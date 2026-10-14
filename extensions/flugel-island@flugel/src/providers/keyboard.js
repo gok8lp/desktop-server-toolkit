@@ -3,6 +3,7 @@ import Clutter from 'gi://Clutter';
 import { createActivity, _now } from '../activity.js';
 import { format } from '../i18n.js';
 import { oncelik, geciciSure } from './provider-base.js';
+import {_} from '../dil.js';
 
 // hacksynth/gnome-dynamic-island (GPL-2.0-or-later) kaynağından. FLUGEL değişikliği (2026-10-13): simge,
 // öncelik ayardan, Türkçe metinler. Varsayılan olarak kapalı.
@@ -53,7 +54,7 @@ export class KeyboardProvider {
         this._lastCapsLock = on;
         if (!this._settings?.get_boolean('keyboard-flash-caps-lock')) return;
         // Two separate msgids — xgettext can't extract `Caps Lock ${x ? 'on' : 'off'}`.
-        this._push(on ? 'Caps Lock açık' : 'Caps Lock kapalı');
+        this._push(on ? _('Caps Lock açık') : _('Caps Lock kapalı'));
     }
 
     _flashLayoutSwitch() {
@@ -61,7 +62,7 @@ export class KeyboardProvider {
         const sources = this._sources.get_value('mru-sources').deepUnpack();
         if (!sources.length) return;
         const [, id] = sources[0];
-        this._push(format('Klavye · %s', id));
+        this._push(format(_('Klavye · %s'), id));
     }
 
     _push(label) {

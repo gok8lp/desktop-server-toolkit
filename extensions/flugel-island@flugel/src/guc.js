@@ -6,6 +6,7 @@ import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {QuickToggle, SystemIndicator} from 'resource:///org/gnome/shell/ui/quickSettings.js';
 import {H, ONBELLEK, calistir} from './ortak.js';
+import {_} from './dil.js';
 
 const TASARRUF_ISARETI = `${ONBELLEK}/pilde`;
 
@@ -82,7 +83,7 @@ export class GucDurumu {
 const TasarrufAnahtari = GObject.registerClass(
 class TasarrufAnahtari extends QuickToggle {
     _init(guc) {
-        super._init({title: 'Pil Tasarrufu', subtitle: 'Parlaklık %40, animasyonsuz',
+        super._init({title: _('Pil Tasarrufu'), subtitle: _('Parlaklık %40, animasyonsuz'),
             iconName: 'power-profile-power-saver-symbolic', toggleMode: true});
         // sadece kullanıcı tıklayınca çalışır; programla durum güncellemesi döngü yaratmaz
         this.connect('clicked', () => guc.tasarrufAyarla(this.checked));

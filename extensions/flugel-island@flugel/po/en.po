@@ -1,0 +1,1675 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the FLUGEL Island package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: FLUGEL Island\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-14 17:51+0300\n"
+"PO-Revision-Date: 2026-10-14 18:00+0300\n"
+"Last-Translator: FLUGEL\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Hızlı"
+msgstr "Quick"
+
+msgid "Uygulamalar, araçlar, uyku engelleme"
+msgstr "Apps, tools, keep awake"
+
+msgid "Kısayollar"
+msgstr "Shortcuts"
+
+msgid "Klasörler, uygulamalar, klavye kısayolları"
+msgstr "Folders, apps, keyboard shortcuts"
+
+msgid "Sistem"
+msgstr "System"
+
+msgid "Bu PC, pil ve sunucu"
+msgstr "This PC, battery and server"
+
+msgid "Sanal makineler"
+msgstr "Virtual machines"
+
+msgid "Sunucudaki Windows ve Ubuntu"
+msgstr "Windows and Ubuntu on the server"
+
+msgid "Kripto ve döviz"
+msgstr "Crypto & currency"
+
+msgid "Fiyatlar ve grafikler"
+msgstr "Prices and charts"
+
+msgid "Maçlar"
+msgstr "Matches"
+
+msgid "Hakemlik görevlerim ve maçlar"
+msgstr "My referee assignments and matches"
+
+msgid "Anime ve manga"
+msgstr "Anime & manga"
+
+msgid "Takip ettiklerim"
+msgstr "What I follow"
+
+msgid "Ekran kaydı, mikrofon, kamera"
+msgstr "Screen recording, microphone, camera"
+
+msgid "Kayıt/paylaşım sürerken ya da mikrofon/kamera kullanımdayken"
+msgstr "While recording/sharing or when the microphone/camera is in use"
+
+msgid "Panik modu"
+msgstr "Panic mode"
+
+msgid "Panikle gizlenen pencereler varken; tek tıkla geri al"
+msgstr "While windows are hidden by panic; one click to undo"
+
+msgid "Sunucu uyarısı"
+msgstr "Server alert"
+
+msgid "Sunucuda sorun olunca (aynı sorun kapatılınca tekrar gelmez)"
+msgstr "When the server has a problem (a dismissed problem does not come back)"
+
+msgid "Windows (GPU) açık"
+msgstr "Windows (GPU) running"
+
+msgid "GPU sanal makinedeyken yerel yapay zekâ durur"
+msgstr "Local AI stops while the GPU is in the VM"
+
+msgid "Çalan medya"
+msgstr "Now playing"
+
+msgid "Kapak, başlık, önceki / oynat-duraklat / sonraki"
+msgstr "Cover, title, previous / play-pause / next"
+
+msgid "Bugün hakemlik görevin varsa; canlı maç skoru"
+msgstr "When you referee today; live match score"
+
+msgid "Anime bölümü"
+msgstr "Anime episode"
+
+msgid "İzlediğin dizinin bölümü yaklaşınca / çıkınca"
+msgstr "When an episode of a show you watch is near / out"
+
+msgid "Kripto büyük değişim"
+msgstr "Big crypto move"
+
+msgid "BTC/ETH 24 saatte eşikten fazla değişince"
+msgstr "When BTC/ETH moves more than the threshold in 24 h"
+
+msgid "Ses ve parlaklık"
+msgstr "Volume & brightness"
+
+msgid "Ses, ekran parlaklığı, klavye ışığı değişince"
+msgstr "When volume, screen brightness or keyboard light changes"
+
+msgid "Şarj ve pil"
+msgstr "Charging & battery"
+
+msgid "Şarj takılınca/çıkınca, pil azalınca; boşta mini pil göstergesi"
+msgstr ""
+"When the charger is plugged/unplugged or the battery runs low; mini battery "
+"when idle"
+
+msgid "Klavye ve fare"
+msgstr "Keyboard & mouse"
+
+msgid "Kablosuz klavye/fare bağlanınca pil yüzdesi, pili azalınca uyarı"
+msgstr ""
+"Battery level when a wireless keyboard/mouse connects, alert when it runs low"
+
+msgid "Bildirim afişi"
+msgstr "Notification banner"
+
+msgid "Gelen bildirimleri adada da göster"
+msgstr "Also show incoming notifications on the island"
+
+msgid "FLUGEL Akış takip kelimesi"
+msgstr "FLUGEL Feed watch word"
+
+msgid "Takip ettiğin bir kelime haberlerde geçince"
+msgstr "When a word you watch shows up in the news"
+
+msgid "Caps Lock / klavye düzeni"
+msgstr "Caps Lock / keyboard layout"
+
+msgid "Değişince kısa süre göster"
+msgstr "Show briefly when it changes"
+
+msgid "Bu sayfayı varsayılana döndür"
+msgstr "Reset this page to defaults"
+
+msgid "Genel"
+msgstr "General"
+
+msgid "Dil ve davranış"
+msgstr "Language & behaviour"
+
+msgid "Dil"
+msgstr "Language"
+
+msgid "Değişince Island yeniden başlatılır; bu pencereyi kapatıp aç"
+msgstr "Island restarts when changed; close and reopen this window"
+
+msgid "Sistem dili"
+msgstr "System language"
+
+msgid "Üst çubukta sadece Island"
+msgstr "Only Island in the top bar"
+
+msgid ""
+"Saat, pil, Hızlı Ayarlar, tepsi, Etkinlikler ve çalışma alanları adanın "
+"içinde; kısayollar çalışır"
+msgstr ""
+"Clock, battery, Quick Settings, tray, Activities and workspaces live inside "
+"the island; shortcuts keep working"
+
+msgid "Kartı açma"
+msgstr "Opening the card"
+
+msgid "Kapsüle tıklamak her zaman kartı açık tutar"
+msgstr "Clicking the capsule always keeps the card open"
+
+msgid "Üzerine gelince"
+msgstr "On hover"
+
+msgid "Sadece tıklayınca"
+msgstr "Only on click"
+
+msgid "Üzerine gelince açılma gecikmesi"
+msgstr "Hover delay"
+
+msgid "milisaniye"
+msgstr "milliseconds"
+
+msgid "Ekran"
+msgstr "Display"
+
+msgid "-1 = birincil ekran; 0, 1… = ekran sırası"
+msgstr "-1 = primary display; 0, 1… = display index"
+
+msgid "Panik onayı"
+msgstr "Panic confirmation"
+
+msgid "Yanlışlıkla basılmasın"
+msgstr "Avoid accidental presses"
+
+msgid "İkinci tık"
+msgstr "Second click"
+
+msgid "0,6 sn basılı tut"
+msgstr "Hold for 0.6 s"
+
+msgid "Eski panel"
+msgstr "Old panel"
+
+msgid ""
+"FLUGEL v1 paneli silinmedi. Geri dönersen Island kapanır, eski üst çubuk "
+"düğmeleri gelir."
+msgstr ""
+"The FLUGEL v1 panel is still installed. Going back turns Island off and "
+"brings the old top bar buttons back."
+
+msgid "Eski panele dön"
+msgstr "Back to the old panel"
+
+msgid "Eski panele dönülsün mü?"
+msgstr "Go back to the old panel?"
+
+msgid "FLUGEL Island kapatılır, FLUGEL v1 paneli açılır. Ayarların silinmez."
+msgstr ""
+"FLUGEL Island is turned off and the FLUGEL v1 panel is turned on. Your "
+"settings are kept."
+
+msgid "Vazgeç"
+msgstr "Cancel"
+
+msgid "Island görünümü"
+msgstr "Island appearance"
+
+msgid "Boyut ve renk"
+msgstr "Size & colour"
+
+msgid "Karanlık tema sabittir; renkler siyah-beyaz"
+msgstr "Dark theme is fixed; colours are black and white"
+
+msgid "Kapsül genişliği"
+msgstr "Capsule width"
+
+msgid "çarpan"
+msgstr "multiplier"
+
+msgid "Kart genişliği"
+msgstr "Card width"
+
+msgid "mantıksal piksel; ızgaralar Island yeniden başlayınca uyar"
+msgstr "logical pixels; grids adapt after Island restarts"
+
+msgid "Kapsül opaklığı"
+msgstr "Capsule opacity"
+
+msgid "% (100 = tam siyah)"
+msgstr "% (100 = solid black)"
+
+msgid "Kart opaklığı"
+msgstr "Card opacity"
+
+msgid "% (koyu nötr cam)"
+msgstr "% (dark neutral glass)"
+
+msgid "Re:Zero sürprizi"
+msgstr "Re:Zero surprise"
+
+msgid ""
+"Ara sıra bir karakter adanın kenarında görünür; kapsüle 5 hızlı tık da "
+"çağırır"
+msgstr ""
+"Now and then a character peeks from the island's edge; 5 quick clicks on the "
+"capsule summon one"
+
+msgid "Island'ı şimdi yeniden başlat"
+msgstr "Restart Island now"
+
+msgid "Animasyon"
+msgstr "Animation"
+
+msgid "Hareket"
+msgstr "Motion"
+
+msgid ""
+"Sistemde \"Animasyonları azalt\" açıksa her geçiş anında olur. Pildeyken "
+"ağır efektler kapanır."
+msgstr ""
+"With \"Reduce animations\" on, every transition is instant. Heavy effects "
+"are off on battery."
+
+msgid "Animasyon hızı"
+msgstr "Animation speed"
+
+msgid "çarpan (1 = varsayılan yay)"
+msgstr "multiplier (1 = default spring)"
+
+msgid "Kısa bildirimlerin süresi"
+msgstr "Short notice duration"
+
+msgid "Canlı etkinlikler"
+msgstr "Live activities"
+
+msgid "Kaynaklar ve öncelik"
+msgstr "Sources & priority"
+
+msgid ""
+"Üstteki daha önemli: iki etkinlik varsa üstteki kapsülde, ikincisi yandaki "
+"balonda"
+msgstr ""
+"Higher is more important: with two activities, the top one is in the capsule "
+"and the second in the side bubble"
+
+msgid "Önceliği artır"
+msgstr "Raise priority"
+
+msgid "Önceliği azalt"
+msgstr "Lower priority"
+
+msgid "Eşikler"
+msgstr "Thresholds"
+
+msgid "Ses/parlaklıkta GNOME göstergesi yerine Island"
+msgstr "Island instead of GNOME's volume/brightness popup"
+
+msgid "Tam ekranda Island gizliyken GNOME'un göstergesi yine çıkar"
+msgstr "In fullscreen, while Island is hidden, GNOME's popup still appears"
+
+msgid "Düşük pil uyarısı"
+msgstr "Low battery alert"
+
+msgid "Klavye/fare pili düşük"
+msgstr "Keyboard/mouse battery low"
+
+msgid "Bildirimleri topla"
+msgstr "Group notifications"
+
+msgid "bu sayıdan sonra tek satır"
+msgstr "one line after this many"
+
+msgid "Bildirimde gösterilmeyecek uygulamalar (virgülle, .desktop kimliği)"
+msgstr "Apps hidden from notifications (comma-separated .desktop IDs)"
+
+msgid "Caps Lock değişimini göster"
+msgstr "Show Caps Lock changes"
+
+msgid "Klavye düzeni değişimini göster"
+msgstr "Show keyboard layout changes"
+
+msgid "Kapatılan sunucu uyarısını yeniden göster"
+msgstr "Show the dismissed server alert again"
+
+msgid "Sabitlenmiş uygulamalar"
+msgstr "Pinned apps"
+
+msgid "Hızlı ve Kısayollar sekmesinin en üstünde, bu sırayla"
+msgstr "At the top of the Quick and Shortcuts tabs, in this order"
+
+msgid "Kaldır"
+msgstr "Remove"
+
+msgid "Uygulama ekle"
+msgstr "Add an app"
+
+msgid "Uygulama"
+msgstr "App"
+
+msgid "Sabitle"
+msgstr "Pin"
+
+msgid "Gösterilen sanal makineler"
+msgstr "Shown virtual machines"
+
+msgid "Kapatma her zaman nazik (ACPI); zorla kapatma yoktur"
+msgstr "Shutdown is always graceful (ACPI); there is no force off"
+
+msgid "Durum yenileme"
+msgstr "Status refresh"
+
+msgid "saniye (sunucu durumu ile birlikte)"
+msgstr "seconds (together with server status)"
+
+msgid "Kripto"
+msgstr "Crypto"
+
+msgid "Varlıklar"
+msgstr "Assets"
+
+msgid "Kaynak: Binance açık piyasa verisi (anahtarsız)"
+msgstr "Source: Binance public market data (no API key)"
+
+msgid "Dolar / TL"
+msgstr "Dollar / TRY"
+
+msgid "Euro / TL"
+msgstr "Euro / TRY"
+
+msgid "Değişimde renk kullan"
+msgstr "Colour the change"
+
+msgid "Kapalıysa siyah-beyaz"
+msgstr "Black and white when off"
+
+msgid "Büyük değişim uyarısı"
+msgstr "Big move alert"
+
+msgid "% (24 saat)"
+msgstr "% (24 hours)"
+
+msgid "Fiyat yenileme"
+msgstr "Price refresh"
+
+msgid "saniye"
+msgstr "seconds"
+
+msgid "Maçlar ve hakemlik"
+msgstr "Matches & refereeing"
+
+msgid "Canlı maç kapsülde"
+msgstr "Live match in the capsule"
+
+msgid "Canlı maç olunca skor adada görünür"
+msgstr "Shows the score on the island during a live match"
+
+msgid "Maçım yaklaşıyor"
+msgstr "My match is coming up"
+
+msgid "dakika kala"
+msgstr "minutes before"
+
+msgid "Maç yenileme"
+msgstr "Match refresh"
+
+msgid "saniye (canlı maç varken sunucu 2 dk'da bir günceller)"
+msgstr "seconds (the server updates every 2 min during live matches)"
+
+msgid ""
+"Sadece MyAnimeList / AniList ve yasal yayın platformlarına bağlantı verilir"
+msgstr "Only MyAnimeList / AniList and legal streaming platforms are linked"
+
+msgid "Bölüm yaklaşıyor"
+msgstr "Episode coming up"
+
+msgid "dakika kala kapsülde göster"
+msgstr "minutes before, show in the capsule"
+
+msgid "Liste yenileme"
+msgstr "List refresh"
+
+msgid "Eklediğin animeler"
+msgstr "Anime you added"
+
+msgid "Eklediğin mangalar"
+msgstr "Manga you added"
+
+#, javascript-format
+msgid "%d adet; kaldırmak için kapağa sağ tıkla"
+msgstr "%d items; right-click a cover to remove"
+
+msgid "Temizle"
+msgstr "Clear"
+
+msgid "Dock"
+msgstr "Dock"
+
+msgid "Alt dock"
+msgstr "Bottom dock"
+
+msgid "Ubuntu dock ayarları (Dash to Dock)"
+msgstr "Ubuntu dock settings (Dash to Dock)"
+
+msgid "Üzerine gelince büyüme"
+msgstr "Grow on hover"
+
+msgid "Simge hafifçe büyür (animasyon kapalıysa/pildeyken yok)"
+msgstr "The icon grows slightly (not with animations off / on battery)"
+
+msgid "Otomatik gizlen"
+msgstr "Auto-hide"
+
+msgid "Pencere değince gizlen"
+msgstr "Hide when a window touches it"
+
+msgid "Simge boyutu"
+msgstr "Icon size"
+
+msgid "Dock opaklığı"
+msgstr "Dock opacity"
+
+msgid "0–1"
+msgstr "0–1"
+
+msgid "Çalışan uygulama noktaları"
+msgstr "Running app dots"
+
+msgid "Çöp kutusu"
+msgstr "Trash"
+
+msgid "Bağlı diskler"
+msgstr "Mounted drives"
+
+msgid "Bildirim rozeti"
+msgstr "Notification badge"
+
+msgid "Orta tık"
+msgstr "Middle click"
+
+msgid "Yeni pencere"
+msgstr "New window"
+
+msgid "Küçült"
+msgstr "Minimize"
+
+msgid "Kapat"
+msgstr "Close"
+
+msgid "Hiçbir şey"
+msgstr "Nothing"
+
+msgid "Simge üstünde tekerlek"
+msgstr "Scroll on icon"
+
+msgid "Pencereler arası geçiş"
+msgstr "Cycle windows"
+
+msgid "Çalışma alanı"
+msgstr "Workspace"
+
+msgid "Dash to Dock / Ubuntu dock bulunamadı"
+msgstr "Dash to Dock / Ubuntu dock not found"
+
+msgid "Gelişmiş"
+msgstr "Advanced"
+
+msgid "Yenileme aralıkları"
+msgstr "Refresh intervals"
+
+msgid ""
+"Ekran kilitliyken hiç sorgu yapılmaz. Pildeyken ya da Pil Tasarrufunda "
+"aralıklar çarpanla uzar."
+msgstr ""
+"Nothing is polled while the screen is locked. On battery or in Battery Saver "
+"the intervals are multiplied."
+
+msgid "Sunucu durumu"
+msgstr "Server status"
+
+msgid "Bu PC"
+msgstr "This PC"
+
+msgid "Pildeyken çarpan"
+msgstr "Battery multiplier"
+
+msgid "kat"
+msgstr "×"
+
+msgid "Sıfırlama ve yedek"
+msgstr "Reset & backup"
+
+msgid "Resim içinde resim konumunu sıfırla (sol alt)"
+msgstr "Reset picture-in-picture position (bottom left)"
+
+msgid "Ayarları JSON olarak dışa aktar"
+msgstr "Export settings as JSON"
+
+msgid "JSON'dan içe aktar"
+msgstr "Import from JSON"
+
+msgid "Tüm ayarları varsayılana döndür"
+msgstr "Reset all settings to defaults"
+
+msgid "Ayarları kaydet"
+msgstr "Save settings"
+
+msgid "Ayar dosyası seç"
+msgstr "Choose settings file"
+
+#, javascript-format
+msgid "Çalışma alanı %s / %s"
+msgstr "Workspace %s / %s"
+
+msgid "Noktaya tıkla ya da kapsülde tekerleği çevir"
+msgstr "Click a dot or scroll on the capsule"
+
+#, javascript-format
+msgid "Çalışma alanı %s"
+msgstr "Workspace %s"
+
+msgid "Şu an buradasın"
+msgstr "You are here"
+
+msgid "Tıkla: geç · kapsülde tekerlek de geçer"
+msgstr "Click to switch · scrolling on the capsule works too"
+
+msgid "Gizle"
+msgstr "Hide"
+
+msgid "Pil Tasarrufu"
+msgstr "Battery Saver"
+
+msgid "Parlaklık %40, animasyonsuz"
+msgstr "40% brightness, no animations"
+
+msgid "Pazar"
+msgstr "Sunday"
+
+msgid "Pazartesi"
+msgstr "Monday"
+
+msgid "Salı"
+msgstr "Tuesday"
+
+msgid "Çarşamba"
+msgstr "Wednesday"
+
+msgid "Perşembe"
+msgstr "Thursday"
+
+msgid "Cuma"
+msgstr "Friday"
+
+msgid "Cumartesi"
+msgstr "Saturday"
+
+msgid "Ocak"
+msgstr "January"
+
+msgid "Şubat"
+msgstr "February"
+
+msgid "Mart"
+msgstr "March"
+
+msgid "Nisan"
+msgstr "April"
+
+msgid "Mayıs"
+msgstr "May"
+
+msgid "Haziran"
+msgstr "June"
+
+msgid "Temmuz"
+msgstr "July"
+
+msgid "Ağustos"
+msgstr "August"
+
+msgid "Eylül"
+msgstr "September"
+
+msgid "Ekim"
+msgstr "October"
+
+msgid "Kasım"
+msgstr "November"
+
+msgid "Aralık"
+msgstr "December"
+
+msgid "Takvim ve bildirimler (sağ tık da açar)"
+msgstr "Calendar & notifications (right-click opens it too)"
+
+msgid "Hızlı ayarlar: ses, ağ, pil, güç"
+msgstr "Quick Settings: sound, network, battery, power"
+
+msgid "Takvim ve bildirimler"
+msgstr "Calendar & notifications"
+
+msgid "Etkinlikler: pencereler ve uygulamalar"
+msgstr "Activities: windows and apps"
+
+msgid "Açık tut"
+msgstr "Keep open"
+
+msgid "Island ayarları"
+msgstr "Island settings"
+
+msgid "komut çalışmadı"
+msgstr "command failed"
+
+msgid "Ekran görüntüsü"
+msgstr "Screenshot"
+
+msgid "Açılamadı"
+msgstr "Could not open"
+
+#, javascript-format
+msgid "Çalıştırılamadı: %s"
+msgstr "Could not run: %s"
+
+msgid "Oca"
+msgstr "Jan"
+
+msgid "Şub"
+msgstr "Feb"
+
+msgid "Mar"
+msgstr "Mar"
+
+msgid "Nis"
+msgstr "Apr"
+
+msgid "May"
+msgstr "May"
+
+msgid "Haz"
+msgstr "Jun"
+
+msgid "Tem"
+msgstr "Jul"
+
+msgid "Ağu"
+msgstr "Aug"
+
+msgid "Eyl"
+msgstr "Sep"
+
+msgid "Eki"
+msgstr "Oct"
+
+msgid "Kas"
+msgstr "Nov"
+
+msgid "Ara"
+msgstr "Dec"
+
+msgid "yayında"
+msgstr "aired"
+
+#, javascript-format
+msgid "%sg %ssa"
+msgstr "%sd %sh"
+
+#, javascript-format
+msgid "%ssa %sdk"
+msgstr "%sh %sm"
+
+#, javascript-format
+msgid "%sdk"
+msgstr "%sm"
+
+msgid "Kapatıldı"
+msgstr "Closed"
+
+msgid "En çok bellek kullanan"
+msgstr "Biggest memory user"
+
+msgid "Panik"
+msgstr "Panic"
+
+msgid "Tüm uygulamalara kapanma isteği gönderildi"
+msgstr "Asked every app to close"
+
+msgid "Masaüstüne eklendi"
+msgstr "Added to desktop"
+
+msgid "Masaüstüne eklenemedi"
+msgstr "Could not add to desktop"
+
+msgid "Masaüstüne ekle"
+msgstr "Add to desktop"
+
+msgid "Dosyalar"
+msgstr "Files"
+
+msgid "Süresiz"
+msgstr "Indefinitely"
+
+msgid "1 saat"
+msgstr "1 hour"
+
+msgid "2 saat"
+msgstr "2 hours"
+
+msgid "Video oynarken"
+msgstr "While video plays"
+
+msgid "Uyku engelli"
+msgstr "Kept awake"
+
+msgid "FLUGEL Island: uyku engelleme"
+msgstr "FLUGEL Island: keep awake"
+
+#, javascript-format
+msgid "%s. bölüm çıktı"
+msgstr "Episode %s is out"
+
+#, javascript-format
+msgid "%s. bölüm %s sonra"
+msgstr "Episode %s in %s"
+
+msgid "Anime sekmesi"
+msgstr "Anime tab"
+
+#, javascript-format
+msgid " · +%s canlı"
+msgstr " · +%s live"
+
+msgid "Maçlar sekmesi"
+msgstr "Matches tab"
+
+msgid "şimdi"
+msgstr "now"
+
+#, javascript-format
+msgid "Maç %s · %s"
+msgstr "Match %s · %s"
+
+msgid "bugün"
+msgstr "today"
+
+msgid "görev"
+msgstr "assignment"
+
+msgid "Basket sekmesi"
+msgstr "Matches tab"
+
+msgid "Fare"
+msgstr "Mouse"
+
+msgid "Klavye"
+msgstr "Keyboard"
+
+msgid "Kulaklık"
+msgstr "Headphones"
+
+msgid "Oyun kolu"
+msgstr "Gamepad"
+
+msgid "bağlandı"
+msgstr "connected"
+
+msgid "Aygıt"
+msgstr "Device"
+
+#, javascript-format
+msgid "%s pili azaldı"
+msgstr "%s battery low"
+
+#, javascript-format
+msgid "%%%s · şarj et"
+msgstr "%%%s · charge it"
+
+msgid "Kablosuz aygıtlar"
+msgstr "Wireless devices"
+
+msgid "Caps Lock açık"
+msgstr "Caps Lock on"
+
+msgid "Caps Lock kapalı"
+msgstr "Caps Lock off"
+
+#, javascript-format
+msgid "Klavye · %s"
+msgstr "Keyboard · %s"
+
+#, javascript-format
+msgid "%s $ · 24 saat"
+msgstr "%s $ · 24 hours"
+
+msgid "Kripto sekmesi"
+msgstr "Crypto tab"
+
+msgid "Önceki"
+msgstr "Previous"
+
+msgid "Duraklat"
+msgstr "Pause"
+
+msgid "Oynat"
+msgstr "Play"
+
+msgid "Sonraki"
+msgstr "Next"
+
+msgid "duraklatıldı"
+msgstr "paused"
+
+msgid "Bildirim"
+msgstr "Notification"
+
+#, javascript-format
+msgid "%d yeni"
+msgstr "%d new"
+
+msgid "Bildirimler"
+msgstr "Notifications"
+
+msgid "Ses"
+msgstr "Sound"
+
+msgid "Parlaklık"
+msgstr "Brightness"
+
+msgid "Klavye ışığı"
+msgstr "Keyboard light"
+
+msgid "Mikrofon"
+msgstr "Microphone"
+
+msgid "pencereler gizli, ses kapalı"
+msgstr "windows hidden, sound muted"
+
+msgid "Geri al: pencereleri ve sesi getir"
+msgstr "Undo: bring windows and sound back"
+
+msgid "Şarj oluyor"
+msgstr "Charging"
+
+msgid "Dolu"
+msgstr "Full"
+
+msgid "Pilde"
+msgstr "On battery"
+
+msgid "Şarj takıldı"
+msgstr "Charger connected"
+
+msgid "Şarj çıkarıldı"
+msgstr "Charger disconnected"
+
+msgid "ekran kaydı"
+msgstr "screen recording"
+
+msgid "ekran paylaşımı"
+msgstr "screen sharing"
+
+msgid "Kaydı durdur"
+msgstr "Stop recording"
+
+msgid "Paylaşımı durdur"
+msgstr "Stop sharing"
+
+msgid "kullanımda"
+msgstr "in use"
+
+msgid "Sunucu: ulaşılamıyor"
+msgstr "Server: unreachable"
+
+#, javascript-format
+msgid "Sunucu: %s"
+msgstr "Server: %s"
+
+#, javascript-format
+msgid "+%s sorun daha"
+msgstr "+%s more issues"
+
+msgid "eski veri"
+msgstr "stale data"
+
+msgid "Sistem sekmesini aç"
+msgstr "Open the System tab"
+
+msgid "yerel yapay zekâ ve medya hızlandırma durdu"
+msgstr "local AI and media acceleration stopped"
+
+msgid "Bağlan (Moonlight)"
+msgstr "Connect (Moonlight)"
+
+msgid "Düzgünce kapat"
+msgstr "Shut down gracefully"
+
+msgid "FLUGEL Akış"
+msgstr "FLUGEL Feed"
+
+msgid "Akış"
+msgstr "Feed"
+
+msgid "Haberi aç"
+msgstr "Open the article"
+
+msgid "Anime"
+msgstr "Anime"
+
+msgid "Manga"
+msgstr "Manga"
+
+msgid "Ara…"
+msgstr "Search…"
+
+msgid "MAL profilim"
+msgstr "My MAL profile"
+
+msgid "MyAnimeList profilim"
+msgstr "My MyAnimeList profile"
+
+msgid "Yayın takvimi"
+msgstr "Airing schedule"
+
+msgid "Bu sezonun yayın takvimi (AniList)"
+msgstr "This season's airing schedule (AniList)"
+
+msgid "Yenile"
+msgstr "Refresh"
+
+msgid "Listeyi şimdi yenile"
+msgstr "Refresh the list now"
+
+#, javascript-format
+msgid "%ssa"
+msgstr "%sh"
+
+msgid "Alınamadı"
+msgstr "Unavailable"
+
+msgid "Yükleniyor…"
+msgstr "Loading…"
+
+msgid "Ekle"
+msgstr "Add"
+
+#, javascript-format
+msgid "Takip dışı %s ekle"
+msgstr "Add %s you don't follow"
+
+msgid "Bu sezon ve MAL listemdeki diğerleri; eklenenler sağ tıkla kaldırılır"
+msgstr ""
+"This season and the rest of my MAL list; right-click added ones to remove"
+
+#, javascript-format
+msgid "Son bölüm: <b>%s</b>%s"
+msgstr "Latest episode: <b>%s</b>%s"
+
+#, javascript-format
+msgid "  ·  IMDb <b>%s</b>"
+msgstr "  ·  IMDb <b>%s</b>"
+
+msgid "  ·  IMDb puanı yok"
+msgstr "  ·  no IMDb rating"
+
+#, javascript-format
+msgid "Sonraki: <b>%s. bölüm</b> · %s sonra"
+msgstr "Next: <b>episode %s</b> · in %s"
+
+#, javascript-format
+msgid "İzlediğin %s/%s · %s"
+msgstr "Watched %s/%s · %s"
+
+msgid "eklediğin"
+msgstr "added by you"
+
+#, javascript-format
+msgid "Bölüm %s%s · %s"
+msgstr "Chapter %s%s · %s"
+
+#, javascript-format
+msgid "AniList <b>%s</b>"
+msgstr "AniList <b>%s</b>"
+
+#, javascript-format
+msgid "MAL <b>%s</b>"
+msgstr "MAL <b>%s</b>"
+
+msgid "Eklendi (sağ tıkla kaldır)"
+msgstr "Added (right-click to remove)"
+
+msgid "Tıkla: ekle"
+msgstr "Click to add"
+
+#, javascript-format
+msgid "%s sa %s dk kaldı"
+msgstr "%s h %s min left"
+
+#, javascript-format
+msgid "%s dk kaldı"
+msgstr "%s min left"
+
+#, javascript-format
+msgid "Takip: %s"
+msgstr "Watching: %s"
+
+#, javascript-format
+msgid "Son kontrol %s"
+msgstr "Last checked %s"
+
+msgid "Benim maçlarım"
+msgstr "My matches"
+
+msgid "Bültenleri şimdi kontrol et"
+msgstr "Check the bulletins now"
+
+msgid "Bugün"
+msgstr "Today"
+
+msgid "Yarın"
+msgstr "Tomorrow"
+
+msgid "Geçmiş"
+msgstr "Past"
+
+msgid "Ankara basketbol fikstürü"
+msgstr "Ankara basketball fixtures"
+
+msgid "canlı"
+msgstr "live"
+
+msgid "Maç verisi alınamadı (sunucu?)"
+msgstr "Match data unavailable (server?)"
+
+msgid "Maç yok"
+msgstr "No matches"
+
+msgid "Hakemlik verisi yok"
+msgstr "No referee data"
+
+msgid "Bugün ve yarın görevin yok"
+msgstr "No assignments today or tomorrow"
+
+#, javascript-format
+msgid "Sıradaki: %s %s · %s — %s"
+msgstr "Next: %s %s · %s — %s"
+
+msgid "Bitti"
+msgstr "Final"
+
+msgid " · tıkla: ESPN maç sayfası"
+msgstr " · click: ESPN match page"
+
+msgid "Zorla kapatılıyor"
+msgstr "Force quitting"
+
+#, javascript-format
+msgid "%s sa %s dk"
+msgstr "%s h %s min"
+
+#, javascript-format
+msgid "%s dk"
+msgstr "%s min"
+
+msgid "Uygulamalar"
+msgstr "Apps"
+
+msgid "Zorla kapat"
+msgstr "Force quit"
+
+msgid "Donan uygulamayı seç: önce kibarca, 2 sn sonra zorla kapatılır"
+msgstr "Pick the frozen app: asked politely first, force-quit after 2 s"
+
+msgid "Uyku engelle"
+msgstr "Keep awake"
+
+msgid "Görüntü"
+msgstr "Screenshot"
+
+msgid "Alan, pencere ya da tüm ekran (Print, Shift+Super+S)"
+msgstr "Area, window or whole screen (Print, Shift+Super+S)"
+
+msgid "Kayıt"
+msgstr "Record"
+
+msgid "Ekran kaydı"
+msgstr "Screen recording"
+
+msgid "Kooha: MP4 ya da GIF"
+msgstr "Kooha: MP4 or GIF"
+
+msgid "Geri al"
+msgstr "Undo"
+
+msgid "Paniği geri al"
+msgstr "Undo panic"
+
+msgid "Gizlenen pencereler ve ses geri gelir"
+msgstr "Hidden windows and sound come back"
+
+msgid "Araçlar"
+msgstr "Tools"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Uyanık"
+msgstr "Awake"
+
+#, javascript-format
+msgid "%s: zorla kapat"
+msgstr "%s: force quit"
+
+msgid "Eclipse'i zorla kapat"
+msgstr "Force quit Eclipse"
+
+msgid "Chrome'u zorla kapat"
+msgstr "Force quit Chrome"
+
+msgid "Tüm süreçler"
+msgstr "All processes"
+
+msgid "Sistem İzleyici"
+msgstr "System Monitor"
+
+msgid "Hangi uygulama dondu?"
+msgstr "Which app is frozen?"
+
+msgid "Açık pencere yok"
+msgstr "No open windows"
+
+#, javascript-format
+msgid "Uyku engelle: %s"
+msgstr "Keep awake: %s"
+
+msgid "Ekran kapanmaz, bilgisayar uykuya geçmez"
+msgstr "The screen stays on and the computer does not sleep"
+
+msgid "Uyku engellemeyi kapat"
+msgstr "Stop keeping awake"
+
+#, javascript-format
+msgid " · %s kaldı"
+msgstr " · %s left"
+
+#, javascript-format
+msgid "Uyku engelli%s"
+msgstr "Kept awake%s"
+
+msgid "Uyku engelleme: ne kadar süre?"
+msgstr "Keep awake: for how long?"
+
+msgid ""
+"Ekran kapanmasın, bilgisayar uyumasın: süresiz, 1–2 saat ya da video oynarken"
+msgstr ""
+"Keep the screen on and the computer awake: indefinitely, 1–2 hours or while "
+"a video plays"
+
+msgid "iki kez tıkla"
+msgstr "click twice"
+
+#, javascript-format
+msgid "Pencereleri küçültür, sesi kapatır, ekranı kilitler. Onay: %s. "
+msgstr "Minimizes windows, mutes sound, locks the screen. Confirm: %s. "
+
+msgid "Geri almak için \"Geri al\"."
+msgstr "Use \"Undo\" to restore."
+
+msgid "Emin misin?"
+msgstr "Sure?"
+
+msgid "Tut…"
+msgstr "Hold…"
+
+msgid "Klasörler"
+msgstr "Folders"
+
+msgid "Ev"
+msgstr "Home"
+
+msgid "Ev klasörü"
+msgstr "Home folder"
+
+msgid "Belgeler"
+msgstr "Documents"
+
+msgid "İndirilen"
+msgstr "Downloads"
+
+msgid "İndirilenler"
+msgstr "Downloads"
+
+msgid "Resimler"
+msgstr "Pictures"
+
+msgid "Görüntüler"
+msgstr "Screenshots"
+
+msgid "Ekran görüntüleri klasörü"
+msgstr "Screenshots folder"
+
+msgid "Videolar"
+msgstr "Videos"
+
+msgid "Videolar (ekran kayıtları)"
+msgstr "Videos (screen recordings)"
+
+msgid "Masaüstü"
+msgstr "Desktop"
+
+msgid "Eclipse ç.a."
+msgstr "Eclipse ws"
+
+msgid "Eclipse çalışma alanı"
+msgstr "Eclipse workspace"
+
+msgid "Sunucu: ana disk (fotoğraf, medya)"
+msgstr "Server: main disk (photos, media)"
+
+msgid "İndirmeler"
+msgstr "Downloads"
+
+msgid "Sunucu: indirmeler"
+msgstr "Server: downloads"
+
+msgid "Sunucu ev"
+msgstr "Server home"
+
+msgid "Sunucu: ev klasörü"
+msgstr "Server: home folder"
+
+msgid "VM yönet."
+msgstr "VM manager"
+
+msgid "Sanal makine yöneticisi"
+msgstr "Virtual machine manager"
+
+msgid "Hesap"
+msgstr "Calculator"
+
+msgid "Hesap makinesi"
+msgstr "Calculator"
+
+msgid "Takvim"
+msgstr "Calendar"
+
+msgid "Saat"
+msgstr "Clocks"
+
+msgid "Saat, alarm, zamanlayıcı"
+msgstr "Clocks, alarms, timers"
+
+msgid "Okul"
+msgstr "School"
+
+msgid "Belge (LibreOffice Writer)"
+msgstr "Document (LibreOffice Writer)"
+
+msgid "Tablo"
+msgstr "Sheet"
+
+msgid "Tablo (LibreOffice Calc)"
+msgstr "Spreadsheet (LibreOffice Calc)"
+
+msgid "Sunum"
+msgstr "Slides"
+
+msgid "Sunum (LibreOffice Impress)"
+msgstr "Presentation (LibreOffice Impress)"
+
+msgid "PDF imza"
+msgstr "Sign PDF"
+
+msgid "PDF yaz"
+msgstr "Write on PDF"
+
+msgid "PDF üzerine yaz (Xournal++)"
+msgstr "Write on a PDF (Xournal++)"
+
+msgid "PDF böl"
+msgstr "Split PDF"
+
+msgid "Not"
+msgstr "Note"
+
+msgid "Hızlı not (Notlar.md)"
+msgstr "Quick note (Notlar.md)"
+
+msgid "Sunucu ve medya"
+msgstr "Server & media"
+
+msgid "Sunucu paneli"
+msgstr "Server dashboard"
+
+msgid "Immich (fotoğraflar)"
+msgstr "Immich (photos)"
+
+msgid "Sonarr (diziler)"
+msgstr "Sonarr (series)"
+
+msgid "Radarr (filmler)"
+msgstr "Radarr (movies)"
+
+msgid "Torrent"
+msgstr "Torrent"
+
+msgid "Transmission"
+msgstr "Transmission"
+
+msgid "Yapay zekâ"
+msgstr "AI"
+
+msgid "Yapay zekâ sohbet"
+msgstr "AI chat"
+
+msgid "İzleyici"
+msgstr "Monitor"
+
+msgid "Sistem izleyici"
+msgstr "System monitor"
+
+msgid "Disk"
+msgstr "Disk"
+
+msgid "Disk kullanımı"
+msgstr "Disk usage"
+
+msgid "Emoji ve semboller"
+msgstr "Emoji & symbols"
+
+msgid "Şifreler"
+msgstr "Passwords"
+
+msgid "Şifreler ve anahtarlar"
+msgstr "Passwords and keys"
+
+msgid "Ağ"
+msgstr "Network"
+
+msgid "Ağ ayarları"
+msgstr "Network settings"
+
+msgid "Ses ayarları"
+msgstr "Sound settings"
+
+msgid "Ekranlar"
+msgstr "Displays"
+
+msgid "Ekran ayarları (ikinci monitör)"
+msgstr "Display settings (second monitor)"
+
+msgid "Bakım ve güç"
+msgstr "Maintenance & power"
+
+msgid "Güncelle"
+msgstr "Update"
+
+msgid "Sistemi güncelle"
+msgstr "Update the system"
+
+msgid "Yedekle"
+msgstr "Back up"
+
+msgid "PC'yi sunucuya yedekle"
+msgstr "Back up this PC to the server"
+
+msgid "Timeshift (geçmişe dön)"
+msgstr "Timeshift (go back in time)"
+
+msgid "Ayarlar"
+msgstr "Settings"
+
+msgid "GNOME ayarları"
+msgstr "GNOME Settings"
+
+msgid "Kilitle"
+msgstr "Lock"
+
+msgid "Ekranı kilitle"
+msgstr "Lock screen"
+
+msgid "Etkinlikler: pencereler ve arama"
+msgstr "Activities: windows and search"
+
+msgid "Tüm uygulamalar"
+msgstr "All apps"
+
+msgid "Hızlı ayarlar (ses, ağ, pil)"
+msgstr "Quick Settings (sound, network, battery)"
+
+msgid "Bildirimler ve takvim"
+msgstr "Notifications & calendar"
+
+msgid "Etkin pencereyi kapat (Alt+F4 da)"
+msgstr "Close the active window (Alt+F4 too)"
+
+msgid "Etkin pencereyi küçült"
+msgstr "Minimize the active window"
+
+msgid "Etkin pencereyi büyüt"
+msgstr "Maximize the active window"
+
+msgid "Ekran görüntüsü (Print da)"
+msgstr "Screenshot (Print too)"
+
+msgid "😊 tuşu"
+msgstr "😊 key"
+
+msgid "Emoji seçici (K380s gülen yüz tuşu)"
+msgstr "Emoji picker (K380s smiley key)"
+
+msgid "Sabitlenmiş"
+msgstr "Pinned"
+
+#, javascript-format
+msgid "Kısayol: %s · tıklayınca şimdi yapar"
+msgstr "Shortcut: %s · click to do it now"
+
+msgid "Klavye kısayolları"
+msgstr "Keyboard shortcuts"
+
+msgid "Şimdi yenile"
+msgstr "Refresh now"
+
+msgid "24 saat"
+msgstr "24 hours"
+
+msgid "7 gün"
+msgstr "7 days"
+
+msgid "Diğer kripto paralar"
+msgstr "Other cryptocurrencies"
+
+msgid "BTC grafiği (TradingView)"
+msgstr "BTC chart (TradingView)"
+
+msgid "Fiyatlar alınamadı"
+msgstr "Prices unavailable"
+
+#, javascript-format
+msgid "En yüksek %s   ·   En düşük %s   ·   %s %s"
+msgstr "High %s   ·   Low %s   ·   %s %s"
+
+#, javascript-format
+msgid "24 saat %s · kaynak %s"
+msgstr "24 hours %s · source %s"
+
+msgid "Bu bilgisayar"
+msgstr "This computer"
+
+msgid "Pil Tasarrufu (parlaklık %40, animasyonsuz)"
+msgstr "Battery Saver (40% brightness, no animations)"
+
+msgid "Sunucu (flugelserver)"
+msgstr "Server (flugelserver)"
+
+msgid "Aç"
+msgstr "Open"
+
+msgid "Sunucu durumu + yapay zekâ analizi"
+msgstr "Server status + AI analysis"
+
+msgid "Netdata (canlı grafikler)"
+msgstr "Netdata (live charts)"
+
+msgid "Bu PC: Sistem İzleyici"
+msgstr "This PC: System Monitor"
+
+msgid "Sunucuya terminalle bağlan"
+msgstr "Connect to the server in a terminal"
+
+#, javascript-format
+msgid "Okunamadı: %s"
+msgstr "Could not read: %s"
+
+#, javascript-format
+msgid "CPU <b>%s</b>   Sıcaklık <b>%s</b>   GPU <b>%s</b>"
+msgstr "CPU <b>%s</b>   Temp <b>%s</b>   GPU <b>%s</b>"
+
+#, javascript-format
+msgid "RAM <b>%s / %s GB</b>   Disk <b>%s</b> dolu"
+msgstr "RAM <b>%s / %s GB</b>   Disk <b>%s</b> used"
+
+#, javascript-format
+msgid "Pil <b>%%%s</b>  %s%s%s"
+msgstr "Battery <b>%%%s</b>  %s%s%s"
+
+msgid " · yenilemeler seyrek"
+msgstr " · refreshing less often"
+
+#, javascript-format
+msgid "%s   Tailscale: %s   Açık: %s"
+msgstr "%s   Tailscale: %s   Up: %s"
+
+msgid "ağ yok"
+msgstr "no network"
+
+msgid "açık"
+msgstr "on"
+
+msgid "kapalı"
+msgstr "off"
+
+msgid "Sunucuya ulaşılamıyor"
+msgstr "Server unreachable"
+
+#, javascript-format
+msgid "Durum <b>%s</b>%s%s"
+msgstr "Status <b>%s</b>%s%s"
+
+msgid "İYİ"
+msgstr "OK"
+
+msgid " (eski veri)"
+msgstr " (stale data)"
+
+#, javascript-format
+msgid "CPU <b>%s</b>   Sıcaklık <b>%s</b>   Yük %s"
+msgstr "CPU <b>%s</b>   Temp <b>%s</b>   Load %s"
+
+msgid "GPU Windows sanal makinesinde"
+msgstr "GPU is in the Windows VM"
+
+#, javascript-format
+msgid "GPU %s %s"
+msgstr "GPU %s %s"
+
+#, javascript-format
+msgid "Disk: %s   %s   %s"
+msgstr "Disk: %s   %s   %s"
+
+msgid "İndirme"
+msgstr "Downloads"
+
+#, javascript-format
+msgid " · sağlıksız: %s"
+msgstr " · unhealthy: %s"
+
+#, javascript-format
+msgid "Konteyner <b>%s</b>%s   VPN %s   Ollama %s   Sanal makine: %s"
+msgstr "Containers <b>%s</b>%s   VPN %s   Ollama %s   VMs: %s"
+
+#, javascript-format
+msgid "<small>Son yedek: %s · Açık: %s · kaynak: %s</small>"
+msgstr "<small>Last backup: %s · Up: %s · via: %s</small>"
+
+#, javascript-format
+msgid "Son 30 dakikadaki uyarılar (%s)"
+msgstr "Alerts in the last 30 minutes (%s)"
+
+msgid "Ekran kartı aktarılmış Windows; Moonlight ile bağlanılır"
+msgstr "Windows with the GPU passed through; connect with Moonlight"
+
+msgid "GPU'suz Windows (aynı disk); konsolla bağlanılır"
+msgstr "Windows without GPU (same disk); connect through the console"
+
+msgid "Mullvad + Tailscale çıkış düğümü"
+msgstr "Mullvad + Tailscale exit node"
+
+msgid "Açık"
+msgstr "Running"
+
+msgid "Kapalı"
+msgstr "Off"
+
+msgid "Duraklatıldı"
+msgstr "Paused"
+
+msgid "Kapanıyor…"
+msgstr "Shutting down…"
+
+msgid "Sunucudaki sanal makineler"
+msgstr "Virtual machines on the server"
+
+msgid "Moonlight (Windows GPU akışı)"
+msgstr "Moonlight (Windows GPU streaming)"
+
+msgid "Yönetici"
+msgstr "Manager"
+
+msgid "Durumu şimdi sor"
+msgstr "Check status now"
+
+msgid "Sunucuya ulaşılamadı"
+msgstr "Could not reach the server"
+
+msgid "yerel AI durdu"
+msgstr "local AI stopped"
+
+msgid "Aç ve bağlan"
+msgstr "Start and connect"
+
+msgid "Bağlan"
+msgstr "Connect"
+
+msgid "Kapat (nazik, ACPI)"
+msgstr "Shut down (graceful, ACPI)"
+
+#, javascript-format
+msgid "%s vCPU · %s GB RAM%s"
+msgstr "%s vCPU · %s GB RAM%s"
+
+msgid " · GPU aktarımı var"
+msgstr " · GPU passthrough"
+
+#, javascript-format
+msgid "IP %s · %s açık"
+msgstr "IP %s · up %s"

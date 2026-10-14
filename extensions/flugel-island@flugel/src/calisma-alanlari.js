@@ -5,6 +5,7 @@ import St from 'gi://St';
 import GLib from 'gi://GLib';
 import Clutter from 'gi://Clutter';
 import {ipucuBagla} from './bilesenler.js';
+import {_, f} from './dil.js';
 
 export class CalismaAlanlari {
     // mini: boştaki kapsülün solundaki küçük noktalar (kapsülün kalıcı yeri)
@@ -19,8 +20,8 @@ export class CalismaAlanlari {
         ];
         this.actor.connect('scroll-event', (_a, olay) => this.kaydir(olay));
         if (mini)
-        {ipucuBagla(this.actor, () => ({baslik: `Çalışma alanı ${this._yonetici.get_active_workspace_index() + 1} / ${this._yonetici.n_workspaces}`,
-            ayrinti: 'Noktaya tıkla ya da kapsülde tekerleği çevir'}));}
+        {ipucuBagla(this.actor, () => ({baslik: f(_('Çalışma alanı %s / %s'), this._yonetici.get_active_workspace_index() + 1, this._yonetici.n_workspaces),
+            ayrinti: _('Noktaya tıkla ya da kapsülde tekerleği çevir')}));}
         this._ciz();
     }
 
@@ -29,10 +30,10 @@ export class CalismaAlanlari {
         const n = this._yonetici.n_workspaces, etkin = this._yonetici.get_active_workspace_index();
         for (let i = 0; i < n; i++) {
             const d = new St.Button({style_class: `flugel-ca-nokta${i === etkin ? ' flugel-ca-etkin' : ''}`, can_focus: true,
-                y_align: Clutter.ActorAlign.CENTER, accessible_name: `Çalışma alanı ${i + 1}`});
+                y_align: Clutter.ActorAlign.CENTER, accessible_name: f(_('Çalışma alanı %s'), i + 1)});
             d.connect('clicked', () => this._yonetici.get_workspace_by_index(i)?.activate(global.get_current_time()));
             if (!this._mini)
-                ipucuBagla(d, {baslik: `Çalışma alanı ${i + 1}`, ayrinti: i === etkin ? 'Şu an buradasın' : 'Tıkla: geç · kapsülde tekerlek de geçer'});
+                ipucuBagla(d, {baslik: f(_('Çalışma alanı %s'), i + 1), ayrinti: i === etkin ? _('Şu an buradasın') : _('Tıkla: geç · kapsülde tekerlek de geçer')});
             this.actor.add_child(d);
         }
     }

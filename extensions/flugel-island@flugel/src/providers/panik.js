@@ -2,6 +2,7 @@
 import {createActivity} from '../activity.js';
 import {oncelik} from './provider-base.js';
 import {SARI} from '../ortak.js';
+import {_} from '../dil.js';
 
 export class PanikProvider {
     constructor(panik) {
@@ -30,9 +31,9 @@ export class PanikProvider {
         this._manager.update(createActivity({
             id: `${this.id}:aktif`, providerId: this.id, tier: 'persistent', slot: 'either',
             priority: oncelik(this._settings, this.id),
-            glyph: 'panik', label: 'Panik modu', sublabel: 'pencereler gizli, ses kapalı',
+            glyph: 'panik', label: _('Panik modu'), sublabel: _('pencereler gizli, ses kapalı'),
             data: {renk: SARI, kisa: 'gizli', eylemler: [
-                {ikon: 'edit-undo-symbolic', ipucu: 'Geri al: pencereleri ve sesi getir', fn: () => this._panik.geriAl()},
+                {ikon: 'edit-undo-symbolic', ipucu: _('Geri al: pencereleri ve sesi getir'), fn: () => this._panik.geriAl()},
             ]},
         }));
     }

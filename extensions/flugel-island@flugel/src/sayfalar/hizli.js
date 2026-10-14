@@ -13,6 +13,7 @@ import {bash, calistir, ekranGoruntusu, ikon} from '../ortak.js';
 import {Karo, Izgara, bolum} from '../bilesenler.js';
 import {sabitKarolar} from '../uygulamalar.js';
 import {UYKU_KIPLERI} from '../uyku.js';
+import {_, f} from '../dil.js';
 
 function surecOldur(pid, ad) {
     if (!pid || pid <= 1)
@@ -20,12 +21,12 @@ function surecOldur(pid, ad) {
     // önce kibarca (TERM), 2 sn sonra hâlâ açıksa alt süreçleriyle birlikte KILL
     bash(`kill -TERM ${pid} 2>/dev/null; pkill -TERM -P ${pid} 2>/dev/null; sleep 2; ` +
          `if kill -0 ${pid} 2>/dev/null; then pkill -KILL -P ${pid}; kill -KILL ${pid}; fi`);
-    Main.notify('Zorla kapatılıyor', ad);
+    Main.notify(_('Zorla kapatılıyor'), ad);
 }
 
 const saatDakika = ms => {
     const dk = Math.max(1, Math.round(ms / 60000));
-    return dk >= 60 ? `${Math.floor(dk / 60)} sa ${dk % 60} dk` : `${dk} dk`;
+    return dk >= 60 ? f(_('%s sa %s dk'), Math.floor(dk / 60), dk % 60) : f(_('%s dk'), dk);
 };
 
 export class HizliSayfa extends Sayfa {
@@ -37,35 +38,35 @@ export class HizliSayfa extends Sayfa {
         this._genislik = o.ayarlar.get_int('kart-genislik') - 48;
 
         this._sabit = new Izgara({genislik: this._genislik, karoGenisligi: 84});
-        this.actor.add_child(bolum('Uygulamalar', this._sabit));
+        this.actor.add_child(bolum(_('Uygulamalar'), this._sabit));
         this._sabitYaz();
         this._ayarId = o.ayarlar.connect('changed::sabit-uygulamalar', () => this._sabitYaz());
 
         const araclar = new Izgara({genislik: this._genislik, karoGenisligi: 84});
-        this._zorla = araclar.ekle(new Karo({ikon: 'kapat-daire', etiket: 'Zorla kapat',
-            ipucu: {baslik: 'Zorla kapat', ayrinti: 'Donan uygulamayı seç: önce kibarca, 2 sn sonra zorla kapatılır'},
+        this._zorla = araclar.ekle(new Karo({ikon: 'kapat-daire', etiket: _('Zorla kapat'),
+            ipucu: {baslik: _('Zorla kapat'), ayrinti: _('Donan uygulamayı seç: önce kibarca, 2 sn sonra zorla kapatılır')},
             eylem: () => this._ac('zorla')}));
-        this._panikKaro = araclar.ekle(new Karo({ikon: 'kalkan', etiket: 'Panik',
+        this._panikKaro = araclar.ekle(new Karo({ikon: 'kalkan', etiket: _('Panik'),
             ipucu: () => this._panikIpucu(), eylem: () => this._panikBas()}));
         this._basiliBagla();
-        this._uykuKaro = araclar.ekle(new Karo({ikon: 'fincan', etiket: 'Uyku engelle',
+        this._uykuKaro = araclar.ekle(new Karo({ikon: 'fincan', etiket: _('Uyku engelle'),
             ipucu: () => this._uykuIpucu(), eylem: () => this._ac('uyku')}));
-        araclar.ekle(new Karo({ikon: 'camera-photo-symbolic', etiket: 'Görüntü',
-            ipucu: {baslik: 'Ekran görüntüsü', ayrinti: 'Alan, pencere ya da tüm ekran (Print, Shift+Super+S)'},
+        araclar.ekle(new Karo({ikon: 'camera-photo-symbolic', etiket: _('Görüntü'),
+            ipucu: {baslik: _('Ekran görüntüsü'), ayrinti: _('Alan, pencere ya da tüm ekran (Print, Shift+Super+S)')},
             eylem: () => {
                 this.close();
                 ekranGoruntusu();
             }}));
-        araclar.ekle(new Karo({ikon: 'camera-video-symbolic', etiket: 'Kayıt',
-            ipucu: {baslik: 'Ekran kaydı', ayrinti: 'Kooha: MP4 ya da GIF'},
+        araclar.ekle(new Karo({ikon: 'camera-video-symbolic', etiket: _('Kayıt'),
+            ipucu: {baslik: _('Ekran kaydı'), ayrinti: _('Kooha: MP4 ya da GIF')},
             eylem: () => {
                 this.close();
                 calistir('kooha');
             }}));
-        this._geriKaro = araclar.ekle(new Karo({ikon: 'edit-undo-symbolic', etiket: 'Geri al',
-            ipucu: {baslik: 'Paniği geri al', ayrinti: 'Gizlenen pencereler ve ses geri gelir'},
+        this._geriKaro = araclar.ekle(new Karo({ikon: 'edit-undo-symbolic', etiket: _('Geri al'),
+            ipucu: {baslik: _('Paniği geri al'), ayrinti: _('Gizlenen pencereler ve ses geri gelir')},
             eylem: () => this._panik.geriAl()}));
-        this.actor.add_child(bolum('Araçlar', araclar));
+        this.actor.add_child(bolum(_('Araçlar'), araclar));
 
         // açılır alt panel (zorla kapat listesi / uyku süreleri)
         this._alt = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel', visible: false});
@@ -98,7 +99,7 @@ export class HizliSayfa extends Sayfa {
         this._geriKaro.actor.visible = this._panik.aktif;
         this._uykuKaro.secili(this._uyku.acik);
         this._uykuKaro.nokta(this._uyku.acik ? 'acik' : null);
-        this._uykuKaro.guncelle({etiket: this._uyku.acik ? (this._uyku.kip === 'video' ? 'Video' : 'Uyanık') : 'Uyku engelle'});
+        this._uykuKaro.guncelle({etiket: this._uyku.acik ? (this._uyku.kip === 'video' ? _('Video') : _('Uyanık')) : _('Uyku engelle')});
         if (this._acikAlt === 'uyku')
             this._uykuPaneli();
     }
@@ -143,62 +144,62 @@ export class HizliSayfa extends Sayfa {
             gorulen.add(pid);
             const ad = app ? app.get_name() : (w.get_wm_class() || '?');
             iz.ekle(new Karo({ikon: app?.get_icon() ?? ikon('application-x-executable-symbolic'), etiket: ad, boyut: 28,
-                ipucu: {baslik: `${ad}: zorla kapat`, ayrinti: (w.get_title() || '').slice(0, 80)},
+                ipucu: {baslik: f(_('%s: zorla kapat'), ad), ayrinti: (w.get_title() || '').slice(0, 80)},
                 eylem: () => {
                     this.close();
                     surecOldur(pid, ad);
                 }}));
         }
-        iz.ekle(new Karo({ikon: 'eclipse', etiket: 'Eclipse', ipucu: 'Eclipse\'i zorla kapat', eylem: () => {
+        iz.ekle(new Karo({ikon: 'eclipse', etiket: 'Eclipse', ipucu: _('Eclipse\'i zorla kapat'), eylem: () => {
             this.close();
             bash("pkill -TERM -f 'org.eclipse.equinox.launcher|snap/eclipse/.*/eclipse'; sleep 2; pkill -KILL -f 'org.eclipse.equinox.launcher|snap/eclipse/.*/eclipse'");
-            Main.notify('Zorla kapatılıyor', 'Eclipse');
+            Main.notify(_('Zorla kapatılıyor'), 'Eclipse');
         }}));
-        iz.ekle(new Karo({ikon: 'web-browser-symbolic', etiket: 'Chrome', ipucu: 'Chrome\'u zorla kapat', eylem: () => {
+        iz.ekle(new Karo({ikon: 'web-browser-symbolic', etiket: 'Chrome', ipucu: _('Chrome\'u zorla kapat'), eylem: () => {
             this.close();
             bash('pkill -TERM -x chrome; sleep 2; pkill -KILL -x chrome');
-            Main.notify('Zorla kapatılıyor', 'Chrome');
+            Main.notify(_('Zorla kapatılıyor'), 'Chrome');
         }}));
-        iz.ekle(new Karo({ikon: 'utilities-system-monitor-symbolic', etiket: 'Tüm süreçler', ipucu: 'Sistem İzleyici',
+        iz.ekle(new Karo({ikon: 'utilities-system-monitor-symbolic', etiket: _('Tüm süreçler'), ipucu: _('Sistem İzleyici'),
             eylem: () => {
                 this.close();
                 calistir('gnome-system-monitor -p');
             }}));
-        this._alt.add_child(bolum(gorulen.size ? 'Hangi uygulama dondu?' : 'Açık pencere yok', iz));
+        this._alt.add_child(bolum(gorulen.size ? _('Hangi uygulama dondu?') : _('Açık pencere yok'), iz));
     }
 
     _uykuPaneli() {
         this._alt.destroy_all_children();
         const iz = new Izgara({genislik: this._genislik, karoGenisligi: 104});
-        for (const [kip, ad] of UYKU_KIPLERI) {
+        for (const [kip, ad] of UYKU_KIPLERI()) {
             const k = iz.ekle(new Karo({ikon: kip === 'video' ? 'media-playback-start-symbolic' : 'fincan', etiket: ad,
-                ipucu: {baslik: `Uyku engelle: ${ad}`, ayrinti: 'Ekran kapanmaz, bilgisayar uykuya geçmez'},
+                ipucu: {baslik: f(_('Uyku engelle: %s'), ad), ayrinti: _('Ekran kapanmaz, bilgisayar uykuya geçmez')},
                 eylem: () => this._uyku.ac(kip)}));
             k.secili(this._uyku.kip === kip);
         }
         if (this._uyku.acik) {
-            iz.ekle(new Karo({ikon: 'window-close-symbolic', etiket: 'Kapat', ipucu: 'Uyku engellemeyi kapat',
+            iz.ekle(new Karo({ikon: 'window-close-symbolic', etiket: _('Kapat'), ipucu: _('Uyku engellemeyi kapat'),
                 eylem: () => {
                     this._uyku.kapat();
                     this._altKapat();
                 }}));
         }
-        const kalan = this._uyku.bitis ? ` · ${saatDakika(this._uyku.bitis - Date.now())} kaldı` : '';
-        this._alt.add_child(bolum(this._uyku.acik ? `Uyku engelli${kalan}` : 'Uyku engelleme: ne kadar süre?', iz));
+        const kalan = this._uyku.bitis ? f(_(' · %s kaldı'), saatDakika(this._uyku.bitis - Date.now())) : '';
+        this._alt.add_child(bolum(this._uyku.acik ? f(_('Uyku engelli%s'), kalan) : _('Uyku engelleme: ne kadar süre?'), iz));
     }
 
     _uykuIpucu() {
         if (!this._uyku.acik)
-            return {baslik: 'Uyku engelle', ayrinti: 'Ekran kapanmasın, bilgisayar uyumasın: süresiz, 1–2 saat ya da video oynarken'};
-        const kalan = this._uyku.bitis ? ` · ${saatDakika(this._uyku.bitis - Date.now())} kaldı` : '';
-        return {baslik: 'Uyku engelli', ayrinti: `${UYKU_KIPLERI.find(k => k[0] === this._uyku.kip)?.[1]}${kalan}`};
+            return {baslik: _('Uyku engelle'), ayrinti: _('Ekran kapanmasın, bilgisayar uyumasın: süresiz, 1–2 saat ya da video oynarken')};
+        const kalan = this._uyku.bitis ? f(_(' · %s kaldı'), saatDakika(this._uyku.bitis - Date.now())) : '';
+        return {baslik: _('Uyku engelli'), ayrinti: `${UYKU_KIPLERI().find(k => k[0] === this._uyku.kip)?.[1]}${kalan}`};
     }
 
     // ---------- panik: onaylı ----------
     _panikIpucu() {
-        const onay = this._o.ayarlar.get_string('panik-onay') === 'basili' ? '0,6 sn basılı tut' : 'iki kez tıkla';
-        return {baslik: 'Panik', ayrinti: `Pencereleri küçültür, sesi kapatır, ekranı kilitler. Onay: ${onay}. ` +
-            'Geri almak için "Geri al".'};
+        const onay = this._o.ayarlar.get_string('panik-onay') === 'basili' ? _('0,6 sn basılı tut') : _('iki kez tıkla');
+        return {baslik: _('Panik'), ayrinti: f(_('Pencereleri küçültür, sesi kapatır, ekranı kilitler. Onay: %s. '), onay) +
+            _('Geri almak için "Geri al".')};
     }
 
     _panikBas() {
@@ -211,7 +212,7 @@ export class HizliSayfa extends Sayfa {
             this._panik.gizle(true);
             return;
         }
-        this._panikKaro.guncelle({etiket: 'Emin misin?'});
+        this._panikKaro.guncelle({etiket: _('Emin misin?')});
         this._panikKaro.secili(true);
         this._panikOnayId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
             this._panikOnayId = 0;
@@ -224,7 +225,7 @@ export class HizliSayfa extends Sayfa {
         if (this._panikOnayId)
             GLib.source_remove(this._panikOnayId);
         this._panikOnayId = 0;
-        this._panikKaro.guncelle({etiket: 'Panik'});
+        this._panikKaro.guncelle({etiket: _('Panik')});
         this._panikKaro.secili(false);
     }
 
@@ -233,7 +234,7 @@ export class HizliSayfa extends Sayfa {
         a.connect('button-press-event', () => {
             if (this._o.ayarlar.get_string('panik-onay') !== 'basili')
                 return Clutter.EVENT_PROPAGATE;
-            this._panikKaro.guncelle({etiket: 'Tut…'});
+            this._panikKaro.guncelle({etiket: _('Tut…')});
             this._basiliId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 600, () => {
                 this._basiliId = 0;
                 this._panikOnayIptal();

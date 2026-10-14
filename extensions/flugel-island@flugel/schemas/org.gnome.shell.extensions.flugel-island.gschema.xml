@@ -9,7 +9,7 @@
     <!-- Davranış -->
     <key name="dil" type="s">
       <choices><choice value="sistem"/><choice value="tr"/><choice value="en"/></choices>
-      <default>'sistem'</default>
+      <default>'tr'</default>
       <summary>Arayüz dili (sistem, Türkçe, English)</summary>
     </key>
     <key name="vm-gizli" type="as">

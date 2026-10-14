@@ -6,6 +6,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import {createActivity} from '../activity.js';
 import {oncelik} from './provider-base.js';
+import {_} from '../dil.js';
 
 const MPRIS_BUS_PREFIX = 'org.mpris.MediaPlayer2.';
 const MPRIS_PATH = '/org/mpris/MediaPlayer2';
@@ -123,11 +124,11 @@ export class MediaProvider {
         const kapak = /^(file|https?):\/\//.test(artUrl) ? Gio.FileIcon.new(Gio.File.new_for_uri(artUrl)) : null;
         const eylemler = [];
         if (coz(proxy.get_cached_property('CanGoPrevious')))
-            eylemler.push({ikon: 'media-skip-backward-symbolic', ipucu: 'Önceki', fn: () => this._cagir(busName, 'Previous')});
+            eylemler.push({ikon: 'media-skip-backward-symbolic', ipucu: _('Önceki'), fn: () => this._cagir(busName, 'Previous')});
         eylemler.push({ikon: caliyor ? 'media-playback-pause-symbolic' : 'media-playback-start-symbolic',
-            ipucu: caliyor ? 'Duraklat' : 'Oynat', fn: () => this._cagir(busName, 'PlayPause')});
+            ipucu: caliyor ? _('Duraklat') : _('Oynat'), fn: () => this._cagir(busName, 'PlayPause')});
         if (coz(proxy.get_cached_property('CanGoNext')))
-            eylemler.push({ikon: 'media-skip-forward-symbolic', ipucu: 'Sonraki', fn: () => this._cagir(busName, 'Next')});
+            eylemler.push({ikon: 'media-skip-forward-symbolic', ipucu: _('Sonraki'), fn: () => this._cagir(busName, 'Next')});
 
         this._manager.update(createActivity({
             id: `${this.id}:${busName}`,
@@ -139,7 +140,7 @@ export class MediaProvider {
             glyph: kapak ? null : (caliyor ? 'media-playback-start-symbolic' : 'media-playback-pause-symbolic'),
             label: title,
             sublabel: artist || null,
-            data: {kapak, kapakUrl: artUrl, kisa: caliyor ? '' : 'duraklatıldı', eylemler},
+            data: {kapak, kapakUrl: artUrl, kisa: caliyor ? '' : _('duraklatıldı'), eylemler},
         }));
     }
 

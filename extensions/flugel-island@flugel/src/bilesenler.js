@@ -11,6 +11,7 @@ import Clutter from 'gi://Clutter';
 import Pango from 'gi://Pango';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {ikon} from './ortak.js';
+import {_} from './dil.js';
 
 const GECIKME = 350;
 const sf = () => St.ThemeContext.get_for_stage(global.stage).scale_factor;

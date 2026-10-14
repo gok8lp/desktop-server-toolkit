@@ -6,6 +6,7 @@ import GLib from 'gi://GLib';
 import Clutter from 'gi://Clutter';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import {_, f} from './dil.js';
 
 export const H = GLib.get_home_dir();
 export const VERI = `${H}/.local/bin/ust-panel-veri`;
@@ -70,7 +71,7 @@ export function komutCiktisi(argv, iptal = null) {
 export async function jsonAl(argv, iptal = null) {
     const cikti = await komutCiktisi(argv, iptal);
     if (cikti === null)
-        return {hata: 'komut çalışmadı'};
+        return {hata: _('komut çalışmadı')};
     try {
         return JSON.parse(cikti);
     } catch (e) {
@@ -82,7 +83,7 @@ export function ekranGoruntusu() {
     try {
         Main.screenshotUI.open().catch(() => {});
     } catch (e) {
-        Main.notify('Ekran görüntüsü', 'Açılamadı');
+        Main.notify(_('Ekran görüntüsü'), _('Açılamadı'));
     }
 }
 
@@ -92,7 +93,7 @@ export function calistir(komut) {
     try {
         GLib.spawn_command_line_async(komut);
     } catch (e) {
-        Main.notify('FLUGEL Island', `Çalıştırılamadı: ${komut}`);
+        Main.notify('FLUGEL Island', f(_('Çalıştırılamadı: %s'), komut));
     }
     return undefined;
 }
@@ -124,19 +125,19 @@ export const renkli = (metin, renk) => (renk ? `<span foreground="${renk}">${met
 export const soluk = m => `<span foreground="${SOLUK}">${m}</span>`;
 export const degisim = d => ((d === null || d === undefined) ? '' : `${d >= 0 ? '▲' : '▼'}${Math.abs(d).toFixed(1)}%`);
 
-const AYLAR = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+const AYLAR = () => [_('Oca'), _('Şub'), _('Mar'), _('Nis'), _('May'), _('Haz'), _('Tem'), _('Ağu'), _('Eyl'), _('Eki'), _('Kas'), _('Ara')];
 export const kisaTarih = t => {
     const p = (t || '').split('-');
-    return p.length === 3 ? `${parseInt(p[2])} ${AYLAR[parseInt(p[1]) - 1]}` : t;
+    return p.length === 3 ? `${parseInt(p[2])} ${AYLAR()[parseInt(p[1]) - 1]}` : t;
 };
 export const bugun = () => GLib.DateTime.new_now_local().format('%Y-%m-%d');
 
 export function geriSayim(ts) {
     const fark = ts - Math.floor(Date.now() / 1000);
     if (fark <= 0)
-        return 'yayında';
+        return _('yayında');
     const g = Math.floor(fark / 86400), sa = Math.floor((fark % 86400) / 3600), dk = Math.floor((fark % 3600) / 60);
-    return g > 0 ? `${g}g ${sa}sa` : (sa > 0 ? `${sa}sa ${dk}dk` : `${Math.max(dk, 1)}dk`);
+    return g > 0 ? f(_('%sg %ssa'), g, sa) : (sa > 0 ? f(_('%ssa %sdk'), sa, dk) : f(_('%sdk'), Math.max(dk, 1)));
 }
 
 // ---------- menü satırları (Island kartındaki sayfalar PopupMenuSection kullanır) ----------

@@ -3,7 +3,7 @@
 
 Kaynak: IMDb'nin resmi, ticari olmayan veri dosyaları (https://datasets.imdbws.com, günlük güncellenir).
 "Information courtesy of IMDb (https://www.imdb.com). Used with permission." — yalnızca kişisel kullanım.
-- title.basics + title.episode haftada bir indirilir, akarak süzülür (sadece animasyon dizileri tutulur),
+- title.basics (iki geçiş) + title.episode haftada bir indirilir, akarak süzülür (sadece animasyon dizileri tutulur),
   ham dosyalar saklanmaz; title.ratings her gün.
 - Eşleştirme: anime adı (Season/Part ekleri atılmış) IMDb dizisinin adıyla birebir aynı olmalı; sezon
   numarası addaki "Season N"den, bölüm numarası son yayınlanan bölümden. Eşleşmezse puan BOŞ kalır,
@@ -63,6 +63,11 @@ def indeks_yenile():
         if len(s) < 4 or s[1] not in diziler or not s[2].isdigit() or not s[3].isdigit():
             continue
         bolumler[f"{s[1]}|{s[2]}|{s[3]}"] = s[0]
+    # bölümlerin yayın yılı (ikinci geçiş): eski bir bölüme yanlış eşleşmeyi önler
+    tt_anahtar = {tt: k for k, tt in bolumler.items()}
+    for s in akis("title.basics.tsv.gz"):
+        if s and s[0] in tt_anahtar:
+            bolumler[tt_anahtar[s[0]]] = f"{s[0]}|{s[5]}"
     adlar = {}
     for tt, d in diziler.items():
         for a in {d["ad"], d["orj"]}:
@@ -88,14 +93,20 @@ def main():
         if not a.get("son_bolum"):
             continue
         for ad in (a.get("ad"), a.get("ad_jp")):
+            # "Part 2" gibi devam bölümlerinde numaralama belirsiz: eşleştirme yapılmaz
+            if re.search(r"part\s*[2-9]|cour\s*[2-9]", ad or "", re.I):
+                break
             kok, sezon = kok_ad(ad)
-            adaylar = indeks["adlar"].get(kok, [])
-            # birden çok dizi aynı adı taşıyorsa: istenen sezon-bölümü olan ilk dizi; yoksa eşleşme yok
-            for tt in adaylar:
-                ep = indeks["bolumler"].get(f"{tt}|{sezon}|{a['son_bolum']}")
-                if ep:
-                    hedef[ep] = {"mal": a["id"], "imdb": tt, "sezon": sezon, "bolum": a["son_bolum"]}
-                    break
+            for tt in indeks["adlar"].get(kok, []):
+                deger = indeks["bolumler"].get(f"{tt}|{sezon}|{a['son_bolum']}")
+                if not deger or "|" not in deger:
+                    continue
+                ep, yil = deger.split("|", 1)
+                # bölüm son 1 yılda yayınlanmış olmalı (şu an yayında olan anime)
+                if not yil.isdigit() or int(yil) < time.localtime().tm_year - 1:
+                    continue
+                hedef[ep] = {"mal": a["id"], "imdb": tt, "sezon": sezon, "bolum": a["son_bolum"]}
+                break
             if any(h["mal"] == a["id"] for h in hedef.values()):
                 break
     sonuc = {}

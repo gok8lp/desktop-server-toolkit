@@ -23,6 +23,10 @@ if [ ! -e "$HOME/sistem-bakim/yedek/SON-PANEL-YEDEGI" ]; then
   echo "Uyarı: ~/sistem-bakim/yedek/SON-PANEL-YEDEGI yok; geri dönüş için önce yedek alın." >&2
 fi
 
+# çeviriler (TR kaynak → EN): gettext varsa derlenir
+if command -v msgfmt >/dev/null; then
+  yap "$KAYNAK/po/derle.sh" >/dev/null
+fi
 yap mkdir -p "$HEDEF"
 yap rsync -a --delete --exclude 'schemas/gschemas.compiled' "$KAYNAK/" "$HEDEF/"
 yap glib-compile-schemas --strict "$HEDEF/schemas"

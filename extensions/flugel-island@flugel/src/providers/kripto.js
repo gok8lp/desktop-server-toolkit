@@ -2,6 +2,7 @@
 import {createActivity} from '../activity.js';
 import {oncelik} from './provider-base.js';
 import {para} from '../ortak.js';
+import {_, f} from '../dil.js';
 
 export class KriptoProvider {
     constructor(ortam) {
@@ -40,9 +41,9 @@ export class KriptoProvider {
             priority: oncelik(this._settings, this.id),
             glyph: ik,
             label: `${ad} ${ok}${Math.abs(c.degisim).toFixed(1)}%`,
-            sublabel: `${para(c.fiyat, 0)} $ · 24 saat`,
+            sublabel: f(_('%s $ · 24 saat'), para(c.fiyat, 0)),
             data: {kisa: `${ok}${Math.abs(c.degisim).toFixed(0)}%`, eylemler: [
-                {ikon: ik, ipucu: 'Kripto sekmesi', fn: () => this._ortam.sekmeAc('kripto')},
+                {ikon: ik, ipucu: _('Kripto sekmesi'), fn: () => this._ortam.sekmeAc('kripto')},
             ], kapat: () => {
                 this._gizlenen = kademe;
                 this._manager?.remove(`${this.id}:hareket`);

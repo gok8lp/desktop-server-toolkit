@@ -2,10 +2,11 @@
 import Shell from 'gi://Shell';
 import {Karo} from './bilesenler.js';
 import {H, calistir} from './ortak.js';
+import {_} from './dil.js';
 
 export const ECLIPSE = `/snap/bin/eclipse -data ${H}/Documents/eclipse-workspace`;
 const KISA = {'eclipse_eclipse.desktop': 'Eclipse', 'kitty.desktop': 'Terminal', 'google-chrome.desktop': 'Chrome',
-    'org.gnome.Nautilus.desktop': 'Dosyalar'};
+    'org.gnome.Nautilus.desktop': _('Dosyalar')};
 
 export function uygulamaAc(id) {
     // Eclipse her zaman C/C++ çalışma alanıyla açılır

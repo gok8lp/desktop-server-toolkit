@@ -4,13 +4,14 @@ import Gio from 'gi://Gio';
 import {createActivity, _now} from '../activity.js';
 import {oncelik, geciciSure} from './provider-base.js';
 import {KIRMIZI} from '../ortak.js';
+import {_, f} from '../dil.js';
 
 const UPOWER = 'org.freedesktop.UPower';
 const AYGIT = 'org.freedesktop.UPower.Device';
 // UPower aygıt türleri: 5 fare, 6 klavye, 12 kulaklık, 17 kulaklık seti, 20 oyun kolu …
-const TURLER = {5: ['input-mouse-symbolic', 'Fare'], 6: ['input-keyboard-symbolic', 'Klavye'],
-    12: ['audio-headphones-symbolic', 'Kulaklık'], 17: ['audio-headset-symbolic', 'Kulaklık'],
-    20: ['input-gaming-symbolic', 'Oyun kolu']};
+const TURLER = () => ({5: ['input-mouse-symbolic', _('Fare')], 6: ['input-keyboard-symbolic', _('Klavye')],
+    12: ['audio-headphones-symbolic', _('Kulaklık')], 17: ['audio-headset-symbolic', _('Kulaklık')],
+    20: ['input-gaming-symbolic', _('Oyun kolu')]});
 
 export class CihazProvider {
     constructor() {
@@ -64,13 +65,13 @@ export class CihazProvider {
                 return;
             }
             const tur = proxy.get_cached_property('Type')?.unpack();
-            if (!TURLER[tur] || !this._manager || this._aygitlar.has(yol))
+            if (!TURLER()[tur] || !this._manager || this._aygitlar.has(yol))
                 return;
             const kayit = {proxy, dusukUyarildi: false};
             kayit.id = proxy.connect('g-properties-changed', () => this._yenile());
             this._aygitlar.set(yol, kayit);
             if (yeniBaglandi)
-                this._flas(proxy, 'bağlandı');
+                this._flas(proxy, _('bağlandı'));
             this._yenile();
         });
     }
@@ -86,7 +87,7 @@ export class CihazProvider {
     }
 
     _bilgi(proxy) {
-        const [glyph, tur] = TURLER[proxy.get_cached_property('Type')?.unpack()] ?? ['battery-symbolic', 'Aygıt'];
+        const [glyph, tur] = TURLER()[proxy.get_cached_property('Type')?.unpack()] ?? ['battery-symbolic', _('Aygıt')];
         const ad = proxy.get_cached_property('Model')?.unpack() || tur;
         const yuzde = Math.round(proxy.get_cached_property('Percentage')?.unpack() ?? -1);
         return {glyph, ad, yuzde};
@@ -119,7 +120,7 @@ export class CihazProvider {
                 this._manager.update(createActivity({
                     id, providerId: this.id, tier: 'persistent', slot: 'either',
                     priority: oncelik(this._settings, this.id),
-                    glyph, label: `${ad} pili azaldı`, sublabel: `%${yuzde} · şarj et`,
+                    glyph, label: f(_('%s pili azaldı'), ad), sublabel: f(_('%%%s · şarj et'), yuzde),
                     data: {renk: KIRMIZI, kisa: `%${yuzde}`, kapat: () => {
                         k.dusukUyarildi = true;
                         this._manager?.remove(id);
@@ -138,7 +139,7 @@ export class CihazProvider {
         this._manager.update(createActivity({
             id: `${this.id}:liste`, providerId: this.id, tier: 'ambient', slot: 'either',
             priority: oncelik(this._settings, this.id),
-            glyph: 'input-keyboard-symbolic', label: 'Kablosuz aygıtlar', sublabel: satirlar.join(' · '),
+            glyph: 'input-keyboard-symbolic', label: _('Kablosuz aygıtlar'), sublabel: satirlar.join(' · '),
             data: {kartta: true},
         }));
     }

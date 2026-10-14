@@ -7,6 +7,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {InjectionManager} from 'resource:///org/gnome/shell/extensions/extension.js';
 import {AppMenu} from 'resource:///org/gnome/shell/ui/appMenu.js';
 import {H} from './ortak.js';
+import {_} from './dil.js';
 
 function masaustuneEkle(app) {
     const kaynak = app?.app_info?.get_filename?.();
@@ -20,9 +21,9 @@ function masaustuneEkle(app) {
         hedef.set_attribute_uint32('unix::mode', 0o755, Gio.FileQueryInfoFlags.NONE, null);
         // DING (masaüstü simgeleri) için "çalıştırmaya izin ver" işareti
         hedef.set_attribute_string('metadata::trusted', 'true', Gio.FileQueryInfoFlags.NONE, null);
-        Main.notify('Masaüstüne eklendi', app.get_name());
+        Main.notify(_('Masaüstüne eklendi'), app.get_name());
     } catch (e) {
-        Main.notify('Masaüstüne eklenemedi', String(e).slice(0, 80));
+        Main.notify(_('Masaüstüne eklenemedi'), String(e).slice(0, 80));
     }
 }
 
@@ -33,7 +34,7 @@ export class PencereYardimcisi {
         this._enj.overrideMethod(AppMenu.prototype, 'setApp', orijinal => function (app) {
             orijinal.call(this, app);
             if (!this._flugelMasaustu) {
-                this._flugelMasaustu = this.addAction('Masaüstüne ekle', () => masaustuneEkle(this._app));
+                this._flugelMasaustu = this.addAction(_('Masaüstüne ekle'), () => masaustuneEkle(this._app));
                 menuler.add(this);
                 this.connect('destroy', () => menuler.delete(this));
             }

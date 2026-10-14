@@ -7,6 +7,7 @@ import {getMixerControl} from 'resource:///org/gnome/shell/ui/status/volume.js';
 import {createActivity} from '../activity.js';
 import {oncelik} from './provider-base.js';
 import {KIRMIZI, SARI} from '../ortak.js';
+import {_} from '../dil.js';
 
 // Ses ayarları ve pavucontrol kendi ölçerleri için kayıt açar; onlar "mikrofon kullanımda" sayılmaz
 const ATLANAN = ['org.gnome.VolumeControl', 'org.PulseAudio.pavucontrol'];
@@ -63,12 +64,12 @@ export class PrivacyProvider {
             this._manager.remove(`${this.id}:durum`);
             return;
         }
-        const parcalar = [kayit && 'ekran kaydı', paylasim && 'ekran paylaşımı', kam && 'kamera', mik && 'mikrofon'].filter(Boolean);
+        const parcalar = [kayit && _('ekran kaydı'), paylasim && _('ekran paylaşımı'), kam && 'kamera', mik && 'mikrofon'].filter(Boolean);
         const eylemler = [];
         if (kayit)
-            eylemler.push({ikon: 'media-playback-stop-symbolic', ipucu: 'Kaydı durdur', fn: () => Main.screenshotUI.stopScreencast()});
+            eylemler.push({ikon: 'media-playback-stop-symbolic', ipucu: _('Kaydı durdur'), fn: () => Main.screenshotUI.stopScreencast()});
         if (paylasim)
-            eylemler.push({ikon: 'media-playback-stop-symbolic', ipucu: 'Paylaşımı durdur', fn: () => this._paylasim?._stopSharing?.()});
+            eylemler.push({ikon: 'media-playback-stop-symbolic', ipucu: _('Paylaşımı durdur'), fn: () => this._paylasim?._stopSharing?.()});
         const ilk = parcalar[0];
         this._manager.update(createActivity({
             id: `${this.id}:durum`,
@@ -78,7 +79,7 @@ export class PrivacyProvider {
             priority: oncelik(this._settings, this.id, kayit ? 50 : 0),
             glyph: kayit ? 'media-record-symbolic' : (paylasim ? 'screen-shared-symbolic' : (kam ? 'camera-web-symbolic' : 'audio-input-microphone-symbolic')),
             label: ilk.charAt(0).toUpperCase() + ilk.slice(1),
-            sublabel: parcalar.length > 1 ? `+ ${parcalar.slice(1).join(', ')}` : 'kullanımda',
+            sublabel: parcalar.length > 1 ? `+ ${parcalar.slice(1).join(', ')}` : _('kullanımda'),
             data: {renk: kayit || kam ? KIRMIZI : SARI, yanip: kayit, kisa: kayit ? 'REC' : '', eylemler},
         }));
     }

@@ -6,12 +6,13 @@ import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Clutter from 'gi://Clutter';
 import {ipucuBagla} from './bilesenler.js';
+import {_} from './dil.js';
 
 const tepsiAnahtari = c => Object.keys(Main.panel.statusArea).find(k =>
     k.startsWith('appindicator-') && Main.panel.statusArea[k]?.container === c);
 const tepsiAdi = c => {
     const i = c.get_first_child();
-    return i?._indicator?.title || i?._indicator?.id || i?.accessible_name || 'Uygulama';
+    return i?._indicator?.title || i?._indicator?.id || i?.accessible_name || _('Uygulama');
 };
 
 export class Tepsi {

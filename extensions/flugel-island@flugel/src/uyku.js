@@ -6,14 +6,15 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import {createActivity} from './activity.js';
 import {oncelik} from './providers/provider-base.js';
+import {_} from './dil.js';
 
 const SM = 'org.gnome.SessionManager';
 const BOSTA = 8, UYKU = 4;
-export const UYKU_KIPLERI = [
-    ['suresiz', 'Süresiz', 0],
-    ['1sa', '1 saat', 3600],
-    ['2sa', '2 saat', 7200],
-    ['video', 'Video oynarken', -1],
+export const UYKU_KIPLERI = () => [
+    ['suresiz', _('Süresiz'), 0],
+    ['1sa', _('1 saat'), 3600],
+    ['2sa', _('2 saat'), 7200],
+    ['video', _('Video oynarken'), -1],
 ];
 
 export class UykuEngeli {
@@ -43,7 +44,7 @@ export class UykuEngeli {
     ac(kip = 'suresiz') {
         this.kapat(false);
         this.kip = kip;
-        const sn = UYKU_KIPLERI.find(k => k[0] === kip)?.[2] ?? 0;
+        const sn = UYKU_KIPLERI().find(k => k[0] === kip)?.[2] ?? 0;
         if (sn > 0) {
             this._bitis = Date.now() + sn * 1000;
             this._sureId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, sn, () => {
@@ -76,11 +77,11 @@ export class UykuEngeli {
         if (this.kip === null) {
             this._yonetici?.remove(id);
         } else {
-            const ad = UYKU_KIPLERI.find(k => k[0] === this.kip)?.[1] ?? '';
+            const ad = UYKU_KIPLERI().find(k => k[0] === this.kip)?.[1] ?? '';
             this._yonetici?.update(createActivity({
                 id, providerId: 'uyku', tier: 'ambient', slot: 'either',
                 priority: oncelik(this._ayar, 'privacy', 90),
-                glyph: 'fincan', label: 'Uyku engelli', sublabel: ad,
+                glyph: 'fincan', label: _('Uyku engelli'), sublabel: ad,
                 data: {mini: true, kartta: true},
             }));
         }
@@ -92,7 +93,7 @@ export class UykuEngeli {
         if (evet && !this._cerez && !this._istek) {
             this._istek = true;
             Gio.DBus.session.call(SM, '/org/gnome/SessionManager', SM, 'Inhibit',
-                new GLib.Variant('(susu)', ['org.gnome.Shell.Extensions.FlugelIsland', 0, 'FLUGEL Island: uyku engelleme', BOSTA | UYKU]),
+                new GLib.Variant('(susu)', ['org.gnome.Shell.Extensions.FlugelIsland', 0, _('FLUGEL Island: uyku engelleme'), BOSTA | UYKU]),
                 new GLib.VariantType('(u)'), Gio.DBusCallFlags.NONE, -1, this._iptal, (bus, res) => {
                     this._istek = false;
                     try {

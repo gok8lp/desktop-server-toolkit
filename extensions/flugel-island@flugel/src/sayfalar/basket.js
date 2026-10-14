@@ -11,6 +11,7 @@ import {Sayfa} from './sayfa.js';
 import {calistir, kisaTarih} from '../ortak.js';
 import {bolum, dugme, ipucuBagla} from '../bilesenler.js';
 import {ikon} from '../ortak.js';
+import {_, f} from '../dil.js';
 
 const saat = ts => GLib.DateTime.new_from_unix_local(ts).format('%H:%M');
 const kalan = (tarih, s) => {
@@ -22,8 +23,8 @@ const kalan = (tarih, s) => {
     if (fark < -120)
         return 'bitti';
     if (fark < 0)
-        return 'şimdi';
-    return fark >= 60 ? `${Math.floor(fark / 60)} sa ${Math.round(fark % 60)} dk kaldı` : `${Math.round(fark)} dk kaldı`;
+        return _('şimdi');
+    return fark >= 60 ? f(_('%s sa %s dk kaldı'), Math.floor(fark / 60), Math.round(fark % 60)) : f(_('%s dk kaldı'), Math.round(fark));
 };
 const ligSimge = lig => (/NBA|basket/i.test(lig) ? 'basket' : 'top');
 
@@ -45,16 +46,16 @@ export class BasketSayfa extends Sayfa {
         this._benim.reactive = true;
         ipucuBagla(this._benim, () => {
             const b = this._sonBenim ?? {};
-            return {baslik: `Takip: ${(b.isimler ?? []).join(', ')}`,
-                ayrinti: [`Son kontrol ${b.guncelleme ?? '?'}`, ...(b.gecmis ?? []).map(m =>
+            return {baslik: f(_('Takip: %s'), (b.isimler ?? []).join(', ')),
+                ayrinti: [f(_('Son kontrol %s'), b.guncelleme ?? '?'), ...(b.gecmis ?? []).map(m =>
                     `${kisaTarih(m.tarih)} ${m.ev} — ${m.dep} (${m.gorev ?? ''})`)].join('\n')};
         });
-        this.actor.add_child(bolum('Benim maçlarım', this._benim, {sag: dugme('view-refresh-symbolic', 'Bültenleri şimdi kontrol et',
+        this.actor.add_child(bolum(_('Benim maçlarım'), this._benim, {sag: dugme('view-refresh-symbolic', _('Bültenleri şimdi kontrol et'),
             () => this._kontrol(), {stil: 'flugel-dugme flugel-dugme-kucuk'})}));
 
         const cipler = new St.BoxLayout({style_class: 'flugel-cipler', x_align: Clutter.ActorAlign.CENTER});
         this._cip = {};
-        for (const [k, ad] of [['bugun', 'Bugün'], ['yarin', 'Yarın'], ['gecmis', 'Geçmiş']]) {
+        for (const [k, ad] of [['bugun', _('Bugün')], ['yarin', _('Yarın')], ['gecmis', _('Geçmiş')]]) {
             const b = new St.Button({label: ad, style_class: 'flugel-cip', can_focus: true});
             b.connect('clicked', () => {
                 this._gorunum = k;
@@ -68,7 +69,7 @@ export class BasketSayfa extends Sayfa {
         this._liste = new St.BoxLayout({style_class: 'flugel-mac-listesi', orientation: Clutter.Orientation.VERTICAL});
         this.actor.add_child(this._liste);
         const alt = new St.BoxLayout({style_class: 'flugel-cipler', x_align: Clutter.ActorAlign.CENTER});
-        const fikstur = new St.Button({label: 'Ankara basketbol fikstürü', style_class: 'flugel-cip', can_focus: true});
+        const fikstur = new St.Button({label: _('Ankara basketbol fikstürü'), style_class: 'flugel-cip', can_focus: true});
         fikstur.connect('clicked', () => {
             this.close();
             calistir('xdg-open https://www.ankarabasket.org.tr/fiksturler');
@@ -79,7 +80,7 @@ export class BasketSayfa extends Sayfa {
         this._aboneler = [veri.abone('maclar', d => {
             const b = d?.benim ?? {};
             const bugunVar = (b.bugun ?? []).length;
-            this.rozetDegisti?.(d?.canli ? 'canlı' : (bugunVar ? 'bugün' : ''));
+            this.rozetDegisti?.(d?.canli ? _('canlı') : (bugunVar ? _('bugün') : ''));
             this.gorunurse(() => this._yaz());
         })];
     }
@@ -113,7 +114,7 @@ export class BasketSayfa extends Sayfa {
         this._benimYaz(d);
         this._liste.destroy_all_children();
         if (!d || d.hata) {
-            this._liste.add_child(etiket(d ? 'Maç verisi alınamadı (sunucu?)' : 'Yükleniyor…', 'flugel-soluk'));
+            this._liste.add_child(etiket(d ? _('Maç verisi alınamadı (sunucu?)') : _('Yükleniyor…'), 'flugel-soluk'));
             return;
         }
         if (this._gorunum === 'gecmis') {
@@ -127,14 +128,14 @@ export class BasketSayfa extends Sayfa {
             this._ligler(d[this._gorunum] ?? []);
         }
         if (!this._liste.get_n_children())
-            this._liste.add_child(etiket('Maç yok', 'flugel-soluk'));
+            this._liste.add_child(etiket(_('Maç yok'), 'flugel-soluk'));
     }
 
     _benimYaz(d) {
         this._benim.destroy_all_children();
         const b = d?.benim;
         if (!b) {
-            this._benim.add_child(etiket('Hakemlik verisi yok', 'flugel-soluk'));
+            this._benim.add_child(etiket(_('Hakemlik verisi yok'), 'flugel-soluk'));
             return;
         }
         const satir = (m, gun) => {
@@ -149,13 +150,13 @@ export class BasketSayfa extends Sayfa {
                 s.add_child(etiket(k, 'flugel-rozet flugel-benim-kalan'));
             this._benim.add_child(s);
         };
-        (b.bugun ?? []).forEach(m => satir(m, 'Bugün'));
-        (b.yarin ?? []).forEach(m => satir(m, 'Yarın'));
+        (b.bugun ?? []).forEach(m => satir(m, _('Bugün')));
+        (b.yarin ?? []).forEach(m => satir(m, _('Yarın')));
         if (!(b.bugun ?? []).length && !(b.yarin ?? []).length) {
-            this._benim.add_child(etiket('Bugün ve yarın görevin yok', 'flugel-benim-bos'));
+            this._benim.add_child(etiket(_('Bugün ve yarın görevin yok'), 'flugel-benim-bos'));
             const y = (b.yaklasan ?? [])[0];
             if (y)
-                this._benim.add_child(etiket(`Sıradaki: ${kisaTarih(y.tarih)} ${y.saat} · ${y.ev} — ${y.dep}`, 'flugel-benim-alt'));
+                this._benim.add_child(etiket(f(_('Sıradaki: %s %s · %s — %s'), kisaTarih(y.tarih), y.saat, y.ev, y.dep), 'flugel-benim-alt'));
         }
         this._sonBenim = b;
     }
@@ -184,7 +185,7 @@ export class BasketSayfa extends Sayfa {
         k.add_child(etiket(orta, 'flugel-mac-skor', 72));
         k.add_child(logo(m.dep ?? {}));
         k.add_child(etiket(m.dep?.ad, 'flugel-mac-takim', 190));
-        k.add_child(etiket(canli ? 'CANLI' : (bitti ? 'Bitti' : ''), `flugel-mac-durum${canli ? ' flugel-rozet' : ''}`));
+        k.add_child(etiket(canli ? 'CANLI' : (bitti ? _('Bitti') : ''), `flugel-mac-durum${canli ? ' flugel-rozet' : ''}`));
         s.set_child(k);
         if (/^https?:\/\//.test(m.link ?? '')) {
             s.connect('clicked', () => {
@@ -192,7 +193,7 @@ export class BasketSayfa extends Sayfa {
                 calistir(`xdg-open ${GLib.shell_quote(m.link)}`);
             });
         }
-        ipucuBagla(s, {baslik: `${m.ev?.ad} — ${m.dep?.ad}`, ayrinti: `${saat(m.ts)} · ${m.detay ?? ''}${m.link ? ' · tıkla: ESPN maç sayfası' : ''}`});
+        ipucuBagla(s, {baslik: `${m.ev?.ad} — ${m.dep?.ad}`, ayrinti: `${saat(m.ts)} · ${m.detay ?? ''}${m.link ? _(' · tıkla: ESPN maç sayfası') : ''}`});
         return s;
     }
 

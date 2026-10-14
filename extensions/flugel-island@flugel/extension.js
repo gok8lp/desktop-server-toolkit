@@ -48,6 +48,7 @@ import {PowerProvider} from './src/providers/power.js';
 import {CihazProvider} from './src/providers/cihaz.js';
 import {NotificationProvider} from './src/providers/notification.js';
 import {KeyboardProvider} from './src/providers/keyboard.js';
+import {_, dilKur} from './src/dil.js';
 
 // Ayarlardaki kimlik → sağlayıcı (her açılışta yeni örnek; eski örnekten hiçbir şey taşınmaz)
 const SAGLAYICILAR = {
@@ -84,6 +85,8 @@ export default class FlugelIsland extends Extension {
             console.warn('FLUGEL Island: flugel-panel de açık; ikisi birlikte kullanılmamalı (kur-island betiği eskisini kapatır)');
 
         this._ayar = this.getSettings();
+        // arayüz dili (sistem / Türkçe / English) — ayarlar penceresi değiştirince Island'ı yeniden başlatır
+        dilKur(this.path, this._ayar.get_string('dil'));
         this._yonetici = new ActivityManager();
         this._guc = new GucDurumu();
         this._veri = new VeriMerkezi(this._ayar);
@@ -108,13 +111,13 @@ export default class FlugelIsland extends Extension {
                 etkinlikler: () => this._ustCubuk?.etkinlikler(),
             }};
         const sayfalar = [
-            {id: 'hizli', ad: 'Hızlı', aciklama: 'Uygulamalar, araçlar, uyku engelleme', ikon: 'view-app-grid-symbolic', sayfa: new HizliSayfa(o)},
-            {id: 'kisayol', ad: 'Kısayollar', aciklama: 'Klasörler, uygulamalar, klavye kısayolları', ikon: 'folder-symbolic', sayfa: new KisayolSayfa(o)},
-            {id: 'sistem', ad: 'Sistem', aciklama: 'Bu PC, pil ve sunucu', ikon: 'computer-symbolic', sayfa: new SistemSayfa(o)},
-            {id: 'vm', ad: 'Sanal makineler', aciklama: 'Sunucudaki Windows ve Ubuntu', ikon: 'video-display-symbolic', sayfa: new VmSayfa(o)},
-            {id: 'kripto', ad: 'Kripto ve döviz', aciklama: 'Fiyatlar ve grafikler', ikon: 'coin-btc', sayfa: new KriptoSayfa(o)},
-            {id: 'basket', ad: 'Maçlar', aciklama: 'Hakemlik görevlerim ve maçlar', ikon: 'basket', sayfa: new BasketSayfa(o)},
-            {id: 'anime', ad: 'Anime ve manga', aciklama: 'Takip ettiklerim', ikon: 'anime', sayfa: new AnimeSayfa(o)},
+            {id: 'hizli', ad: _('Hızlı'), aciklama: _('Uygulamalar, araçlar, uyku engelleme'), ikon: 'view-app-grid-symbolic', sayfa: new HizliSayfa(o)},
+            {id: 'kisayol', ad: _('Kısayollar'), aciklama: _('Klasörler, uygulamalar, klavye kısayolları'), ikon: 'folder-symbolic', sayfa: new KisayolSayfa(o)},
+            {id: 'sistem', ad: _('Sistem'), aciklama: _('Bu PC, pil ve sunucu'), ikon: 'computer-symbolic', sayfa: new SistemSayfa(o)},
+            {id: 'vm', ad: _('Sanal makineler'), aciklama: _('Sunucudaki Windows ve Ubuntu'), ikon: 'video-display-symbolic', sayfa: new VmSayfa(o)},
+            {id: 'kripto', ad: _('Kripto ve döviz'), aciklama: _('Fiyatlar ve grafikler'), ikon: 'coin-btc', sayfa: new KriptoSayfa(o)},
+            {id: 'basket', ad: _('Maçlar'), aciklama: _('Hakemlik görevlerim ve maçlar'), ikon: 'basket', sayfa: new BasketSayfa(o)},
+            {id: 'anime', ad: _('Anime ve manga'), aciklama: _('Takip ettiklerim'), ikon: 'anime', sayfa: new AnimeSayfa(o)},
         ];
         this._kart = new Kart({ayarlar: this._ayar, sayfalar, ayarlariAc: () => this.openPreferences(),
             tepsi: new Tepsi(), ustCubuk: o.ustCubuk});

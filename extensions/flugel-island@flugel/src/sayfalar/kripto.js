@@ -7,6 +7,7 @@ import {Sayfa} from './sayfa.js';
 import {calistir, para} from '../ortak.js';
 import {Karo, Izgara, bolum, dugme} from '../bilesenler.js';
 import {Grafik} from '../grafik.js';
+import {_, f} from '../dil.js';
 
 export const KOIN_IKON = {BTC: 'coin-btc', ETH: 'coin-eth', SOL: 'coin-sol', BNB: 'coin-bnb', XRP: 'coin-xrp',
     DOGE: 'coin-doge', AVAX: 'coin-avax', ADA: 'coin-ada'};
@@ -22,7 +23,7 @@ export class KriptoSayfa extends Sayfa {
         this._ayar = ayarlar;
         this._donem = '24s';
         this._kartlar = new St.BoxLayout({style_class: 'flugel-kripto-kartlar', x_align: Clutter.ActorAlign.CENTER});
-        this.actor.add_child(bolum('Kripto ve döviz', this._kartlar, {sag: dugme('view-refresh-symbolic', 'Şimdi yenile',
+        this.actor.add_child(bolum(_('Kripto ve döviz'), this._kartlar, {sag: dugme('view-refresh-symbolic', _('Şimdi yenile'),
             () => {
                 veri.yenile('grafik', true);
                 veri.yenile('kripto', true);
@@ -34,7 +35,7 @@ export class KriptoSayfa extends Sayfa {
         this._buyukBaslik = new St.Label({style_class: 'flugel-buyuk-baslik', x_expand: true, y_align: Clutter.ActorAlign.CENTER});
         ust.add_child(this._buyukBaslik);
         this._donemDugme = {};
-        for (const [d, ad] of [['24s', '24 saat'], ['7g', '7 gün']]) {
+        for (const [d, ad] of [['24s', _('24 saat')], ['7g', _('7 gün')]]) {
             const b = new St.Button({label: ad, style_class: 'flugel-cip', can_focus: true});
             b.connect('clicked', () => {
                 this._donem = d;
@@ -52,11 +53,11 @@ export class KriptoSayfa extends Sayfa {
         this.actor.add_child(this._buyuk);
 
         this._digerIzgara = new Izgara({genislik: ayarlar.get_int('kart-genislik') - 48, karoGenisligi: 96});
-        this.actor.add_child(bolum('Diğer kripto paralar', this._digerIzgara));
+        this.actor.add_child(bolum(_('Diğer kripto paralar'), this._digerIzgara));
         const baglantilar = new Izgara({sutun: 2});
         baglantilar.ekle(new Karo({ikon: 'send-to-symbolic', etiket: 'CoinMarketCap', ipucu: 'coinmarketcap.com',
             eylem: () => this._ac('https://coinmarketcap.com')}));
-        baglantilar.ekle(new Karo({ikon: 'send-to-symbolic', etiket: 'TradingView', ipucu: 'BTC grafiği (TradingView)',
+        baglantilar.ekle(new Karo({ikon: 'send-to-symbolic', etiket: 'TradingView', ipucu: _('BTC grafiği (TradingView)'),
             eylem: () => this._ac('https://www.tradingview.com/chart/?symbol=BTCUSDT')}));
         this.actor.add_child(bolum('', baglantilar));
 
@@ -90,7 +91,7 @@ export class KriptoSayfa extends Sayfa {
             return;
         this._kartlar.destroy_all_children();
         if (!d || d.hata) {
-            this._kartlar.add_child(new St.Label({text: d ? 'Fiyatlar alınamadı' : 'Yükleniyor…', style_class: 'flugel-soluk'}));
+            this._kartlar.add_child(new St.Label({text: d ? _('Fiyatlar alınamadı') : _('Yükleniyor…'), style_class: 'flugel-soluk'}));
             return;
         }
         const secili = new Set(this._ayar.get_strv('kripto-varliklar'));
@@ -119,7 +120,7 @@ export class KriptoSayfa extends Sayfa {
             this._kartlar.add_child(kart);
         }
         if (d.eski)
-            this._kartlar.add_child(new St.Label({text: 'eski veri', style_class: 'flugel-soluk', y_align: Clutter.ActorAlign.END}));
+            this._kartlar.add_child(new St.Label({text: _('eski veri'), style_class: 'flugel-soluk', y_align: Clutter.ActorAlign.END}));
         this._buyukCiz();
     }
 
@@ -143,7 +144,7 @@ export class KriptoSayfa extends Sayfa {
         const yuksek = Math.max(...seri), dusuk = Math.min(...seri);
         const degisim = seri.length > 1 ? 100 * (seri[seri.length - 1] - seri[0]) / seri[0] : null;
         this._buyukBaslik.text = `${SIMGE[v.sembol] ?? ''} ${v.ad} · ${fiyat(v.fiyat, v.sembol)}`;
-        this._buyukAlt.text = `En yüksek ${fiyat(yuksek, v.sembol)}   ·   En düşük ${fiyat(dusuk, v.sembol)}   ·   ${this._donem === '7g' ? '7 gün' : '24 saat'} ${ok(degisim)}`;
+        this._buyukAlt.text = f(_('En yüksek %s   ·   En düşük %s   ·   %s %s'), fiyat(yuksek, v.sembol), fiyat(dusuk, v.sembol), this._donem === '7g' ? _('7 gün') : _('24 saat'), ok(degisim));
     }
 
     _digerYaz() {
@@ -153,7 +154,7 @@ export class KriptoSayfa extends Sayfa {
         this._digerIzgara.temizle();
         for (const c of (d?.coinler ?? []).filter(x => !['BTC', 'ETH'].includes(x.sym))) {
             this._digerIzgara.ekle(new Karo({ikon: KOIN_IKON[c.sym] ?? 'coin-btc', etiket: `${c.sym} ${para(c.usd)}$`,
-                ipucu: {baslik: `${c.sym}: ${para(c.usd)} $`, ayrinti: `24 saat ${ok(c.degisim)} · kaynak ${d.kaynak ?? '?'}`}}));
+                ipucu: {baslik: `${c.sym}: ${para(c.usd)} $`, ayrinti: f(_('24 saat %s · kaynak %s'), ok(c.degisim), d.kaynak ?? '?')}}));
         }
     }
 

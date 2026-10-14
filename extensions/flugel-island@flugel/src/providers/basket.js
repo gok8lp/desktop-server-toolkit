@@ -3,6 +3,7 @@ import GLib from 'gi://GLib';
 import {createActivity} from '../activity.js';
 import {oncelik} from './provider-base.js';
 import {SARI, bugun} from '../ortak.js';
+import {_, f} from '../dil.js';
 
 export class BasketProvider {
     constructor(ortam) {
@@ -52,9 +53,9 @@ export class BasketProvider {
             priority: oncelik(this._settings, this.id, 30),
             glyph: /NBA/.test(m.lig) ? 'basket' : 'top',
             label: `${m.ev?.ad} ${m.ev?.skor ?? ''}–${m.dep?.skor ?? ''} ${m.dep?.ad}`,
-            sublabel: `${m.lig}${m.detay ? ` · ${m.detay}` : ''}${canlilar.length > 1 ? ` · +${canlilar.length - 1} canlı` : ''}`,
+            sublabel: `${m.lig}${m.detay ? ` · ${m.detay}` : ''}${canlilar.length > 1 ? f(_(' · +%s canlı'), canlilar.length - 1) : ''}`,
             data: {kisa: `${m.ev?.skor ?? ''}–${m.dep?.skor ?? ''}`, eylemler: [
-                {ikon: 'top', ipucu: 'Maçlar sekmesi', fn: () => this._ortam.sekmeAc('basket')},
+                {ikon: 'top', ipucu: _('Maçlar sekmesi'), fn: () => this._ortam.sekmeAc('basket')},
             ]},
         }));
     }
@@ -79,17 +80,17 @@ export class BasketProvider {
         const yakin = kalanDk !== null && kalanDk <= this._settings.get_int('basket-yakin-dk');
         let kisa = m.saat ?? '';
         if (yakin && kalanDk > 0)
-            kisa = kalanDk >= 60 ? `${Math.floor(kalanDk / 60)}sa ${kalanDk % 60}dk` : `${kalanDk}dk`;
+            kisa = kalanDk >= 60 ? f(_('%ssa %sdk'), Math.floor(kalanDk / 60), kalanDk % 60) : f(_('%sdk'), kalanDk);
         else if (yakin)
-            kisa = 'şimdi';
+            kisa = _('şimdi');
         this._manager.update(createActivity({
             id: `${this.id}:mac`, providerId: this.id, tier: 'persistent', slot: 'either',
             priority: oncelik(this._settings, this.id, yakin ? 60 : 0),
             glyph: 'basket',
-            label: `Maç ${m.saat ?? 'bugün'} · ${m.gorev ?? 'görev'}`,
+            label: f(_('Maç %s · %s'), m.saat ?? _('bugün'), m.gorev ?? _('görev')),
             sublabel: `${m.ev ?? '?'} — ${m.dep ?? '?'} · ${m.salon ?? ''}`,
             data: {renk: yakin ? SARI : null, kisa, eylemler: [
-                {ikon: 'basket', ipucu: 'Basket sekmesi', fn: () => this._ortam.sekmeAc('basket')},
+                {ikon: 'basket', ipucu: _('Basket sekmesi'), fn: () => this._ortam.sekmeAc('basket')},
             ]},
         }));
     }

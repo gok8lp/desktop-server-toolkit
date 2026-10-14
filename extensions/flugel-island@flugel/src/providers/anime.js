@@ -4,6 +4,7 @@ import GLib from 'gi://GLib';
 import {createActivity} from '../activity.js';
 import {oncelik} from './provider-base.js';
 import {calistir, geriSayim} from '../ortak.js';
+import {_, f} from '../dil.js';
 
 const TAKIP = new Set(['Izliyorum', 'Beklemede']);
 
@@ -59,11 +60,11 @@ export class AnimeProvider {
             id: `${this.id}:bolum`, providerId: this.id, tier: 'persistent', slot: 'either',
             priority: oncelik(this._settings, this.id, cikti ? 40 : 0),
             glyph: 'anime',
-            label: cikti ? `${a.sonraki_bolum}. bölüm çıktı` : `${a.sonraki_bolum}. bölüm ${geriSayim(a.yayin)} sonra`,
+            label: cikti ? f(_('%s. bölüm çıktı'), a.sonraki_bolum) : f(_('%s. bölüm %s sonra'), a.sonraki_bolum, geriSayim(a.yayin)),
             sublabel: a.ad,
             data: {kisa: cikti ? 'yeni' : geriSayim(a.yayin), eylemler: [
                 ...(url ? [{ikon: 'send-to-symbolic', ipucu: 'MyAnimeList / AniList sayfası', fn: () => calistir(`xdg-open ${GLib.shell_quote(url)}`)}] : []),
-                {ikon: 'anime', ipucu: 'Anime sekmesi', fn: () => this._ortam.sekmeAc('anime')},
+                {ikon: 'anime', ipucu: _('Anime sekmesi'), fn: () => this._ortam.sekmeAc('anime')},
             ]},
         }));
     }

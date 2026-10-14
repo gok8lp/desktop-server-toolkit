@@ -3,6 +3,7 @@ import { createActivity, _now } from '../activity.js';
 import { format } from '../i18n.js';
 import { oncelik, geciciSure } from './provider-base.js';
 import { KIRMIZI } from '../ortak.js';
+import {_} from '../dil.js';
 
 // hacksynth/gnome-dynamic-island (GPL-2.0-or-later) kaynağından. FLUGEL değişiklikleri (2026-10-13): ortam
 // etkinliği boştaki kapsülde mini pil göstergesi oldu (simge + pildeyken yüzde, düşükse kırmızı); şarj ve
@@ -67,14 +68,14 @@ export class PowerProvider {
             priority: oncelik(this._settings, this.id),
             glyph: this._proxy.get_cached_property('IconName')?.deepUnpack() || 'battery-symbolic',
             label: `${Math.round(pct)}%`,
-            sublabel: state === 1 ? 'Şarj oluyor' : state === 4 ? 'Dolu' : 'Pilde',
+            sublabel: state === 1 ? _('Şarj oluyor') : state === 4 ? _('Dolu') : _('Pilde'),
             data: { mini: true, kisa: `${Math.round(pct)}%`, renk: lowNow ? KIRMIZI : null },
         }));
 
         // Plug/unplug transient.
         const plugged = (state === 1 || state === 4);
         if (this._lastPlugged !== null && plugged !== this._lastPlugged) {
-            this._flash(plugged ? 'Şarj takıldı' : 'Şarj çıkarıldı',
+            this._flash(plugged ? _('Şarj takıldı') : _('Şarj çıkarıldı'),
                 plugged ? 'battery-full-charging-symbolic' : 'battery-symbolic');
         }
         this._lastPlugged = plugged;

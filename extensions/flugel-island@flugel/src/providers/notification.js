@@ -2,6 +2,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import { createActivity } from '../activity.js';
 import { format } from '../i18n.js';
 import { oncelik } from './provider-base.js';
+import {_} from '../dil.js';
 
 // hacksynth/gnome-dynamic-island (GPL-2.0-or-later) kaynağından. FLUGEL değişikliği (2026-10-13): simge,
 // öncelik ayardan, Türkçe metinler. Varsayılan olarak kapalı (ayarlardan açılır).
@@ -91,11 +92,11 @@ export class NotificationProvider {
             // Fallback when the source provides no title — translatable.
             // Notification title/body itself comes from the source app and is
             // intentionally NOT translated here.
-            label = latest.title ?? latest.source?.title ?? 'Bildirim';
+            label = latest.title ?? latest.source?.title ?? _('Bildirim');
             sublabel = latest.bannerBodyText ?? latest.body ?? '';
         } else {
-            label = format('%d yeni', n);
-            sublabel = 'Bildirimler';
+            label = format(_('%d yeni'), n);
+            sublabel = _('Bildirimler');
         }
 
         this._manager?.update(createActivity({

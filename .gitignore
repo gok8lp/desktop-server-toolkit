@@ -14,3 +14,4 @@ __pycache__/
 node_modules/
 *.zip
 extensions/*/schemas/gschemas.compiled
+extensions/*/locale/

@@ -3,6 +3,7 @@
 // Island'da "Panik modu" canlı etkinliği görünür.
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {bash, calistir} from './ortak.js';
+import {_} from './dil.js';
 
 export class PanikDenetci {
     constructor() {
@@ -52,7 +53,7 @@ export class PanikDenetci {
         // gnome-shell, Xwayland ve sistem servisleri hariç en çok RAM kullanan kullanıcı uygulaması
         bash(`p=$(ps -u "$USER" -o pid=,rss=,comm= --sort=-rss | awk '$3 !~ /^(gnome-shell|Xwayland|systemd|pipewire|wireplumber|gjs|claude|dbus)/ {print $1"|"$3; exit}'); ` +
              `pid=\${p%%|*}; ad=\${p#*|}; [ -n "$pid" ] && { kill -TERM $pid; sleep 2; kill -0 $pid 2>/dev/null && kill -KILL $pid; ` +
-             `notify-send -a Panik "Kapatıldı" "En çok bellek kullanan: $ad"; }`);
+             `notify-send -a Panik "${_('Kapatıldı')}" "${_('En çok bellek kullanan')}: $ad"; }`);
     }
 
     hepsiniKapat() {
@@ -62,7 +63,7 @@ export class PanikDenetci {
             if (w && !w.is_skip_taskbar() && w.can_close())
                 w.delete(zaman);
         }
-        Main.notify('Panik', 'Tüm uygulamalara kapanma isteği gönderildi');
+        Main.notify(_('Panik'), _('Tüm uygulamalara kapanma isteği gönderildi'));
     }
 
     sesAcKapa() {

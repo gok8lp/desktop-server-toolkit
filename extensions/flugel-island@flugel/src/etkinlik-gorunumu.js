@@ -5,6 +5,7 @@ import Clutter from 'gi://Clutter';
 import Pango from 'gi://Pango';
 import {ikon} from './ortak.js';
 import {dugme} from './bilesenler.js';
+import {_} from './dil.js';
 
 function etiket(stil, metin = '') {
     const l = new St.Label({text: metin, style_class: stil, y_align: Clutter.ActorAlign.CENTER});
@@ -113,7 +114,7 @@ export class EtkinlikGorunumu {
         eylemler.forEach((e, i) => this._eylemler.add_child(
             dugme(e.ikon, e.ipucu, () => this._eylemFonk[i]?.(), {stil: 'flugel-dugme flugel-dugme-kucuk'})));
         if (d.kapat) {
-            this._eylemler.add_child(dugme('window-close-symbolic', 'Gizle', () => this._kapatFonk?.(),
+            this._eylemler.add_child(dugme('window-close-symbolic', _('Gizle'), () => this._kapatFonk?.(),
                 {stil: 'flugel-dugme flugel-dugme-kucuk flugel-dugme-soluk', boyut: 14}));
         }
     }

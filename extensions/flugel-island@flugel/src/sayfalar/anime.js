@@ -12,6 +12,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Sayfa} from './sayfa.js';
 import {calistir, geriSayim, kac, soluk} from '../ortak.js';
 import {Izgara, ResimKaro, Karo, bolum, dugme} from '../bilesenler.js';
+import {_, f} from '../dil.js';
 
 const SITE_IKON = {'Crunchyroll': 'renkli:crunchyroll', 'HIDIVE': 'renkli:hidive', 'Netflix': 'renkli:netflix'};
 const TAKIP = new Set(['Izliyorum', 'Beklemede', 'Planliyorum', 'Okuyorum']);
@@ -31,7 +32,7 @@ function rozet(a) {
         return '';
     const kalan = a.yayin - simdi;
     if (kalan > 0 && kalan < 3600)
-        return `${Math.max(1, Math.floor(kalan / 60))}dk`;
+        return f(_('%sdk'), Math.max(1, Math.floor(kalan / 60)));
     // haftalık yayında bir önceki bölüm son 24 saatte çıktıysa: yeni
     const onceki = a.yayin - 7 * 86400;
     return onceki <= simdi && simdi - onceki < 86400 ? '●' : '';
@@ -47,7 +48,7 @@ export class AnimeSayfa extends Sayfa {
 
         const cipler = new St.BoxLayout({style_class: 'flugel-cipler', x_align: Clutter.ActorAlign.CENTER});
         this._cip = {};
-        for (const [k, ad] of [['anime', 'Anime'], ['manga', 'Manga']]) {
+        for (const [k, ad] of [['anime', _('Anime')], ['manga', _('Manga')]]) {
             const b = new St.Button({label: ad, style_class: 'flugel-cip', can_focus: true});
             b.connect('clicked', () => {
                 this._tur = k;
@@ -64,29 +65,29 @@ export class AnimeSayfa extends Sayfa {
 
         // takip dışı seçim paneli
         this._secim = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel', visible: false});
-        this._arama = new St.Entry({style_class: 'flugel-arama', hint_text: 'Ara…', can_focus: true, x_expand: true});
+        this._arama = new St.Entry({style_class: 'flugel-arama', hint_text: _('Ara…'), can_focus: true, x_expand: true});
         this._arama.clutter_text.connect('text-changed', () => this._secimYaz());
         const aramaSatiri = new St.BoxLayout({style: 'spacing: 6px;'});
         aramaSatiri.add_child(this._arama);
-        aramaSatiri.add_child(dugme('window-close-symbolic', 'Kapat', () => this._secimKapat(), {stil: 'flugel-dugme flugel-dugme-kucuk'}));
+        aramaSatiri.add_child(dugme('window-close-symbolic', _('Kapat'), () => this._secimKapat(), {stil: 'flugel-dugme flugel-dugme-kucuk'}));
         this._secim.add_child(aramaSatiri);
         this._secimIzgara = new Izgara({genislik: this._genislik - 16, karoGenisligi: 96, bosluk: 8});
         this._secim.add_child(this._secimIzgara.actor);
         this.actor.add_child(this._secim);
 
         const alt = new Izgara({sutun: 3});
-        alt.ekle(new Karo({ikon: 'avatar-default-symbolic', etiket: 'MAL profilim', ipucu: 'MyAnimeList profilim',
+        alt.ekle(new Karo({ikon: 'avatar-default-symbolic', etiket: _('MAL profilim'), ipucu: _('MyAnimeList profilim'),
             eylem: () => this._git('https://myanimelist.net/profile/gokalpgoksu')}));
-        alt.ekle(new Karo({ikon: 'x-office-calendar-symbolic', etiket: 'Yayın takvimi', ipucu: 'Bu sezonun yayın takvimi (AniList)',
+        alt.ekle(new Karo({ikon: 'x-office-calendar-symbolic', etiket: _('Yayın takvimi'), ipucu: _('Bu sezonun yayın takvimi (AniList)'),
             eylem: () => this._git('https://anilist.co/airing')}));
-        alt.ekle(new Karo({ikon: 'view-refresh-symbolic', etiket: 'Yenile', ipucu: 'Listeyi şimdi yenile',
+        alt.ekle(new Karo({ikon: 'view-refresh-symbolic', etiket: _('Yenile'), ipucu: _('Listeyi şimdi yenile'),
             eylem: () => this._veri.yenile('anime', true)}));
         this.actor.add_child(bolum('', alt));
 
         this._aboneler = [veri.abone('anime', d => {
             const y = yaklasanlar(d).filter(a => a.liste !== 'Planliyorum');
             const kalan = y[0] ? y[0].yayin - Math.floor(Date.now() / 1000) : Infinity;
-            this.rozetDegisti?.(kalan < 3600 ? `${Math.max(1, Math.floor(kalan / 60))}dk` : (kalan < 86400 ? `${Math.floor(kalan / 3600)}sa` : ''));
+            this.rozetDegisti?.(kalan < 3600 ? f(_('%sdk'), Math.max(1, Math.floor(kalan / 60))) : (kalan < 86400 ? f(_('%ssa'), Math.floor(kalan / 3600)) : ''));
             this.gorunurse(() => this._yaz());
         })];
         this._ayarId = ayarlar.connect('changed', (_s, k) => {
@@ -141,13 +142,13 @@ export class AnimeSayfa extends Sayfa {
         }
         this._izgara.temizle();
         if (!d || d.hata) {
-            this._izgara.ekle(new Karo({ikon: 'image-missing-symbolic', etiket: d ? 'Alınamadı' : 'Yükleniyor…'}));
+            this._izgara.ekle(new Karo({ikon: 'image-missing-symbolic', etiket: d ? _('Alınamadı') : _('Yükleniyor…')}));
             return;
         }
         for (const a of this._kayitlar(d))
             this._izgara.ekle(this._kapak(a));
-        this._izgara.ekle(new Karo({ikon: 'list-add-symbolic', etiket: 'Ekle', boyut: 28, stil: 'flugel-ekle-karo flugel-ekle-kapak',
-            ipucu: {baslik: `Takip dışı ${this._tur} ekle`, ayrinti: 'Bu sezon ve MAL listemdeki diğerleri; eklenenler sağ tıkla kaldırılır'},
+        this._izgara.ekle(new Karo({ikon: 'list-add-symbolic', etiket: _('Ekle'), boyut: 28, stil: 'flugel-ekle-karo flugel-ekle-kapak',
+            ipucu: {baslik: f(_('Takip dışı %s ekle'), this._tur), ayrinti: _('Bu sezon ve MAL listemdeki diğerleri; eklenenler sağ tıkla kaldırılır')},
             eylem: () => this._secimAc()}));
     }
 
@@ -165,15 +166,15 @@ export class AnimeSayfa extends Sayfa {
         const satirlar = [];
         if (this._tur === 'anime') {
             if (a.son_bolum)
-                satirlar.push(`Son bölüm: <b>${a.son_bolum}</b>${a.imdb_puan ? `  ·  IMDb <b>${a.imdb_puan}</b>` : soluk('  ·  IMDb puanı yok')}`);
+                satirlar.push(f(_('Son bölüm: <b>%s</b>%s'), a.son_bolum, a.imdb_puan ? f(_('  ·  IMDb <b>%s</b>'), a.imdb_puan) : soluk(_('  ·  IMDb puanı yok'))));
             if (a.yayin)
-                satirlar.push(`Sonraki: <b>${a.sonraki_bolum}. bölüm</b> · ${geriSayim(a.yayin)} sonra`);
+                satirlar.push(f(_('Sonraki: <b>%s. bölüm</b> · %s sonra'), a.sonraki_bolum, geriSayim(a.yayin)));
             if (a.izlenen !== undefined)
-                satirlar.push(soluk(`İzlediğin ${a.izlenen}/${a.toplam || '?'} · ${kac(a.liste ?? 'eklediğin')}`));
+                satirlar.push(soluk(f(_('İzlediğin %s/%s · %s'), a.izlenen, a.toplam || '?', kac(a.liste ?? _('eklediğin')))));
         } else {
-            satirlar.push(`Bölüm ${a.okunan ?? '?'}${a.toplam ? `/${a.toplam}` : ''} · ${kac(a.durum ?? '')}`);
+            satirlar.push(f(_('Bölüm %s%s · %s'), a.okunan ?? '?', a.toplam ? `/${a.toplam}` : '', kac(a.durum ?? '')));
         }
-        satirlar.push([a.al_puan ? `AniList <b>${a.al_puan}</b>` : '', a.mal_puan ? `MAL <b>${a.mal_puan}</b>` : ''].filter(Boolean).join('  ·  '));
+        satirlar.push([a.al_puan ? f(_('AniList <b>%s</b>'), a.al_puan) : '', a.mal_puan ? f(_('MAL <b>%s</b>'), a.mal_puan) : ''].filter(Boolean).join('  ·  '));
         // kısa açıklama: Türkçe (sunucudaki yerel çeviri), yoksa AniList'in kısa İngilizce metni
         const aciklama = a.aciklama || a.aciklama_en;
         if (aciklama)
@@ -229,8 +230,8 @@ export class AnimeSayfa extends Sayfa {
             this._secimIzgara.ekle(new ResimKaro({resim: x.kapak_kucuk, boyut: 96, baslik: x.ad,
                 puan: x.al_puan ? (x.al_puan / 10).toFixed(1) : null, rozet: secili.has(x.id) ? '✓' : '',
                 eylem: () => this._secimeEkle(x.id),
-                onizleme: () => ({resim: x.kapak_kucuk, baslik: x.ad, satirlar: [x.al_puan ? `AniList <b>${x.al_puan}</b>` : '',
-                    secili.has(x.id) ? 'Eklendi (sağ tıkla kaldır)' : 'Tıkla: ekle'].filter(Boolean)}),
+                onizleme: () => ({resim: x.kapak_kucuk, baslik: x.ad, satirlar: [x.al_puan ? f(_('AniList <b>%s</b>'), x.al_puan) : '',
+                    secili.has(x.id) ? _('Eklendi (sağ tıkla kaldır)') : _('Tıkla: ekle')].filter(Boolean)}),
                 sagTik: secili.has(x.id) ? () => this._secimdenCikar(x.id) : null}));
             if (this._secimIzgara.sayi >= 60)
                 break;

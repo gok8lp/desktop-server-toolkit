@@ -8,9 +8,10 @@ import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
 import {ikon} from './ortak.js';
 import {dugme, ipucuBagla, onizlemeAcik} from './bilesenler.js';
 import {CalismaAlanlari} from './calisma-alanlari.js';
+import {_} from './dil.js';
 
-const GUNLER = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
-const AYLAR = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+const GUNLER = () => [_('Pazar'), _('Pazartesi'), _('Salı'), _('Çarşamba'), _('Perşembe'), _('Cuma'), _('Cumartesi')];
+const AYLAR = () => [_('Ocak'), _('Şubat'), _('Mart'), _('Nisan'), _('Mayıs'), _('Haziran'), _('Temmuz'), _('Ağustos'), _('Eylül'), _('Ekim'), _('Kasım'), _('Aralık')];
 
 export class Kart {
     // sayfalar: [{id, ad, ikon, sayfa}]  (sayfa: sayfalar/sayfa.js Sayfa örneği)
@@ -39,7 +40,7 @@ export class Kart {
             this.kapatIstendi?.();
             Main.panel.toggleCalendar();
         });
-        ipucuBagla(zaman, 'Takvim ve bildirimler (sağ tık da açar)');
+        ipucuBagla(zaman, _('Takvim ve bildirimler (sağ tık da açar)'));
         ust.add_child(zaman);
         ust.add_child(new St.Widget({x_expand: true}));
         // çalışma alanları (üst çubuğun solundaki ekran değiştirici)
@@ -51,16 +52,16 @@ export class Kart {
             this.kapatIstendi?.();
             fn();
         };
-        ust.add_child(dugme('view-grid-symbolic', 'Hızlı ayarlar: ses, ağ, pil, güç', sonra(() => ustCubuk.hizliAyarlar())));
-        ust.add_child(dugme('x-office-calendar-symbolic', 'Takvim ve bildirimler', sonra(() => ustCubuk.takvim())));
-        ust.add_child(dugme('focus-windows-symbolic', 'Etkinlikler: pencereler ve uygulamalar', sonra(() => ustCubuk.etkinlikler())));
-        this._sabitDugme = dugme('view-pin-symbolic', 'Açık tut', () => this.sabitleIstendi?.());
+        ust.add_child(dugme('view-grid-symbolic', _('Hızlı ayarlar: ses, ağ, pil, güç'), sonra(() => ustCubuk.hizliAyarlar())));
+        ust.add_child(dugme('x-office-calendar-symbolic', _('Takvim ve bildirimler'), sonra(() => ustCubuk.takvim())));
+        ust.add_child(dugme('focus-windows-symbolic', _('Etkinlikler: pencereler ve uygulamalar'), sonra(() => ustCubuk.etkinlikler())));
+        this._sabitDugme = dugme('view-pin-symbolic', _('Açık tut'), () => this.sabitleIstendi?.());
         ust.add_child(this._sabitDugme);
-        ust.add_child(dugme('emblem-system-symbolic', 'Island ayarları', () => {
+        ust.add_child(dugme('emblem-system-symbolic', _('Island ayarları'), () => {
             this.kapatIstendi?.();
             ayarlariAc();
         }));
-        ust.add_child(dugme('window-close-symbolic', 'Kapat', () => this.kapatIstendi?.()));
+        ust.add_child(dugme('window-close-symbolic', _('Kapat'), () => this.kapatIstendi?.()));
         this.actor.add_child(ust);
 
         // arka plan uygulamaları (tepsi) — simge yoksa görünmez
@@ -137,7 +138,7 @@ export class Kart {
     saatYaz() {
         const t = GLib.DateTime.new_now_local();
         this._saat.text = t.format('%H:%M');
-        this._tarih.text = `${t.get_day_of_month()} ${AYLAR[t.get_month() - 1]} ${GUNLER[t.get_day_of_week() % 7]}`;
+        this._tarih.text = `${t.get_day_of_month()} ${AYLAR()[t.get_month() - 1]} ${GUNLER()[t.get_day_of_week() % 7]}`;
     }
 
     sekmeSec(id, animasyon = true) {

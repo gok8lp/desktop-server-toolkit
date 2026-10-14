@@ -7,17 +7,18 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {InjectionManager} from 'resource:///org/gnome/shell/extensions/extension.js';
 import {createActivity, _now} from '../activity.js';
 import {oncelik, geciciSure} from './provider-base.js';
+import {_} from '../dil.js';
 
 function tur(simge) {
     const ad = simge?.to_string?.() ?? String(simge ?? '');
     if (ad.includes('audio-volume') || ad.includes('audio-speakers'))
-        return 'Ses';
+        return _('Ses');
     if (ad.includes('display-brightness'))
-        return 'Parlaklık';
+        return _('Parlaklık');
     if (ad.includes('keyboard-brightness'))
-        return 'Klavye ışığı';
+        return _('Klavye ışığı');
     if (ad.includes('microphone'))
-        return 'Mikrofon';
+        return _('Mikrofon');
     return null;
 }
 
