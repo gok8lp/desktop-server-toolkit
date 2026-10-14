@@ -3,8 +3,8 @@
 # sunucu kapaliysa basketbol + anime kontrolunu bu PC'de kendisi yapar ve Telegram'a kendisi yazar.
 B=~/.local/share/flugel-bot; D=$B/durum; mkdir -p $D
 if ssh -o BatchMode=yes -o ConnectTimeout=8 -o ControlPath=none flugelserver true 2>/dev/null; then
-  scp -q -o ControlPath=none flugelserver:/var/lib/basket-bot/maclar.json flugelserver:/var/lib/basket-bot/anime.json $D/ 2>/dev/null
-  scp -q -o ControlPath=none flugelserver:/opt/basket-bot/ayar.json flugelserver:/opt/basket-bot/basket_bot.py flugelserver:/opt/basket-bot/anime_takip.py $B/ 2>/dev/null
+  scp -q -o ControlPath=none flugelserver:/var/lib/basket-bot/maclar.json flugelserver:/var/lib/basket-bot/anime.json flugelserver:/var/lib/basket-bot/imdb.json flugelserver:/var/lib/basket-bot/aciklama-tr.json $D/ 2>/dev/null
+  scp -q -o ControlPath=none flugelserver:/opt/basket-bot/ayar.json flugelserver:/opt/basket-bot/basket_bot.py flugelserver:/opt/basket-bot/anime_takip.py flugelserver:/opt/basket-bot/imdb_puan.py $B/ 2>/dev/null
   echo "$(date '+%F %T') sunucu acik -> veri senkronlandi" >> $B/calisma.log
 else
   export BOT_DIR=$D BOT_AYAR=$B/ayar.json BOT_BILDIRIM=$HOME/.local/bin/bildirim-pc BOT_ETIKET="[YEDEK PC - sunucu kapali] "

@@ -42,6 +42,10 @@
       <default>[]</default>
       <summary>Takip dışından eklenen mangalar (MAL kimlikleri)</summary>
     </key>
+    <key name="dock-buyume" type="b">
+      <default>true</default>
+      <summary>Alt dock: üzerine gelince simge hafifçe büyüsün</summary>
+    </key>
     <key name="pip-konum" type="s">
       <default>''</default>
       <summary>Resim içinde resim penceresinin son konumu ve boyutu (JSON; boş = sol alt köşe)</summary>

@@ -12,6 +12,7 @@ tasarruf(){
   [ "$(cat $D/parlaklik-fis 2>/dev/null || echo 100)" -gt 40 ] && gdctl prefs --monitor eDP-1 --backlight 40 >/dev/null 2>&1
   powerprofilesctl set power-saver
   gsettings set org.gnome.desktop.session idle-delay 180
+  gnome-extensions disable blur-my-shell@aunetx 2>/dev/null   # agir efekt pildeyken kapali
   echo "$(date '+%F %T') TASARRUF ($1): parlaklik 40, power-saver, ekran 3 dk" >> $D/pil-modu.log
 }
 
@@ -21,6 +22,7 @@ normal(){
   gdctl prefs --monitor eDP-1 --backlight "$(cat $D/parlaklik-fis 2>/dev/null || echo 80)" >/dev/null 2>&1
   powerprofilesctl set balanced
   gsettings set org.gnome.desktop.session idle-delay 300
+  gnome-extensions enable blur-my-shell@aunetx 2>/dev/null
   echo "$(date '+%F %T') NORMAL ($1): parlaklik geri, balanced" >> $D/pil-modu.log
 }
 

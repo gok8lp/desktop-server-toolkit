@@ -22,6 +22,7 @@ import {EkipSurprizi} from './src/ekip.js';
 import {PencereYardimcisi} from './src/pencere.js';
 import {PipYoneticisi} from './src/pip.js';
 import {UykuEngeli} from './src/uyku.js';
+import {DockBuyume} from './src/dock.js';
 import {Kart} from './src/kart.js';
 import {IslandGorunumu} from './src/island-gorunumu.js';
 
@@ -96,6 +97,8 @@ export default class FlugelIsland extends Extension {
         this._pencere.enable();
         this._pip = new PipYoneticisi(this._ayar);
         this._pip.enable();
+        this._dock = new DockBuyume(this._ayar, this._guc);
+        this._dock.enable();
 
         this._uyku = new UykuEngeli(this._yonetici, this._ayar);
         const o = {veri: this._veri, panik: this._panik, uyku: this._uyku, guc: this._guc, ekip: this._ekip, ayarlar: this._ayar,
@@ -203,6 +206,8 @@ export default class FlugelIsland extends Extension {
         this._tarihMenu = null;
         this._uyku?.destroy();
         this._uyku = null;
+        this._dock?.disable();
+        this._dock = null;
         this._pip?.disable();
         this._pencere?.disable();
         this._tasarruf?.destroy();
