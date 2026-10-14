@@ -84,8 +84,20 @@ export class IslandGorunumu {
         this._balon.connect('notify::hover', () => this._hoverDegisti());
         this._kok.connect('button-release-event', (_a, e) => this._tiklandi(e));
         // kapsül üzerinde tekerlek: çalışma alanı değiştir (kart açıkken sayfa kayar, karışmaz)
-        this._kok.connect('scroll-event', (_a, olay) => (this._durum === 'genis'
-            ? Clutter.EVENT_PROPAGATE : this._kart.calismaAlanlari.kaydir(olay)));
+        // Dokunmatik yüzey: kapsülün üzerine gelip hemen kaydırınca kart açılmaz (açılma iptal edilir, kaydırma
+        // bitene kadar beklenir); kart açıkken de üst şeritte (saat, çalışma alanı noktaları) kaydırmak geçiş yapar.
+        this._kok.connect('scroll-event', (_a, olay) => {
+            if (this._durum === 'genis') {
+                const [x, y] = olay.get_coords();
+                const e = this._kart.ustSerit?.get_transformed_extents();
+                const ustte = e && x >= e.origin.x && x <= e.origin.x + e.size.width && y >= e.origin.y && y <= e.origin.y + e.size.height;
+                return ustte ? this._kart.calismaAlanlari.kaydir(olay) : Clutter.EVENT_PROPAGATE;
+            }
+            this._kaydirmaSon = GLib.get_monotonic_time();
+            // açılma zamanlayıcısı yeniden kurulur: kaydırma bitip imleç kalırsa kart yine açılır
+            this._hoverDegisti();
+            return this._kart.calismaAlanlari.kaydir(olay);
+        });
         // 5 hızlı tık → Re:Zero sürprizi
         this._kok.connect('button-press-event', () => {
             this._ekip.tik();
@@ -602,6 +614,11 @@ export class IslandGorunumu {
             if (this._ayar.get_string('tetik') === 'hover' && this._durum !== 'genis')
             {this._acmaId = this._zaman(this._ayar.get_int('hover-gecikme'), () => {
                 this._acmaId = 0;
+                // az önce kaydırıldıysa (çalışma alanı değiştiriliyor) kart açılmaz; imleç kalırsa sonra açılır
+                if (GLib.get_monotonic_time() - (this._kaydirmaSon ?? 0) < 700000) {
+                    this._hoverDegisti();
+                    return;
+                }
                 if (this._ustunde)
                     this._yonetici.setHover(true);
             });}

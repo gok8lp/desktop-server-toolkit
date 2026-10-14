@@ -98,6 +98,12 @@ export class EtkinlikGorunumu {
             for (const c of [this._macEvLogo, this._macEv, this._macSkor, this._macDep, this._macDepLogo, this._macDk])
                 this._mac.add_child(c);
             this.actor.add_child(this._mac);
+            // görünüm üst aktörüyle birlikte yok edilirse (destroy() çağrılmadan) zamanlayıcı ölü etikete dokunmasın
+            this._mac.connect('destroy', () => {
+                if (this._vurguId)
+                    GLib.source_remove(this._vurguId);
+                this._vurguId = 0;
+            });
         }
         const ikonYol = y => (y ? Gio.FileIcon.new(Gio.File.new_for_path(y)) : ikon('emblem-default-symbolic'));
         this._macEvLogo.gicon = ikonYol(m.evLogo);

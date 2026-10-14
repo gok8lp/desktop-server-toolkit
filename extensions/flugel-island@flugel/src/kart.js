@@ -29,6 +29,7 @@ export class Kart {
 
         // başlık
         const ust = new St.BoxLayout({style_class: 'flugel-kart-ust'});
+        this.ustSerit = ust;
         const zaman = new St.Button({style_class: 'flugel-zaman-dugme', can_focus: true, y_align: Clutter.ActorAlign.CENTER});
         const zamanKutu = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL});
         this._saat = new St.Label({style_class: 'flugel-kart-saat'});

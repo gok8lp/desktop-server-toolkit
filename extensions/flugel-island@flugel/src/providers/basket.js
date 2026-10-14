@@ -98,8 +98,10 @@ export class BasketProvider {
         const r1 = t1.raund ?? 0, r2 = t2.raund ?? 0;
         // raund kazananı: önceki skora göre hangi taraf arttı (harita değişince sıfırlanır)
         const once = this._raundlar.get(m.id);
-        let vurgu = once?.vurgu ?? null, vurguNo = once?.vurguNo ?? 0;
-        if (once && once.harita === m.harita_no && (r1 !== once.r1 || r2 !== once.r2)) {
+        // harita değişince önceki haritanın vurgusu taşınmaz
+        const ayniHarita = once && once.harita === m.harita_no;
+        let vurgu = ayniHarita ? once.vurgu : null, vurguNo = once?.vurguNo ?? 0;
+        if (ayniHarita && (r1 !== once.r1 || r2 !== once.r2)) {
             vurgu = r1 > once.r1 && r2 === once.r2 ? 'ev' : (r2 > once.r2 && r1 === once.r1 ? 'dep' : null);
             vurguNo++;
         }
