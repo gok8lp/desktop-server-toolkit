@@ -27,6 +27,11 @@ fi
 if command -v msgfmt >/dev/null; then
   yap "$KAYNAK/po/derle.sh" >/dev/null
 fi
+# CS2 botu (HLTV, Cloudflare arkasında): curl_cffi ayrı bir sanal ortamda; bir kez kurulur
+VENV="$HOME/.local/share/flugel-island/venv"
+if [ ! -x "$VENV/bin/python" ] || ! "$VENV/bin/python" -c 'import curl_cffi' 2>/dev/null; then
+  yap python3 -m venv "$VENV" && yap "$VENV/bin/pip" -q install curl_cffi || echo "Uyarı: curl_cffi kurulamadı; CS2 verisi bo3.gg'den gelir" >&2
+fi
 yap mkdir -p "$HEDEF"
 yap rsync -a --delete --exclude 'schemas/gschemas.compiled' "$KAYNAK/" "$HEDEF/"
 yap glib-compile-schemas --strict "$HEDEF/schemas"

@@ -310,7 +310,7 @@ export class ResimKaro {
         if (!yol || typeof yol !== 'string')
             return 'background-color: rgba(255,255,255,0.06);';
         const uri = GLib.filename_to_uri(yol, null).replace(/"/g, '%22');
-        return `background-image: url("${uri}"); background-size: cover; background-position: center;`;
+        return `background-image: url("${uri}"); background-size: cover;`;
     }
 
     static icon(r) {

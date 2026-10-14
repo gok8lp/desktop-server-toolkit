@@ -103,7 +103,25 @@ export class Kart {
                     this.kapatIstendi?.();
             });
         }
-        this.actor.add_child(this._sekmeKutu);
+        // seçili sekmenin arkasında kayan yumuşak bir zemin (alt çizgi yok): sekmeler arasında yayla kayar
+        const katman = new St.Widget({layout_manager: new Clutter.BinLayout(), style_class: 'flugel-sekmeler-zemin',
+            x_align: Clutter.ActorAlign.CENTER});
+        const arka = new St.Widget({x_expand: true, y_expand: true});
+        this._secici = new St.Widget({style_class: 'flugel-sekme-secici', opacity: 0});
+        arka.add_child(this._secici);
+        katman.add_child(arka);
+        katman.add_child(this._sekmeKutu);
+        // yerleşim sırasında başka aktörü taşımamak için bir sonraki boşta
+        this._sekmeKutu.connect('notify::allocation', () => {
+            if (this._seciciId)
+                return;
+            this._seciciId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._seciciId = 0;
+                this._seciciYerlestir(false);
+                return GLib.SOURCE_REMOVE;
+            });
+        });
+        this.actor.add_child(katman);
 
         // sayfa alanı
         this._kaydirma = new St.ScrollView({style_class: 'flugel-sayfa-kap', hscrollbar_policy: St.PolicyType.NEVER,
@@ -168,7 +186,30 @@ export class Kart {
             yeni.sayfa.actor.ease({opacity: 255, translation_y: 0, duration: 220, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
         }
         this._ayar.set_string('son-sekme', id);
+        this._seciciYerlestir(animasyon);
         this._boyutBildir();
+    }
+
+    _seciciYerlestir(animasyon) {
+        const d = this._sekmeler.get(this._secili?.id)?.dugme;
+        if (!d || !this._secici)
+            return;
+        // sayfa değişirken yerleşim yeniden istenir (has_allocation false olur) ama sekmelerin yeri değişmez
+        const b = d.get_allocation_box();
+        if (b.x2 - b.x1 <= 0)
+            return;
+        const [x, y] = [b.x1 + this._sekmeKutu.get_allocation_box().x1, b.y1 + this._sekmeKutu.get_allocation_box().y1];
+        const [w, h] = [b.x2 - b.x1, b.y2 - b.y1];
+        if (this._secici.x === x && this._secici.width === w && this._secici.opacity === 255)
+            return;
+        this._secici.remove_all_transitions();
+        if (animasyon && this._secici.opacity === 255 && St.Settings.get().enable_animations) {
+            this._secici.ease({x, y, width: w, height: h, duration: 260, mode: Clutter.AnimationMode.EASE_OUT_BACK});
+        } else {
+            this._secici.set_position(x, y);
+            this._secici.set_size(w, h);
+            this._secici.opacity = 255;
+        }
     }
 
     acildi() {
@@ -244,6 +285,9 @@ export class Kart {
     }
 
     destroy() {
+        if (this._seciciId)
+            GLib.source_remove(this._seciciId);
+        this._seciciId = 0;
         if (this._isitId)
             GLib.source_remove(this._isitId);
         this._isitId = 0;

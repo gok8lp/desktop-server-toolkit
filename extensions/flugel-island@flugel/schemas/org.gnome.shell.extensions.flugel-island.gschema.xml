@@ -129,7 +129,7 @@
       <summary>Kısa süreli bildirimlerin (ses, şarj, cihaz) ekranda kalma süresi (ms)</summary>
     </key>
     <key name="osd-yerine" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Ses/parlaklık için GNOME'un ekran ortasındaki göstergesi yerine Island'ı kullan</summary>
     </key>
     <key name="kripto-esik" type="d">

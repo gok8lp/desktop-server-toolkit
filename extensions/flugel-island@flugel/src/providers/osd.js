@@ -38,9 +38,11 @@ export class OsdProvider {
             if (!self._goster(simge, etiket, seviye, azami, Main.layoutManager.primaryIndex))
                 orijinal.call(this, simge, etiket, seviye, azami);
         });
-        this._enj.overrideMethod(osd, 'showOne', orijinal => function (monitor, simge, etiket, seviye, azami) {
-            if (!self._goster(simge, etiket, seviye, azami, monitor))
-                orijinal.call(this, monitor, simge, etiket, seviye, azami);
+        // GNOME 50: parlaklık ve showOne show(simge, etiket, {monitör: {level, maxLevel}}) üzerinden gelir
+        this._enj.overrideMethod(osd, 'show', orijinal => function (simge, etiket, seviyeler) {
+            const [mon, s] = Object.entries(seviyeler ?? {}).find(([, v]) => v) ?? [Main.layoutManager.primaryIndex, null];
+            if (!self._goster(simge, etiket, s?.level, s?.maxLevel, Number(mon)))
+                orijinal.call(this, simge, etiket, seviyeler);
         });
     }
 

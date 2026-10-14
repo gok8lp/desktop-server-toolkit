@@ -87,19 +87,17 @@
 .flugel-dugme-soluk { color: #8a8a94; }
 
 /* sekmeler */
-.flugel-sekmeler {
-  spacing: 4px;
-  padding: 3px;
-  border-radius: 14px;
-  background-color: rgba(255, 255, 255, 0.06);
-}
+.flugel-sekmeler { spacing: 4px; padding: 3px; }
+.flugel-sekmeler-zemin { border-radius: 14px; background-color: rgba(255, 255, 255, 0.05); }
+.flugel-sekme-secici { border-radius: 11px; background-color: rgba(255, 255, 255, 0.13); }
 .flugel-sekme {
   padding: 8px 14px;
   border-radius: 11px;
   color: #b4b4bc;
 }
-.flugel-sekme:hover { background-color: rgba(255, 255, 255, 0.09); color: #ffffff; }
-.flugel-sekme:checked { background-color: rgba(255, 255, 255, 0.24); color: #ffffff; box-shadow: inset 0 -2px 0 #ffffff; }
+.flugel-sekme { color: #8a8a94; transition-duration: 160ms; }
+.flugel-sekme:hover { color: #e6e6ea; }
+.flugel-sekme:checked { color: #ffffff; }
 .flugel-sekme-etiket { font-size: 8.5pt; margin-top: 2px; }
 .flugel-rozet {
   font-size: 7pt;

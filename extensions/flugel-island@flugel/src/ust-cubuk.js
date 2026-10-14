@@ -4,6 +4,7 @@
 // kısayollar ve GNOME'un ses/parlaklık göstergesi çalışmaya devam eder. Hızlı Ayarlar ve takvim menüleri
 // Island'ın altında açılır (kaynak aktörleri adanın çapasıdır). Arka plan uygulama simgelerini tepsi.js alır.
 // Eklenti kapanınca ya da 'ust-cubuk-sade' kapatılınca her şey eski haline döner.
+import St from 'gi://St';
 import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
@@ -58,17 +59,29 @@ export class UstCubuk {
     _gizle(c) {
         if (tepsiSimgesiMi(c))
             return;
-        const ic = c.get_first_child();
-        if (!this._gizli.has(c)) {
-            this._gizli.set(c, {opacity: c.opacity, genislik: c.width_set ? c.width : -1,
-                icStil: ic?.style ?? null});
-        }
+        // içteki bütün St öğelerinin dolgusu sıfırlanır: sıfır genişlikte negatif boyut uyarısı (Clutter) çıkmasın
+        const icler = [];
+        const gez = a => {
+            for (const k of a.get_children()) {
+                if (k instanceof St.Widget)
+                    icler.push(k);
+                gez(k);
+            }
+        };
+        gez(c);
+        if (!this._gizli.has(c))
+            this._gizli.set(c, {opacity: c.opacity, genislik: c.width_set ? c.width : -1, stiller: icler.map(k => [k, k.style])});
         // görünür (mapped) kalır ki Super+S / Super+V gibi kısayollar çalışsın: saydam, sıfır genişlik, dolgusuz.
         // GNOME bir kabı yeniden eklerse (oturum kipi değişince) child-added ile tekrar uygulanır.
         c.opacity = 0;
         c.set_width(0);
-        if (ic)
-            ic.style = 'padding: 0; margin: 0; spacing: 0;';
+        // Etkinlikler düğmesinin kısayolu yok (Super tuşu ondan bağımsız): tamamen gizlenir; çalışma alanı
+        // noktaları sıfır genişliğe sığmayıp Clutter uyarısı üretmesin
+        if (c === Main.panel.statusArea.activities?.container)
+            c.hide();
+        // PanelMenu.ButtonBox içeriğini -natural/-minimum-hpadding kadar içeriden yerleştirir; sıfır genişlikte negatif olmasın
+        for (const k of icler)
+            k.style = 'padding: 0; margin: 0; spacing: 0; border-width: 0; min-width: 0; -natural-hpadding: 0px; -minimum-hpadding: 0px;';
     }
 
     _geriAl() {
@@ -81,9 +94,15 @@ export class UstCubuk {
         for (const [c, eski] of this._gizli) {
             c.opacity = eski.opacity;
             c.set_width(eski.genislik);
-            const ic = c.get_first_child();
-            if (ic)
-                ic.style = eski.icStil;
+            if (c === Main.panel.statusArea.activities?.container)
+                c.show();
+            for (const [k, stil] of eski.stiller ?? []) {
+                try {
+                    k.style = stil;
+                } catch (e) {
+                    // GNOME o öğeyi bu arada yok etmiş olabilir
+                }
+            }
         }
         this._gizli.clear();
         for (const [menu, eski] of this._menuler) {
