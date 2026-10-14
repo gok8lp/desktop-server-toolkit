@@ -167,14 +167,14 @@ const SEKMELER = {
 };
 const KOK = { one: "ana", uyari: "ana", playstation: "oyun", japonya: "anime" };
 function sekmeCiz(kok, alt) {
-  const s = SEKMELER[kok] || [[kok, (SAYFALAR.find(x => x[0] === kok) || [, ""])[1]]];
+  const s = SEKMELER[kok] || [[kok, (SAYFALAR.find(x => x[0] === kok) || [null, ""])[1]]];
   $("#sekmeler").innerHTML = s.map(([id, ad]) => `<a class="sekme ${id === alt ? "aktif" : ""}" href="#/${id}"><span>${ad}</span></a>`).join("");
 }
 
 async function sayfaAc(k, zorla) {
   const kok = KOK[k] || k.split(":")[0];
   document.querySelectorAll("[data-k]").forEach(a => a.classList.toggle("aktif", a.dataset.k === kok));
-  $("#sayfa-baslik").textContent = (SAYFALAR.find(x => x[0] === kok) || [, "FLUGEL"])[1];
+  $("#sayfa-baslik").textContent = (SAYFALAR.find(x => x[0] === kok) || [null, "FLUGEL"])[1];
   sekmeCiz(kok, k);
   $("#tam-menu").hidden = true;
   $("#yeni-gonderi").hidden = true;

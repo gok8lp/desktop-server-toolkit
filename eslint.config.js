@@ -4,7 +4,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 
 export default [
-    {ignores: ['node_modules/', '**/locale/']},
+    {ignores: ['node_modules/', '**/locale/', 'tests/altin/']},
     js.configs.recommended,
     {
         files: ['extensions/**/*.js'],
@@ -45,5 +45,21 @@ export default [
             'no-unreachable-loop': 'error',
             'no-await-in-loop': 'error',
         },
+    },
+    // diğer GNOME eklentileri (kilit ekranı, v1 panel): aynı GJS ortamı, sadece hata yakalayan kurallar
+    {
+        files: ['pc/gnome-uzantilari/**/*.js'],
+        languageOptions: {
+            ecmaVersion: 2024, sourceType: 'module',
+            globals: {...globals.es2021, global: 'readonly', log: 'readonly', logError: 'readonly', console: 'readonly',
+                TextEncoder: 'readonly', TextDecoder: 'readonly'},
+        },
+        rules: {'no-unused-vars': ['error', {argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrors: 'none'}]},
+    },
+    // sunucudaki web arayüzleri (FLUGEL Akış, homepage): tarayıcı ortamı
+    {
+        files: ['sunucu/**/*.js'],
+        languageOptions: {ecmaVersion: 2024, sourceType: 'script', globals: {...globals.browser, ...globals.serviceworker}},
+        rules: {'no-unused-vars': ['error', {argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrors: 'none'}]},
     },
 ];

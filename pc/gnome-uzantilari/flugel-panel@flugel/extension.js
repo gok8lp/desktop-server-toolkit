@@ -636,7 +636,9 @@ class SanalMakineDugmesi extends PanelMenu.Button {
                 let liste = null;
                 try {
                     liste = JSON.parse(proc.communicate_utf8_finish(res)[1]);
-                } catch (e) {}
+                } catch (e) {
+                    liste = null; // komut çıktısı okunamadı: liste boş gösterilir
+                }
                 this._yaz(liste);
             });
         } catch (e) {

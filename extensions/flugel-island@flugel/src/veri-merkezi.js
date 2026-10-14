@@ -13,7 +13,6 @@ const KAYNAKLAR = {
     canli: [[VERI, 'canli'], 'canli', 'yenileme-kripto'],
     pc: [[VERI, 'pc'], null, 'yenileme-pc'],
     kripto: [[VERI, 'kripto'], 'kripto', null],
-    grafik: [[VERI, 'grafik'], null, null],
     // izleme listesi + alarm koinleri (fiyat alarmları bununla denetlenir)
     kizle: [a => [VERI, 'kripto-izle', izlenenler(a).join(',') || 'BTC'], null, 'yenileme-kripto'],
     maclar: [[VERI, 'maclar'], 'maclar-island', 'yenileme-maclar'],

@@ -471,7 +471,7 @@ GRAFIK_VARLIK = [("BTC", "Bitcoin", "BTCUSDT"), ("ETH", "Ethereum", "ETHUSDT"),
 
 
 def binance_kapanis(sembol, aralik, adet):
-    for kok in ("https://data-api.binance.vision", "https://api.binance.com"):
+    for kok in BINANCE:
         try:
             url = f"{kok}/api/v3/klines?symbol={sembol}&interval={aralik}&limit={adet}"
             veri = json.load(urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "FLUGEL"}), timeout=8))
