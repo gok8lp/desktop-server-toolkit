@@ -65,13 +65,12 @@ msgstr "Screen recording, microphone, camera"
 msgid "Kayıt/paylaşım sürerken ya da mikrofon/kamera kullanımdayken"
 msgstr "While recording/sharing or when the microphone/camera is in use"
 
-#, fuzzy
 msgid "Bildirimler adadan"
-msgstr "Notifications"
+msgstr "Notifications from the island"
 
 msgid ""
 "Yeni bildirim adadan animasyonlu afiş olarak açılır (GNOME afişi yerine)"
-msgstr ""
+msgstr "New notifications open as an animated banner from the island (instead of GNOME's banner)"
 
 msgid "Panik modu"
 msgstr "Panic mode"
@@ -335,9 +334,8 @@ msgstr "Island instead of GNOME's volume/brightness popup"
 msgid "Tam ekranda Island gizliyken GNOME'un göstergesi yine çıkar"
 msgstr "In fullscreen, while Island is hidden, GNOME's popup still appears"
 
-#, fuzzy
 msgid "Bildirim afişi süresi"
-msgstr "Notification banner"
+msgstr "Notification banner duration"
 
 msgid "Düşük pil uyarısı"
 msgstr "Low battery alert"
@@ -567,30 +565,28 @@ msgstr "Battery multiplier"
 msgid "kat"
 msgstr "×"
 
-#, fuzzy
 msgid "Otomatik güncelleme"
-msgstr "Update the system"
+msgstr "Automatic updates"
 
 msgid ""
 "apt, snap ve flatpak; dağıtım sürümü ve sürücü ana sürümü değişmez; sonuç "
 "bildirim olarak gelir"
-msgstr ""
+msgstr "apt, snap and flatpak; the release and the driver's major version never change; you get the result as a notification"
 
 msgid "Sıklık"
-msgstr ""
+msgstr "Frequency"
 
 msgid "Kapalı"
 msgstr "Off"
 
 msgid "Günlük"
-msgstr ""
+msgstr "Daily"
 
 msgid "Haftalık (Pazartesi 12:30)"
-msgstr ""
+msgstr "Weekly (Monday 12:30)"
 
-#, fuzzy
 msgid "Şimdi güncelle"
-msgstr "Update the system"
+msgstr "Update now"
 
 msgid "Sıfırlama ve yedek"
 msgstr "Reset & backup"
