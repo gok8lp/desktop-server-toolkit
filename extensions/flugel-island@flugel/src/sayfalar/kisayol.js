@@ -91,7 +91,7 @@ const KLAVYE = o => [
     ['Shift+Super+S', _('Ekran görüntüsü (Print da)'), 'camera-photo-symbolic', ekranGoruntusu],
     ['Super+L', _('Ekranı kilitle'), 'system-lock-screen-symbolic', () => calistir('loginctl lock-session')],
     ['Ctrl+Alt+T', 'Terminal', 'utilities-terminal-symbolic', () => calistir('kitty')],
-    [_('😊 tuşu'), _('Emoji seçici (K380s gülen yüz tuşu)'), 'face-smile-symbolic', () => calistir('flatpak run it.mijorus.smile')],
+    [_('Emoji tuşu'), _('Emoji seçici (K380s gülen yüz tuşu)'), 'face-smile-symbolic', () => calistir('flatpak run it.mijorus.smile')],
 ];
 
 // kategori → [simge, vurgu rengi] (renk sakin: sadece simge ve hafif zemin)

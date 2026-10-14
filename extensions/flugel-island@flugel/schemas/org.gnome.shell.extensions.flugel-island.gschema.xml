@@ -142,8 +142,29 @@
       <summary>Canlı maç olunca kapsülde canlı etkinlik olarak göster</summary>
     </key>
     <key name="kripto-varliklar" type="as">
-      <default>['BTC', 'ETH', 'USD', 'EUR']</default>
-      <summary>Kripto sekmesinde gösterilecek varlıklar (BTC, ETH, USD, EUR)</summary>
+      <default>['BTC', 'ETH', 'SOL', 'BNB', 'XRP', 'DOGE', 'USD', 'EUR']</default>
+      <summary>Kripto izleme listesi (Binance sembolleri; USD ve EUR: TL karşılığı), kartlar bu sırayla dizilir</summary>
+    </key>
+    <key name="kripto-alarmlar" type="s">
+      <default>'[]'</default>
+      <summary>Fiyat alarmları (JSON: [{id, s, fiyat, yon}])</summary>
+    </key>
+    <key name="kripto-isaretler" type="s">
+      <default>'{}'</default>
+      <summary>Grafik işaretleri (JSON: {sembol: [fiyat]})</summary>
+    </key>
+    <key name="kripto-donem" type="s">
+      <choices><choice value="1s"/><choice value="24s"/><choice value="7g"/><choice value="30g"/><choice value="1y"/></choices>
+      <default>'24s'</default>
+      <summary>Ayrıntı grafiğinin açılış dönemi</summary>
+    </key>
+    <key name="kripto-mini-grafik" type="b">
+      <default>true</default>
+      <summary>Kartlarda küçük grafik</summary>
+    </key>
+    <key name="kripto-alarm-ses" type="b">
+      <default>true</default>
+      <summary>Alarm çalınca ses</summary>
     </key>
     <key name="kripto-renk" type="b">
       <default>false</default>

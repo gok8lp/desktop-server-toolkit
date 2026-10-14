@@ -6,7 +6,7 @@ import Clutter from 'gi://Clutter';
 import Pango from 'gi://Pango';
 import GLib from 'gi://GLib';
 import {Sayfa} from './sayfa.js';
-import {ikon} from '../ortak.js';
+import {emojisiz, ikon} from '../ortak.js';
 import {bolum, ipucuBagla} from '../bilesenler.js';
 import {KATEGORI_AD, kategori, sessizler, sessizMi, sessizeAl} from '../sunucu-bildirim.js';
 import {_, f} from '../dil.js';
@@ -97,7 +97,7 @@ export class BildirimlerSayfa extends Sayfa {
         ust.add_child(new St.Label({text: t.format('%H:%M'), style_class: 'flugel-sb-saat'}));
         ust.add_child(new St.Label({text: KATEGORI_AD()[k], style_class: 'flugel-sb-kategori'}));
         metinKutu.add_child(ust);
-        const metin = new St.Label({text: b.metin, style_class: 'flugel-sb-metin', x_expand: true});
+        const metin = new St.Label({text: emojisiz(b.metin), style_class: 'flugel-sb-metin', x_expand: true});
         metin.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         metinKutu.add_child(metin);
         kutu.add_child(metinKutu);

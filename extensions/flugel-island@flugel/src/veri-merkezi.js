@@ -5,6 +5,7 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import {VERI, H, ONBELLEK, jsonAl} from './ortak.js';
+import {izlenenler} from './kripto-ortak.js';
 
 // tür → [komut, önbellek dosyası (zorla yenilemede silinir), ayar anahtarı (saniye) | null = sadece istenince]
 const KAYNAKLAR = {
@@ -13,6 +14,8 @@ const KAYNAKLAR = {
     pc: [[VERI, 'pc'], null, 'yenileme-pc'],
     kripto: [[VERI, 'kripto'], 'kripto', null],
     grafik: [[VERI, 'grafik'], null, null],
+    // izleme listesi + alarm koinleri (fiyat alarmları bununla denetlenir)
+    kizle: [a => [VERI, 'kripto-izle', izlenenler(a).join(',') || 'BTC'], null, 'yenileme-kripto'],
     maclar: [[VERI, 'maclar'], 'maclar-island', 'yenileme-maclar'],
     basket: [[VERI, 'basket'], 'basket', null],
     anime: [[VERI, 'anime'], 'anime', 'yenileme-anime'],
@@ -32,6 +35,8 @@ export class VeriMerkezi {
         this._ayarId = this._ayar.connect('changed', (_s, anahtar) => {
             if (anahtar.startsWith('yenileme-') || anahtar === 'pil-carpani')
                 this._hepsiniPlanla();
+            if (anahtar === 'kripto-varliklar')
+                this.yenile('kizle');
         });
     }
 
@@ -71,7 +76,7 @@ export class VeriMerkezi {
         if (zorla && k[1])
             GLib.unlink(`${ONBELLEK}/${k[1]}.json`);
         this._suruyor.add(tur);
-        const veri = await jsonAl(k[0], this._iptal);
+        const veri = await jsonAl(typeof k[0] === 'function' ? k[0](this._ayar) : k[0], this._iptal);
         this._suruyor.delete(tur);
         if (this._iptal.is_cancelled())
             return;

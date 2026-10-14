@@ -4,13 +4,13 @@ import {_} from './dil.js';
 
 // [kimlik, desen, simge]
 const KURALLAR = [
-    ['ozet', /özet|ozet|günaydın|gunaydin|🌅/i, 'x-office-document-symbolic'],
+    ['ozet', /özet|ozet|günaydın|gunaydin/i, 'x-office-document-symbolic'],
     ['yedek', /yedek|backup/i, 'document-save-symbolic'],
     ['servis', /servis|service|konteyner|container|unhealthy|sağlıksız/i, 'system-run-symbolic'],
     ['guvenlik', /virüs|virus|ssh|giriş|login|fail2ban|güvenlik/i, 'security-high-symbolic'],
     ['disk', /disk|smart|doluluk|alan/i, 'drive-harddisk-symbolic'],
     ['ag', /vpn|gluetun|tailscale|ağ|network|internet/i, 'network-wired-symbolic'],
-    ['anime', /anime|manga|bölüm|bolum|📺/i, 'anime'],
+    ['anime', /anime|manga|bölüm|bolum/i, 'anime'],
     ['mac', /maç|mac |basket|hakem|bülten|bulten/i, 'basket'],
     ['durum', /sorun|normal|yük|yuk|ram|swap|sıcaklık|cpu/i, 'utilities-system-monitor-symbolic'],
 ];

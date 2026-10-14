@@ -417,3 +417,27 @@
 .flugel-sb-metin { font-size: 9.5pt; color: #f2f2f4; }
 .flugel-sb-ad { font-weight: 700; }
 .flugel-sb-sessiz-ad { font-weight: 700; color: #8a8a94; }
+
+/* kripto: izleme kartları, koin seçimi, ayrıntı */
+.flugel-kripto-kart { padding: 10px 12px; border-radius: 16px; background-color: rgba(255, 255, 255, 0.06); }
+.flugel-kripto-kart:hover { background-color: rgba(255, 255, 255, 0.11); }
+.flugel-kripto-sembol { font-size: 10pt; font-weight: 800; color: #ffffff; }
+.flugel-koin-simge { color: #ffffff; }
+.flugel-koin-rozet { border-radius: 999px; background-color: rgba(255, 255, 255, 0.14); color: #ffffff; font-weight: 800; text-align: center; padding: 0 2px; }
+.flugel-kripto-alarm-rozet { font-size: 8pt; font-weight: 800; color: #000000; background-color: #7fb2ff; border-radius: 999px; padding: 0 6px; }
+.flugel-kripto-secim { padding: 7px 10px; border-radius: 12px; background-color: rgba(255, 255, 255, 0.05); }
+.flugel-kripto-secim:hover { background-color: rgba(255, 255, 255, 0.12); }
+.flugel-kripto-alarm-satir { padding: 6px 10px; border-radius: 12px; background-color: rgba(127, 178, 255, 0.08); color: #e6e6ea; }
+.flugel-kripto-alarm-satir:hover { background-color: rgba(127, 178, 255, 0.16); }
+.flugel-kripto-detay { spacing: 10px; }
+.flugel-kripto-detay-ust { spacing: 10px; }
+.flugel-kripto-detay-ad { font-size: 9.5pt; color: #9a9aa5; font-weight: 700; }
+.flugel-kripto-detay-fiyat { font-size: 17pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }
+.flugel-kripto-detay-degisim { font-size: 10pt; font-weight: 700; color: #cfcfd6; padding-left: 4px; }
+.flugel-kripto-kip { spacing: 6px; }
+.flugel-kripto-ipucu { font-size: 8.5pt; }
+.flugel-kripto-istat { spacing: 6px; }
+.flugel-kripto-istat-kutu { padding: 8px 10px; border-radius: 12px; background-color: rgba(255, 255, 255, 0.05); }
+.flugel-kripto-istat-deger { font-size: 10.5pt; font-weight: 700; color: #ffffff; font-feature-settings: "tnum"; }
+.flugel-kripto-isaret { color: #e8c66b; }
+.flugel-arama:error { box-shadow: inset 0 0 0 1px #f07b7b; }

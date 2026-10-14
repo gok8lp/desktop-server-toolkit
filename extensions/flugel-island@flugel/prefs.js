@@ -353,20 +353,97 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
     _kripto() {
         const a = this._ayar;
         const sayfa = new Adw.PreferencesPage({title: _('Kripto'), icon_name: 'money-symbolic'});
-        const g = new Adw.PreferencesGroup({title: _('Varlıklar'), description: _('Kaynak: Binance açık piyasa verisi (anahtarsız)')});
-        for (const [k, ad] of [['BTC', 'Bitcoin'], ['ETH', 'Ethereum'], ['USD', _('Dolar / TL')], ['EUR', _('Euro / TL')]]) {
-            const row = new Adw.SwitchRow({title: ad, active: a.get_strv('kripto-varliklar').includes(k)});
-            row.connect('notify::active', () => {
-                const s = a.get_strv('kripto-varliklar').filter(x => x !== k);
-                a.set_strv('kripto-varliklar', row.active ? [...s, k] : s);
+        // izleme listesi: sıra kartlardaki sıradır (yukarı/aşağı), yeni koin Island'daki "Koin ekle" ya da aşağıdaki kutudan
+        const liste = new Adw.PreferencesGroup({title: _('İzleme listesi'),
+            description: _('Kaynak: Binance açık piyasa verisi (anahtarsız). USD ve EUR: TL karşılığı.')});
+        const satirlar = [];
+        const listeYaz = () => {
+            satirlar.splice(0).forEach(r => liste.remove(r));
+            const l = a.get_strv('kripto-varliklar');
+            l.forEach((k, i) => {
+                const row = new Adw.ActionRow({title: k});
+                const tasi = (yon, ikonAd, ipucu) => {
+                    const b = new Gtk.Button({icon_name: ikonAd, valign: Gtk.Align.CENTER, tooltip_text: ipucu,
+                        css_classes: ['flat'], sensitive: yon < 0 ? i > 0 : i < l.length - 1});
+                    b.connect('clicked', () => {
+                        const y = [...l];
+                        [y[i], y[i + yon]] = [y[i + yon], y[i]];
+                        a.set_strv('kripto-varliklar', y);
+                    });
+                    row.add_suffix(b);
+                };
+                tasi(-1, 'go-up-symbolic', _('Yukarı'));
+                tasi(1, 'go-down-symbolic', _('Aşağı'));
+                const sil = new Gtk.Button({icon_name: 'user-trash-symbolic', valign: Gtk.Align.CENTER, tooltip_text: _('Listeden çıkar'),
+                    css_classes: ['flat']});
+                sil.connect('clicked', () => a.set_strv('kripto-varliklar', l.filter(x => x !== k)));
+                row.add_suffix(sil);
+                liste.add(row);
+                satirlar.push(row);
             });
-            g.add(row);
-        }
+            const ekle = new Adw.EntryRow({title: _('Sembol ekle (ör. SOL, PEPE, USD)'), show_apply_button: true});
+            ekle.connect('apply', () => {
+                const k = ekle.text.trim().toUpperCase().replace(/USDT$/, '');
+                if (/^[A-Z0-9]{2,12}$/.test(k) && !a.get_strv('kripto-varliklar').includes(k))
+                    a.set_strv('kripto-varliklar', [...a.get_strv('kripto-varliklar'), k]);
+                ekle.text = '';
+            });
+            liste.add(ekle);
+            satirlar.push(ekle);
+        };
+        listeYaz();
+        const listeId = a.connect('changed::kripto-varliklar', () => listeYaz());
+        sayfa.add(liste);
+
+        // alarmlar
+        const alarm = new Adw.PreferencesGroup({title: _('Fiyat alarmları'),
+            description: _('Island\'da koinin grafiğinden kurulur; fiyat eşiği geçince kapsülde uyarı çıkar ve alarm silinir.')});
+        const alarmSatir = [];
+        const alarmYaz = () => {
+            alarmSatir.splice(0).forEach(r => alarm.remove(r));
+            let l = [];
+            try {
+                l = JSON.parse(a.get_string('kripto-alarmlar') || '[]');
+            } catch (e) {
+                l = [];
+            }
+            if (!l.length) {
+                const r = new Adw.ActionRow({title: _('Kurulu alarm yok')});
+                alarm.add(r);
+                alarmSatir.push(r);
+            }
+            for (const x of l) {
+                const r = new Adw.ActionRow({title: `${x.s}  ${x.yon === 'ust' ? '≥' : '≤'} ${x.fiyat}`,
+                    subtitle: GLib.DateTime.new_from_unix_local(x.olustu ?? 0).format('%d.%m.%Y %H:%M')});
+                const sil = new Gtk.Button({icon_name: 'user-trash-symbolic', valign: Gtk.Align.CENTER, css_classes: ['flat'],
+                    tooltip_text: _('Alarmı sil')});
+                sil.connect('clicked', () => a.set_string('kripto-alarmlar', JSON.stringify(l.filter(y => y.id !== x.id))));
+                r.add_suffix(sil);
+                alarm.add(r);
+                alarmSatir.push(r);
+            }
+        };
+        alarmYaz();
+        const alarmId = a.connect('changed::kripto-alarmlar', () => alarmYaz());
+        alarm.add(anahtar(a, 'kripto-alarm-ses', _('Alarm çalınca ses'), null));
+        sayfa.add(alarm);
+        sayfa.connect('destroy', () => {
+            a.disconnect(listeId);
+            a.disconnect(alarmId);
+            a.disconnect(donemId);
+        });
+
+        const g = new Adw.PreferencesGroup({title: _('Görünüm ve yenileme')});
+        const [donem, donemId] = secim(a, 'kripto-donem', _('Grafik açılış dönemi'), _('Koin ayrıntısı ilk bu dönemle açılır'),
+            [['1s', _('1 saat')], ['24s', _('24 saat')], ['7g', _('7 gün')], ['30g', _('30 gün')], ['1y', _('1 yıl')]]);
+        g.add(donem);
+        g.add(anahtar(a, 'kripto-mini-grafik', _('Kartlarda küçük grafik'), _('24 saatlik eğri')));
         g.add(anahtar(a, 'kripto-renk', _('Değişimde renk kullan'), _('Kapalıysa siyah-beyaz')));
-        g.add(sayi(a, 'kripto-esik', _('Büyük değişim uyarısı'), _('% (24 saat)'), 1, 50, 0.5, 1));
-        g.add(sayi(a, 'yenileme-kripto', _('Fiyat yenileme'), _('saniye'), 15, 600, 5));
+        g.add(sayi(a, 'kripto-esik', _('Büyük değişim uyarısı'), _('% (24 saat, BTC ve ETH)'), 1, 50, 0.5, 1));
+        g.add(sayi(a, 'yenileme-kripto', _('Fiyat yenileme'), _('saniye (alarmlar da bu aralıkla denetlenir)'), 15, 600, 5));
         sayfa.add(g);
-        sifirla(a, ['kripto-varliklar', 'kripto-renk', 'kripto-esik', 'yenileme-kripto'], sayfa);
+        sifirla(a, ['kripto-varliklar', 'kripto-renk', 'kripto-esik', 'yenileme-kripto', 'kripto-donem', 'kripto-mini-grafik',
+            'kripto-alarm-ses', 'kripto-isaretler'], sayfa);
         return sayfa;
     }
 

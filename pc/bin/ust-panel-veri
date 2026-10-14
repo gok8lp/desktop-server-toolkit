@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Ust panel eklentisi icin veri: kripto fiyatlari, bu PC ve sunucu durumu (JSON).
-Kullanim: ust-panel-veri kripto | canli | grafik | maclar | pc | sunucu | island | basket | anime     (sistem-bakim)
+Kullanim: ust-panel-veri kripto | canli | grafik | kripto-izle A,B | kripto-liste | koin SYM DONEM | maclar | pc | sunucu | island | basket | anime     (sistem-bakim)
 Evde LAN, disarida Tailscale uzerinden sunucuya ulasir (ssh config Match kurali)."""
-import json, os, subprocess, sys, time, urllib.request
+import json, os, subprocess, sys, time, urllib.parse, urllib.request
 
 CACHE = os.path.expanduser("~/.cache/sistem-bakim")
 os.makedirs(CACHE, exist_ok=True)
@@ -456,6 +456,173 @@ def grafik():
     return {"varliklar": varliklar, "zaman": time.strftime("%H:%M"), "eski": bool(s24.get("eski") or s7.get("eski"))}
 
 
+# ---------- kripto izleme listesi, koin listesi, koin grafigi (Island kripto sekmesi + fiyat alarmlari) ----------
+# Kaynak: Binance herkese acik piyasa verisi (anahtarsiz). Koin adlari ve beyaz simgeler: cryptocurrency-icons
+# (CC0, npm paketi jsDelivr uzerinden), bir kez indirilip ~/.cache/flugel-island/koin altinda tutulur.
+KOIN_KOK = os.path.expanduser("~/.cache/flugel-island/koin")
+IKON_CDN = "https://cdn.jsdelivr.net/npm/cryptocurrency-icons@0.18.1"
+BINANCE = ("https://api.binance.com", "https://data-api.binance.vision")
+# sabit paralar ve kaldiracli tokenlar listede gosterilmez
+KOIN_DISI = {"USDC", "FDUSD", "TUSD", "USDP", "DAI", "BUSD", "EUR", "TRY", "USDE", "USD1", "PAXG", "XUSD", "BFUSD", "AEUR"}
+DONEM = {"1s": ("1m", 60, 30), "24s": ("15m", 96, 120), "7g": ("1h", 168, 600), "30g": ("4h", 180, 1800),
+         "1y": ("1d", 365, 3600)}
+
+
+def binance(yol):
+    for kok in BINANCE:
+        try:
+            return json.load(urllib.request.urlopen(urllib.request.Request(kok + yol, headers={"User-Agent": "FLUGEL"}), timeout=8))
+        except Exception:
+            continue
+    raise RuntimeError("Binance'e ulasilamadi")
+
+
+def koin_adlari():
+    os.makedirs(KOIN_KOK, exist_ok=True)
+    p = os.path.join(KOIN_KOK, "adlar.json")
+    try:
+        if time.time() - os.path.getmtime(p) < 30 * 86400:
+            return json.load(open(p))
+    except OSError:
+        pass
+    try:
+        ham = json.load(urllib.request.urlopen(IKON_CDN + "/manifest.json", timeout=8))
+        adlar = {k["symbol"].upper(): k["name"] for k in ham}
+        json.dump(adlar, open(p, "w"))
+        return adlar
+    except Exception:
+        try:
+            return json.load(open(p))
+        except Exception:
+            return {}
+
+
+def koin_simgeleri(semboller):
+    """beyaz SVG simgeleri indirir (yoksa bos dosya: tekrar denenmez); {sembol: yol}"""
+    from concurrent.futures import ThreadPoolExecutor
+    os.makedirs(KOIN_KOK, exist_ok=True)
+
+    def bir(s):
+        y = os.path.join(KOIN_KOK, s.lower() + ".svg")
+        if not os.path.exists(y):
+            try:
+                ham = urllib.request.urlopen(f"{IKON_CDN}/svg/white/{s.lower()}.svg", timeout=8).read()
+            except Exception:
+                ham = b""
+            open(y, "wb").write(ham)
+        return s, (y if os.path.getsize(y) else None)
+    with ThreadPoolExecutor(6) as h:
+        return {s: y for s, y in h.map(bir, semboller) if y}
+
+
+def doviz_seri(aralik, adet):
+    usdtry = [float(k[4]) for k in binance(f"/api/v3/klines?symbol=USDTTRY&interval={aralik}&limit={adet}")]
+    return usdtry
+
+
+def koin_mumlari(sembol, donem):
+    aralik, adet, _ = DONEM[donem]
+    if sembol in ("USD", "EUR"):
+        usd = binance(f"/api/v3/klines?symbol=USDTTRY&interval={aralik}&limit={adet}")
+        if sembol == "USD":
+            return usd
+        eur = binance(f"/api/v3/klines?symbol=EURUSDT&interval={aralik}&limit={adet}")
+        n = min(len(usd), len(eur))
+        usd, eur = usd[-n:], eur[-n:]
+        return [[e[0], *(float(e[i]) * float(u[i]) for i in (1, 2, 3, 4))] for e, u in zip(eur, usd)]
+    return binance(f"/api/v3/klines?symbol={sembol}USDT&interval={aralik}&limit={adet}")
+
+
+def koin(sembol, donem):
+    sembol, donem = sembol.upper(), (donem if donem in DONEM else "24s")
+
+    def al():
+        m = koin_mumlari(sembol, donem)
+        return {"s": sembol, "donem": donem, "t": [int(k[0]) // 1000 for k in m], "a": [float(k[1]) for k in m],
+                "y": [float(k[2]) for k in m], "d": [float(k[3]) for k in m], "c": [float(k[4]) for k in m]}
+    return cached(f"koin-{sembol}-{donem}", DONEM[donem][2], al)
+
+
+def kripto_izle(semboller):
+    """izleme listesi + alarm koinleri: fiyat, 24 saat degisim, 24 saatlik kucuk grafik, ad, simge"""
+    semboller = [s.upper() for s in semboller if s.strip()][:40]
+    adlar = koin_adlari()
+    koinler = [s for s in semboller if s not in ("USD", "EUR")]
+    sonuc = {}
+    if koinler:
+        cift = json.dumps([s + "USDT" for s in koinler], separators=(",", ":"))
+        try:
+            for t in binance("/api/v3/ticker/24hr?type=MINI&symbols=" + urllib.parse.quote(cift)):
+                s = t["symbol"][:-4]
+                f, a = float(t["lastPrice"]), float(t["openPrice"])
+                sonuc[s] = {"fiyat": f, "degisim": round(100 * (f - a) / a, 2) if a else None,
+                            "yuksek": float(t["highPrice"]), "dusuk": float(t["lowPrice"]), "hacim": float(t["quoteVolume"])}
+        except RuntimeError:
+            # biri gecersizse toplu istek hata verir: tek tek dene
+            for s in koinler:
+                try:
+                    t = binance(f"/api/v3/ticker/24hr?type=MINI&symbol={s}USDT")
+                    f, a = float(t["lastPrice"]), float(t["openPrice"])
+                    sonuc[s] = {"fiyat": f, "degisim": round(100 * (f - a) / a, 2) if a else None,
+                                "yuksek": float(t["highPrice"]), "dusuk": float(t["lowPrice"]), "hacim": float(t["quoteVolume"])}
+                except Exception:
+                    pass
+    for s in ("USD", "EUR"):
+        if s in semboller:
+            try:
+                k = koin(s, "24s")
+                if k.get("c"):
+                    f, a = k["c"][-1], k["a"][0]
+                    sonuc[s] = {"fiyat": f, "degisim": round(100 * (f - a) / a, 2), "yuksek": max(k["y"]), "dusuk": min(k["d"])}
+            except Exception:
+                pass
+    from concurrent.futures import ThreadPoolExecutor
+    simge = koin_simgeleri(koinler)
+
+    def seri_al(s):
+        try:
+            return s, koin(s, "24s").get("c", [])[::2]
+        except Exception:
+            return s, []
+    with ThreadPoolExecutor(6) as h:
+        seriler = dict(h.map(seri_al, [s for s in semboller if s in sonuc]))
+    cikti = []
+    for s in semboller:
+        if s not in sonuc:
+            cikti.append({"s": s, "yok": True})
+            continue
+        seri = seriler.get(s, [])
+        ad = {"USD": "Dolar / TL", "EUR": "Euro / TL"}.get(s) or adlar.get(s, s)
+        cikti.append({"s": s, "ad": ad, "simge": simge.get(s), "seri": seri, "birim": "TL" if s in ("USD", "EUR") else "$", **sonuc[s]})
+    return {"koinler": cikti, "zaman": int(time.time())}
+
+
+def kripto_liste():
+    """Binance'teki butun USDT ciftleri, islem hacmine gore (koin ekleme listesi)"""
+    def al():
+        adlar = koin_adlari()
+        liste = []
+        for t in binance("/api/v3/ticker/24hr?type=MINI"):
+            sym = t["symbol"]
+            if not sym.endswith("USDT"):
+                continue
+            s = sym[:-4]
+            if s in KOIN_DISI or s.endswith(("UP", "DOWN", "BULL", "BEAR")) or float(t["quoteVolume"]) < 50000:
+                continue
+            f, a = float(t["lastPrice"]), float(t["openPrice"])
+            liste.append({"s": s, "ad": adlar.get(s, s), "fiyat": f, "degisim": round(100 * (f - a) / a, 2) if a else None,
+                          "hacim": float(t["quoteVolume"])})
+        liste.sort(key=lambda k: -k["hacim"])
+        return {"koinler": liste, "zaman": int(time.time())}
+    d = cached("kripto-liste", 600, al)
+    simge = koin_simgeleri([k["s"] for k in d.get("koinler", [])[:80]])
+    for k in d.get("koinler", []):
+        k["simge"] = simge.get(k["s"]) or (os.path.join(KOIN_KOK, k["s"].lower() + ".svg")
+                                           if os.path.exists(os.path.join(KOIN_KOK, k["s"].lower() + ".svg")) and
+                                           os.path.getsize(os.path.join(KOIN_KOK, k["s"].lower() + ".svg")) else None)
+    return d
+
+
 if __name__ == "__main__":
     ne = sys.argv[1] if len(sys.argv) > 1 else "pc"
     if ne == "kripto":
@@ -464,6 +631,12 @@ if __name__ == "__main__":
         print(json.dumps(cached("maclar-island", 110, maclar)))
     elif ne == "grafik":
         print(json.dumps(grafik()))
+    elif ne == "kripto-izle":
+        print(json.dumps(kripto_izle((sys.argv[2] if len(sys.argv) > 2 else "BTC,ETH").split(","))))
+    elif ne == "kripto-liste":
+        print(json.dumps(kripto_liste()))
+    elif ne == "koin":
+        print(json.dumps(koin(sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else "24s")))
     elif ne == "canli":
         print(json.dumps(cached("canli", 20, canli)))
     elif ne == "anime":

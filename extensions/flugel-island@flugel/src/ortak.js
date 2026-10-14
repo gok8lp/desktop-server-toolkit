@@ -107,6 +107,9 @@ export function bash(betik) {
 }
 
 // ---------- metin biçimleri ----------
+// sunucudan gelen metinlerdeki emojiler arayüzde gösterilmez
+export const emojisiz = t => String(t ?? '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]/gu, '').replace(/\u{FE0F}|\u{200D}/gu, '')
+    .replace(/[ \t]{2,}/g, ' ').trim();
 export const kac = t => GLib.markup_escape_text(String(t ?? ''), -1);
 export function para(n, ondalik) {
     if (n === null || n === undefined)

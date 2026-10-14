@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 22:41+0300\n"
+"POT-Creation-Date: 2026-10-14 22:56+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -419,17 +419,76 @@ msgstr "seconds (together with server status)"
 msgid "Kripto"
 msgstr "Crypto"
 
-msgid "Varlıklar"
-msgstr "Assets"
+msgid "İzleme listesi"
+msgstr ""
 
-msgid "Kaynak: Binance açık piyasa verisi (anahtarsız)"
+#, fuzzy
+msgid ""
+"Kaynak: Binance açık piyasa verisi (anahtarsız). USD ve EUR: TL karşılığı."
 msgstr "Source: Binance public market data (no API key)"
 
-msgid "Dolar / TL"
-msgstr "Dollar / TRY"
+msgid "Yukarı"
+msgstr ""
 
-msgid "Euro / TL"
-msgstr "Euro / TRY"
+msgid "Aşağı"
+msgstr ""
+
+msgid "Listeden çıkar"
+msgstr ""
+
+msgid "Sembol ekle (ör. SOL, PEPE, USD)"
+msgstr ""
+
+#, fuzzy
+msgid "Fiyat alarmları"
+msgstr "Prices unavailable"
+
+msgid ""
+"Island'da koinin grafiğinden kurulur; fiyat eşiği geçince kapsülde uyarı "
+"çıkar ve alarm silinir."
+msgstr ""
+
+msgid "Kurulu alarm yok"
+msgstr ""
+
+msgid "Alarmı sil"
+msgstr ""
+
+msgid "Alarm çalınca ses"
+msgstr ""
+
+#, fuzzy
+msgid "Görünüm ve yenileme"
+msgstr "Screenshots"
+
+msgid "Grafik açılış dönemi"
+msgstr ""
+
+msgid "Koin ayrıntısı ilk bu dönemle açılır"
+msgstr ""
+
+msgid "1 saat"
+msgstr "1 hour"
+
+msgid "24 saat"
+msgstr "24 hours"
+
+msgid "7 gün"
+msgstr "7 days"
+
+#, fuzzy
+msgid "30 gün"
+msgstr "7 days"
+
+msgid "1 yıl"
+msgstr ""
+
+msgid "Kartlarda küçük grafik"
+msgstr ""
+
+#, fuzzy
+msgid "24 saatlik eğri"
+msgstr "24 hours"
 
 msgid "Değişimde renk kullan"
 msgstr "Colour the change"
@@ -440,14 +499,15 @@ msgstr "Black and white when off"
 msgid "Büyük değişim uyarısı"
 msgstr "Big move alert"
 
-msgid "% (24 saat)"
+#, fuzzy
+msgid "% (24 saat, BTC ve ETH)"
 msgstr "% (24 hours)"
 
 msgid "Fiyat yenileme"
 msgstr "Price refresh"
 
-msgid "saniye"
-msgstr "seconds"
+msgid "saniye (alarmlar da bu aralıkla denetlenir)"
+msgstr ""
 
 msgid "Maçlar ve hakemlik"
 msgstr "Matches & refereeing"
@@ -482,6 +542,9 @@ msgstr "minutes before, show in the capsule"
 
 msgid "Liste yenileme"
 msgstr "List refresh"
+
+msgid "saniye"
+msgstr "seconds"
 
 msgid "Eklediğin animeler"
 msgstr "Anime you added"
@@ -926,9 +989,6 @@ msgstr "Added (right-click to remove)"
 msgid "Süresiz"
 msgstr "Indefinitely"
 
-msgid "1 saat"
-msgstr "1 hour"
-
 msgid "2 saat"
 msgstr "2 hours"
 
@@ -1013,6 +1073,29 @@ msgstr "Caps Lock off"
 #, javascript-format
 msgid "Klavye · %s"
 msgstr "Keyboard · %s"
+
+#, fuzzy, javascript-format
+msgid "%s %s üstüne çıktı"
+msgstr "Episode %s is out"
+
+#, javascript-format
+msgid "%s %s altına indi"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "şimdi %s"
+msgstr "now"
+
+msgid "Grafiği aç"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "Fiyat alarmı: %s %s"
+msgstr "Prices unavailable"
+
+#, fuzzy
+msgid "Kripto alarmı"
+msgstr "Crypto"
 
 #, javascript-format
 msgid "%s $ · 24 saat"
@@ -1274,6 +1357,10 @@ msgstr ""
 #, javascript-format
 msgid "%s: 8 saat sustur"
 msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s sa kaldı"
+msgstr "%s min left"
 
 #, fuzzy
 msgid "1 sa"
@@ -1651,8 +1738,8 @@ msgstr "Maximize the active window"
 msgid "Ekran görüntüsü (Print da)"
 msgstr "Screenshot (Print too)"
 
-msgid "😊 tuşu"
-msgstr "😊 key"
+msgid "Emoji tuşu"
+msgstr ""
 
 msgid "Emoji seçici (K380s gülen yüz tuşu)"
 msgstr "Emoji picker (K380s smiley key)"
@@ -1672,31 +1759,138 @@ msgstr "Server: home folder"
 msgid "Kısayol: %s · tıklayınca şimdi yapar"
 msgstr "Shortcut: %s · click to do it now"
 
+#, fuzzy
+msgid "24 sa"
+msgstr "24 hours"
+
 msgid "Şimdi yenile"
 msgstr "Refresh now"
 
-msgid "24 saat"
-msgstr "24 hours"
+msgid "Koin ara (ad ya da sembol)…"
+msgstr ""
 
-msgid "7 gün"
-msgstr "7 days"
+msgid "Koin ekle"
+msgstr ""
 
-msgid "Diğer kripto paralar"
-msgstr "Other cryptocurrencies"
-
-msgid "BTC grafiği (TradingView)"
-msgstr "BTC chart (TradingView)"
+msgid "Binance'teki bütün koinler; karta sağ tıklayınca listeden çıkar"
+msgstr ""
 
 msgid "Fiyatlar alınamadı"
 msgstr "Prices unavailable"
 
-#, javascript-format
-msgid "En yüksek %s   ·   En düşük %s   ·   %s %s"
-msgstr "High %s   ·   Low %s   ·   %s %s"
+msgid "Binance'te yok"
+msgstr ""
 
 #, javascript-format
-msgid "24 saat %s · kaynak %s"
-msgstr "24 hours %s · source %s"
+msgid ""
+"24 sa: en yüksek %s · en düşük %s\n"
+"Tıkla: grafik ve alarm · sağ tık: listeden çıkar"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s üstüne çıkınca"
+msgstr "Episode %s is out"
+
+#, javascript-format
+msgid "%s altına inince"
+msgstr ""
+
+#, javascript-format
+msgid "%s uzakta"
+msgstr ""
+
+#, fuzzy
+msgid "Liste yükleniyor…"
+msgstr "Loading…"
+
+msgid "Dolar / TL"
+msgstr "Dollar / TRY"
+
+msgid "Euro / TL"
+msgstr "Euro / TRY"
+
+#, fuzzy
+msgid "Bulunamadı"
+msgstr "Could not read: %s"
+
+#, fuzzy
+msgid "Liste alınamadı"
+msgstr "Prices unavailable"
+
+#, javascript-format
+msgid "24 sa işlem hacmi: %s $ · tıkla: listeye ekle"
+msgstr ""
+
+#, fuzzy
+msgid "Tıkla: listeye ekle"
+msgstr "Click to add"
+
+#, fuzzy
+msgid "Listeye dön"
+msgstr "List refresh"
+
+msgid "İşaret"
+msgstr ""
+
+msgid "Grafiğe tıklayınca o fiyata işaret çizgisi konur"
+msgstr ""
+
+msgid "Alarm"
+msgstr ""
+
+#, fuzzy
+msgid "Grafiğe tıklayınca o fiyata alarm kurulur"
+msgstr "Only on click"
+
+msgid "Üzerine gel: incele · basılı tutup sürükle: ölç · sağ tık: çizgiyi sil"
+msgstr ""
+
+#, fuzzy
+msgid "Fiyat yaz, Enter"
+msgstr "Price refresh"
+
+msgid "Alarm kur"
+msgstr ""
+
+msgid "Şimdiki fiyata göre alarm"
+msgstr ""
+
+#, fuzzy
+msgid "Fiyat alarmı"
+msgstr "Prices unavailable"
+
+msgid "İşaretler"
+msgstr ""
+
+msgid "Bu koinin bütün işaretlerini sil"
+msgstr ""
+
+#, fuzzy, javascript-format
+msgid "%s  (24 sa)"
+msgstr "% (24 hours)"
+
+#, fuzzy
+msgid "Açılış"
+msgstr "Could not open"
+
+msgid "En yüksek"
+msgstr ""
+
+msgid "En düşük"
+msgstr ""
+
+msgid "Değişim"
+msgstr ""
+
+msgid "Dalgalanma"
+msgstr ""
+
+msgid "Grafiğe tıklayarak destek/direnç çizgisi koy"
+msgstr ""
+
+#, fuzzy
+msgid "Tıkla: işareti sil"
+msgstr "Click to add"
 
 msgid "Bu bilgisayar"
 msgstr "This computer"
@@ -1879,6 +2073,30 @@ msgstr " · GPU passthrough"
 #, javascript-format
 msgid "IP %s · %s açık"
 msgstr "IP %s · up %s"
+
+#, fuzzy
+#~ msgid "Tıklayınca:"
+#~ msgstr "Only on click"
+
+#~ msgid "Varlıklar"
+#~ msgstr "Assets"
+
+#~ msgid "😊 tuşu"
+#~ msgstr "😊 key"
+
+#~ msgid "Diğer kripto paralar"
+#~ msgstr "Other cryptocurrencies"
+
+#~ msgid "BTC grafiği (TradingView)"
+#~ msgstr "BTC chart (TradingView)"
+
+#, javascript-format
+#~ msgid "En yüksek %s   ·   En düşük %s   ·   %s %s"
+#~ msgstr "High %s   ·   Low %s   ·   %s %s"
+
+#, javascript-format
+#~ msgid "24 saat %s · kaynak %s"
+#~ msgstr "24 hours %s · source %s"
 
 #, javascript-format
 #~ msgid "Son bölüm: <b>%s</b>%s"
