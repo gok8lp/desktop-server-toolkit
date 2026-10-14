@@ -48,7 +48,7 @@ yap gsettings set $DOCK dock-fixed false
 yap gsettings set $DOCK autohide true
 yap gsettings set $DOCK intellihide true
 yap gsettings set $DOCK intellihide-mode 'ALL_WINDOWS'
-yap gsettings set $DOCK dash-max-icon-size 44
+yap gsettings set $DOCK dash-max-icon-size 38
 yap gsettings set $DOCK apply-custom-theme false
 yap gsettings set $DOCK custom-theme-shrink true
 yap gsettings set $DOCK transparency-mode 'FIXED'

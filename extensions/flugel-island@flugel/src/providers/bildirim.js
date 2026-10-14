@@ -30,11 +30,13 @@ export class BildirimProvider {
         // ada görünürken GNOME afişi bastırılır; tam ekranda (ada gizli) GNOME'unki çalışır
         this._kok = this._ortam.adaKok?.();
         this._gorunurId = this._kok?.connect('notify::visible', () => this._engelle()) ?? 0;
+        this._kipId = settings.connect('changed::tam-ekran-kipi', () => this._engelle());
         this._engelle();
     }
 
+    // ada bildirimi gösterebiliyorsa (tam ekranda çentik dahil) GNOME afişi bastırılır
     _engelle() {
-        this._tray.bannerBlocked = !!this._kok?.visible;
+        this._tray.bannerBlocked = !!this._ortam.adaGorunur?.();
     }
 
     _bagla(kaynak) {
@@ -87,6 +89,9 @@ export class BildirimProvider {
             this._birak(k);
         if (this._gorunurId)
             this._kok.disconnect(this._gorunurId);
+        if (this._kipId)
+            this._settings.disconnect(this._kipId);
+        this._kipId = 0;
         this._gorunurId = 0;
         if (this._tray)
             this._tray.bannerBlocked = false;

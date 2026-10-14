@@ -112,6 +112,11 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
             [['hover', _('Üzerine gelince')], ['click', _('Sadece tıklayınca')]]);
         this._baglan(a, tetikId);
         g.add(tetik);
+        const [te, teId] = secim(a, 'tam-ekran-kipi', _('Tam ekranda ada'),
+            _('Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar'),
+            [['gizli', _('Sadece fareyle (oyun modu)')], ['bildirim', _('Bildirim ve ses/parlaklıkta da')], ['canli', _('Canlı etkinliklerde de (maç skoru…)')]]);
+        this._baglan(a, teId);
+        g.add(te);
         g.add(sayi(a, 'hover-gecikme', _('Üzerine gelince açılma gecikmesi'), _('milisaniye'), 0, 2000, 20));
         g.add(sayi(a, 'monitor', _('Ekran'), _('-1 = birincil ekran; 0, 1… = ekran sırası'), -1, 7, 1));
         const [panik, panikId] = secim(a, 'panik-onay', _('Panik onayı'), _('Yanlışlıkla basılmasın'),

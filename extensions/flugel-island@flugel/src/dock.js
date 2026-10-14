@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 import Clutter from 'gi://Clutter';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-const OLCEK = 1.22;
+const OLCEK = 1.1;
 
 function bul(kok, ad) {
     if (!kok)

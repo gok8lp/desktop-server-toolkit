@@ -70,7 +70,8 @@ export class IslandGorunumu {
         Main.layoutManager.uiGroup.add_child(this.capa);
 
         for (const a of [this._kok, this._balon]) {
-            Main.layoutManager.addChrome(a, {affectsStruts: false, trackFullscreen: true});
+            // tam ekranı ada kendisi yönetir (çentik kipi); GNOME'un otomatik gizlemesi kullanılmaz
+            Main.layoutManager.addChrome(a, {affectsStruts: false, trackFullscreen: false});
             // panelin hemen üstü; açılır menüler ve sistem pencereleri (parola, kapatma) yine üstte kalır
             Main.layoutManager.uiGroup.set_child_above_sibling(a, Main.layoutManager.panelBox);
         }
@@ -95,6 +96,8 @@ export class IslandGorunumu {
         this._monitorId = Main.layoutManager.connect('monitors-changed', () => this._yerlestir(true));
         this._panelId = Main.panel.connect('notify::height', () => this._yerlestir(true));
         this._ayarId = this._ayar.connect('changed', (_s, k) => {
+            if (k === 'tam-ekran-kipi')
+                this._uygula(this._vm ?? this._yonetici._lastVM);
             if (['saydamlik', 'kart-saydamlik', 'genislik-carpani', 'kart-genislik', 'monitor'].includes(k))
                 this._yerlestir(true);
         });
@@ -103,7 +106,23 @@ export class IslandGorunumu {
         this._kart.boyutDegisti = () => this._kartBoyutu();
         this._kart.disMenuKapandi = () => this._hoverDegisti();
 
+        // ---------- tam ekran: çentik kipi ----------
+        // Tam ekranda ada kaybolmaz; ekranın üst kenarına yapışık bir çentik olur. Normalde gizlidir; fare üst
+        // ortadaki ince sıcak bölgeye gelince, bir bildirim/ses/parlaklık gelince ya da (ayarla) canlı etkinlik
+        // varken kenardan aşağı kayar. Görünürken kompozitörün doğrudan taraması (unredirect) kapatılır ki
+        // oyun/video üstünde çizilebilsin; gizlenince geri açılır.
+        this._te = {aktif: false, acik: false, unred: false};
+        this._sicak = new St.Widget({reactive: true, track_hover: true, opacity: 0, visible: false, name: 'flugelSicakBolge'});
+        Main.layoutManager.addChrome(this._sicak, {affectsStruts: false, trackFullscreen: false});
+        this._sicak.connect('notify::hover', () => this._sicakHover());
+        this._teIdler = [
+            [global.display, global.display.connect('in-fullscreen-changed', () => this._tamEkranDenetle())],
+            [Main.overview, Main.overview.connect('showing', () => this._tamEkranDenetle())],
+            [Main.overview, Main.overview.connect('hidden', () => this._tamEkranDenetle())],
+        ];
+
         this._abonelik = this._yonetici.subscribe(vm => this._uygula(vm));
+        this._tamEkranDenetle();
         this._zaman(4000, () => this._isit());
     }
 
@@ -126,6 +145,8 @@ export class IslandGorunumu {
 
     _ustY() {
         const m = this._monitor();
+        if (this._te?.aktif)
+            return m.y;    // çentik: üst kenara yapışık
         return m.y + Math.round((Main.panel.height - this._kapsulYuksekligi()) / 2);
     }
 
@@ -180,7 +201,10 @@ export class IslandGorunumu {
         const a0 = this._ayar.get_int('saydamlik') / 100, a1 = this._ayar.get_int('kart-saydamlik') / 100;
         const [cr, cg, cb] = KAPSUL_RGB.map((v, i) => Math.round(v + (KART_RGB[i] - v) * t));
         const alfa = (a0 + (a1 - a0) * t).toFixed(2);
-        const stil = `border-radius: ${css}px; background-color: rgba(${cr},${cg},${cb},${alfa});`;
+        // tam ekranda çentik: üst köşeler düz, alt köşeler yuvarlak, tam siyah
+        const kose = this._te?.aktif ? `0px 0px ${css}px ${css}px` : `${css}px`;
+        const stil = this._te?.aktif ? `border-radius: ${kose}; background-color: rgba(0,0,0,1);`
+            : `border-radius: ${kose}; background-color: rgba(${cr},${cg},${cb},${alfa});`;
         if (zemin.style !== stil)
             zemin.style = stil;
     }
@@ -260,6 +284,15 @@ export class IslandGorunumu {
         this._bosGuncelle(vm);
         const onceki = this._durum;
         this._durum = gorunum;
+        if (this._te?.aktif) {
+            const kip = this._teKip();
+            const goster = gorunum === 'genis' || (kip !== 'gizli' && (gorunum === 'flas' || gorunum === 'bildirim')) ||
+                (kip === 'canli' && gorunum === 'kompakt');
+            if (goster)
+                this._teGoster();
+            else
+                this._teKapatPlanla();
+        }
 
         if (gorunum === 'genis') {
             this._kart.sabitDurumu(vm.pinned);
@@ -450,9 +483,119 @@ export class IslandGorunumu {
         return this._kok.hover || this._balon.hover;
     }
 
+    // ---------- tam ekran (çentik) ----------
+    _tamEkranDenetle() {
+        const m = this._monitor();
+        const aktif = !!m?.inFullscreen && !Main.overview.visible;
+        if (aktif === this._te.aktif)
+            return;
+        this._te.aktif = aktif;
+        const s = this._s;
+        this._sicak.set_size(Math.round(360 * s), Math.max(2, Math.round(3 * s)));
+        this._sicak.set_position(Math.round(m.x + (m.width - this._sicak.width) / 2), m.y);
+        this._sicak.visible = aktif;
+        if (aktif) {
+            this._yonetici.setPinned(false);
+            this._yonetici.setHover(false);
+            this._teGizle(true);
+        } else {
+            this._teGoster(true);
+            this._unred(false);
+        }
+        this._yerlestir(true);
+    }
+
+    _teKip() {
+        return this._ayar.get_string('tam-ekran-kipi');
+    }
+
+    _unred(kapat) {
+        if (kapat && !this._te.unred) {
+            global.compositor.disable_unredirect();
+            this._te.unred = true;
+        } else if (!kapat && this._te.unred) {
+            global.compositor.enable_unredirect();
+            this._te.unred = false;
+        }
+    }
+
+    _teGoster(anlik = false) {
+        this._teKapatId = this._iptal(this._teKapatId);
+        if (this._te.acik && !anlik)
+            return;
+        this._te.acik = true;
+        for (const a of [this._kok, this._balon]) {
+            a.remove_transition('translation-y');
+            a.remove_transition('opacity');
+        }
+        this._kok.show();
+        if (!this._te.aktif || anlik || !St.Settings.get().enable_animations) {
+            this._kok.translation_y = 0;
+            this._kok.opacity = 255;
+            return;
+        }
+        this._unred(true);
+        this._kok.translation_y = -this._kok.height - 4;
+        this._kok.opacity = 255;
+        this._kok.ease({translation_y: 0, duration: 260, mode: Clutter.AnimationMode.EASE_OUT_BACK});
+    }
+
+    _teGizle(anlik = false) {
+        this._teKapatId = this._iptal(this._teKapatId);
+        if (!this._te.acik && !anlik)
+            return;
+        this._te.acik = false;
+        const bitir = () => {
+            if (this._te.acik || !this._te.aktif)
+                return;
+            this._kok.hide();
+            this._balon.hide();
+            this._unred(false);
+        };
+        if (anlik || !St.Settings.get().enable_animations) {
+            bitir();
+            return;
+        }
+        this._kok.ease({translation_y: -this._kok.height - 4, duration: 200, mode: Clutter.AnimationMode.EASE_IN_QUAD,
+            onStopped: bitir});
+        this._balon.ease({opacity: 0, duration: 150, mode: Clutter.AnimationMode.EASE_IN_QUAD});
+    }
+
+    _sicakHover() {
+        if (!this._te.aktif)
+            return;
+        if (this._sicak.hover) {
+            this._teAcId = this._iptal(this._teAcId);
+            this._teAcId = this._zaman(160, () => {
+                this._teAcId = 0;
+                if (this._sicak.hover)
+                    this._teGoster();
+            });
+        } else {
+            this._teKapatPlanla();
+        }
+    }
+
+    // çentik açıkken: fare uzaklaşınca, kart kapalıysa ve gösterilecek bir şey kalmadıysa geri gizlenir
+    _teKapatPlanla() {
+        if (!this._te.aktif || !this._te.acik)
+            return;
+        this._teKapatId = this._iptal(this._teKapatId);
+        this._teKapatId = this._zaman(900, () => {
+            this._teKapatId = 0;
+            const kalici = this._teKip() === 'canli' && (this._durum === 'kompakt');
+            const mesgul = this._ustunde || this._sicak.hover || this._durum === 'genis' || this._durum === 'flas' ||
+                this._durum === 'bildirim' || this._kart.disMenuAcik();
+            if (!mesgul && !kalici)
+                this._teGizle();
+        });
+    }
+
     _hoverDegisti() {
         this._acmaId = this._iptal(this._acmaId);
         this._kapamaId = this._iptal(this._kapamaId);
+        if (this._te?.aktif && !this._ustunde)
+            this._teKapatPlanla();
         if (this._ustunde) {
             if (this._ayar.get_string('tetik') === 'hover' && this._durum !== 'genis')
             {this._acmaId = this._zaman(this._ayar.get_int('hover-gecikme'), () => {
@@ -542,7 +685,12 @@ export class IslandGorunumu {
 
     // Ses/parlaklık göstergesi adada gösterilebilir mi? (tam ekranda ada gizlidir → GNOME'unki çıkar)
     gorunurMu(monitor) {
-        if (!this._kok?.visible || !this._kok.mapped)
+        if (!this._kok)
+            return false;
+        // tam ekranda çentik bildirim/ses için aşağı kayar ('gizli' kipinde hiç göstermez)
+        if (this._te?.aktif)
+            return this._teKip() !== 'gizli';
+        if (!this._kok.visible || !this._kok.mapped)
             return false;
         const i = Main.layoutManager.monitors.indexOf(this._monitor());
         return monitor === undefined || monitor < 0 || monitor === i;
@@ -557,6 +705,9 @@ export class IslandGorunumu {
         for (const id of this._zamanlar)
             GLib.source_remove(id);
         this._zamanlar.clear();
+        this._teIdler.forEach(([n, id]) => n.disconnect(id));
+        this._unred(false);
+        this._sicak.destroy();
         this._caIdler.forEach(id => global.workspace_manager.disconnect(id));
         this._caMini.destroy();
         this._saatKaynagi.disconnect(this._saatId);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 17:57+0300\n"
+"POT-Creation-Date: 2026-10-14 22:27+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -70,7 +70,9 @@ msgstr "Notifications from the island"
 
 msgid ""
 "Yeni bildirim adadan animasyonlu afiş olarak açılır (GNOME afişi yerine)"
-msgstr "New notifications open as an animated banner from the island (instead of GNOME's banner)"
+msgstr ""
+"New notifications open as an animated banner from the island (instead of "
+"GNOME's banner)"
 
 msgid "Panik modu"
 msgstr "Panic mode"
@@ -189,6 +191,23 @@ msgstr "On hover"
 
 msgid "Sadece tıklayınca"
 msgstr "Only on click"
+
+msgid "Tam ekranda ada"
+msgstr ""
+
+msgid ""
+"Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar"
+msgstr ""
+
+msgid "Sadece fareyle (oyun modu)"
+msgstr ""
+
+msgid "Bildirim ve ses/parlaklıkta da"
+msgstr ""
+
+#, fuzzy
+msgid "Canlı etkinliklerde de (maç skoru…)"
+msgstr "Live activities"
 
 msgid "Üzerine gelince açılma gecikmesi"
 msgstr "Hover delay"
@@ -571,7 +590,9 @@ msgstr "Automatic updates"
 msgid ""
 "apt, snap ve flatpak; dağıtım sürümü ve sürücü ana sürümü değişmez; sonuç "
 "bildirim olarak gelir"
-msgstr "apt, snap and flatpak; the release and the driver's major version never change; you get the result as a notification"
+msgstr ""
+"apt, snap and flatpak; the release and the driver's major version never "
+"change; you get the result as a notification"
 
 msgid "Sıklık"
 msgstr "Frequency"

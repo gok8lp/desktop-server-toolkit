@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 18:01+0300\n"
+"POT-Creation-Date: 2026-10-14 22:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,6 +183,22 @@ msgid "Üzerine gelince"
 msgstr ""
 
 msgid "Sadece tıklayınca"
+msgstr ""
+
+msgid "Tam ekranda ada"
+msgstr ""
+
+msgid ""
+"Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar"
+msgstr ""
+
+msgid "Sadece fareyle (oyun modu)"
+msgstr ""
+
+msgid "Bildirim ve ses/parlaklıkta da"
+msgstr ""
+
+msgid "Canlı etkinliklerde de (maç skoru…)"
 msgstr ""
 
 msgid "Üzerine gelince açılma gecikmesi"
