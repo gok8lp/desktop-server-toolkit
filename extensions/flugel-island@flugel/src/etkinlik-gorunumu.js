@@ -17,6 +17,10 @@ function etiket(stil, metin = '') {
 export class EtkinlikGorunumu {
     constructor(bicim) {
         this.bicim = bicim;
+        if (bicim === 'bildirim') {
+            this._bildirimKur();
+            return;
+        }
         this.actor = new St.BoxLayout({style_class: `flugel-etkinlik flugel-etkinlik-${bicim}`,
             x_expand: bicim !== 'balon', y_align: Clutter.ActorAlign.CENTER});
         this._kapak = new St.Icon({style_class: 'flugel-kapak', icon_size: bicim === 'satir' ? 36 : 18, visible: false,
@@ -54,8 +58,42 @@ export class EtkinlikGorunumu {
         }
     }
 
+    _bildirimKur() {
+        this.actor = new St.BoxLayout({style_class: 'flugel-bildirim', x_expand: true, orientation: Clutter.Orientation.VERTICAL});
+        const ust = new St.BoxLayout({style_class: 'flugel-bildirim-ust'});
+        this._kaynakSimge = new St.Icon({icon_size: 14, y_align: Clutter.ActorAlign.CENTER, style_class: 'flugel-bildirim-kaynak-simge'});
+        this._uygulama = etiket('flugel-bildirim-uygulama');
+        this._uygulama.x_expand = true;
+        ust.add_child(this._kaynakSimge);
+        ust.add_child(this._uygulama);
+        ust.add_child(etiket('flugel-bildirim-zaman', _('şimdi')));
+        this.actor.add_child(ust);
+        const govde = new St.BoxLayout({style_class: 'flugel-bildirim-govde'});
+        this._simge = new St.Icon({icon_size: 40, y_align: Clutter.ActorAlign.START, style_class: 'flugel-bildirim-simge'});
+        govde.add_child(this._simge);
+        const metin = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true});
+        this._baslik = etiket('flugel-bildirim-baslik');
+        this._alt = new St.Label({style_class: 'flugel-bildirim-metin'});
+        this._alt.clutter_text.line_wrap = true;
+        this._alt.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        metin.add_child(this._baslik);
+        metin.add_child(this._alt);
+        govde.add_child(metin);
+        this.actor.add_child(govde);
+    }
+
     guncelle(a) {
         const d = a.data ?? {};
+        if (this.bicim === 'bildirim') {
+            this.id = a.id;
+            this._simge.gicon = ikon(a.glyph ?? 'mail-unread-symbolic');
+            this._kaynakSimge.gicon = ikon(d.kaynakSimge ?? a.glyph ?? 'mail-unread-symbolic');
+            this._uygulama.text = d.uygulama ?? '';
+            this._baslik.text = a.label;
+            this._alt.text = (a.sublabel ?? '').slice(0, 240);
+            this._alt.visible = !!a.sublabel;
+            return;
+        }
         this.id = a.id;
         if (d.kapak) {
             this._kapak.gicon = d.kapak;

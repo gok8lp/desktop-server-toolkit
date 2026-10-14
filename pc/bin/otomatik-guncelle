@@ -1,0 +1,33 @@
+#!/bin/bash
+# otomatik-guncelle — FLUGEL: PC'yi sessizce günceller (apt, snap, flatpak). systemd --user zamanlayıcısı
+# (flugel-guncelle.timer) çalıştırır; sıklık Island ayarlarından (otomatik-guncelleme: kapali/gunluk/haftalik).
+# Kural: dağıtım sürümü yükseltilmez, NVIDIA ana sürümü değişmez (apt upgrade yeni paket kurmaz/kaldırmaz),
+# şifre gerekiyorsa apt atlanır (sudo -n). Sonuç bildirim olarak gelir ve işlem kaydına yazılır.
+set -uo pipefail
+KAYIT="$HOME/sistem-bakim/islem-kaydi.log"
+LOG="$HOME/sistem-bakim/otomatik-guncelle.log"
+ozet=()
+{
+  echo "=== $(date '+%F %T')"
+  if sudo -n true 2>/dev/null; then
+    if sudo -n env DEBIAN_FRONTEND=noninteractive apt-get update -q && \
+       sudo -n env DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q -o Dpkg::Options::=--force-confold; then
+      ozet+=("apt tamam")
+    else
+      ozet+=("apt HATA")
+    fi
+  else
+    ozet+=("apt atlandı (şifre gerekiyor)")
+  fi
+  if command -v snap >/dev/null; then
+    if sudo -n snap refresh 2>&1; then ozet+=("snap tamam"); else ozet+=("snap atlandı"); fi
+  fi
+  if command -v flatpak >/dev/null; then
+    if flatpak update -y --noninteractive; then ozet+=("flatpak tamam"); else ozet+=("flatpak HATA"); fi
+  fi
+} >> "$LOG" 2>&1
+metin=$(IFS=', '; echo "${ozet[*]}")
+echo "$(date '+%F %T') otomatik-guncelle: $metin" >> "$KAYIT"
+yeniden=""
+[ -f /var/run/reboot-required ] && yeniden=" · yeniden başlatma gerekiyor"
+notify-send -a "FLUGEL" -i software-update-available-symbolic "Otomatik güncelleme" "$metin$yeniden" 2>/dev/null || true

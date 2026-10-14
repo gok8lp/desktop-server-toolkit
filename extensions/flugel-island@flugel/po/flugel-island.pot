@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 17:53+0300\n"
+"POT-Creation-Date: 2026-10-14 17:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,6 +63,13 @@ msgid "Ekran kaydı, mikrofon, kamera"
 msgstr ""
 
 msgid "Kayıt/paylaşım sürerken ya da mikrofon/kamera kullanımdayken"
+msgstr ""
+
+msgid "Bildirimler adadan"
+msgstr ""
+
+msgid ""
+"Yeni bildirim adadan animasyonlu afiş olarak açılır (GNOME afişi yerine)"
 msgstr ""
 
 msgid "Panik modu"
@@ -312,6 +319,9 @@ msgstr ""
 msgid "Tam ekranda Island gizliyken GNOME'un göstergesi yine çıkar"
 msgstr ""
 
+msgid "Bildirim afişi süresi"
+msgstr ""
+
 msgid "Düşük pil uyarısı"
 msgstr ""
 
@@ -538,6 +548,29 @@ msgstr ""
 msgid "kat"
 msgstr ""
 
+msgid "Otomatik güncelleme"
+msgstr ""
+
+msgid ""
+"apt, snap ve flatpak; dağıtım sürümü ve sürücü ana sürümü değişmez; sonuç "
+"bildirim olarak gelir"
+msgstr ""
+
+msgid "Sıklık"
+msgstr ""
+
+msgid "Kapalı"
+msgstr ""
+
+msgid "Günlük"
+msgstr ""
+
+msgid "Haftalık (Pazartesi 12:30)"
+msgstr ""
+
+msgid "Şimdi güncelle"
+msgstr ""
+
 msgid "Sıfırlama ve yedek"
 msgstr ""
 
@@ -574,6 +607,9 @@ msgid "Şu an buradasın"
 msgstr ""
 
 msgid "Tıkla: geç · kapsülde tekerlek de geçer"
+msgstr ""
+
+msgid "şimdi"
 msgstr ""
 
 msgid "Gizle"
@@ -784,9 +820,6 @@ msgstr ""
 msgid "Maçlar sekmesi"
 msgstr ""
 
-msgid "şimdi"
-msgstr ""
-
 #, javascript-format
 msgid "Maç %s · %s"
 msgstr ""
@@ -798,6 +831,9 @@ msgid "görev"
 msgstr ""
 
 msgid "Basket sekmesi"
+msgstr ""
+
+msgid "Bildirim"
 msgstr ""
 
 msgid "Fare"
@@ -859,9 +895,6 @@ msgid "Sonraki"
 msgstr ""
 
 msgid "duraklatıldı"
-msgstr ""
-
-msgid "Bildirim"
 msgstr ""
 
 #, javascript-format
@@ -1605,9 +1638,6 @@ msgid "Mullvad + Tailscale çıkış düğümü"
 msgstr ""
 
 msgid "Açık"
-msgstr ""
-
-msgid "Kapalı"
 msgstr ""
 
 msgid "Duraklatıldı"

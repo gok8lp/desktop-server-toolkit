@@ -13,6 +13,7 @@ import {dilKur, _, f} from './src/dil.js';
 
 const SAGLAYICILAR = () => ({
     'privacy': [_('Ekran kaydı, mikrofon, kamera'), _('Kayıt/paylaşım sürerken ya da mikrofon/kamera kullanımdayken')],
+    'bildirim': [_('Bildirimler adadan'), _('Yeni bildirim adadan animasyonlu afiş olarak açılır (GNOME afişi yerine)')],
     'panik': [_('Panik modu'), _('Panikle gizlenen pencereler varken; tek tıkla geri al')],
     'sunucu': [_('Sunucu uyarısı'), _('Sunucuda sorun olunca (aynı sorun kapatılınca tekrar gelmez)')],
     'gpu-vm': [_('Windows (GPU) açık'), _('GPU sanal makinedeyken yerel yapay zekâ durur')],
@@ -242,6 +243,7 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         const esik = new Adw.PreferencesGroup({title: _('Eşikler')});
         esik.add(anahtar(a, 'osd-yerine', _('Ses/parlaklıkta GNOME göstergesi yerine Island'),
             _('Tam ekranda Island gizliyken GNOME\'un göstergesi yine çıkar')));
+        esik.add(sayi(a, 'bildirim-sure', _('Bildirim afişi süresi'), _('milisaniye'), 2000, 20000, 500));
         esik.add(sayi(a, 'power-low-threshold', _('Düşük pil uyarısı'), '%', 5, 50, 1));
         esik.add(sayi(a, 'cihaz-dusuk-esik', _('Klavye/fare pili düşük'), '%', 5, 50, 1));
         esik.add(sayi(a, 'notification-coalesce-threshold', _('Bildirimleri topla'), _('bu sayıdan sonra tek satır'), 1, 20, 1));
@@ -441,6 +443,17 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         y.add(sayi(a, 'pil-carpani', _('Pildeyken çarpan'), _('kat'), 1, 10, 1));
         sayfa.add(y);
 
+        const gu = new Adw.PreferencesGroup({title: _('Otomatik güncelleme'),
+            description: _('apt, snap ve flatpak; dağıtım sürümü ve sürücü ana sürümü değişmez; sonuç bildirim olarak gelir')});
+        const [kip, kipId] = secim(a, 'otomatik-guncelleme', _('Sıklık'), '',
+            [['kapali', _('Kapalı')], ['gunluk', _('Günlük')], ['haftalik', _('Haftalık (Pazartesi 12:30)')]]);
+        this._baglan(a, kipId);
+        gu.add(kip);
+        const simdi = new Adw.ButtonRow({title: _('Şimdi güncelle'), start_icon_name: 'software-update-available-symbolic'});
+        simdi.connect('activated', () => GLib.spawn_command_line_async('systemctl --user start flugel-guncelle.service'));
+        gu.add(simdi);
+        sayfa.add(gu);
+
         const s = new Adw.PreferencesGroup({title: _('Sıfırlama ve yedek')});
         const pip = new Adw.ButtonRow({title: _('Resim içinde resim konumunu sıfırla (sol alt)')});
         pip.connect('activated', () => a.reset('pip-konum'));
@@ -459,7 +472,7 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         don.connect('activated', () => this._eskiPanel(pencere));
         s.add(don);
         sayfa.add(s);
-        sifirla(a, ['yenileme-sunucu', 'yenileme-pc', 'pil-carpani'], sayfa);
+        sifirla(a, ['yenileme-sunucu', 'yenileme-pc', 'pil-carpani', 'otomatik-guncelleme'], sayfa);
         return sayfa;
     }
 

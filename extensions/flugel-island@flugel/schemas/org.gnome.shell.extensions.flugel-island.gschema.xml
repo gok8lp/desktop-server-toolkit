@@ -55,6 +55,16 @@
       <default>true</default>
       <summary>Alt dock: üzerine gelince simge hafifçe büyüsün</summary>
     </key>
+    <key name="bildirim-sure" type="i">
+      <range min="2000" max="20000"/>
+      <default>6000</default>
+      <summary>Bildirim afişinin adada kalma süresi (ms)</summary>
+    </key>
+    <key name="otomatik-guncelleme" type="s">
+      <choices><choice value="kapali"/><choice value="gunluk"/><choice value="haftalik"/></choices>
+      <default>'haftalik'</default>
+      <summary>Otomatik güncelleme (apt, snap, flatpak): kapalı, günlük, haftalık</summary>
+    </key>
     <key name="pip-konum" type="s">
       <default>''</default>
       <summary>Resim içinde resim penceresinin son konumu ve boyutu (JSON; boş = sol alt köşe)</summary>
@@ -97,11 +107,11 @@
 
     <!-- Canlı etkinlikler -->
     <key name="etkin-saglayicilar" type="as">
-      <default>['privacy', 'panik', 'sunucu', 'gpu-vm', 'media', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'akis']</default>
+      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'akis']</default>
       <summary>Açık canlı etkinlik kaynakları</summary>
     </key>
     <key name="oncelik-sirasi" type="as">
-      <default>['privacy', 'panik', 'sunucu', 'gpu-vm', 'media', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'notification', 'akis', 'keyboard']</default>
+      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'notification', 'akis', 'keyboard']</default>
       <summary>Canlı etkinliklerin öncelik sırası (ilk = en önemli)</summary>
     </key>
     <key name="transient-duration-ms" type="i">

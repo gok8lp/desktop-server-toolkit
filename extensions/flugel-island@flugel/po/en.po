@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 17:51+0300\n"
+"POT-Creation-Date: 2026-10-14 17:57+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -64,6 +64,14 @@ msgstr "Screen recording, microphone, camera"
 
 msgid "Kayıt/paylaşım sürerken ya da mikrofon/kamera kullanımdayken"
 msgstr "While recording/sharing or when the microphone/camera is in use"
+
+#, fuzzy
+msgid "Bildirimler adadan"
+msgstr "Notifications"
+
+msgid ""
+"Yeni bildirim adadan animasyonlu afiş olarak açılır (GNOME afişi yerine)"
+msgstr ""
 
 msgid "Panik modu"
 msgstr "Panic mode"
@@ -327,6 +335,10 @@ msgstr "Island instead of GNOME's volume/brightness popup"
 msgid "Tam ekranda Island gizliyken GNOME'un göstergesi yine çıkar"
 msgstr "In fullscreen, while Island is hidden, GNOME's popup still appears"
 
+#, fuzzy
+msgid "Bildirim afişi süresi"
+msgstr "Notification banner"
+
 msgid "Düşük pil uyarısı"
 msgstr "Low battery alert"
 
@@ -555,6 +567,31 @@ msgstr "Battery multiplier"
 msgid "kat"
 msgstr "×"
 
+#, fuzzy
+msgid "Otomatik güncelleme"
+msgstr "Update the system"
+
+msgid ""
+"apt, snap ve flatpak; dağıtım sürümü ve sürücü ana sürümü değişmez; sonuç "
+"bildirim olarak gelir"
+msgstr ""
+
+msgid "Sıklık"
+msgstr ""
+
+msgid "Kapalı"
+msgstr "Off"
+
+msgid "Günlük"
+msgstr ""
+
+msgid "Haftalık (Pazartesi 12:30)"
+msgstr ""
+
+#, fuzzy
+msgid "Şimdi güncelle"
+msgstr "Update the system"
+
 msgid "Sıfırlama ve yedek"
 msgstr "Reset & backup"
 
@@ -592,6 +629,9 @@ msgstr "You are here"
 
 msgid "Tıkla: geç · kapsülde tekerlek de geçer"
 msgstr "Click to switch · scrolling on the capsule works too"
+
+msgid "şimdi"
+msgstr "now"
 
 msgid "Gizle"
 msgstr "Hide"
@@ -801,9 +841,6 @@ msgstr " · +%s live"
 msgid "Maçlar sekmesi"
 msgstr "Matches tab"
 
-msgid "şimdi"
-msgstr "now"
-
 #, javascript-format
 msgid "Maç %s · %s"
 msgstr "Match %s · %s"
@@ -816,6 +853,9 @@ msgstr "assignment"
 
 msgid "Basket sekmesi"
 msgstr "Matches tab"
+
+msgid "Bildirim"
+msgstr "Notification"
 
 msgid "Fare"
 msgstr "Mouse"
@@ -877,9 +917,6 @@ msgstr "Next"
 
 msgid "duraklatıldı"
 msgstr "paused"
-
-msgid "Bildirim"
-msgstr "Notification"
 
 #, javascript-format
 msgid "%d yeni"
@@ -1626,9 +1663,6 @@ msgstr "Mullvad + Tailscale exit node"
 
 msgid "Açık"
 msgstr "Running"
-
-msgid "Kapalı"
-msgstr "Off"
 
 msgid "Duraklatıldı"
 msgstr "Paused"

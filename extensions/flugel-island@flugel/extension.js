@@ -47,6 +47,8 @@ import {OsdProvider} from './src/providers/osd.js';
 import {PowerProvider} from './src/providers/power.js';
 import {CihazProvider} from './src/providers/cihaz.js';
 import {NotificationProvider} from './src/providers/notification.js';
+import {BildirimProvider} from './src/providers/bildirim.js';
+import {OtomatikGuncelleme} from './src/guncelleme.js';
 import {KeyboardProvider} from './src/providers/keyboard.js';
 import {_, dilKur} from './src/dil.js';
 
@@ -64,6 +66,7 @@ const SAGLAYICILAR = {
     'power': () => new PowerProvider(),
     'cihaz': () => new CihazProvider(),
     'notification': () => new NotificationProvider(),
+    'bildirim': o => new BildirimProvider(o),
     'akis': o => new AkisProvider(o),
     'keyboard': () => new KeyboardProvider(),
 };
@@ -102,6 +105,7 @@ export default class FlugelIsland extends Extension {
         this._pip.enable();
         this._dock = new DockBuyume(this._ayar, this._guc);
         this._dock.enable();
+        this._guncelleme = new OtomatikGuncelleme(this._ayar);
 
         this._uyku = new UykuEngeli(this._yonetici, this._ayar);
         const o = {veri: this._veri, panik: this._panik, uyku: this._uyku, guc: this._guc, ekip: this._ekip, ayarlar: this._ayar,
@@ -137,6 +141,7 @@ export default class FlugelIsland extends Extension {
                 this._yonetici.setPinned(true);
             },
             adaGorunur: monitor => this._ada.gorunurMu(monitor),
+            adaKok: () => this._ada?._kok,
         };
         this._saglayicilar = [];
         this._saglayicilariKur();
@@ -209,6 +214,8 @@ export default class FlugelIsland extends Extension {
         this._tarihMenu = null;
         this._uyku?.destroy();
         this._uyku = null;
+        this._guncelleme?.destroy();
+        this._guncelleme = null;
         this._dock?.disable();
         this._dock = null;
         this._pip?.disable();

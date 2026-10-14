@@ -349,3 +349,13 @@
 .flugel-ca-mini { spacing: 4px; padding: 0 2px; background-color: transparent; margin-right: 4px; }
 .flugel-ca-mini .flugel-ca-nokta { width: 6px; height: 6px; border-radius: 3px; }
 .flugel-ca-mini .flugel-ca-etkin { width: 14px; }
+
+/* bildirim afişi (adadan açılır) */
+.flugel-bildirim { padding: 10px 14px 12px 14px; spacing: 6px; }
+.flugel-bildirim-ust { spacing: 6px; }
+.flugel-bildirim-uygulama { font-size: 8.5pt; font-weight: 700; color: #9a9aa5; }
+.flugel-bildirim-zaman { font-size: 8.5pt; color: #8a8a94; }
+.flugel-bildirim-govde { spacing: 12px; }
+.flugel-bildirim-simge { border-radius: 10px; }
+.flugel-bildirim-baslik { font-size: 10.5pt; font-weight: 800; color: #ffffff; }
+.flugel-bildirim-metin { font-size: 9.5pt; color: #d6d6dc; }

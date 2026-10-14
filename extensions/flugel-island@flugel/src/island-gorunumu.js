@@ -146,6 +146,12 @@ export class IslandGorunumu {
         }
         // sadece gelen içerik ölçülür (solarak giden eski içerik genişliği şişirmesin)
         const icerik = this._aktifIcerik ?? this._kompakt;
+        if (gorunum === 'bildirim') {
+            // afiş: kapsülden aşağı doğru büyür, içerik kadar yüksek
+            const w = Math.round(Math.min(520 * s, this._monitor().width - 24 * s));
+            const [, ih] = icerik.get_preferred_height(w);
+            return {w, h: Math.max(h * 2, Math.ceil(ih)), r: Math.round(22 * s)};
+        }
         const [, dogal] = icerik.get_preferred_width(h);
         const carpan = this._ayar.get_double('genislik-carpani');
         const enAz = Math.round((gorunum === 'bos' ? 132 : 180) * s * carpan);
@@ -159,7 +165,7 @@ export class IslandGorunumu {
         const w = Math.max(1, Math.round(g.w)), h = Math.max(1, Math.round(g.h));
         this._kok.set_size(w, h);
         this._kok.set_position(Math.round(m.x + (m.width - w) / 2), this._ustY());
-        this._kompakt.set_height(this._kapsulYuksekligi());
+        this._kompakt.set_height(this._durum === 'bildirim' ? -1 : this._kapsulYuksekligi());
         this.capa.set_size(2, this._kapsulYuksekligi());
         this.capa.set_position(Math.round(m.x + m.width / 2 - 1), this._ustY());
         // kapsül siyahından kartın nötr camına, yükseklikle orantılı geçiş
@@ -245,7 +251,7 @@ export class IslandGorunumu {
         if (vm.baseState === 'expanded')
             gorunum = 'genis';
         else if (vm.flashing)
-            gorunum = 'flas';
+            gorunum = vm.flashing.data?.bildirim ? 'bildirim' : 'flas';
         else if (vm.baseState === 'idle')
             gorunum = 'bos';
         else
@@ -268,7 +274,7 @@ export class IslandGorunumu {
             this._disariyiIzle(false);
         }
 
-        const ana = gorunum === 'flas' ? vm.flashing : (gorunum === 'bos' ? null : (vm.leading ?? vm.trailing));
+        const ana = gorunum === 'flas' || gorunum === 'bildirim' ? vm.flashing : (gorunum === 'bos' ? null : (vm.leading ?? vm.trailing));
         const ikinci = gorunum === 'kompakt' && vm.leading && vm.trailing ? vm.trailing : null;
         this._kompaktGoster(gorunum, ana, onceki === 'genis' || onceki === null);
         this._balonGoster(ikinci);
@@ -286,6 +292,10 @@ export class IslandGorunumu {
         if (gorunum === 'bos') {
             yeni = this._bos;
             this._kompaktGorunum = null;
+        } else if (gorunum === 'bildirim') {
+            this._kompaktGorunum = new EtkinlikGorunumu('bildirim');
+            this._kompaktGorunum.guncelle(a);
+            yeni = this._kompaktGorunum.actor;
         } else {
             this._kompaktGorunum = new EtkinlikGorunumu(gorunum === 'flas' ? 'flas' : 'kompakt');
             this._kompaktGorunum.guncelle(a);
@@ -464,6 +474,15 @@ export class IslandGorunumu {
         if (this._durum === 'genis')
             return false;
         const dugme = olay.get_button();
+        // bildirim afişi: sol tık açar, sağ tık kapatır
+        if (this._durum === 'bildirim') {
+            const d = this._vm?.flashing?.data;
+            if (dugme === Clutter.BUTTON_SECONDARY)
+                d?.kapat?.();
+            else
+                d?.tikla?.();
+            return true;
+        }
         if (dugme === Clutter.BUTTON_SECONDARY) {
             Main.panel.toggleCalendar?.();
             return true;

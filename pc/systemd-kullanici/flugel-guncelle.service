@@ -1,0 +1,8 @@
+[Unit]
+Description=FLUGEL otomatik güncelleme (apt, snap, flatpak)
+
+[Service]
+Type=oneshot
+Nice=15
+IOSchedulingClass=idle
+ExecStart=%h/.local/bin/otomatik-guncelle
