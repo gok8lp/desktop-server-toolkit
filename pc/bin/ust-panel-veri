@@ -232,12 +232,14 @@ def anime():
     d, yedek = sunucu_ya_da_yedek("anime.json")
     takip = d.get("anime", []) + d.get("manga", []) + d.get("trend", [])
     secim = d.get("sezon", []) + d.get("diger", []) + d.get("manga_diger", [])
-    # kapaklar diskte: kucuk (120 px) her kayit icin, buyuk (360 px) sadece takip edilenler icin
-    kucuk = resimleri_onbellekle([x.get("kapak") for x in takip + secim], "kapak", (120,))
-    buyuk = resimleri_onbellekle([x.get("kapak_buyuk") for x in takip], "kapak", (360,))
+    # kapaklar diskte, net gorunsun diye en buyuk kaynaktan (extraLarge) ve HiDPI icin 2 kat:
+    # kucuk 300 px (karo ~110 px), buyuk 640 px (onizleme ~240 px); JPEG kalite 94
+    kaynak = lambda x: x.get("kapak_buyuk") or x.get("kapak")
+    kucuk = resimleri_onbellekle([kaynak(x) for x in takip + secim], "kapak", (300,))
+    buyuk = resimleri_onbellekle([kaynak(x) for x in takip], "kapak", (640,))
     for x in takip + secim:
-        x["kapak_kucuk"] = (kucuk.get(x.get("kapak")) or {}).get(120)
-        x["kapak_buyuk_yol"] = (buyuk.get(x.get("kapak_buyuk")) or {}).get(360)
+        x["kapak_kucuk"] = (kucuk.get(kaynak(x)) or {}).get(300)
+        x["kapak_buyuk_yol"] = (buyuk.get(kaynak(x)) or {}).get(640)
     return {"anime": d.get("anime", []), "manga": d.get("manga", []), "trend": d.get("trend", []),
             "sezon": d.get("sezon", []), "diger": d.get("diger", []), "manga_diger": d.get("manga_diger", []),
             "guncelleme": d.get("guncelleme"), "yedek": yedek}
@@ -272,9 +274,10 @@ def resimleri_onbellekle(urller, klasor, boyutlar):
             im = Image.open(BytesIO(ham)).convert("RGBA")
             for b, y in yollar.items():
                 k = im.copy()
-                k.thumbnail((b, b * 2 if klasor == "kapak" else b), Image.LANCZOS)
+                # kapakta b = genislik (oran korunur, buyutulmez); logoda kare kutu
+                k.thumbnail((b, b * 3) if klasor == "kapak" else (b, b), Image.LANCZOS)
                 if y.endswith(".jpg"):
-                    k.convert("RGB").save(y + ".yeni", "JPEG", quality=86)
+                    k.convert("RGB").save(y + ".yeni", "JPEG", quality=94, subsampling=0)
                 else:
                     k.save(y + ".yeni", "PNG")
                 os.replace(y + ".yeni", y)
@@ -285,8 +288,75 @@ def resimleri_onbellekle(urller, klasor, boyutlar):
         return {u: y for u, y in h.map(bir, sorted(set(u for u in urller if u))) if y}
 
 
+MAC_LIGLER = [("Süper Lig", "soccer/tur.1"), ("Premier Lig", "soccer/eng.1"), ("La Liga", "soccer/esp.1"),
+              ("Serie A", "soccer/ita.1"), ("Bundesliga", "soccer/ger.1"), ("Ligue 1", "soccer/fra.1"),
+              ("Şampiyonlar Ligi", "soccer/uefa.champions"), ("Avrupa Ligi", "soccer/uefa.europa"), ("NBA", "basketball/nba")]
+GUN_AD = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
+AY_AD = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+
+
+def maclar_yerel():
+    """Sunucu kapaliysa ayni veriyi bu PC'de ESPN'den hesaplar (sunucudaki akis.py island_maclar ile ayni bicim)."""
+    import datetime as dt
+    from concurrent.futures import ThreadPoolExecutor
+    bugun = dt.date.today()
+    gunler = [bugun - dt.timedelta(days=2), bugun - dt.timedelta(days=1), bugun, bugun + dt.timedelta(days=1)]
+
+    def getir(is_):
+        lig, yol, g = is_
+        try:
+            url = f"https://site.api.espn.com/apis/site/v2/sports/{yol}/scoreboard?dates={g:%Y%m%d}"
+            return [(lig, e) for e in json.load(urllib.request.urlopen(url, timeout=10)).get("events", [])]
+        except Exception:
+            return []
+    tablo, gorulen = {g: {} for g in gunler}, set()
+    isler = [(l, y, g) for l, y in MAC_LIGLER for g0 in gunler for g in (g0 - dt.timedelta(days=1), g0)]
+    with ThreadPoolExecutor(8) as h:
+        for sonuc in h.map(getir, sorted(set(isler))):
+            for lig, e in sonuc:
+                if e["id"] in gorulen:
+                    continue
+                ts = int(dt.datetime.fromisoformat(e["date"].replace("Z", "+00:00")).timestamp())
+                g = dt.date.fromtimestamp(ts)
+                if g not in tablo:
+                    continue
+                gorulen.add(e["id"])
+                c = e["competitions"][0]
+                t = {x["homeAway"]: x for x in c["competitors"]}
+                st = e["status"]["type"]
+                takim = lambda x: {"ad": x["team"].get("shortDisplayName") or x["team"].get("displayName"),
+                                   "logo": x["team"].get("logo"), "skor": x.get("score")}
+                tablo[g].setdefault(lig, []).append({
+                    "ev": takim(t["home"]), "dep": takim(t["away"]), "ts": ts, "durum": st["state"],
+                    "detay": st.get("shortDetail"), "link": next((l["href"] for l in e.get("links", []) if "summary" in l.get("rel", [])), None)})
+    sira = [l for l, _ in MAC_LIGLER]
+
+    def ligler(g, sadece_biten=False):
+        out = []
+        for l in sira:
+            ms = sorted([m for m in tablo[g].get(l, []) if not sadece_biten or m["durum"] == "post"], key=lambda m: m["ts"])
+            if ms:
+                out.append({"lig": l, "maclar": ms})
+        return out
+    try:
+        bot = json.load(open(os.path.join(YEDEK, "maclar.json")))
+    except Exception:
+        bot = {}
+    hepsi, b, y = bot.get("maclar", []), str(bugun), str(bugun + dt.timedelta(days=1))
+    benim = {"bugun": [m for m in hepsi if m.get("tarih") == b], "yarin": [m for m in hepsi if m.get("tarih") == y],
+             "yaklasan": [m for m in bot.get("gelecek", []) if m.get("tarih", "") > y][:5],
+             "gecmis": sorted([m for m in hepsi if m.get("tarih", "") < b], key=lambda m: (m.get("tarih", ""), m.get("saat", "")), reverse=True)[:5],
+             "guncelleme": bot.get("guncelleme"), "isimler": bot.get("isimler", [])}
+    return {"benim": benim, "bugun": ligler(bugun), "yarin": ligler(bugun + dt.timedelta(days=1)),
+            "gecmis": [{"tarih": str(g), "gun": f"{GUN_AD[g.weekday()]} {g.day} {AY_AD[g.month - 1]}", "ligler": ligler(g, True)} for g in gunler[1::-1]],
+            "canli": any(m["durum"] == "in" for g in gunler for l in tablo[g].values() for m in l), "zaman": int(time.time()), "yedek": True}
+
+
 def maclar():
-    d = island("/api/maclar?island=1")
+    try:
+        d = island("/api/maclar?island=1")
+    except Exception:
+        d = maclar_yerel()
     logolar = [t.get("logo") for bolum in (d.get("bugun", []), d.get("yarin", []), *[g["ligler"] for g in d.get("gecmis", [])])
                for lig in bolum for m in lig["maclar"] for t in (m["ev"], m["dep"])]
     yollar = resimleri_onbellekle(logolar, "logo", (48,))

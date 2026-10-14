@@ -13,6 +13,7 @@ import {Sayfa} from './sayfa.js';
 import {calistir, geriSayim, kac, soluk} from '../ortak.js';
 import {Izgara, ResimKaro, Karo, bolum, dugme} from '../bilesenler.js';
 
+const SITE_IKON = {'Crunchyroll': 'renkli:crunchyroll', 'HIDIVE': 'renkli:hidive', 'Netflix': 'renkli:netflix'};
 const TAKIP = new Set(['Izliyorum', 'Beklemede', 'Planliyorum', 'Okuyorum']);
 const ac = url => {
     if (/^https?:\/\//.test(url ?? ''))
@@ -58,7 +59,7 @@ export class AnimeSayfa extends Sayfa {
             cipler.add_child(b);
         }
         this.actor.add_child(cipler);
-        this._izgara = new Izgara({genislik: this._genislik, karoGenisligi: 90, bosluk: 8});
+        this._izgara = new Izgara({genislik: this._genislik, karoGenisligi: 108, bosluk: 10});
         this.actor.add_child(bolum('', this._izgara));
 
         // takip dışı seçim paneli
@@ -69,7 +70,7 @@ export class AnimeSayfa extends Sayfa {
         aramaSatiri.add_child(this._arama);
         aramaSatiri.add_child(dugme('window-close-symbolic', 'Kapat', () => this._secimKapat(), {stil: 'flugel-dugme flugel-dugme-kucuk'}));
         this._secim.add_child(aramaSatiri);
-        this._secimIzgara = new Izgara({genislik: this._genislik - 16, karoGenisligi: 72, bosluk: 6});
+        this._secimIzgara = new Izgara({genislik: this._genislik - 16, karoGenisligi: 96, bosluk: 8});
         this._secim.add_child(this._secimIzgara.actor);
         this.actor.add_child(this._secim);
 
@@ -145,14 +146,15 @@ export class AnimeSayfa extends Sayfa {
         }
         for (const a of this._kayitlar(d))
             this._izgara.ekle(this._kapak(a));
-        this._izgara.ekle(new Karo({ikon: 'list-add-symbolic', etiket: 'Ekle', boyut: 28, stil: 'flugel-ekle-karo',
+        this._izgara.ekle(new Karo({ikon: 'list-add-symbolic', etiket: 'Ekle', boyut: 28, stil: 'flugel-ekle-karo flugel-ekle-kapak',
             ipucu: {baslik: `Takip dışı ${this._tur} ekle`, ayrinti: 'Bu sezon ve MAL listemdeki diğerleri; eklenenler sağ tıkla kaldırılır'},
             eylem: () => this._secimAc()}));
     }
 
     _kapak(a) {
         return new ResimKaro({
-            resim: a.kapak_kucuk, boyut: 86, baslik: a.ad, rozet: this._tur === 'anime' ? rozet(a) : '',
+            resim: a.kapak_kucuk, boyut: 108, baslik: a.ad, puan: a.mal_puan ?? (a.al_puan ? (a.al_puan / 10).toFixed(1) : null),
+            rozet: this._tur === 'anime' ? rozet(a) : '',
             eylem: () => this._git(a.url),
             sagTik: a._secilen ? () => this._secimdenCikar(a.id) : null,
             onizleme: () => this._onizleme(a),
@@ -172,10 +174,14 @@ export class AnimeSayfa extends Sayfa {
             satirlar.push(`Bölüm ${a.okunan ?? '?'}${a.toplam ? `/${a.toplam}` : ''} · ${kac(a.durum ?? '')}`);
         }
         satirlar.push([a.al_puan ? `AniList <b>${a.al_puan}</b>` : '', a.mal_puan ? `MAL <b>${a.mal_puan}</b>` : ''].filter(Boolean).join('  ·  '));
+        // kısa açıklama: Türkçe (sunucudaki yerel çeviri), yoksa AniList'in kısa İngilizce metni
+        const aciklama = a.aciklama || a.aciklama_en;
+        if (aciklama)
+            satirlar.unshift(`<i>${kac(aciklama)}</i>`);
         const dugmeler = [];
         if (a.izle?.url)
-            dugmeler.push({ikon: 'media-playback-start-symbolic', etiket: a.izle.site, fn: () => ac(a.izle.url)});
-        dugmeler.push({ikon: 'send-to-symbolic', etiket: 'MyAnimeList', fn: () => ac(a.url)});
+            dugmeler.push({ikon: SITE_IKON[a.izle.site] ?? 'media-playback-start-symbolic', etiket: a.izle.site, fn: () => ac(a.izle.url)});
+        dugmeler.push({ikon: 'renkli:mal', etiket: 'MyAnimeList', fn: () => ac(a.url)});
         return {resim: a.kapak_buyuk_yol ?? a.kapak_kucuk, baslik: a.ad, satirlar: satirlar.filter(Boolean), dugmeler};
     }
 
@@ -220,7 +226,8 @@ export class AnimeSayfa extends Sayfa {
             if (gorulen.has(x.id) || takip.has(x.id) || (ara && !(x.ad ?? '').toLocaleLowerCase('tr').includes(ara)))
                 continue;
             gorulen.add(x.id);
-            this._secimIzgara.ekle(new ResimKaro({resim: x.kapak_kucuk, boyut: 66, baslik: x.ad, rozet: secili.has(x.id) ? '✓' : '',
+            this._secimIzgara.ekle(new ResimKaro({resim: x.kapak_kucuk, boyut: 96, baslik: x.ad,
+                puan: x.al_puan ? (x.al_puan / 10).toFixed(1) : null, rozet: secili.has(x.id) ? '✓' : '',
                 eylem: () => this._secimeEkle(x.id),
                 onizleme: () => ({resim: x.kapak_kucuk, baslik: x.ad, satirlar: [x.al_puan ? `AniList <b>${x.al_puan}</b>` : '',
                     secili.has(x.id) ? 'Eklendi (sağ tıkla kaldır)' : 'Tıkla: ekle'].filter(Boolean)}),

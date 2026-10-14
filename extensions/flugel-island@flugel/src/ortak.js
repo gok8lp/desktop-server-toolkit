@@ -29,6 +29,10 @@ const ikonOnbellek = new Map();
 export function ikon(ad) {
     if (ad instanceof Gio.Icon)
         return ad;
+    if (!ikonOnbellek.has(ad) && ad.startsWith('renkli:')) {
+        // hizmet logoları (Crunchyroll, HIDIVE, MAL…) kendi renkleriyle: ikon/renkli/<ad>.png
+        ikonOnbellek.set(ad, Gio.FileIcon.new(Gio.File.new_for_path(dosya(`ikon/renkli/${ad.slice(7)}.png`))));
+    }
     if (!ikonOnbellek.has(ad)) {
         ikonOnbellek.set(ad, OZEL_IKONLAR.has(ad)
             ? Gio.FileIcon.new(Gio.File.new_for_path(dosya(`ikon/${ad}-mono.svg`)))

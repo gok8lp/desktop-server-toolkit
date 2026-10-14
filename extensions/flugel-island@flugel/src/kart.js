@@ -7,6 +7,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
 import {ikon} from './ortak.js';
 import {dugme, ipucuBagla, onizlemeAcik} from './bilesenler.js';
+import {CalismaAlanlari} from './calisma-alanlari.js';
 
 const GUNLER = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
 const AYLAR = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
@@ -41,12 +42,16 @@ export class Kart {
         ipucuBagla(zaman, 'Takvim ve bildirimler (sağ tık da açar)');
         ust.add_child(zaman);
         ust.add_child(new St.Widget({x_expand: true}));
+        // çalışma alanları (üst çubuğun solundaki ekran değiştirici)
+        this.calismaAlanlari = new CalismaAlanlari();
+        ust.add_child(this.calismaAlanlari.actor);
+        ust.add_child(new St.Widget({x_expand: true}));
         // üst çubuktan taşınanlar: Hızlı Ayarlar (pil, ses, ağ), takvim/bildirimler, Etkinlikler
         const sonra = fn => () => {
             this.kapatIstendi?.();
             fn();
         };
-        ust.add_child(dugme('org.gnome.Settings-symbolic', 'Hızlı ayarlar: ses, ağ, pil, güç', sonra(() => ustCubuk.hizliAyarlar())));
+        ust.add_child(dugme('view-grid-symbolic', 'Hızlı ayarlar: ses, ağ, pil, güç', sonra(() => ustCubuk.hizliAyarlar())));
         ust.add_child(dugme('x-office-calendar-symbolic', 'Takvim ve bildirimler', sonra(() => ustCubuk.takvim())));
         ust.add_child(dugme('focus-windows-symbolic', 'Etkinlikler: pencereler ve uygulamalar', sonra(() => ustCubuk.etkinlikler())));
         this._sabitDugme = dugme('view-pin-symbolic', 'Açık tut', () => this.sabitleIstendi?.());
@@ -247,6 +252,7 @@ export class Kart {
         for (const s of this._sayfalar)
             s.sayfa.destroy();
         this._tepsi.destroy();
+        this.calismaAlanlari.destroy();
         this._canliGorunumler.clear();
         this.actor.destroy();
     }

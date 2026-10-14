@@ -10,6 +10,7 @@ import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {springProgress} from './spring.js';
 import {Animasyon} from './sayfalar/sayfa.js';
+import {CalismaAlanlari} from './calisma-alanlari.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
 import {ikon, KAPSUL_RGB, KART_RGB} from './ortak.js';
 
@@ -48,7 +49,11 @@ export class IslandGorunumu {
         this._bosSol = new St.BoxLayout({style_class: 'flugel-mini-kutu', y_align: Clutter.ActorAlign.CENTER});
         this._saat = new St.Label({style_class: 'flugel-saat', y_align: Clutter.ActorAlign.CENTER});
         this._bosSag = new St.BoxLayout({style_class: 'flugel-mini-kutu', y_align: Clutter.ActorAlign.CENTER});
-        for (const c of [this._bosSol, this._saat, this._bosSag])
+        // çalışma alanları kapsülün solunda kalıcı yerinde (tek alan varsa gizli)
+        this._caMini = new CalismaAlanlari({mini: true});
+        this._caIdler = ['notify::n-workspaces'].map(sinyal => global.workspace_manager.connect(sinyal, () => this._caGorunur()));
+        this._caGorunur();
+        for (const c of [this._caMini.actor, this._bosSol, this._saat, this._bosSag])
             this._bos.add_child(c);
 
         // ikinci balon (bölünmüş durum)
@@ -77,6 +82,9 @@ export class IslandGorunumu {
         this._kok.connect('notify::hover', () => this._hoverDegisti());
         this._balon.connect('notify::hover', () => this._hoverDegisti());
         this._kok.connect('button-release-event', (_a, e) => this._tiklandi(e));
+        // kapsül üzerinde tekerlek: çalışma alanı değiştir (kart açıkken sayfa kayar, karışmaz)
+        this._kok.connect('scroll-event', (_a, olay) => (this._durum === 'genis'
+            ? Clutter.EVENT_PROPAGATE : this._kart.calismaAlanlari.kaydir(olay)));
         // 5 hızlı tık → Re:Zero sürprizi
         this._kok.connect('button-press-event', () => {
             this._ekip.tik();
@@ -281,7 +289,12 @@ export class IslandGorunumu {
         } else {
             this._kompaktGorunum = new EtkinlikGorunumu(gorunum === 'flas' ? 'flas' : 'kompakt');
             this._kompaktGorunum.guncelle(a);
-            yeni = this._kompaktGorunum.actor;
+            // saat her zaman adada: etkinlik gösterilirken de sağda durur
+            yeni = new St.BoxLayout({x_expand: true, y_align: Clutter.ActorAlign.CENTER});
+            yeni.add_child(this._kompaktGorunum.actor);
+            this._kompaktSaat = new St.Label({style_class: 'flugel-kompakt-saat', y_align: Clutter.ActorAlign.CENTER,
+                text: GLib.DateTime.new_now_local().format('%H:%M')});
+            yeni.add_child(this._kompaktSaat);
         }
         // zaten solarak giden (bir önceki geçişten kalan) aktörlere dokunulmaz; kendi kendilerine kalkarlar
         const eski = this._kompakt.get_children().filter(c => c !== yeni && !c._flugelGidiyor);
@@ -395,8 +408,14 @@ export class IslandGorunumu {
             this._bicimle(this._hedef('bos'));
     }
 
+    _caGorunur() {
+        this._caMini.actor.visible = global.workspace_manager.n_workspaces > 1;
+    }
+
     _saatYaz() {
         this._saat.text = GLib.DateTime.new_now_local().format('%H:%M');
+        if (this._kompaktSaat?.get_stage())
+            this._kompaktSaat.text = this._saat.text;
         this._kart.saatYaz?.();
     }
 
@@ -432,7 +451,8 @@ export class IslandGorunumu {
                     this._yonetici.setHover(true);
             });}
         } else if (this._yonetici.isHovered()) {
-            this._kapamaId = this._zaman(450, () => {
+            // dokunmatik yüzeyde imleç kısa süre taşabilir: kart hemen kapanmasın
+            this._kapamaId = this._zaman(650, () => {
                 this._kapamaId = 0;
                 if (!this._ustunde && !this._kart.disMenuAcik())
                     this._yonetici.setHover(false);
@@ -518,6 +538,8 @@ export class IslandGorunumu {
         for (const id of this._zamanlar)
             GLib.source_remove(id);
         this._zamanlar.clear();
+        this._caIdler.forEach(id => global.workspace_manager.disconnect(id));
+        this._caMini.destroy();
         this._saatKaynagi.disconnect(this._saatId);
         this._saatKaynagi = null;
         Main.layoutManager.disconnect(this._monitorId);

@@ -240,7 +240,7 @@ function onizlemeKur() {
     if (onizleme)
         return onizleme;
     onizleme = new St.BoxLayout({style_class: 'flugel-onizleme', reactive: true, track_hover: true, visible: false});
-    onizleme._resim = new St.Icon({style_class: 'flugel-onizleme-resim', icon_size: 180});
+    onizleme._resim = new St.Widget({style_class: 'flugel-onizleme-resim'});
     onizleme._metin = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-onizleme-metin',
         y_align: Clutter.ActorAlign.START});
     onizleme.add_child(onizleme._resim);
@@ -254,18 +254,37 @@ function onizlemeKur() {
 }
 
 export class ResimKaro {
-    // {resim: Gio.Icon|yol, ipucu, eylem, rozet, boyut, onizleme: () => ({resim, baslik, satirlar[], dugmeler[]})}
+    // {resim: dosya yolu, baslik, puan, rozet, boyut (genişlik, px), eylem, sagTik,
+    //  onizleme: () => ({resim, baslik, satirlar[], dugmeler[]})}
+    // Kapak gerçek oranında (2:3) ve kırpılmadan/sıkıştırılmadan gösterilir; üstte puan, altta başlık şeridi.
     constructor(o) {
         this._o = o;
-        const boyut = o.boyut ?? 84;
+        const g = o.boyut ?? 108, y = Math.round(g * 1.42);
         this.actor = new St.Button({style_class: 'flugel-resim-karo', can_focus: true, track_hover: true,
             accessible_name: o.baslik ?? ''});
-        const bin = new St.Widget({layout_manager: new Clutter.BinLayout()});
-        this._resim = new St.Icon({gicon: ResimKaro.icon(o.resim), icon_size: boyut, style_class: 'flugel-resim'});
-        bin.add_child(this._resim);
-        this._rozet = new St.Label({style_class: 'flugel-rozet', visible: false, x_align: Clutter.ActorAlign.END,
-            y_align: Clutter.ActorAlign.START});
-        bin.add_child(this._rozet);
+        const bin = new St.Widget({layout_manager: new Clutter.BinLayout(), style_class: 'flugel-kapak-zemin',
+            style: `${ResimKaro.stil(o.resim)} width: ${g}px; height: ${y}px;`});
+        this._resim = bin;
+        // üstte puan + rozet, altta başlık şeridi (tek dikey kutu: hizalama kesin)
+        const ust = new St.BoxLayout({style_class: 'flugel-kapak-ust'});
+        if (o.puan)
+            ust.add_child(new St.Label({text: `★ ${o.puan}`, style_class: 'flugel-kapak-puan'}));
+        ust.add_child(new St.Widget({x_expand: true}));
+        this._rozet = new St.Label({style_class: 'flugel-rozet flugel-kapak-rozet', visible: false});
+        ust.add_child(this._rozet);
+        const kat = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, y_expand: true});
+        kat.add_child(ust);
+        kat.add_child(new St.Widget({y_expand: true}));
+        if (o.baslik) {
+            const serit = new St.BoxLayout({style_class: 'flugel-kapak-serit', orientation: Clutter.Orientation.VERTICAL});
+            const l = new St.Label({text: o.baslik, style_class: 'flugel-kapak-baslik'});
+            l.clutter_text.line_wrap = true;
+            l.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
+            l.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+            serit.add_child(l);
+            kat.add_child(serit);
+        }
+        bin.add_child(kat);
         this.actor.set_child(bin);
         this.actor.set_pivot_point(0.5, 0.5);
         // sol tık: eylem, sağ tık: sagTik (ör. listeden kaldır)
@@ -282,6 +301,14 @@ export class ResimKaro {
                 onizlemeGizle(true);
         });
         this.rozet(o.rozet);
+    }
+
+    // CSS arka planı: resim kutuyu kaplar (cover), oran korunur
+    static stil(yol) {
+        if (!yol || typeof yol !== 'string')
+            return 'background-color: rgba(255,255,255,0.06);';
+        const uri = GLib.filename_to_uri(yol, null).replace(/"/g, '%22');
+        return `background-image: url("${uri}"); background-size: cover; background-position: center;`;
     }
 
     static icon(r) {
@@ -327,7 +354,7 @@ export class ResimKaro {
         const o = onizlemeKur();
         onizlemeSahibi = this.actor;
         o.remove_all_transitions();
-        o._resim.gicon = ResimKaro.icon(v.resim ?? this._o.resim);
+        o._resim.style = `${ResimKaro.stil(v.resim ?? this._o.resim)} width: 240px; height: 340px;`;
         o._metin.destroy_all_children();
         const b = new St.Label({text: v.baslik ?? '', style_class: 'flugel-onizleme-baslik'});
         b.clutter_text.line_wrap = true;
@@ -343,7 +370,7 @@ export class ResimKaro {
             for (const d of v.dugmeler) {
                 const btn = new St.Button({style_class: 'flugel-onizleme-dugme', can_focus: true,
                     child: new St.BoxLayout({style: 'spacing: 6px;'})});
-                btn.child.add_child(new St.Icon({gicon: ikon(d.ikon), icon_size: 14}));
+                btn.child.add_child(new St.Icon({gicon: ikon(d.ikon), icon_size: 16, style_class: 'flugel-onizleme-dugme-ikon'}));
                 btn.child.add_child(new St.Label({text: d.etiket ?? '', y_align: Clutter.ActorAlign.CENTER}));
                 btn.connect('clicked', () => {
                     onizlemeGizle(true);

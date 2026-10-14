@@ -79,7 +79,7 @@ const odak = () => global.display.focus_window;
 const KLAVYE = o => [
     ['Super', 'Etkinlikler: pencereler ve arama', 'focus-windows-symbolic', () => Main.overview.toggle()],
     ['Super+A', 'Tüm uygulamalar', 'view-app-grid-symbolic', () => Main.overview.showApps()],
-    ['Super+S', 'Hızlı ayarlar (ses, ağ, pil)', 'org.gnome.Settings-symbolic', () => o.ustCubuk?.hizliAyarlar()],
+    ['Super+S', 'Hızlı ayarlar (ses, ağ, pil)', 'view-grid-symbolic', () => o.ustCubuk?.hizliAyarlar()],
     ['Super+V', 'Bildirimler ve takvim', 'x-office-calendar-symbolic', () => o.ustCubuk?.takvim()],
     ['Super+Z', 'Terminal (kitty)', 'utilities-terminal-symbolic', () => calistir('kitty')],
     ['Super+X', 'Etkin pencereyi kapat (Alt+F4 da)', 'window-close-symbolic', () => odak()?.delete(global.get_current_time())],
