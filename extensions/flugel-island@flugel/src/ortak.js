@@ -23,7 +23,7 @@ export function eklentiYolu(yol) {
 export const dosya = alt => `${EXT}/${alt}`;
 
 // ---------- simgeler (kural: kendi simgelerimiz ikon/<ad>-mono.svg, gerisi tema simgesi) ----------
-const OZEL_IKONLAR = new Set(['anime', 'basket', 'manga', 'kurukafa', 'panik', 'eclipse',
+const OZEL_IKONLAR = new Set(['anime', 'basket', 'manga', 'kurukafa', 'panik', 'eclipse', 'kapat-daire', 'kalkan', 'fincan', 'goz-kapali',
     'coin-btc', 'coin-eth', 'coin-sol', 'coin-bnb', 'coin-xrp', 'coin-doge', 'coin-avax', 'coin-ada']);
 const ikonOnbellek = new Map();
 export function ikon(ad) {
@@ -163,61 +163,4 @@ export function altMenu(menu, baslik, ikonAdi) {
 }
 export function baslik(menu, metin) {
     menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem(metin));
-}
-
-// ---------- üzerine gelince açıklama (ipucu) ----------
-export function ipucuEkle(aktor, metin) {
-    let etiket = null, zaman = 0;
-    const gizle = () => {
-        if (zaman)
-            GLib.source_remove(zaman);
-        zaman = 0;
-        etiket?.destroy();
-        etiket = null;
-    };
-    aktor.connect('notify::hover', () => {
-        if (!aktor.hover)
-            return gizle();
-        if (zaman || etiket)
-            return undefined;
-        zaman = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 450, () => {
-            zaman = 0;
-            const yazi = typeof metin === 'function' ? metin() : metin;
-            if (!aktor.hover || aktor.menu?.isOpen || !yazi || !aktor.get_stage())
-                return GLib.SOURCE_REMOVE;
-            etiket = new St.Label({text: yazi, style_class: 'flugel-ipucu'});
-            Main.layoutManager.addTopChrome(etiket);
-            const [x, y] = aktor.get_transformed_position();
-            const [w, h] = aktor.get_transformed_size();
-            const m = Main.layoutManager.findMonitorForActor(aktor) ?? Main.layoutManager.primaryMonitor;
-            const lx = Math.max(m.x + 4, Math.min(Math.round(x + w / 2 - etiket.width / 2), m.x + m.width - etiket.width - 4));
-            etiket.set_position(lx, Math.round(y + h + 6));
-            etiket.opacity = 0;
-            etiket.ease({opacity: 255, duration: 140, mode: Clutter.AnimationMode.EASE_OUT_QUAD});
-            return GLib.SOURCE_REMOVE;
-        });
-        return undefined;
-    });
-    aktor.connect('button-press-event', () => {
-        gizle();
-        return Clutter.EVENT_PROPAGATE;
-    });
-    aktor.connect('destroy', gizle);
-}
-
-// Simge düğmesi (kart başlığı, hızlı başlatma, etkinlik eylemleri)
-export function dugme(ikonAdi, ipucu, eylem, {boyut = 16, stil = 'flugel-dugme', etiket = null} = {}) {
-    const d = new St.Button({style_class: stil, can_focus: true, accessible_name: ipucu, y_align: Clutter.ActorAlign.CENTER});
-    if (etiket) {
-        const kutu = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_align: Clutter.ActorAlign.CENTER});
-        kutu.add_child(new St.Icon({gicon: ikon(ikonAdi), icon_size: boyut, x_align: Clutter.ActorAlign.CENTER}));
-        kutu.add_child(new St.Label({text: etiket, style_class: 'flugel-dugme-etiket', x_align: Clutter.ActorAlign.CENTER}));
-        d.set_child(kutu);
-    } else {
-        d.set_child(new St.Icon({gicon: ikon(ikonAdi), icon_size: boyut}));
-    }
-    d.connect('clicked', () => eylem());
-    if (ipucu)
-        ipucuEkle(d, ipucu);
-    return d;
 }

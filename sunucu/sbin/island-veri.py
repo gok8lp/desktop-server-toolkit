@@ -21,8 +21,9 @@ def sh(komut, zaman=6):
 
 
 def oku(yol, varsayilan=""):
+    # bozuk bayt (yarım yazılmış log satırı) tüm paketi düşürmesin
     try:
-        with open(yol, encoding="utf-8") as f:
+        with open(yol, encoding="utf-8", errors="replace") as f:
             return f.read().strip()
     except OSError:
         return varsayilan
@@ -44,6 +45,36 @@ def cpu_yuzde():
     return round(100 * (top - bos) / max(top, 1))
 
 
+VM_ONBELLEK = "/home/flugel/sistem-bakim/durum/.vm-sabit.json"
+
+
+def vm_ayrinti(ad, acik):
+    """vCPU, RAM, GPU aktarımı (10 dk önbellekli) + açıksa IP ve ne kadar süredir açık olduğu."""
+    onb = jsonoku(VM_ONBELLEK)
+    k = onb.get(ad)
+    if not k or time.time() - k.get("t", 0) > 600:
+        bilgi = sh(f"virsh -c qemu:///system dominfo {ad}")
+        cpu = next((x.split()[-1] for x in bilgi.split("\n") if x.startswith("CPU(s)")), "?")
+        ram = next((x.split()[-2] for x in bilgi.split("\n") if x.startswith("Max memory")), "0")
+        gpu = sh(f"virsh -c qemu:///system dumpxml {ad} | grep -c '<hostdev'") not in ("", "0")
+        k = {"t": int(time.time()), "vcpu": cpu, "ram_gb": round(int(ram or 0) / 1048576, 1), "gpu_aktarim": gpu}
+        onb[ad] = k
+        try:
+            with open(VM_ONBELLEK + ".yeni", "w", encoding="utf-8") as f:
+                json.dump(onb, f)
+            os.replace(VM_ONBELLEK + ".yeni", VM_ONBELLEK)
+        except OSError:
+            pass
+    d = {"vcpu": k["vcpu"], "ram_gb": k["ram_gb"], "gpu_aktarim": k["gpu_aktarim"]}
+    if acik:
+        ip = sh(f"virsh -c qemu:///system domifaddr {ad} --source lease 2>/dev/null | awk '/ipv4/{{print $4; exit}}'")
+        d["ip"] = ip.split("/")[0] if ip else ""
+        pid = oku(f"/run/libvirt/qemu/{ad}.pid")
+        sure = sh(f"ps -o etimes= -p {pid}") if pid.isdigit() else ""
+        d["acik_sn"] = int(sure) if sure.strip().isdigit() else None
+    return d
+
+
 def main():
     m = {s.split(":")[0]: int(s.split()[1]) for s in oku("/proc/meminfo").split("\n") if s}
     dur = oku(f"{DURUM}/.durum", "?").split("\n")
@@ -61,7 +92,7 @@ def main():
     for s in sh("virsh -c qemu:///system list --all | tail -n +3").split("\n"):
         p = s.split()
         if len(p) >= 3:
-            vm.append({"ad": p[1], "durum": " ".join(p[2:])})
+            vm.append({"ad": p[1], "durum": " ".join(p[2:]), **vm_ayrinti(p[1], " ".join(p[2:]) == "running")})
     # son 30 dakikadaki UYARI/HATA bildirimleri (Island'da "kritik uyari" canli etkinligi)
     uyarilar, simdi = [], time.time()
     for satir in oku(f"{DURUM}/bildirimler.log").split("\n")[-40:]:

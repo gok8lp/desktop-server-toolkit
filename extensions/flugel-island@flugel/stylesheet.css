@@ -88,13 +88,13 @@
 
 /* sekmeler */
 .flugel-sekmeler {
-  spacing: 2px;
+  spacing: 4px;
   padding: 3px;
   border-radius: 14px;
   background-color: rgba(255, 255, 255, 0.06);
 }
 .flugel-sekme {
-  padding: 6px 2px 5px 2px;
+  padding: 8px 14px;
   border-radius: 11px;
   color: #b4b4bc;
 }
@@ -176,3 +176,84 @@
 }
 
 .flugel-ikon { color: #f2f2f4; }
+
+/* ---------- ortak bileşenler (bilesenler.js) ---------- */
+.flugel-ipucu { spacing: 2px; max-width: 360px; }
+.flugel-ipucu-baslik { font-weight: 700; font-size: 9.5pt; color: #ffffff; }
+.flugel-ipucu-ayrinti { font-size: 9pt; color: #b8b8c0; }
+.flugel-sekme-rozet { }
+
+.flugel-bolum { spacing: 6px; padding: 4px 2px 8px 2px; }
+.flugel-bolum-ust { padding: 0 4px; }
+.flugel-bolum-baslik { font-size: 9pt; font-weight: 700; color: #8a8a94; }
+
+.flugel-izgara { padding: 0 2px; }
+.flugel-karo {
+  padding: 10px 4px 8px 4px;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #f2f2f4;
+}
+.flugel-karo:hover { background-color: rgba(255, 255, 255, 0.13); }
+.flugel-karo:active, .flugel-karo:checked { background-color: rgba(255, 255, 255, 0.22); }
+.flugel-karo:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55); }
+.flugel-karo:insensitive { color: #6a6a72; background-color: rgba(255, 255, 255, 0.03); }
+.flugel-karo-simge { color: #f2f2f4; }
+.flugel-karo-etiket { font-size: 8.5pt; margin-top: 5px; color: #d0d0d6; max-width: 84px; }
+.flugel-nokta { width: 8px; height: 8px; border-radius: 4px; }
+.flugel-nokta-acik { background-color: #8fd6a0; }
+.flugel-nokta-kapali { background-color: #5a5a62; }
+.flugel-nokta-bekliyor { background-color: #e8c66b; }
+.flugel-nokta-uyari { background-color: #f07b7b; }
+
+.flugel-resim-karo { border-radius: 10px; padding: 0; }
+.flugel-resim-karo:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55); }
+.flugel-resim { border-radius: 10px; }
+
+.flugel-onizleme {
+  spacing: 14px;
+  padding: 12px;
+  border-radius: 20px;
+  background-color: rgba(14, 14, 16, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #f2f2f4;
+  max-width: 560px;
+}
+.flugel-onizleme-resim { border-radius: 12px; }
+.flugel-onizleme-metin { spacing: 6px; width: 280px; }
+.flugel-onizleme-baslik { font-size: 12pt; font-weight: 800; color: #ffffff; }
+.flugel-onizleme-satir { font-size: 9.5pt; color: #cfcfd6; }
+.flugel-onizleme-dugmeler { spacing: 6px; padding-top: 6px; }
+.flugel-onizleme-dugme { padding: 6px 12px; border-radius: 999px; background-color: rgba(255, 255, 255, 0.10); }
+.flugel-onizleme-dugme:hover { background-color: rgba(255, 255, 255, 0.20); }
+.flugel-karo-tus .flugel-karo-etiket {
+  font-family: monospace;
+  font-size: 8pt;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.10);
+  color: #ffffff;
+  max-width: 100px;
+}
+.flugel-alt-panel {
+  padding: 8px 6px;
+  margin-top: 4px;
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* sanal makine kartları */
+.flugel-vm-kartlar { spacing: 10px; }
+.flugel-vm-kart {
+  width: 190px;
+  spacing: 4px;
+  padding: 14px 10px 10px 10px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.flugel-vm-kart:hover { background-color: rgba(255, 255, 255, 0.10); }
+.flugel-vm-ad { font-weight: 700; font-size: 10.5pt; color: #ffffff; margin-top: 6px; }
+.flugel-vm-durum { font-size: 9pt; color: #9a9aa5; }
+.flugel-vm-rozet { margin-top: 2px; }
+.flugel-vm-dugmeler { spacing: 6px; margin-top: 6px; }
+.flugel-soluk { color: #9a9aa5; }

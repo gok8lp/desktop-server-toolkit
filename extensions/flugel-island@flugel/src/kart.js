@@ -5,7 +5,8 @@ import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
-import {dugme, ikon, ipucuEkle} from './ortak.js';
+import {ikon} from './ortak.js';
+import {dugme, ipucuBagla, onizlemeAcik} from './bilesenler.js';
 
 const GUNLER = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
 const AYLAR = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
@@ -37,7 +38,7 @@ export class Kart {
             this.kapatIstendi?.();
             Main.panel.toggleCalendar();
         });
-        ipucuEkle(zaman, 'Takvim ve bildirimler (sağ tık da açar)');
+        ipucuBagla(zaman, 'Takvim ve bildirimler (sağ tık da açar)');
         ust.add_child(zaman);
         ust.add_child(new St.Widget({x_expand: true}));
         // üst çubuktan taşınanlar: Hızlı Ayarlar (pil, ses, ağ), takvim/bildirimler, Etkinlikler
@@ -66,20 +67,22 @@ export class Kart {
         this.actor.add_child(this._canli);
 
         // sekmeler
-        this._sekmeKutu = new St.BoxLayout({style_class: 'flugel-sekmeler', x_expand: true});
+        // sekme çubuğu: ortada, sadece simge; adı ve ne olduğu balonda
+        this._sekmeKutu = new St.BoxLayout({style_class: 'flugel-sekmeler', x_align: Clutter.ActorAlign.CENTER});
         this._sekmeler = new Map();
         for (const s of sayfalar) {
-            const d = new St.Button({style_class: 'flugel-sekme', can_focus: true, x_expand: true, toggle_mode: false,
-                accessible_name: s.ad});
-            const kutu = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_align: Clutter.ActorAlign.CENTER});
-            // simge + sağ üstte küçük rozet (sayı, "bugün", geri sayım)
-            const simgeSatiri = new St.BoxLayout({x_align: Clutter.ActorAlign.CENTER, style: 'spacing: 3px;'});
-            simgeSatiri.add_child(new St.Icon({gicon: ikon(s.ikon), icon_size: 16}));
-            const rozet = new St.Label({style_class: 'flugel-rozet', visible: false, y_align: Clutter.ActorAlign.START});
-            simgeSatiri.add_child(rozet);
-            kutu.add_child(simgeSatiri);
-            kutu.add_child(new St.Label({text: s.ad, style_class: 'flugel-sekme-etiket', x_align: Clutter.ActorAlign.CENTER}));
+            const d = new St.Button({style_class: 'flugel-sekme', can_focus: true, accessible_name: s.ad});
+            const kutu = new St.Widget({layout_manager: new Clutter.BinLayout()});
+            kutu.add_child(new St.Icon({gicon: ikon(s.ikon), icon_size: 18, x_align: Clutter.ActorAlign.CENTER,
+                y_align: Clutter.ActorAlign.CENTER}));
+            const rozet = new St.Label({style_class: 'flugel-rozet flugel-sekme-rozet', visible: false,
+                x_align: Clutter.ActorAlign.END, y_align: Clutter.ActorAlign.START});
+            // rozet simgenin sağ üstüne taşar (negatif CSS kenar boşluğu St'de boyutu bozar; kaydırma kullanılır)
+            rozet.translation_x = 10;
+            rozet.translation_y = -7;
+            kutu.add_child(rozet);
             d.set_child(kutu);
+            ipucuBagla(d, () => ({baslik: s.ad, ayrinti: [s.aciklama, rozet.visible ? rozet.text : ''].filter(Boolean).join(' · ')}));
             d.connect('clicked', () => this.sekmeSec(s.id));
             this._sekmeKutu.add_child(d);
             this._sekmeler.set(s.id, {dugme: d, ad: s.ad});
@@ -231,7 +234,7 @@ export class Kart {
     }
 
     disMenuAcik() {
-        return this._tepsi.disMenuAcik() || this._sayfalar.some(s => s.sayfa.disMenuAcik());
+        return onizlemeAcik() || this._tepsi.disMenuAcik() || this._sayfalar.some(s => s.sayfa.disMenuAcik());
     }
 
     destroy() {

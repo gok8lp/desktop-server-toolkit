@@ -3,7 +3,8 @@
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import Pango from 'gi://Pango';
-import {ikon, dugme} from './ortak.js';
+import {ikon} from './ortak.js';
+import {dugme} from './bilesenler.js';
 
 function etiket(stil, metin = '') {
     const l = new St.Label({text: metin, style_class: stil, y_align: Clutter.ActorAlign.CENTER});

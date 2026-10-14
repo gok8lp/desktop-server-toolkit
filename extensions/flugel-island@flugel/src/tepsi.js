@@ -5,7 +5,7 @@ import St from 'gi://St';
 import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Clutter from 'gi://Clutter';
-import {ipucuEkle} from './ortak.js';
+import {ipucuBagla} from './bilesenler.js';
 
 const tepsiAnahtari = c => Object.keys(Main.panel.statusArea).find(k =>
     k.startsWith('appindicator-') && Main.panel.statusArea[k]?.container === c);
@@ -49,7 +49,7 @@ export class Tepsi {
         this._kutu.add_child(c);
         if (!c._flugelIpucu) {
             c._flugelIpucu = true;
-            ipucuEkle(c.get_first_child() ?? c, () => tepsiAdi(c));
+            ipucuBagla(c.get_first_child() ?? c, () => tepsiAdi(c));
         }
         const menu = c.get_first_child()?.menu;
         if (menu && !this._menuIdleri.has(c))

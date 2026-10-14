@@ -373,7 +373,7 @@ export class IslandGorunumu {
 
     _bosGuncelle(vm) {
         // mini göstergeler: data.mini işaretli ortam (ambient) etkinlikleri, öncelik sırasıyla en fazla iki tane
-        const miniler = vm.ambientOverflow.filter(a => a.data?.mini).sort((x, y) => y.priority - x.priority).slice(0, 2);
+        const miniler = vm.ambientOverflow.filter(a => a.data?.mini).sort((x, y) => y.priority - x.priority).slice(0, 3);
         const anahtar = miniler.map(a => `${a.id}:${a.glyph}:${a.data.kisa ?? ''}:${a.data.renk ?? ''}`).join('|');
         if (anahtar === this._miniAnahtar)
             return;
@@ -381,6 +381,7 @@ export class IslandGorunumu {
         this._bosSol.destroy_all_children();
         this._bosSag.destroy_all_children();
         miniler.forEach((a, i) => {
+            // ilk gösterge saatin solunda, diğerleri sağında
             const kutu = i === 0 ? this._bosSol : this._bosSag;
             const simge = new St.Icon({gicon: ikon(a.glyph), icon_size: 14, style_class: 'flugel-mini',
                 y_align: Clutter.ActorAlign.CENTER});

@@ -14,12 +14,14 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import {ActivityManager} from './src/activity-manager.js';
 import {eklentiYolu, ikonOnbellegiTemizle} from './src/ortak.js';
+import {bilesenleriTemizle} from './src/bilesenler.js';
 import {VeriMerkezi} from './src/veri-merkezi.js';
 import {GucDurumu, TasarrufGostergesi} from './src/guc.js';
 import {PanikDenetci} from './src/panik.js';
 import {EkipSurprizi} from './src/ekip.js';
 import {PencereYardimcisi} from './src/pencere.js';
 import {PipYoneticisi} from './src/pip.js';
+import {UykuEngeli} from './src/uyku.js';
 import {Kart} from './src/kart.js';
 import {IslandGorunumu} from './src/island-gorunumu.js';
 
@@ -95,24 +97,24 @@ export default class FlugelIsland extends Extension {
         this._pip = new PipYoneticisi(this._ayar);
         this._pip.enable();
 
-        const o = {veri: this._veri, panik: this._panik, guc: this._guc, ekip: this._ekip, ayarlar: this._ayar};
+        this._uyku = new UykuEngeli(this._yonetici, this._ayar);
+        const o = {veri: this._veri, panik: this._panik, uyku: this._uyku, guc: this._guc, ekip: this._ekip, ayarlar: this._ayar,
+            ustCubuk: {
+                hizliAyarlar: () => this._ustCubuk?.hizliAyarlar(),
+                takvim: () => this._ustCubuk?.takvim(),
+                etkinlikler: () => this._ustCubuk?.etkinlikler(),
+            }};
         const sayfalar = [
-            {id: 'hizli', ad: 'Hızlı', ikon: 'view-app-grid-symbolic', sayfa: new HizliSayfa(o)},
-            {id: 'kisayol', ad: 'Kısayol', ikon: 'folder-symbolic', sayfa: new KisayolSayfa(o)},
-            {id: 'sistem', ad: 'Sistem', ikon: 'computer-symbolic', sayfa: new SistemSayfa(o)},
-            {id: 'vm', ad: 'VM', ikon: 'video-display-symbolic', sayfa: new VmSayfa(o)},
-            {id: 'kripto', ad: 'Kripto', ikon: 'coin-btc', sayfa: new KriptoSayfa(o)},
-            {id: 'basket', ad: 'Basket', ikon: 'basket', sayfa: new BasketSayfa(o)},
-            {id: 'anime', ad: 'Anime', ikon: 'anime', sayfa: new AnimeSayfa(o)},
+            {id: 'hizli', ad: 'Hızlı', aciklama: 'Uygulamalar, araçlar, uyku engelleme', ikon: 'view-app-grid-symbolic', sayfa: new HizliSayfa(o)},
+            {id: 'kisayol', ad: 'Kısayollar', aciklama: 'Klasörler, uygulamalar, klavye kısayolları', ikon: 'folder-symbolic', sayfa: new KisayolSayfa(o)},
+            {id: 'sistem', ad: 'Sistem', aciklama: 'Bu PC, pil ve sunucu', ikon: 'computer-symbolic', sayfa: new SistemSayfa(o)},
+            {id: 'vm', ad: 'Sanal makineler', aciklama: 'Sunucudaki Windows ve Ubuntu', ikon: 'video-display-symbolic', sayfa: new VmSayfa(o)},
+            {id: 'kripto', ad: 'Kripto ve döviz', aciklama: 'Fiyatlar ve grafikler', ikon: 'coin-btc', sayfa: new KriptoSayfa(o)},
+            {id: 'basket', ad: 'Maçlar', aciklama: 'Hakemlik görevlerim ve maçlar', ikon: 'basket', sayfa: new BasketSayfa(o)},
+            {id: 'anime', ad: 'Anime ve manga', aciklama: 'Takip ettiklerim', ikon: 'anime', sayfa: new AnimeSayfa(o)},
         ];
-        // üst çubuk düğmeleri kartta; çapa ada kurulunca bağlanır
-        const ustCubukVekil = {
-            hizliAyarlar: () => this._ustCubuk?.hizliAyarlar(),
-            takvim: () => this._ustCubuk?.takvim(),
-            etkinlikler: () => this._ustCubuk?.etkinlikler(),
-        };
         this._kart = new Kart({ayarlar: this._ayar, sayfalar, ayarlariAc: () => this.openPreferences(),
-            tepsi: new Tepsi(), ustCubuk: ustCubukVekil});
+            tepsi: new Tepsi(), ustCubuk: o.ustCubuk});
         this._ada = new IslandGorunumu({ayarlar: this._ayar, yonetici: this._yonetici, kart: this._kart, ekip: this._ekip});
         this._ustCubuk = new UstCubuk(this._ayar, this._ada.capa);
         this._ustCubuk.enable();
@@ -199,6 +201,8 @@ export default class FlugelIsland extends Extension {
         if (this._tarihMenu)
             this._tarihMenu.opacity = 255;
         this._tarihMenu = null;
+        this._uyku?.destroy();
+        this._uyku = null;
         this._pip?.disable();
         this._pencere?.disable();
         this._tasarruf?.destroy();
@@ -207,6 +211,7 @@ export default class FlugelIsland extends Extension {
         this._ekip?.destroy();
         this._panik?.destroy();
         this._yonetici?.destroy();
+        bilesenleriTemizle();
         ikonOnbellegiTemizle();
         this._ada = this._kart = this._veri = this._pencere = this._pip = this._tasarruf = this._guc = null;
         this._ekip = this._panik = this._yonetici = this._ortam = this._ayar = null;

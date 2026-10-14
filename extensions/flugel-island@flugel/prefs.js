@@ -80,7 +80,7 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         const gorunum = new Adw.PreferencesGroup({title: 'Görünüm',
             description: 'Sistemde "Animasyonları azalt" açıksa ada animasyonsuz değişir'});
         gorunum.add(sayiSatiri(ayar, 'genislik-carpani', 'Kapsül genişliği', 'çarpan', 0.6, 2.0, 0.05, 2));
-        gorunum.add(sayiSatiri(ayar, 'kart-genislik', 'Kart genişliği', 'mantıksal piksel', 460, 900, 10));
+        gorunum.add(sayiSatiri(ayar, 'kart-genislik', 'Kart genişliği', 'mantıksal piksel', 560, 960, 10));
         gorunum.add(sayiSatiri(ayar, 'saydamlik', 'Kapsül opaklığı', '% (100 = tam siyah)', 40, 100, 1));
         gorunum.add(sayiSatiri(ayar, 'kart-saydamlik', 'Kart opaklığı', '% (koyu nötr cam)', 60, 100, 1));
         gorunum.add(sayiSatiri(ayar, 'animasyon-hizi', 'Animasyon hızı', 'çarpan (1 = iOS gibi)', 0.5, 2.0, 0.05, 2));

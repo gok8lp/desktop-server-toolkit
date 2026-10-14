@@ -25,6 +25,15 @@
       <default>true</default>
       <summary>Üst çubukta sadece Island kalsın (saat, pil, Hızlı Ayarlar, tepsi, Etkinlikler gizlenir; kısayollar çalışır)</summary>
     </key>
+    <key name="sabit-uygulamalar" type="as">
+      <default>['eclipse_eclipse.desktop', 'kitty.desktop', 'google-chrome.desktop', 'org.gnome.Nautilus.desktop']</default>
+      <summary>Kısayollar ve Hızlı sekmesinde sabitlenmiş uygulamalar (.desktop kimlikleri, sırasıyla)</summary>
+    </key>
+    <key name="panik-onay" type="s">
+      <choices><choice value="cift"/><choice value="basili"/></choices>
+      <default>'cift'</default>
+      <summary>Panik onayı: cift = ikinci tık, basili = 0,6 sn basılı tutma</summary>
+    </key>
     <key name="pip-konum" type="s">
       <default>''</default>
       <summary>Resim içinde resim penceresinin son konumu ve boyutu (JSON; boş = sol alt köşe)</summary>
@@ -41,8 +50,8 @@
       <summary>Kapsül genişliği çarpanı</summary>
     </key>
     <key name="kart-genislik" type="i">
-      <range min="460" max="900"/>
-      <default>640</default>
+      <range min="560" max="960"/>
+      <default>720</default>
       <summary>Genişletilmiş kartın genişliği (mantıksal piksel)</summary>
     </key>
     <key name="saydamlik" type="i">
