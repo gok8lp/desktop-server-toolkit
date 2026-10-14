@@ -63,7 +63,7 @@ msgid "Bildirimler"
 msgstr "Notifications"
 
 msgid "Sunucudan gelen son 24 saat; kategori susturma"
-msgstr ""
+msgstr "Last 24 hours from the server; mute by category"
 
 msgid "Ekran kaydı, mikrofon, kamera"
 msgstr "Screen recording, microphone, camera"
@@ -199,21 +199,23 @@ msgid "Sadece tıklayınca"
 msgstr "Only on click"
 
 msgid "Tam ekranda ada"
-msgstr ""
+msgstr "Island in fullscreen"
 
 msgid ""
 "Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar"
 msgstr ""
+"Becomes a notch stuck to the top edge; slides down when the pointer reaches "
+"the top center"
 
 msgid "Sadece fareyle (oyun modu)"
-msgstr ""
+msgstr "Only with the pointer (game mode)"
 
 msgid "Bildirim ve ses/parlaklıkta da"
-msgstr ""
+msgstr "Also for notifications and volume/brightness"
 
-#, fuzzy
+#
 msgid "Canlı etkinliklerde de (maç skoru…)"
-msgstr "Live activities"
+msgstr "Also for live activities (match score…)"
 
 msgid "Üzerine gelince açılma gecikmesi"
 msgstr "Hover delay"
@@ -420,52 +422,55 @@ msgid "Kripto"
 msgstr "Crypto"
 
 msgid "İzleme listesi"
-msgstr ""
+msgstr "Watchlist"
 
-#, fuzzy
+#
 msgid ""
 "Kaynak: Binance açık piyasa verisi (anahtarsız). USD ve EUR: TL karşılığı."
-msgstr "Source: Binance public market data (no API key)"
+msgstr ""
+"Source: Binance public market data (no key). USD and EUR: value in TRY."
 
 msgid "Yukarı"
-msgstr ""
+msgstr "Up"
 
 msgid "Aşağı"
-msgstr ""
+msgstr "Down"
 
 msgid "Listeden çıkar"
-msgstr ""
+msgstr "Remove from list"
 
 msgid "Sembol ekle (ör. SOL, PEPE, USD)"
-msgstr ""
+msgstr "Add symbol (e.g. SOL, PEPE, USD)"
 
-#, fuzzy
+#
 msgid "Fiyat alarmları"
-msgstr "Prices unavailable"
+msgstr "Price alerts"
 
 msgid ""
 "Island'da koinin grafiğinden kurulur; fiyat eşiği geçince kapsülde uyarı "
 "çıkar ve alarm silinir."
 msgstr ""
+"Set from the coin's chart in the Island; when the price crosses the level an "
+"alert appears in the capsule and the alert is removed."
 
 msgid "Kurulu alarm yok"
-msgstr ""
+msgstr "No alerts set"
 
 msgid "Alarmı sil"
-msgstr ""
+msgstr "Delete alert"
 
 msgid "Alarm çalınca ses"
-msgstr ""
+msgstr "Sound when an alert fires"
 
-#, fuzzy
+#
 msgid "Görünüm ve yenileme"
-msgstr "Screenshots"
+msgstr "Appearance and refresh"
 
 msgid "Grafik açılış dönemi"
-msgstr ""
+msgstr "Default chart period"
 
 msgid "Koin ayrıntısı ilk bu dönemle açılır"
-msgstr ""
+msgstr "Coin details open with this period"
 
 msgid "1 saat"
 msgstr "1 hour"
@@ -476,19 +481,19 @@ msgstr "24 hours"
 msgid "7 gün"
 msgstr "7 days"
 
-#, fuzzy
+#
 msgid "30 gün"
-msgstr "7 days"
+msgstr "30 days"
 
 msgid "1 yıl"
-msgstr ""
+msgstr "1 year"
 
 msgid "Kartlarda küçük grafik"
-msgstr ""
+msgstr "Small chart on cards"
 
-#, fuzzy
+#
 msgid "24 saatlik eğri"
-msgstr "24 hours"
+msgstr "24-hour curve"
 
 msgid "Değişimde renk kullan"
 msgstr "Colour the change"
@@ -499,15 +504,15 @@ msgstr "Black and white when off"
 msgid "Büyük değişim uyarısı"
 msgstr "Big move alert"
 
-#, fuzzy
+#
 msgid "% (24 saat, BTC ve ETH)"
-msgstr "% (24 hours)"
+msgstr "% (24 hours, BTC and ETH)"
 
 msgid "Fiyat yenileme"
 msgstr "Price refresh"
 
 msgid "saniye (alarmlar da bu aralıkla denetlenir)"
-msgstr ""
+msgstr "seconds (alerts are checked at this interval too)"
 
 msgid "Maçlar ve hakemlik"
 msgstr "Matches & refereeing"
@@ -531,77 +536,82 @@ msgid "saniye (canlı maç varken sunucu 2 dk'da bir günceller)"
 msgstr "seconds (the server updates every 2 min during live matches)"
 
 msgid "Öne çıkanlar"
-msgstr ""
+msgstr "Highlights"
 
 msgid ""
 "en az bu kadar yıldızlı maçlar (favoriler, derbiler, özel maçlar her zaman)"
 msgstr ""
+"matches with at least this many stars (favorites, derbies and pinned matches "
+"always)"
 
 msgid "Favori takımlar"
-msgstr ""
+msgstr "Favorite teams"
 
 msgid ""
 "Favori takımların maçları her listede en üstte; canlıysa kapsülde önce onlar "
 "gösterilir."
 msgstr ""
+"Favorite teams' matches are on top of every list; when live they are shown "
+"in the capsule first."
 
 msgid "Favorilerden çıkar"
-msgstr ""
+msgstr "Remove from favorites"
 
 msgid "Takım ekle (ör. Galatasaray, Eternal Fire)"
-msgstr ""
+msgstr "Add team (e.g. Galatasaray, Eternal Fire)"
 
 msgid "Kategoriler"
-msgstr ""
+msgstr "Categories"
 
 msgid "Maçlar sekmesinde gösterilecek bölümler"
-msgstr ""
+msgstr "Sections shown in the Matches tab"
 
 msgid "Futbol"
-msgstr ""
+msgstr "Football"
 
 msgid "Basketbol"
-msgstr ""
+msgstr "Basketball"
 
-#, fuzzy
+#
 msgid "Milli maçlar"
-msgstr "Matches"
+msgstr "National teams"
 
 msgid "Derbiler"
-msgstr ""
+msgstr "Derbies"
 
-#, fuzzy
+#
 msgid "Takımlarım"
-msgstr "Keyboard shortcuts"
+msgstr "My teams"
 
-#, fuzzy
+#
 msgid "Özel maçlar"
-msgstr "My matches"
+msgstr "Pinned matches"
 
 msgid ""
 "Kaynak: HLTV maçlar sayfası (bu PC'deki cs2-veri botu); ulaşılamazsa bo3.gg"
 msgstr ""
+"Source: HLTV matches page (cs2-veri bot on this PC); bo3.gg if unreachable"
 
-#, fuzzy
+#
 msgid "CS2 maçları"
-msgstr "My matches"
+msgstr "CS2 matches"
 
 msgid "Canlı raund skoru, harita, HLTV yıldızları"
-msgstr ""
+msgstr "Live round score, map, HLTV stars"
 
-#, fuzzy
+#
 msgid "Kapsülde canlı CS2"
-msgstr "Capsule opacity"
+msgstr "Live CS2 in the capsule"
 
 msgid "en az HLTV yıldızı (favori takımlar her zaman)"
-msgstr ""
+msgstr "minimum HLTV stars (favorite teams always)"
 
-#, fuzzy
+#
 msgid "CS2 yenileme"
-msgstr "Match refresh"
+msgstr "CS2 refresh"
 
 msgid "saniye (canlıyken raundları yakalamak için kısa tut)"
-msgstr ""
+msgstr "seconds (keep it short to catch rounds while live)"
 
 msgid ""
 "Sadece MyAnimeList / AniList ve yasal yayın platformlarına bağlantı verilir"
@@ -801,58 +811,58 @@ msgstr "Battery Saver"
 msgid "Parlaklık %40, animasyonsuz"
 msgstr "40% brightness, no animations"
 
-#, fuzzy
+#
 msgid "Tasarruf"
-msgstr "Battery Saver"
+msgstr "Power saver"
 
-#, fuzzy
+#
 msgid "Dengeli"
-msgstr "Kept awake"
+msgstr "Balanced"
 
 msgid "Performans"
-msgstr ""
+msgstr "Performance"
 
 msgid "Açık · tıkla: kapat"
-msgstr ""
+msgstr "On · click: turn off"
 
 msgid "Kapalı · tıkla: aç"
-msgstr ""
+msgstr "Off · click: turn on"
 
 msgid "Açık"
 msgstr "Running"
 
-#, fuzzy
+#
 msgid "Uçak modu"
-msgstr "Panic mode"
+msgstr "Airplane mode"
 
-#, fuzzy
+#
 msgid "Tüm kablosuz bağlantılar"
-msgstr "Wireless devices"
+msgstr "All wireless connections"
 
-#, fuzzy
+#
 msgid "Gece ışığı"
-msgstr "Keyboard light"
+msgstr "Night light"
 
 msgid "Ekran rengini ısıtır"
-msgstr ""
+msgstr "Makes the screen color warmer"
 
 msgid "Rahatsız etme"
-msgstr ""
+msgstr "Do not disturb"
 
 msgid "Bildirim afişleri gösterilmez (listede kalır)"
-msgstr ""
+msgstr "Notification banners are hidden (they stay in the list)"
 
 msgid "Güç modu"
-msgstr ""
+msgstr "Power mode"
 
 msgid "Tıkla: tasarruf → dengeli → performans"
-msgstr ""
+msgstr "Click: power saver → balanced → performance"
 
 msgid "Mikrofon"
 msgstr "Microphone"
 
 msgid "Sessiz"
-msgstr ""
+msgstr "Muted"
 
 msgid "Pazar"
 msgstr "Sunday"
@@ -933,7 +943,7 @@ msgid "Ses"
 msgstr "Sound"
 
 msgid "Sesi kapat / aç"
-msgstr ""
+msgstr "Mute / unmute"
 
 msgid "Parlaklık"
 msgstr "Brightness"
@@ -1026,38 +1036,38 @@ msgstr "Could not add to desktop"
 msgid "Masaüstüne ekle"
 msgstr "Add to desktop"
 
-#, fuzzy
+#
 msgid "Yedek"
-msgstr "Back up"
+msgstr "Backup"
 
 msgid "Servisler"
-msgstr ""
+msgstr "Services"
 
 msgid "Güvenlik"
-msgstr ""
+msgstr "Security"
 
 msgid "Disk"
 msgstr "Disk"
 
 msgid "Ağ / VPN"
-msgstr ""
+msgstr "Network / VPN"
 
 msgid "Anime"
 msgstr "Anime"
 
-#, fuzzy
+#
 msgid "Günlük özet"
-msgstr "Daily"
+msgstr "Daily summary"
 
 msgid "Diğer"
-msgstr ""
+msgstr "Other"
 
 msgid "Dosyalar"
 msgstr "Files"
 
-#, fuzzy
+#
 msgid "Sağ tık: kaldır"
-msgstr "Added (right-click to remove)"
+msgstr "Right-click: remove"
 
 msgid "Süresiz"
 msgstr "Indefinitely"
@@ -1094,11 +1104,11 @@ msgstr "Matches tab"
 
 #, javascript-format
 msgid "son raund: %s"
-msgstr ""
+msgstr "last round: %s"
 
 #, javascript-format
 msgid "seri %s"
-msgstr ""
+msgstr "series %s"
 
 #, javascript-format
 msgid "Maç %s · %s"
@@ -1155,28 +1165,28 @@ msgstr "Caps Lock off"
 msgid "Klavye · %s"
 msgstr "Keyboard · %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s %s üstüne çıktı"
-msgstr "Episode %s is out"
+msgstr "%s rose above %s"
 
 #, javascript-format
 msgid "%s %s altına indi"
-msgstr ""
+msgstr "%s fell below %s"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "şimdi %s"
-msgstr "now"
+msgstr "now %s"
 
 msgid "Grafiği aç"
-msgstr ""
+msgstr "Open chart"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fiyat alarmı: %s %s"
-msgstr "Prices unavailable"
+msgstr "Price alert: %s %s"
 
-#, fuzzy
+#
 msgid "Kripto alarmı"
-msgstr "Crypto"
+msgstr "Crypto alert"
 
 #, javascript-format
 msgid "%s $ · 24 saat"
@@ -1324,10 +1334,10 @@ msgstr ""
 "This season and the rest of my MAL list; right-click added ones to remove"
 
 msgid "IMDb (son bölüm)"
-msgstr ""
+msgstr "IMDb (latest episode)"
 
 msgid "Sıra"
-msgstr ""
+msgstr "Rank"
 
 #, javascript-format
 msgid "Sonraki: <b>%s. bölüm</b> · %s sonra"
@@ -1354,9 +1364,9 @@ msgstr "Added (right-click to remove)"
 msgid "Tıkla: ekle"
 msgstr "Click to add"
 
-#, fuzzy
+#
 msgid "bitti"
-msgstr "Final"
+msgstr "over"
 
 #, javascript-format
 msgid "%s sa %s dk kaldı"
@@ -1367,10 +1377,10 @@ msgid "%s dk kaldı"
 msgstr "%s min left"
 
 msgid "Milli"
-msgstr ""
+msgstr "National"
 
 msgid "Özel"
-msgstr ""
+msgstr "Pinned"
 
 #, javascript-format
 msgid "Takip: %s"
@@ -1401,82 +1411,82 @@ msgstr "Ankara basketball fixtures"
 msgid "canlı"
 msgstr "live"
 
-#, fuzzy
+#
 msgid "Canlı"
-msgstr "live"
+msgstr "Live"
 
 msgid "Yaklaşan (36 saat)"
-msgstr ""
+msgstr "Upcoming (36 hours)"
 
 msgid "HLTV'ye ulaşılamadı; bo3.gg verisi"
-msgstr ""
+msgstr "HLTV unreachable; data from bo3.gg"
 
 msgid "Bu gün için öne çıkan maç yok"
-msgstr ""
+msgstr "No highlighted matches for this day"
 
 msgid "Derbi yok"
-msgstr ""
+msgstr "No derbies"
 
 msgid "Favori takımlarının maçı yok"
-msgstr ""
+msgstr "No matches for your favorite teams"
 
 msgid "Favori takım yok: bir maça tıklayıp takımı ekle"
-msgstr ""
+msgstr "No favorite teams: click a match and add a team"
 
 msgid "Özel maç yok: bir maça tıklayıp sabitle"
-msgstr ""
+msgstr "No pinned matches: click a match and pin it"
 
-#, fuzzy
+#
 msgid "CS2 maçı yok"
-msgstr "No matches"
+msgstr "No CS2 matches"
 
 msgid "CS2 kapalı (Ayarlar)"
-msgstr ""
+msgstr "CS2 is off (Settings)"
 
 msgid "Maç yok"
 msgstr "No matches"
 
 msgid "Takımlarım ve özel maçlar"
-msgstr ""
+msgstr "My teams and pinned matches"
 
 msgid "DERBİ"
-msgstr ""
+msgstr "DERBY"
 
 msgid "CANLI"
-msgstr ""
+msgstr "LIVE"
 
 msgid "Bitti"
 msgstr "Final"
 
 msgid "Tıkla: favori, özel maç, maç sayfası"
-msgstr ""
+msgstr "Click: favorite, pin, match page"
 
 #, javascript-format
 msgid "HLTV: %s yıldız"
-msgstr ""
+msgstr "HLTV: %s stars"
 
 msgid "Tıkla: favori, kapsülde takip, maç sayfası"
-msgstr ""
+msgstr "Click: favorite, follow in capsule, match page"
 
 #, javascript-format
 msgid "%s favoride"
-msgstr ""
+msgstr "%s is a favorite"
 
 #, javascript-format
 msgid "%s favorilere"
-msgstr ""
+msgstr "Add %s to favorites"
 
 msgid "Özelden çıkar"
-msgstr ""
+msgstr "Unpin"
 
 msgid "Özel maç"
-msgstr ""
+msgstr "Pin match"
 
 msgid "Takibi bırak"
-msgstr ""
+msgstr "Stop following"
 
 msgid "Kapsülde takip et"
-msgstr ""
+msgstr "Follow in capsule"
 
 msgid "Hakemlik verisi yok"
 msgstr "No referee data"
@@ -1489,44 +1499,44 @@ msgid "Sıradaki: %s %s · %s — %s"
 msgstr "Next: %s %s · %s — %s"
 
 msgid "Tümü"
-msgstr ""
+msgstr "All"
 
 msgid "Uyarılar"
-msgstr ""
+msgstr "Warnings"
 
 msgid "Bilgi"
-msgstr ""
+msgstr "Info"
 
 msgid "Susturma"
-msgstr ""
+msgstr "Mute"
 
 msgid "Sunucuya ulaşılamıyor"
 msgstr "Server unreachable"
 
 msgid "Son 24 saatte bildirim yok"
-msgstr ""
+msgstr "No notifications in the last 24 hours"
 
 #, javascript-format
 msgid "%s: susturmayı kaldır"
-msgstr ""
+msgstr "%s: unmute"
 
 #, javascript-format
 msgid "%s: 8 saat sustur"
-msgstr ""
+msgstr "%s: mute for 8 hours"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s sa kaldı"
-msgstr "%s min left"
+msgstr "%s h left"
 
-#, fuzzy
+#
 msgid "1 sa"
-msgstr "1 hour"
+msgstr "1 h"
 
 msgid "8 sa"
-msgstr ""
+msgstr "8 h"
 
 msgid "Susturulan kategoriler kapsülde uyarı olarak gösterilmez"
-msgstr ""
+msgstr "Muted categories are not shown as alerts in the capsule"
 
 msgid "Zorla kapatılıyor"
 msgstr "Force quitting"
@@ -1542,9 +1552,9 @@ msgstr "%s min"
 msgid "Uygulamalar"
 msgstr "Apps"
 
-#, fuzzy
+#
 msgid "Uygulama ara…"
-msgstr "Apps"
+msgstr "Search apps…"
 
 msgid "Zorla kapat"
 msgstr "Force quit"
@@ -1582,18 +1592,17 @@ msgstr "Hidden windows and sound come back"
 msgid "Araçlar"
 msgstr "Tools"
 
-#, fuzzy
+#
 msgid "Hızlı ayarlar"
-msgstr "Quick Settings (sound, network, battery)"
+msgstr "Quick settings"
 
-#, fuzzy
+#
 msgid "Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır"
-msgstr ""
-"This season and the rest of my MAL list; right-click added ones to remove"
+msgstr "Any app on the system; right-click to remove"
 
-#, fuzzy
+#
 msgid "Tıkla: sabitle"
-msgstr "Click to add"
+msgstr "Click: pin"
 
 msgid "Video"
 msgstr "Video"
@@ -1895,7 +1904,7 @@ msgid "Ekran görüntüsü (Print da)"
 msgstr "Screenshot (Print too)"
 
 msgid "Emoji tuşu"
-msgstr ""
+msgstr "Emoji key"
 
 msgid "Emoji seçici (K380s gülen yüz tuşu)"
 msgstr "Emoji picker (K380s smiley key)"
@@ -1903,61 +1912,63 @@ msgstr "Emoji picker (K380s smiley key)"
 msgid "Klavye kısayolları"
 msgstr "Keyboard shortcuts"
 
-#, fuzzy
+#
 msgid "Tuş kısayolları"
 msgstr "Keyboard shortcuts"
 
-#, fuzzy
+#
 msgid "Sunucu ve proje klasörleri"
-msgstr "Server: home folder"
+msgstr "Server and project folders"
 
 #, javascript-format
 msgid "Kısayol: %s · tıklayınca şimdi yapar"
 msgstr "Shortcut: %s · click to do it now"
 
-#, fuzzy
+#
 msgid "24 sa"
-msgstr "24 hours"
+msgstr "24 h"
 
 msgid "Şimdi yenile"
 msgstr "Refresh now"
 
 msgid "Koin ara (ad ya da sembol)…"
-msgstr ""
+msgstr "Search coins (name or symbol)…"
 
 msgid "Koin ekle"
-msgstr ""
+msgstr "Add coin"
 
 msgid "Binance'teki bütün koinler; karta sağ tıklayınca listeden çıkar"
-msgstr ""
+msgstr "All coins on Binance; right-click a card to remove it"
 
 msgid "Fiyatlar alınamadı"
 msgstr "Prices unavailable"
 
 msgid "Binance'te yok"
-msgstr ""
+msgstr "Not on Binance"
 
 #, javascript-format
 msgid ""
 "24 sa: en yüksek %s · en düşük %s\n"
 "Tıkla: grafik ve alarm · sağ tık: listeden çıkar"
 msgstr ""
+"24 h: high %s · low %s\n"
+"Click: chart and alerts · right-click: remove"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s üstüne çıkınca"
-msgstr "Episode %s is out"
+msgstr "when above %s"
 
 #, javascript-format
 msgid "%s altına inince"
-msgstr ""
+msgstr "when below %s"
 
 #, javascript-format
 msgid "%s uzakta"
-msgstr ""
+msgstr "%s away"
 
-#, fuzzy
+#
 msgid "Liste yükleniyor…"
-msgstr "Loading…"
+msgstr "Loading list…"
 
 msgid "Dolar / TL"
 msgstr "Dollar / TRY"
@@ -1965,104 +1976,104 @@ msgstr "Dollar / TRY"
 msgid "Euro / TL"
 msgstr "Euro / TRY"
 
-#, fuzzy
+#
 msgid "Bulunamadı"
-msgstr "Could not read: %s"
+msgstr "Not found"
 
-#, fuzzy
+#
 msgid "Liste alınamadı"
-msgstr "Prices unavailable"
+msgstr "Could not load the list"
 
 #, javascript-format
 msgid "24 sa işlem hacmi: %s $ · tıkla: listeye ekle"
-msgstr ""
+msgstr "24 h volume: %s $ · click: add to list"
 
-#, fuzzy
+#
 msgid "Tıkla: listeye ekle"
-msgstr "Click to add"
+msgstr "Click: add to list"
 
-#, fuzzy
+#
 msgid "Listeye dön"
-msgstr "List refresh"
+msgstr "Back to list"
 
 msgid "İşaret"
-msgstr ""
+msgstr "Mark"
 
 msgid "Grafiğe tıklayınca o fiyata işaret çizgisi konur"
-msgstr ""
+msgstr "Clicking the chart puts a mark line at that price"
 
 msgid "Alarm"
-msgstr ""
+msgstr "Alert"
 
-#, fuzzy
+#
 msgid "Grafiğe tıklayınca o fiyata alarm kurulur"
-msgstr "Only on click"
+msgstr "Clicking the chart sets an alert at that price"
 
 msgid "Üzerine gel: incele · basılı tutup sürükle: ölç · sağ tık: çizgiyi sil"
-msgstr ""
+msgstr "Hover: inspect · press and drag: measure · right-click: delete line"
 
-#, fuzzy
+#
 msgid "Fiyat yaz, Enter"
-msgstr "Price refresh"
+msgstr "Type a price, Enter"
 
 msgid "Alarm kur"
-msgstr ""
+msgstr "Set alert"
 
 msgid "Şimdiki fiyata göre alarm"
-msgstr ""
+msgstr "Alert relative to the current price"
 
-#, fuzzy
+#
 msgid "Fiyat alarmı"
-msgstr "Prices unavailable"
+msgstr "Price alert"
 
 msgid "İşaretler"
-msgstr ""
+msgstr "Marks"
 
 msgid "Bu koinin bütün işaretlerini sil"
-msgstr ""
+msgstr "Delete all marks of this coin"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s  (24 sa)"
-msgstr "% (24 hours)"
+msgstr "%s  (24 h)"
 
-#, fuzzy
+#
 msgid "Açılış"
-msgstr "Could not open"
+msgstr "Open"
 
 msgid "En yüksek"
-msgstr ""
+msgstr "High"
 
 msgid "En düşük"
-msgstr ""
+msgstr "Low"
 
 msgid "Değişim"
-msgstr ""
+msgstr "Change"
 
 msgid "Dalgalanma"
-msgstr ""
+msgstr "Range"
 
 msgid "Grafiğe tıklayarak destek/direnç çizgisi koy"
-msgstr ""
+msgstr "Click the chart to add a support/resistance line"
 
-#, fuzzy
+#
 msgid "Tıkla: işareti sil"
-msgstr "Click to add"
+msgstr "Click: delete mark"
 
 msgid "Bu bilgisayar"
 msgstr "This computer"
 
-#, fuzzy
+#
 msgid "Sunucu"
-msgstr "Server home"
+msgstr "Server"
 
 msgid "Tıkla: ayrıntılar ve sıcaklık grafiği"
-msgstr ""
+msgstr "Click: details and temperature chart"
 
 msgid "Tıkla: ayrıntılar, diskler, konteynerler"
-msgstr ""
+msgstr "Click: details, disks, containers"
 
 msgid "Durum + AI"
-msgstr ""
+msgstr "Status + AI"
 
 msgid "Sunucu durumu + yapay zekâ analizi"
 msgstr "Server status + AI analysis"
@@ -2085,30 +2096,30 @@ msgstr "Check status now"
 msgid "Aç"
 msgstr "Open"
 
-#, fuzzy
+#
 msgid "Pil"
-msgstr "On battery"
+msgstr "Battery"
 
 msgid "Durum"
-msgstr ""
+msgstr "Status"
 
-#, fuzzy
+#
 msgid "okunamadı"
-msgstr "Could not read: %s"
+msgstr "unreadable"
 
 msgid "İYİ"
 msgstr "OK"
 
-#, fuzzy
+#
 msgid "ulaşılamıyor"
-msgstr "Server: unreachable"
+msgstr "unreachable"
 
 msgid "Sunucu (flugelserver)"
 msgstr "Server (flugelserver)"
 
 #, javascript-format
 msgid "CPU sıcaklığı son %s dk: %s   ·   GPU: %s"
-msgstr ""
+msgstr "CPU temperature, last %s min: %s   ·   GPU: %s"
 
 #, javascript-format
 msgid "Okunamadı: %s"
@@ -2229,51 +2240,3 @@ msgstr " · GPU passthrough"
 #, javascript-format
 msgid "IP %s · %s açık"
 msgstr "IP %s · up %s"
-
-#~ msgid "Maç verisi alınamadı (sunucu?)"
-#~ msgstr "Match data unavailable (server?)"
-
-#~ msgid " · tıkla: ESPN maç sayfası"
-#~ msgstr " · click: ESPN match page"
-
-#, fuzzy
-#~ msgid "Tıklayınca:"
-#~ msgstr "Only on click"
-
-#~ msgid "Varlıklar"
-#~ msgstr "Assets"
-
-#~ msgid "😊 tuşu"
-#~ msgstr "😊 key"
-
-#~ msgid "Diğer kripto paralar"
-#~ msgstr "Other cryptocurrencies"
-
-#~ msgid "BTC grafiği (TradingView)"
-#~ msgstr "BTC chart (TradingView)"
-
-#, javascript-format
-#~ msgid "En yüksek %s   ·   En düşük %s   ·   %s %s"
-#~ msgstr "High %s   ·   Low %s   ·   %s %s"
-
-#, javascript-format
-#~ msgid "24 saat %s · kaynak %s"
-#~ msgstr "24 hours %s · source %s"
-
-#, javascript-format
-#~ msgid "Son bölüm: <b>%s</b>%s"
-#~ msgstr "Latest episode: <b>%s</b>%s"
-
-#, javascript-format
-#~ msgid "  ·  IMDb <b>%s</b>"
-#~ msgstr "  ·  IMDb <b>%s</b>"
-
-#~ msgid "  ·  IMDb puanı yok"
-#~ msgstr "  ·  no IMDb rating"
-
-#, javascript-format
-#~ msgid "MAL <b>%s</b>"
-#~ msgstr "MAL <b>%s</b>"
-
-#~ msgid "Sabitlenmiş"
-#~ msgstr "Pinned"

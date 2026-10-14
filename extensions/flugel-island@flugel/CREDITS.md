@@ -16,7 +16,11 @@ Because GPL-2.0-or-later and GPL-3.0 code are combined, **the whole extension is
   *Information courtesy of IMDb (https://www.imdb.com). Used with permission.* Personal, non-commercial use only.
 - **AniList / MyAnimeList:** cover images, scores and descriptions belong to their owners; only links to MAL,
   AniList and legal streaming platforms are shown.
-- **Binance** public market data (prices), **ESPN** scoreboard (matches) — fetched by the user's own scripts.
+- **Binance** public market data (prices), **ESPN** scoreboard (matches), **HLTV** matches page and **bo3.gg**
+  (CS2 matches, stars and live scores) — fetched by the user's own scripts for personal use. The CS2 helper uses
+  [curl_cffi](https://github.com/lexiforest/curl_cffi) (MIT), installed in a separate virtual environment.
+- Coin names and white coin icons: [cryptocurrency-icons](https://github.com/spothq/cryptocurrency-icons) (CC0-1.0),
+  downloaded at runtime by the helper script; not bundled.
 - `ikon/renkli/` holds the favicons of Crunchyroll, HIDIVE, Netflix, MyAnimeList and AniList, used only as link
   buttons to those services. They are trademarks of their respective owners and are not covered by the GPL.
 - Re:Zero characters © Tappei Nagatsuki / KADOKAWA; the chibi drawings are fan art made for this project.
