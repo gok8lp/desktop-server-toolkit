@@ -64,15 +64,10 @@ export class HizliSayfa extends Sayfa {
         this._kafein = new PopupMenu.PopupSwitchMenuItem('Uyku modunu engelle', false);
         this._kafein.connect('toggled', (_i, acik) => this._oturum.set_uint('idle-delay', acik ? 0 : 300));
         this.addMenuItem(this._kafein);
-        this._arayuz = new Gio.Settings({schema_id: 'org.gnome.desktop.interface'});
-        this._tema = new PopupMenu.PopupSwitchMenuItem('Karanlık tema', false);
-        this._tema.connect('toggled', (_i, acik) => this._arayuz.set_string('color-scheme', acik ? 'prefer-dark' : 'default'));
-        this.addMenuItem(this._tema);
     }
 
     goster() {
         this._kafein.setToggleState(this._oturum.get_uint('idle-delay') === 0);
-        this._tema.setToggleState(this._arayuz.get_string('color-scheme') === 'prefer-dark');
         this._geriAl.visible = this._panik.aktif;
     }
 
@@ -115,7 +110,7 @@ export class HizliSayfa extends Sayfa {
     }
 
     destroy() {
-        this._oturum = this._arayuz = null;
+        this._oturum = null;
         super.destroy();
     }
 }

@@ -1,5 +1,13 @@
 /* FLUGEL Island — siyah-beyaz FLUGEL kimliği. Renk sadece uyarı/kayıt durumlarında (kod içinden) gelir.
-   Arka plan rengi ve köşe yarıçapı animasyon sırasında koddan yazılır (.flugel-island-zemin). */
+   Arka plan rengi ve köşe yarıçapı animasyon sırasında koddan yazılır (.flugel-island-zemin).
+
+   RENK TABLOSU (tek yer — kod tarafı: src/ortak.js KAPSUL_RGB / KART_RGB / SARI / KIRMIZI)
+     metin         #f2f2f4     ikincil metin  #9a9aa5     soluk  #8a8a94
+     kapsül        rgb(0,0,0)  × ayar saydamlik (%92)
+     kart (cam)    rgb(14,14,16) × ayar kart-saydamlik (%95)
+     yüzey         beyaz %6–%14 (satır, düğme, sekme zemini)
+     vurgu         beyaz #ffffff (seçili sekme, açık anahtar) — sistem vurgu rengi (turuncu) KULLANILMAZ
+     kenar         beyaz %9 */
 
 /* ---------- ada ve balon ---------- */
 .flugel-island-zemin {
@@ -117,6 +125,18 @@
 .flugel-kart .popup-sub-menu .popup-menu-item:hover { background-color: rgba(255, 255, 255, 0.10); }
 .flugel-kart .popup-separator-menu-item .popup-separator-menu-item-separator { background-color: rgba(255, 255, 255, 0.10); }
 .flugel-kart .popup-separator-menu-item { color: #8a8a94; font-size: 9pt; font-weight: 700; }
+
+/* anahtarlar ve seçimler: Yaru'nun turuncu vurgusu yerine beyaz */
+.flugel-kart .toggle-switch { background-color: rgba(255, 255, 255, 0.14); }
+.flugel-kart .toggle-switch:hover { background-color: rgba(255, 255, 255, 0.20); }
+.flugel-kart .toggle-switch:checked { background-color: #f2f2f4; color: #000000; }
+.flugel-kart .toggle-switch:checked:hover { background-color: #ffffff; }
+.flugel-kart .toggle-switch .handle { background-color: #f2f2f4; }
+.flugel-kart .toggle-switch:checked .handle { background-color: #000000; }
+.flugel-kart .popup-menu-item:active:focus,
+.flugel-kart .popup-menu-item:focus:hover { background-color: rgba(255, 255, 255, 0.16); }
+.flugel-kart .popup-menu-ornament { color: #f2f2f4; }
+.flugel-kart StScrollBar StButton#vhandle { background-color: rgba(255, 255, 255, 0.28); border-radius: 999px; }
 
 /* hızlı başlatma */
 .flugel-baslat-satiri { padding: 2px 0 6px 0; }

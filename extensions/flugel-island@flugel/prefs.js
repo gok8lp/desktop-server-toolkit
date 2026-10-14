@@ -2,6 +2,7 @@
 import Adw from 'gi://Adw';
 import Gtk from 'gi://Gtk';
 import Gio from 'gi://Gio';
+import Gdk from 'gi://Gdk';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 const SAGLAYICI_ADLARI = {
@@ -40,6 +41,16 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
     fillPreferencesWindow(pencere) {
         const ayar = this.getSettings();
         pencere.set_default_size(720, 820);
+        // FLUGEL kimliği: ayar penceresi de her zaman koyu ve vurgu rengi nötr (sistem turuncusu yok)
+        Adw.StyleManager.get_default().color_scheme = Adw.ColorScheme.FORCE_DARK;
+        const css = new Gtk.CssProvider();
+        css.load_from_string(':root { --accent-bg-color: #e8e8ec; --accent-fg-color: #000000; --accent-color: #f2f2f4; }');
+        Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        // aynı süreçte açılan başka eklenti ayarlarını etkilemesin
+        pencere.connect('close-request', () => {
+            Gtk.StyleContext.remove_provider_for_display(Gdk.Display.get_default(), css);
+            return false;
+        });
         pencere.add(this._genel(ayar, pencere));
         this._idler = [];
         pencere.add(this._etkinlikler(ayar));
@@ -68,7 +79,8 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
             description: 'Sistemde "Animasyonları azalt" açıksa ada animasyonsuz değişir'});
         gorunum.add(sayiSatiri(ayar, 'genislik-carpani', 'Kapsül genişliği', 'çarpan', 0.6, 2.0, 0.05, 2));
         gorunum.add(sayiSatiri(ayar, 'kart-genislik', 'Kart genişliği', 'mantıksal piksel', 460, 900, 10));
-        gorunum.add(sayiSatiri(ayar, 'saydamlik', 'Opaklık', '% (100 = tam siyah)', 40, 100, 1));
+        gorunum.add(sayiSatiri(ayar, 'saydamlik', 'Kapsül opaklığı', '% (100 = tam siyah)', 40, 100, 1));
+        gorunum.add(sayiSatiri(ayar, 'kart-saydamlik', 'Kart opaklığı', '% (koyu nötr cam)', 60, 100, 1));
         gorunum.add(sayiSatiri(ayar, 'animasyon-hizi', 'Animasyon hızı', 'çarpan (1 = iOS gibi)', 0.5, 2.0, 0.05, 2));
         gorunum.add(anahtarSatiri(ayar, 'ekip-kapsulde', 'Kapsülde Re:Zero karakteri'));
         gorunum.add(anahtarSatiri(ayar, 'ekip-otomatik', 'Karakteri otomatik değiştir', 'pildeyken 4 kat seyrek, salınım yok'));

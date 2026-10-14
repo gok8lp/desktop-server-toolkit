@@ -10,7 +10,7 @@ import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {springProgress} from './spring.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
-import {ikon} from './ortak.js';
+import {ikon, KAPSUL_RGB, KART_RGB} from './ortak.js';
 
 const SOLMA_CIKIS = 110, SOLMA_GIRIS = 200;
 const lerp = (a, b, p) => a + (b - a) * p;
@@ -77,7 +77,7 @@ export class IslandGorunumu {
         this._monitorId = Main.layoutManager.connect('monitors-changed', () => this._yerlestir(true));
         this._panelId = Main.panel.connect('notify::height', () => this._yerlestir(true));
         this._ayarId = this._ayar.connect('changed', (_s, k) => {
-            if (['saydamlik', 'genislik-carpani', 'kart-genislik', 'monitor', 'ekip-kapsulde'].includes(k))
+            if (['saydamlik', 'kart-saydamlik', 'genislik-carpani', 'kart-genislik', 'monitor', 'ekip-kapsulde'].includes(k))
                 this._yerlestir(true);
         });
         this._kart.kapatIstendi = () => this.daralt();
@@ -141,14 +141,19 @@ export class IslandGorunumu {
         this._kok.set_size(w, h);
         this._kok.set_position(Math.round(m.x + (m.width - w) / 2), this._ustY());
         this._kompakt.set_height(this._kapsulYuksekligi());
-        this._radiusYaz(this._zemin, Math.max(0, Math.min(g.r, h / 2)));
+        // kapsül siyahından kartın nötr camına, yükseklikle orantılı geçiş
+        const kh = this._kapsulYuksekligi();
+        const t = Math.max(0, Math.min(1, (h - kh) / Math.max(1, kh * 3)));
+        this._radiusYaz(this._zemin, Math.max(0, Math.min(g.r, h / 2)), t);
         this._balonYerlestir();
     }
 
-    _radiusYaz(zemin, r) {
+    _radiusYaz(zemin, r, t = 0) {
         const css = Math.round(r / this._s);
-        const alfa = (this._ayar.get_int('saydamlik') / 100).toFixed(2);
-        const stil = `border-radius: ${css}px; background-color: rgba(0,0,0,${alfa});`;
+        const a0 = this._ayar.get_int('saydamlik') / 100, a1 = this._ayar.get_int('kart-saydamlik') / 100;
+        const [cr, cg, cb] = KAPSUL_RGB.map((v, i) => Math.round(v + (KART_RGB[i] - v) * t));
+        const alfa = (a0 + (a1 - a0) * t).toFixed(2);
+        const stil = `border-radius: ${css}px; background-color: rgba(${cr},${cg},${cb},${alfa});`;
         if (zemin.style !== stil)
             zemin.style = stil;
     }

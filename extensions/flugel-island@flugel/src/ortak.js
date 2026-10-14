@@ -10,7 +10,11 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 export const H = GLib.get_home_dir();
 export const VERI = `${H}/.local/bin/ust-panel-veri`;
 export const ONBELLEK = `${H}/.cache/sistem-bakim`;
+// ---------- renk paleti (tek yer; CSS'teki sabitler stylesheet.css başındaki tabloyla aynı) ----------
+// Siyah-beyaz FLUGEL kimliği: turuncu/kahverengi yok. Uyarı renkleri sadece sorun anında.
 export const SARI = '#E8C66B', KIRMIZI = '#F07B7B', SOLUK = '#9A9AA5', YESIL = '#8FD6A0';
+export const KAPSUL_RGB = [0, 0, 0];        // boştaki/kompakt kapsül: saf siyah (opaklık: ayar 'saydamlik')
+export const KART_RGB = [14, 14, 16];       // açık kart: koyu nötr cam (opaklık: ayar 'kart-saydamlik')
 
 let EXT = '';
 export function eklentiYolu(yol) {

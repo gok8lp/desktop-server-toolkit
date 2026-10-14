@@ -43,8 +43,13 @@
     </key>
     <key name="saydamlik" type="i">
       <range min="40" max="100"/>
-      <default>94</default>
-      <summary>Island arka planının opaklığı (%)</summary>
+      <default>92</default>
+      <summary>Kapsülün opaklığı (%)</summary>
+    </key>
+    <key name="kart-saydamlik" type="i">
+      <range min="60" max="100"/>
+      <default>95</default>
+      <summary>Açık kartın opaklığı (%)</summary>
     </key>
     <key name="animasyon-hizi" type="d">
       <range min="0.5" max="2.0"/>
