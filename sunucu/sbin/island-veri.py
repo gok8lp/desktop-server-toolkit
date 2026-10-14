@@ -104,6 +104,21 @@ def main():
                 continue
             if simdi - ts < 1800:
                 uyarilar.append({"ts": int(ts), "seviye": p[1], "metin": p[2][:160]})
+    # son 24 saatin bütün bildirimleri (Island "Bildirimler" sekmesi; en yeni önce, en fazla 80)
+    bildirimler = []
+    for satir in reversed(oku(f"{DURUM}/bildirimler.log").split("\n")[-400:]):
+        p = satir.split("|", 2)
+        if len(p) != 3:
+            continue
+        try:
+            ts = time.mktime(time.strptime(p[0], "%Y-%m-%d %H:%M:%S"))
+        except ValueError:
+            continue
+        if simdi - ts > 86400:
+            break
+        bildirimler.append({"ts": int(ts), "seviye": p[1], "metin": p[2].strip()[:1200]})
+        if len(bildirimler) >= 80:
+            break
     basket = jsonoku("/var/lib/basket-bot/maclar.json")
     anime = jsonoku("/var/lib/basket-bot/anime.json")
     bolumler = sorted(({"ad": a.get("ad"), "bolum": a.get("sonraki_bolum"), "yayin": a.get("yayin")}
@@ -127,6 +142,7 @@ def main():
         "yedek": oku("/var/lib/sistem-bakim/son-kritik-yedek", "-"),
         "vm": vm, "vm_acik": sum(1 for v in vm if v["durum"] == "running"),
         "uyarilar": uyarilar,
+        "bildirimler": bildirimler,
         "basket": {"gelecek": basket.get("gelecek", []), "guncelleme": basket.get("guncelleme")},
         "anime": bolumler,
     }

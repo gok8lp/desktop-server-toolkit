@@ -394,3 +394,26 @@
 .flugel-cubuk-satir { spacing: 10px; }
 .flugel-cubuk-yuzde { font-size: 9pt; color: #cfcfd6; min-width: 44px; font-feature-settings: "tnum"; }
 .flugel-cubuklar .slider { -barlevel-active-background-color: #f2f2f4; -barlevel-background-color: rgba(255, 255, 255, 0.16); -slider-handle-radius: 8px; color: #ffffff; }
+
+/* anime detay (tıklayınca) */
+.flugel-anime-detay { spacing: 16px; padding: 4px 4px 8px 4px; }
+.flugel-anime-detay-kapak { border-radius: 14px; }
+.flugel-anime-detay-sag { spacing: 8px; }
+.flugel-puanlar { spacing: 8px; }
+.flugel-puan { padding: 6px 12px; border-radius: 12px; background-color: rgba(255, 255, 255, 0.07); }
+.flugel-puan-sayi { font-size: 13pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }
+.flugel-puan-ad { font-size: 7.5pt; color: #9a9aa5; }
+.flugel-anime-bilgi { font-size: 9.5pt; color: #e6e6ea; }
+.flugel-anime-ozet { font-size: 9.5pt; color: #cfcfd6; }
+
+/* sunucu bildirimleri */
+.flugel-bildirim-listesi { spacing: 3px; }
+.flugel-sb-satir { padding: 8px 10px; border-radius: 14px; color: #f2f2f4; }
+.flugel-sb-satir:hover { background-color: rgba(255, 255, 255, 0.07); }
+.flugel-sb-sessiz { opacity: 0.45; }
+.flugel-sb-ikon { color: #cfcfd6; }
+.flugel-sb-saat { font-size: 8.5pt; color: #9a9aa5; font-feature-settings: "tnum"; }
+.flugel-sb-kategori { font-size: 8pt; font-weight: 700; color: #d6d6dc; padding: 0 6px; border-radius: 6px; background-color: rgba(255, 255, 255, 0.08); }
+.flugel-sb-metin { font-size: 9.5pt; color: #f2f2f4; }
+.flugel-sb-ad { font-weight: 700; }
+.flugel-sb-sessiz-ad { font-weight: 700; color: #8a8a94; }

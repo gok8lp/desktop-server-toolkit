@@ -228,6 +228,47 @@ def basket():
             "yedek": yedek}
 
 
+MAL_OZET = os.path.expanduser("~/.cache/flugel-island/mal-ozet.json")
+
+
+def mal_ozetleri(kayitlar, en_fazla=20):
+    """Her kayda MAL özeti (synopsis, İngilizce) ve türler ekler — doğrudan myanimelist.net sayfasından
+    (Jikan erişilemiyor). Yeni olanlardan en fazla en_fazla tanesi, istekler arası 1,2 sn."""
+    try:
+        bellek = json.load(open(MAL_OZET))
+    except Exception:
+        bellek = {}
+    yeni = 0
+    for tur, x in kayitlar:
+        k = f"{tur}:{x.get('id')}"
+        if k not in bellek and yeni < en_fazla and x.get("id"):
+            try:
+                import html as _html
+                import re as _re
+                sayfa = urllib.request.urlopen(urllib.request.Request(f"https://myanimelist.net/{tur}/{x['id']}",
+                    headers={"User-Agent": "Mozilla/5.0 FLUGEL"}), timeout=12).read().decode("utf-8", "replace")
+                m = _re.search(r'<(?:p|span) itemprop="description">(.*?)</(?:p|span)>', sayfa, _re.S)
+                ozet = _html.unescape(_re.sub(r"<[^>]+>", "", m.group(1))).replace("[Written by MAL Rewrite]", "").strip() if m else ""
+                sira = _re.findall(r"Ranked:</span>\s*#(\d+)", sayfa)
+                uye = _re.findall(r"Members:</span>\s*([\d,]+)", sayfa)
+                bellek[k] = {"ozet": ozet, "tur": _re.findall(r'<span itemprop="genre"[^>]*>([^<]+)</span>', sayfa)[:4],
+                             "studyo": _re.findall(r'/anime/producer/\d+/[^"]*" title="([^"]+)"', sayfa)[:2],
+                             "siralama": int(sira[0]) if sira else None, "populerlik": None,
+                             "uye": int(uye[0].replace(",", "")) if uye else None}
+                yeni += 1
+                time.sleep(1.2)
+            except Exception:
+                break   # ağ yok ya da hız sınırı: sonraki yenilemede devam
+        b = bellek.get(k)
+        if b:
+            x.update({"mal_ozet": b["ozet"], "mal_tur": b["tur"], "mal_studyo": b["studyo"], "mal_sira": b["siralama"],
+                      "mal_uye": b["uye"]})
+    if yeni:
+        os.makedirs(RESIM_KOK, exist_ok=True)
+        json.dump(bellek, open(MAL_OZET + ".yeni", "w"), ensure_ascii=False)
+        os.replace(MAL_OZET + ".yeni", MAL_OZET)
+
+
 def anime():
     d, yedek = sunucu_ya_da_yedek("anime.json")
     takip = d.get("anime", []) + d.get("manga", []) + d.get("trend", [])
@@ -240,6 +281,8 @@ def anime():
     for x in takip + secim:
         x["kapak_kucuk"] = (kucuk.get(kaynak(x)) or {}).get(300)
         x["kapak_buyuk_yol"] = (buyuk.get(kaynak(x)) or {}).get(640)
+    # MyAnimeList'in kendi İngilizce özeti (MAL sayfası; yavaş ve kalıcı önbellekli)
+    mal_ozetleri([("anime", a) for a in d.get("anime", [])] + [("manga", m) for m in d.get("manga", [])])
     return {"anime": d.get("anime", []), "manga": d.get("manga", []), "trend": d.get("trend", []),
             "sezon": d.get("sezon", []), "diger": d.get("diger", []), "manga_diger": d.get("manga_diger", []),
             "guncelleme": d.get("guncelleme"), "yedek": yedek}

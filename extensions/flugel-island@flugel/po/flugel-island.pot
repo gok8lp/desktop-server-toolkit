@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 22:33+0300\n"
+"POT-Creation-Date: 2026-10-14 22:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,6 +57,12 @@ msgid "Anime ve manga"
 msgstr ""
 
 msgid "Takip ettiklerim"
+msgstr ""
+
+msgid "Bildirimler"
+msgstr ""
+
+msgid "Sunucudan gelen son 24 saat; kategori susturma"
 msgstr ""
 
 msgid "Ekran kaydı, mikrofon, kamera"
@@ -857,6 +863,30 @@ msgstr ""
 msgid "Masaüstüne ekle"
 msgstr ""
 
+msgid "Yedek"
+msgstr ""
+
+msgid "Servisler"
+msgstr ""
+
+msgid "Güvenlik"
+msgstr ""
+
+msgid "Disk"
+msgstr ""
+
+msgid "Ağ / VPN"
+msgstr ""
+
+msgid "Anime"
+msgstr ""
+
+msgid "Günlük özet"
+msgstr ""
+
+msgid "Diğer"
+msgstr ""
+
 msgid "Dosyalar"
 msgstr ""
 
@@ -980,9 +1010,6 @@ msgstr ""
 msgid "%d yeni"
 msgstr ""
 
-msgid "Bildirimler"
-msgstr ""
-
 msgid "Klavye ışığı"
 msgstr ""
 
@@ -1057,9 +1084,6 @@ msgstr ""
 msgid "Haberi aç"
 msgstr ""
 
-msgid "Anime"
-msgstr ""
-
 msgid "Manga"
 msgstr ""
 
@@ -1104,15 +1128,10 @@ msgstr ""
 msgid "Bu sezon ve MAL listemdeki diğerleri; eklenenler sağ tıkla kaldırılır"
 msgstr ""
 
-#, javascript-format
-msgid "Son bölüm: <b>%s</b>%s"
+msgid "IMDb (son bölüm)"
 msgstr ""
 
-#, javascript-format
-msgid "  ·  IMDb <b>%s</b>"
-msgstr ""
-
-msgid "  ·  IMDb puanı yok"
+msgid "Sıra"
 msgstr ""
 
 #, javascript-format
@@ -1132,10 +1151,6 @@ msgstr ""
 
 #, javascript-format
 msgid "AniList <b>%s</b>"
-msgstr ""
-
-#, javascript-format
-msgid "MAL <b>%s</b>"
 msgstr ""
 
 msgid "Eklendi (sağ tıkla kaldır)"
@@ -1201,6 +1216,41 @@ msgid "Bitti"
 msgstr ""
 
 msgid " · tıkla: ESPN maç sayfası"
+msgstr ""
+
+msgid "Tümü"
+msgstr ""
+
+msgid "Uyarılar"
+msgstr ""
+
+msgid "Bilgi"
+msgstr ""
+
+msgid "Susturma"
+msgstr ""
+
+msgid "Sunucuya ulaşılamıyor"
+msgstr ""
+
+msgid "Son 24 saatte bildirim yok"
+msgstr ""
+
+#, javascript-format
+msgid "%s: susturmayı kaldır"
+msgstr ""
+
+#, javascript-format
+msgid "%s: 8 saat sustur"
+msgstr ""
+
+msgid "1 sa"
+msgstr ""
+
+msgid "8 sa"
+msgstr ""
+
+msgid "Susturulan kategoriler kapsülde uyarı olarak gösterilmez"
 msgstr ""
 
 msgid "Zorla kapatılıyor"
@@ -1481,9 +1531,6 @@ msgstr ""
 msgid "Sistem izleyici"
 msgstr ""
 
-msgid "Disk"
-msgstr ""
-
 msgid "Disk kullanımı"
 msgstr ""
 
@@ -1695,9 +1742,6 @@ msgid "ağ yok"
 msgstr ""
 
 msgid "açık"
-msgstr ""
-
-msgid "Sunucuya ulaşılamıyor"
 msgstr ""
 
 #, javascript-format

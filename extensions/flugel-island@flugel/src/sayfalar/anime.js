@@ -10,7 +10,7 @@ import Clutter from 'gi://Clutter';
 import Shell from 'gi://Shell';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Sayfa} from './sayfa.js';
-import {calistir, geriSayim, kac, soluk} from '../ortak.js';
+import {calistir, geriSayim, ikon, kac, soluk} from '../ortak.js';
 import {Izgara, ResimKaro, Karo, bolum, dugme} from '../bilesenler.js';
 import {_, f} from '../dil.js';
 
@@ -59,9 +59,14 @@ export class AnimeSayfa extends Sayfa {
             this._cip[k] = b;
             cipler.add_child(b);
         }
-        this.actor.add_child(cipler);
+        // liste (ızgara, seçim, bağlantılar) ve detay iki ayrı görünüm
+        this._liste = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true});
+        this._detay = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, visible: false});
+        this.actor.add_child(this._liste);
+        this.actor.add_child(this._detay);
+        this._liste.add_child(cipler);
         this._izgara = new Izgara({genislik: this._genislik, karoGenisligi: 108, bosluk: 10});
-        this.actor.add_child(bolum('', this._izgara));
+        this._liste.add_child(bolum('', this._izgara));
 
         // takip dışı seçim paneli
         this._secim = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel', visible: false});
@@ -73,7 +78,7 @@ export class AnimeSayfa extends Sayfa {
         this._secim.add_child(aramaSatiri);
         this._secimIzgara = new Izgara({genislik: this._genislik - 16, karoGenisligi: 96, bosluk: 8});
         this._secim.add_child(this._secimIzgara.actor);
-        this.actor.add_child(this._secim);
+        this._liste.add_child(this._secim);
 
         const alt = new Izgara({sutun: 3});
         alt.ekle(new Karo({ikon: 'avatar-default-symbolic', etiket: _('MAL profilim'), ipucu: _('MyAnimeList profilim'),
@@ -82,7 +87,7 @@ export class AnimeSayfa extends Sayfa {
             eylem: () => this._git('https://anilist.co/airing')}));
         alt.ekle(new Karo({ikon: 'view-refresh-symbolic', etiket: _('Yenile'), ipucu: _('Listeyi şimdi yenile'),
             eylem: () => this._veri.yenile('anime', true)}));
-        this.actor.add_child(bolum('', alt));
+        this._liste.add_child(bolum('', alt));
 
         this._aboneler = [veri.abone('anime', d => {
             const y = yaklasanlar(d).filter(a => a.liste !== 'Planliyorum');
@@ -109,11 +114,13 @@ export class AnimeSayfa extends Sayfa {
 
     gizle() {
         this._secimKapat();
+        this._detayKapat();
     }
 
     kapandi() {
         super.kapandi();
         this._secimKapat();
+        this._detayKapat();
     }
 
     _kayitlar(d) {
@@ -156,34 +163,103 @@ export class AnimeSayfa extends Sayfa {
         return new ResimKaro({
             resim: a.kapak_kucuk, boyut: 108, baslik: a.ad, puan: a.mal_puan ?? (a.al_puan ? (a.al_puan / 10).toFixed(1) : null),
             rozet: this._tur === 'anime' ? rozet(a) : '',
-            eylem: () => this._git(a.url),
+            eylem: () => this._detayAc(a),
             sagTik: a._secilen ? () => this._secimdenCikar(a.id) : null,
-            onizleme: () => this._onizleme(a),
         });
     }
 
-    _onizleme(a) {
-        const satirlar = [];
+    // ---------- detay: kapağa tıklayınca kart içinde ----------
+    _detayAc(a) {
+        this._detay.destroy_all_children();
+        const ust = new St.BoxLayout({style_class: 'flugel-detay-ust'});
+        const geri = new St.Button({style_class: 'flugel-dugme flugel-geri', can_focus: true,
+            child: new St.Icon({icon_name: 'go-previous-symbolic', icon_size: 16})});
+        geri.connect('clicked', () => this._detayKapat());
+        ust.add_child(geri);
+        const bas = new St.Label({text: a.ad, style_class: 'flugel-detay-baslik', x_expand: true, y_align: Clutter.ActorAlign.CENTER});
+        bas.clutter_text.ellipsize = 3;
+        ust.add_child(bas);
+        this._detay.add_child(ust);
+
+        const govde = new St.BoxLayout({style_class: 'flugel-anime-detay'});
+        govde.add_child(new St.Widget({style_class: 'flugel-anime-detay-kapak',
+            style: `${ResimKaro.stil(a.kapak_buyuk_yol ?? a.kapak_kucuk)} width: 200px; height: 284px;`}));
+        const sag = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, style_class: 'flugel-anime-detay-sag'});
+        // puan çipleri
+        const cipler = new St.BoxLayout({style_class: 'flugel-puanlar'});
+        const cip = (ad, deger) => {
+            if (!deger)
+                return;
+            const c = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-puan'});
+            c.add_child(new St.Label({text: String(deger), style_class: 'flugel-puan-sayi'}));
+            c.add_child(new St.Label({text: ad, style_class: 'flugel-puan-ad'}));
+            cipler.add_child(c);
+        };
+        cip('MAL', a.mal_puan);
+        cip('AniList', a.al_puan ? (a.al_puan / 10).toFixed(1) : null);
+        cip(_('IMDb (son bölüm)'), a.imdb_puan);
+        cip(_('Sıra'), a.mal_sira ? `#${a.mal_sira}` : null);
+        sag.add_child(cipler);
+        const bilgi = [];
         if (this._tur === 'anime') {
-            if (a.son_bolum)
-                satirlar.push(f(_('Son bölüm: <b>%s</b>%s'), a.son_bolum, a.imdb_puan ? f(_('  ·  IMDb <b>%s</b>'), a.imdb_puan) : soluk(_('  ·  IMDb puanı yok'))));
             if (a.yayin)
-                satirlar.push(f(_('Sonraki: <b>%s. bölüm</b> · %s sonra'), a.sonraki_bolum, geriSayim(a.yayin)));
+                bilgi.push(f(_('Sonraki: <b>%s. bölüm</b> · %s sonra'), a.sonraki_bolum, geriSayim(a.yayin)));
             if (a.izlenen !== undefined)
-                satirlar.push(soluk(f(_('İzlediğin %s/%s · %s'), a.izlenen, a.toplam || '?', kac(a.liste ?? _('eklediğin')))));
+                bilgi.push(f(_('İzlediğin %s/%s · %s'), a.izlenen, a.toplam || '?', kac(a.liste ?? _('eklediğin'))));
         } else {
-            satirlar.push(f(_('Bölüm %s%s · %s'), a.okunan ?? '?', a.toplam ? `/${a.toplam}` : '', kac(a.durum ?? '')));
+            bilgi.push(f(_('Bölüm %s%s · %s'), a.okunan ?? '?', a.toplam ? `/${a.toplam}` : '', kac(a.durum ?? '')));
         }
-        satirlar.push([a.al_puan ? f(_('AniList <b>%s</b>'), a.al_puan) : '', a.mal_puan ? f(_('MAL <b>%s</b>'), a.mal_puan) : ''].filter(Boolean).join('  ·  '));
-        // kısa açıklama: Türkçe (sunucudaki yerel çeviri), yoksa AniList'in kısa İngilizce metni
-        const aciklama = a.aciklama || a.aciklama_en;
-        if (aciklama)
-            satirlar.unshift(`<i>${kac(aciklama)}</i>`);
-        const dugmeler = [];
+        if (a.mal_tur?.length)
+            bilgi.push(soluk(kac(a.mal_tur.join(' · '))));
+        for (const m of bilgi) {
+            const l = new St.Label({style_class: 'flugel-anime-bilgi'});
+            l.clutter_text.set_markup(m);
+            sag.add_child(l);
+        }
+        // MyAnimeList'in kendi İngilizce özeti (yoksa AniList'in kısa metni)
+        const ozet = a.mal_ozet || a.aciklama_en || '';
+        if (ozet) {
+            const l = new St.Label({text: ozet.length > 900 ? `${ozet.slice(0, 900)}…` : ozet, style_class: 'flugel-anime-ozet'});
+            l.clutter_text.line_wrap = true;
+            sag.add_child(l);
+        }
+        const dugmeler = new St.BoxLayout({style_class: 'flugel-onizleme-dugmeler'});
+        const dug = (ik, etiket, fn) => {
+            const btn = new St.Button({style_class: 'flugel-onizleme-dugme', can_focus: true, child: new St.BoxLayout({style: 'spacing: 6px;'})});
+            btn.child.add_child(new St.Icon({gicon: ikon(ik), icon_size: 16, style_class: 'flugel-onizleme-dugme-ikon'}));
+            btn.child.add_child(new St.Label({text: etiket, y_align: Clutter.ActorAlign.CENTER}));
+            btn.connect('clicked', fn);
+            dugmeler.add_child(btn);
+        };
         if (a.izle?.url)
-            dugmeler.push({ikon: SITE_IKON[a.izle.site] ?? 'media-playback-start-symbolic', etiket: a.izle.site, fn: () => ac(a.izle.url)});
-        dugmeler.push({ikon: 'renkli:mal', etiket: 'MyAnimeList', fn: () => ac(a.url)});
-        return {resim: a.kapak_buyuk_yol ?? a.kapak_kucuk, baslik: a.ad, satirlar: satirlar.filter(Boolean), dugmeler};
+            dug(SITE_IKON[a.izle.site] ?? 'media-playback-start-symbolic', a.izle.site, () => this._git(a.izle.url));
+        dug('renkli:mal', 'MyAnimeList', () => this._git(a.url));
+        if (a.imdb_url)
+            dug('send-to-symbolic', 'IMDb', () => this._git(a.imdb_url));
+        sag.add_child(dugmeler);
+        govde.add_child(sag);
+        this._detay.add_child(govde);
+
+        this._liste.hide();
+        this._detay.show();
+        if (St.Settings.get().enable_animations) {
+            this._detay.opacity = 0;
+            this._detay.translation_x = 28;
+            this._detay.ease({opacity: 255, translation_x: 0, duration: 200, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        }
+    }
+
+    _detayKapat() {
+        if (!this._detay.visible)
+            return;
+        this._detay.hide();
+        this._detay.destroy_all_children();
+        this._liste.show();
+        if (St.Settings.get().enable_animations) {
+            this._liste.opacity = 0;
+            this._liste.translation_x = -28;
+            this._liste.ease({opacity: 255, translation_x: 0, duration: 200, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        }
     }
 
     // ---------- takip dışı seçim ----------

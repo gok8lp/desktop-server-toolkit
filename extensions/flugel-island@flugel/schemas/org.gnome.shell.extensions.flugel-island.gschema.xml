@@ -70,6 +70,10 @@
       <default>'bildirim'</default>
       <summary>Tam ekranda ada (çentik): gizli = sadece fareyle, bildirim = bildirim/ses gelince de, canli = canlı etkinlik varken de</summary>
     </key>
+    <key name="sunucu-sessiz" type="s">
+      <default>'{}'</default>
+      <summary>Susturulan sunucu bildirim kategorileri (JSON: kategori → bitiş zamanı, 0 = süresiz)</summary>
+    </key>
     <key name="pip-konum" type="s">
       <default>''</default>
       <summary>Resim içinde resim penceresinin son konumu ve boyutu (JSON; boş = sol alt köşe)</summary>

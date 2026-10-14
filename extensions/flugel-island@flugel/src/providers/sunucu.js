@@ -7,6 +7,7 @@ import {createActivity} from '../activity.js';
 import {oncelik} from './provider-base.js';
 import {KIRMIZI, SARI, SOLUK, calistir} from '../ortak.js';
 import {vmKomut} from '../sayfalar/vm.js';
+import {kategori, sessizMi} from '../sunucu-bildirim.js';
 import {_, f} from '../dil.js';
 
 export class SunucuProvider {
@@ -44,7 +45,11 @@ export class SunucuProvider {
             this._manager.remove(`${this.id}:uyari`);
             return;
         }
-        const sorunlar = s.sorunlar || [];
+        const sorunlar = (s.sorunlar || []).filter(x => !sessizMi(this._settings, kategori(x).k));
+        if (!sorunlar.length) {
+            this._manager.remove(`${this.id}:uyari`);
+            return;
+        }
         // imzada sayılar yok: "Yük yüksek: 5dk ort 16" ile "… ort 37" aynı sorun sayılır
         const imza = `${s.durum}|${sorunlar.map(x => x.replace(/[\d.,]+/g, '#')).sort().join('|')}`;
         if (this._settings.get_string('sunucu-goruldu') === imza) {

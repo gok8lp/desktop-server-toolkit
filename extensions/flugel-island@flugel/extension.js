@@ -33,6 +33,7 @@ import {VmSayfa} from './src/sayfalar/vm.js';
 import {KriptoSayfa} from './src/sayfalar/kripto.js';
 import {BasketSayfa} from './src/sayfalar/basket.js';
 import {AnimeSayfa} from './src/sayfalar/anime.js';
+import {BildirimlerSayfa} from './src/sayfalar/bildirimler.js';
 import {Tepsi} from './src/tepsi.js';
 import {UstCubuk} from './src/ust-cubuk.js';
 
@@ -122,6 +123,7 @@ export default class FlugelIsland extends Extension {
             {id: 'kripto', ad: _('Kripto ve döviz'), aciklama: _('Fiyatlar ve grafikler'), ikon: 'coin-btc', sayfa: new KriptoSayfa(o)},
             {id: 'basket', ad: _('Maçlar'), aciklama: _('Hakemlik görevlerim ve maçlar'), ikon: 'basket', sayfa: new BasketSayfa(o)},
             {id: 'anime', ad: _('Anime ve manga'), aciklama: _('Takip ettiklerim'), ikon: 'anime', sayfa: new AnimeSayfa(o)},
+            {id: 'bildirim', ad: _('Bildirimler'), aciklama: _('Sunucudan gelen son 24 saat; kategori susturma'), ikon: 'preferences-system-notifications-symbolic', sayfa: new BildirimlerSayfa(o)},
         ];
         this._kart = new Kart({ayarlar: this._ayar, sayfalar, ayarlariAc: () => this.openPreferences(),
             tepsi: new Tepsi(), ustCubuk: o.ustCubuk});

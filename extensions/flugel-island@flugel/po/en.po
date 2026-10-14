@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 22:33+0300\n"
+"POT-Creation-Date: 2026-10-14 22:41+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -58,6 +58,12 @@ msgstr "Anime & manga"
 
 msgid "Takip ettiklerim"
 msgstr "What I follow"
+
+msgid "Bildirimler"
+msgstr "Notifications"
+
+msgid "Sunucudan gelen son 24 saat; kategori susturma"
+msgstr ""
 
 msgid "Ekran kaydı, mikrofon, kamera"
 msgstr "Screen recording, microphone, camera"
@@ -884,6 +890,32 @@ msgstr "Could not add to desktop"
 msgid "Masaüstüne ekle"
 msgstr "Add to desktop"
 
+#, fuzzy
+msgid "Yedek"
+msgstr "Back up"
+
+msgid "Servisler"
+msgstr ""
+
+msgid "Güvenlik"
+msgstr ""
+
+msgid "Disk"
+msgstr "Disk"
+
+msgid "Ağ / VPN"
+msgstr ""
+
+msgid "Anime"
+msgstr "Anime"
+
+#, fuzzy
+msgid "Günlük özet"
+msgstr "Daily"
+
+msgid "Diğer"
+msgstr ""
+
 msgid "Dosyalar"
 msgstr "Files"
 
@@ -1008,9 +1040,6 @@ msgstr "paused"
 msgid "%d yeni"
 msgstr "%d new"
 
-msgid "Bildirimler"
-msgstr "Notifications"
-
 msgid "Klavye ışığı"
 msgstr "Keyboard light"
 
@@ -1085,9 +1114,6 @@ msgstr "Feed"
 msgid "Haberi aç"
 msgstr "Open the article"
 
-msgid "Anime"
-msgstr "Anime"
-
 msgid "Manga"
 msgstr "Manga"
 
@@ -1133,16 +1159,11 @@ msgid "Bu sezon ve MAL listemdeki diğerleri; eklenenler sağ tıkla kaldırıl�
 msgstr ""
 "This season and the rest of my MAL list; right-click added ones to remove"
 
-#, javascript-format
-msgid "Son bölüm: <b>%s</b>%s"
-msgstr "Latest episode: <b>%s</b>%s"
+msgid "IMDb (son bölüm)"
+msgstr ""
 
-#, javascript-format
-msgid "  ·  IMDb <b>%s</b>"
-msgstr "  ·  IMDb <b>%s</b>"
-
-msgid "  ·  IMDb puanı yok"
-msgstr "  ·  no IMDb rating"
+msgid "Sıra"
+msgstr ""
 
 #, javascript-format
 msgid "Sonraki: <b>%s. bölüm</b> · %s sonra"
@@ -1162,10 +1183,6 @@ msgstr "Chapter %s%s · %s"
 #, javascript-format
 msgid "AniList <b>%s</b>"
 msgstr "AniList <b>%s</b>"
-
-#, javascript-format
-msgid "MAL <b>%s</b>"
-msgstr "MAL <b>%s</b>"
 
 msgid "Eklendi (sağ tıkla kaldır)"
 msgstr "Added (right-click to remove)"
@@ -1231,6 +1248,42 @@ msgstr "Final"
 
 msgid " · tıkla: ESPN maç sayfası"
 msgstr " · click: ESPN match page"
+
+msgid "Tümü"
+msgstr ""
+
+msgid "Uyarılar"
+msgstr ""
+
+msgid "Bilgi"
+msgstr ""
+
+msgid "Susturma"
+msgstr ""
+
+msgid "Sunucuya ulaşılamıyor"
+msgstr "Server unreachable"
+
+msgid "Son 24 saatte bildirim yok"
+msgstr ""
+
+#, javascript-format
+msgid "%s: susturmayı kaldır"
+msgstr ""
+
+#, javascript-format
+msgid "%s: 8 saat sustur"
+msgstr ""
+
+#, fuzzy
+msgid "1 sa"
+msgstr "1 hour"
+
+msgid "8 sa"
+msgstr ""
+
+msgid "Susturulan kategoriler kapsülde uyarı olarak gösterilmez"
+msgstr ""
 
 msgid "Zorla kapatılıyor"
 msgstr "Force quitting"
@@ -1517,9 +1570,6 @@ msgstr "Monitor"
 msgid "Sistem izleyici"
 msgstr "System monitor"
 
-msgid "Disk"
-msgstr "Disk"
-
 msgid "Disk kullanımı"
 msgstr "Disk usage"
 
@@ -1739,9 +1789,6 @@ msgstr "no network"
 msgid "açık"
 msgstr "on"
 
-msgid "Sunucuya ulaşılamıyor"
-msgstr "Server unreachable"
-
 #, javascript-format
 msgid "Durum <b>%s</b>%s%s"
 msgstr "Status <b>%s</b>%s%s"
@@ -1832,6 +1879,21 @@ msgstr " · GPU passthrough"
 #, javascript-format
 msgid "IP %s · %s açık"
 msgstr "IP %s · up %s"
+
+#, javascript-format
+#~ msgid "Son bölüm: <b>%s</b>%s"
+#~ msgstr "Latest episode: <b>%s</b>%s"
+
+#, javascript-format
+#~ msgid "  ·  IMDb <b>%s</b>"
+#~ msgstr "  ·  IMDb <b>%s</b>"
+
+#~ msgid "  ·  IMDb puanı yok"
+#~ msgstr "  ·  no IMDb rating"
+
+#, javascript-format
+#~ msgid "MAL <b>%s</b>"
+#~ msgstr "MAL <b>%s</b>"
 
 #~ msgid "Sabitlenmiş"
 #~ msgstr "Pinned"

@@ -246,7 +246,8 @@ def main():
 
     # --- kısa Türkçe açıklamalar (takip edilenler) ---
     onceki = {e["id"]: e.get("aciklama") for e in eski.get("anime", []) + eski.get("manga", []) if e.get("aciklama")}
-    tr = turkce_aciklamalar([(x["id"], x.get("_ing")) for x in anime + manga], onceki)
+    # Türkçe yapay zekâ çevirisi kapatıldı (kullanıcı isteği: kalitesiz); PC MAL'ın İngilizce özetini kullanıyor
+    tr = {}
     for x in anime + manga:
         # Türkçe yoksa (Ollama kapalı / PC yedeği) kısa İngilizce metin kalır
         x["aciklama_en"] = x.pop("_ing", None) or None
