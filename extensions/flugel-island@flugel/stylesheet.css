@@ -1,0 +1,154 @@
+/* FLUGEL Island — siyah-beyaz FLUGEL kimliği. Renk sadece uyarı/kayıt durumlarında (kod içinden) gelir.
+   Arka plan rengi ve köşe yarıçapı animasyon sırasında koddan yazılır (.flugel-island-zemin). */
+
+/* ---------- ada ve balon ---------- */
+.flugel-island-zemin {
+  background-color: rgba(0, 0, 0, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.flugel-island { color: #f4f4f6; }
+
+.flugel-bos { spacing: 8px; padding: 0 14px; }
+.flugel-saat {
+  font-weight: 700;
+  font-size: 10.5pt;
+  font-feature-settings: "tnum";
+  color: #ffffff;
+}
+.flugel-mini-kutu { spacing: 3px; }
+.flugel-mini { color: #e8e8ec; }
+.flugel-mini-metin { font-size: 8.5pt; font-weight: 600; color: #d6d6dc; font-feature-settings: "tnum"; }
+
+/* ---------- etkinlik görünümleri ---------- */
+.flugel-etkinlik { spacing: 8px; padding: 0 14px; }
+.flugel-etkinlik-balon { padding: 0 10px; spacing: 5px; }
+.flugel-etkinlik-metin { spacing: 6px; }
+.flugel-etkinlik-baslik { font-weight: 700; font-size: 10pt; color: #ffffff; }
+.flugel-etkinlik-alt { font-size: 9pt; color: #9a9aa5; }
+.flugel-etkinlik-kisa { font-size: 9pt; font-weight: 700; color: #dcdce2; font-feature-settings: "tnum"; }
+.flugel-etkinlik-simge { color: #ffffff; }
+.flugel-yanip { color: #f07b7b; }
+.flugel-kapak { border-radius: 5px; }
+
+.flugel-ilerleme {
+  height: 4px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+.flugel-ilerleme-dolgu {
+  height: 4px;
+  border-radius: 2px;
+  background-color: #ffffff;
+}
+
+/* kartta canlı etkinlik satırı */
+.flugel-kart-canli { spacing: 6px; }
+.flugel-etkinlik-satir {
+  padding: 8px 10px;
+  spacing: 10px;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+.flugel-etkinlik-satir .flugel-etkinlik-metin { spacing: 1px; }
+.flugel-etkinlik-satir .flugel-etkinlik-baslik { font-size: 10.5pt; }
+.flugel-etkinlik-satir .flugel-kapak { border-radius: 8px; }
+.flugel-etkinlik-eylemler { spacing: 2px; }
+
+/* ---------- kart ---------- */
+.flugel-kart {
+  padding: 12px 14px 12px 14px;
+  spacing: 10px;
+  color: #f2f2f4;
+}
+.flugel-kart-ust { spacing: 10px; }
+.flugel-kart-saat { font-size: 20pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }
+.flugel-kart-tarih { font-size: 9.5pt; color: #9a9aa5; }
+.flugel-zaman-dugme { padding: 2px 8px; border-radius: 12px; }
+.flugel-zaman-dugme:hover { background-color: rgba(255, 255, 255, 0.08); }
+
+.flugel-dugme {
+  padding: 7px;
+  border-radius: 999px;
+  color: #ececf0;
+}
+.flugel-dugme:hover { background-color: rgba(255, 255, 255, 0.12); color: #ffffff; }
+.flugel-dugme:active, .flugel-dugme:checked { background-color: rgba(255, 255, 255, 0.24); }
+.flugel-dugme:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5); }
+.flugel-dugme-kucuk { padding: 5px; }
+.flugel-dugme-soluk { color: #8a8a94; }
+
+/* sekmeler */
+.flugel-sekmeler {
+  spacing: 2px;
+  padding: 3px;
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.flugel-sekme {
+  padding: 6px 2px 5px 2px;
+  border-radius: 11px;
+  color: #b4b4bc;
+}
+.flugel-sekme:hover { background-color: rgba(255, 255, 255, 0.09); color: #ffffff; }
+.flugel-sekme:checked { background-color: #ffffff; color: #000000; }
+.flugel-sekme-etiket { font-size: 8.5pt; margin-top: 2px; }
+.flugel-rozet {
+  font-size: 7pt;
+  font-weight: 800;
+  padding: 0 4px;
+  border-radius: 999px;
+  color: #000000;
+  background-color: #ffffff;
+}
+.flugel-sekme:checked .flugel-rozet { color: #ffffff; background-color: #000000; }
+
+/* sayfalar: GNOME menü öğeleri, ada içinde açık tema seçilse bile koyu kalsın */
+.flugel-sayfa-kap { }
+.flugel-sayfa { spacing: 0; }
+.flugel-kart .popup-menu-item { color: #f2f2f4; border-radius: 12px; padding: 7px 10px; }
+.flugel-kart .popup-menu-item:hover,
+.flugel-kart .popup-menu-item:selected,
+.flugel-kart .popup-menu-item:focus { background-color: rgba(255, 255, 255, 0.10); color: #ffffff; }
+.flugel-kart .popup-menu-item:active { background-color: rgba(255, 255, 255, 0.18); }
+.flugel-kart .popup-menu-item:checked { background-color: rgba(255, 255, 255, 0.10); }
+.flugel-kart .popup-inactive-menu-item { color: #e6e6ea; }
+.flugel-kart .popup-sub-menu { background-color: rgba(255, 255, 255, 0.05); }
+.flugel-kart .popup-sub-menu .popup-menu-item:hover { background-color: rgba(255, 255, 255, 0.10); }
+.flugel-kart .popup-separator-menu-item .popup-separator-menu-item-separator { background-color: rgba(255, 255, 255, 0.10); }
+.flugel-kart .popup-separator-menu-item { color: #8a8a94; font-size: 9pt; font-weight: 700; }
+
+/* hızlı başlatma */
+.flugel-baslat-satiri { padding: 2px 0 6px 0; }
+.flugel-baslat { spacing: 6px; }
+.flugel-baslat-dugme {
+  padding: 10px 4px 8px 4px;
+  border-radius: 16px;
+  min-width: 70px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.flugel-baslat-dugme:hover { background-color: rgba(255, 255, 255, 0.14); }
+.flugel-dugme-etiket { font-size: 8.5pt; margin-top: 4px; color: #d6d6dc; }
+
+/* Re:Zero ekibi */
+.flugel-ekip-kapsul { margin-right: 2px; }
+.flugel-ekip-metin { spacing: 4px; padding-left: 10px; }
+.flugel-ekip-ad { font-size: 13pt; }
+.flugel-ekip-soz { color: #d0d0d6; }
+
+/* tepsi */
+.flugel-tepsi { spacing: 4px; padding: 2px 0; }
+.flugel-tepsi .panel-button { border-radius: 12px; padding: 4px 8px; }
+.flugel-tepsi .panel-button:hover { background-color: rgba(255, 255, 255, 0.12); }
+
+/* ipucu (üzerine gelince açıklama) */
+.flugel-ipucu {
+  background-color: rgba(18, 18, 22, 0.96);
+  color: #eeeef2;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 9.5pt;
+}
+
+.flugel-ikon { color: #f2f2f4; }

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Puck (kucuk kedi ruh) - ozgun cizim -->
+  <path d="M6 12 L5 3 L12 8 Z" fill="#AEB4BF"/><path d="M26 12 L27 3 L20 8 Z" fill="#AEB4BF"/>
+  <path d="M7 10 L7 5 L11 8 Z" fill="#F7B6C8"/><path d="M25 10 L25 5 L21 8 Z" fill="#F7B6C8"/>
+  <ellipse cx="16" cy="17" rx="11" ry="9.5" fill="#C3C8D1"/>
+  <ellipse cx="11.5" cy="16" rx="2" ry="2.4" fill="#2B2F3A"/><ellipse cx="20.5" cy="16" rx="2" ry="2.4" fill="#2B2F3A"/>
+  <circle cx="12.2" cy="15.2" r="0.7" fill="#fff"/><circle cx="21.2" cy="15.2" r="0.7" fill="#fff"/>
+  <path d="M15 19.5 L17 19.5 L16 20.7 Z" fill="#F28DA8"/>
+  <path d="M16 20.7 Q14.5 22.3 13.2 21.4 M16 20.7 Q17.5 22.3 18.8 21.4" stroke="#7C8190" stroke-width="0.8" fill="none"/>
+  <ellipse cx="9" cy="20" rx="2" ry="1.1" fill="#F7B6C8" opacity="0.6"/><ellipse cx="23" cy="20" rx="2" ry="1.1" fill="#F7B6C8" opacity="0.6"/>
+</svg>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="flugel-island">
+  <enum id="org.gnome.shell.extensions.flugel-island.Tetik">
+    <value nick="hover" value="0"/>
+    <value nick="click" value="1"/>
+  </enum>
+
+  <schema id="org.gnome.shell.extensions.flugel-island" path="/org/gnome/shell/extensions/flugel-island/">
+    <!-- Davranış -->
+    <key name="tetik" enum="org.gnome.shell.extensions.flugel-island.Tetik">
+      <default>'hover'</default>
+      <summary>Kartı açma biçimi</summary>
+      <description>hover: üzerine gelince açılır, tıklayınca sabitlenir. click: sadece tıklayınca açılır.</description>
+    </key>
+    <key name="hover-gecikme" type="i">
+      <range min="0" max="2000"/>
+      <default>280</default>
+      <summary>Üzerine gelince açılma gecikmesi (ms)</summary>
+    </key>
+    <key name="monitor" type="i">
+      <default>-1</default>
+      <summary>Island'ın gösterileceği ekran (-1 = birincil ekran)</summary>
+    </key>
+    <key name="son-sekme" type="s">
+      <default>'hizli'</default>
+      <summary>Kartta en son açılan sekme</summary>
+    </key>
+
+    <!-- Görünüm -->
+    <key name="genislik-carpani" type="d">
+      <range min="0.6" max="2.0"/>
+      <default>1.0</default>
+      <summary>Kapsül genişliği çarpanı</summary>
+    </key>
+    <key name="kart-genislik" type="i">
+      <range min="460" max="900"/>
+      <default>640</default>
+      <summary>Genişletilmiş kartın genişliği (mantıksal piksel)</summary>
+    </key>
+    <key name="saydamlik" type="i">
+      <range min="40" max="100"/>
+      <default>94</default>
+      <summary>Island arka planının opaklığı (%)</summary>
+    </key>
+    <key name="animasyon-hizi" type="d">
+      <range min="0.5" max="2.0"/>
+      <default>1.0</default>
+      <summary>Animasyon hızı çarpanı (sistemde "animasyonları azalt" açıksa animasyon hiç yapılmaz)</summary>
+    </key>
+    <key name="ekip-kapsulde" type="b">
+      <default>true</default>
+      <summary>Boştaki kapsülde Re:Zero karakterini göster</summary>
+    </key>
+    <key name="ekip-otomatik" type="b">
+      <default>true</default>
+      <summary>Re:Zero karakterini otomatik değiştir</summary>
+    </key>
+
+    <!-- Canlı etkinlikler -->
+    <key name="etkin-saglayicilar" type="as">
+      <default>['privacy', 'panik', 'sunucu', 'gpu-vm', 'media', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'akis']</default>
+      <summary>Açık canlı etkinlik kaynakları</summary>
+    </key>
+    <key name="oncelik-sirasi" type="as">
+      <default>['privacy', 'panik', 'sunucu', 'gpu-vm', 'media', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'notification', 'akis', 'keyboard']</default>
+      <summary>Canlı etkinliklerin öncelik sırası (ilk = en önemli)</summary>
+    </key>
+    <key name="transient-duration-ms" type="i">
+      <range min="500" max="10000"/>
+      <default>1800</default>
+      <summary>Kısa süreli bildirimlerin (ses, şarj, cihaz) ekranda kalma süresi (ms)</summary>
+    </key>
+    <key name="osd-yerine" type="b">
+      <default>false</default>
+      <summary>Ses/parlaklık için GNOME'un ekran ortasındaki göstergesi yerine Island'ı kullan</summary>
+    </key>
+    <key name="kripto-esik" type="d">
+      <range min="1.0" max="50.0"/>
+      <default>5.0</default>
+      <summary>Kripto büyük değişim eşiği (24 saatlik %)</summary>
+    </key>
+    <key name="basket-yakin-dk" type="i">
+      <range min="15" max="720"/>
+      <default>120</default>
+      <summary>Maç kaç dakika kala "yaklaşıyor" sayılır</summary>
+    </key>
+    <key name="anime-yakin-dk" type="i">
+      <range min="5" max="720"/>
+      <default>60</default>
+      <summary>Bölüm kaç dakika kala gösterilir</summary>
+    </key>
+    <key name="power-low-threshold" type="i">
+      <range min="5" max="50"/>
+      <default>15</default>
+      <summary>Düşük pil uyarısı eşiği (%)</summary>
+    </key>
+    <key name="cihaz-dusuk-esik" type="i">
+      <range min="5" max="50"/>
+      <default>20</default>
+      <summary>Klavye/fare pili düşük eşiği (%)</summary>
+    </key>
+    <key name="notification-excluded-apps" type="as">
+      <default>[]</default>
+      <summary>Bildirim afişinde gösterilmeyecek uygulamalar (.desktop kimliği)</summary>
+    </key>
+    <key name="notification-coalesce-threshold" type="i">
+      <range min="1" max="20"/>
+      <default>3</default>
+      <summary>Bu sayıdan çok bildirim birikince tek satırda say</summary>
+    </key>
+    <key name="keyboard-flash-caps-lock" type="b">
+      <default>true</default>
+      <summary>Caps Lock değişince göster</summary>
+    </key>
+    <key name="keyboard-flash-layout-switch" type="b">
+      <default>true</default>
+      <summary>Klavye düzeni değişince göster</summary>
+    </key>
+    <key name="sunucu-goruldu" type="s">
+      <default>''</default>
+      <summary>Kapatılan son sunucu uyarısının imzası (aynı sorun tekrar gösterilmez)</summary>
+    </key>
+
+    <!-- Yenileme aralıkları (saniye) -->
+    <key name="yenileme-sunucu" type="i">
+      <range min="10" max="600"/>
+      <default>20</default>
+      <summary>Sunucu durumu yenileme aralığı (sn)</summary>
+    </key>
+    <key name="yenileme-kripto" type="i">
+      <range min="15" max="600"/>
+      <default>30</default>
+      <summary>Kripto/döviz yenileme aralığı (sn)</summary>
+    </key>
+    <key name="yenileme-pc" type="i">
+      <range min="5" max="600"/>
+      <default>15</default>
+      <summary>Bu PC durumu yenileme aralığı (sn)</summary>
+    </key>
+    <key name="yenileme-anime" type="i">
+      <range min="300" max="7200"/>
+      <default>900</default>
+      <summary>Anime listesi yenileme aralığı (sn)</summary>
+    </key>
+    <key name="pil-carpani" type="i">
+      <range min="1" max="10"/>
+      <default>4</default>
+      <summary>Pildeyken / Pil Tasarrufu açıkken yenileme aralıkları kaç kat uzasın</summary>
+    </key>
+  </schema>
+</schemalist>

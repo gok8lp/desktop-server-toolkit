@@ -1,0 +1,11 @@
+{
+  "uuid": "flugel-island@flugel",
+  "name": "FLUGEL Island",
+  "description": "Üst çubuğun ortasında yaşayan Dynamic Island: canlı etkinlikler (medya, gizlilik, sunucu, maç, anime, VM…) ve FLUGEL panelinin tüm araçları tek bir adada. hacksynth/gnome-dynamic-island ve HIMURAw/gnome-dynamic-island'dan çatallanmıştır (bkz. CREDITS.md).",
+  "shell-version": ["50"],
+  "session-modes": ["user"],
+  "settings-schema": "org.gnome.shell.extensions.flugel-island",
+  "gettext-domain": "flugel-island",
+  "url": "https://github.com/gok8lp/flugel",
+  "version": 1
+}

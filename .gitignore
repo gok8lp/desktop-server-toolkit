@@ -11,3 +11,6 @@ secrets*
 __pycache__/
 *.pyc
 *.onceki*
+node_modules/
+*.zip
+extensions/*/schemas/gschemas.compiled

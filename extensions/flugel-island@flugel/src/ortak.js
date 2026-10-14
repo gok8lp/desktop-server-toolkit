@@ -1,0 +1,219 @@
+// FLUGEL Island — ortak yardımcılar.
+// Çoğu FLUGEL v1 panelinden (flugel-panel@flugel) taşındı: simgeler, komut çalıştırma, menü satırları, ipuçları.
+import St from 'gi://St';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import Clutter from 'gi://Clutter';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+
+export const H = GLib.get_home_dir();
+export const VERI = `${H}/.local/bin/ust-panel-veri`;
+export const ONBELLEK = `${H}/.cache/sistem-bakim`;
+export const SARI = '#E8C66B', KIRMIZI = '#F07B7B', SOLUK = '#9A9AA5', YESIL = '#8FD6A0';
+
+let EXT = '';
+export function eklentiYolu(yol) {
+    EXT = yol;
+}
+export const dosya = alt => `${EXT}/${alt}`;
+
+// ---------- simgeler (kural: kendi simgelerimiz ikon/<ad>-mono.svg, gerisi tema simgesi) ----------
+const OZEL_IKONLAR = new Set(['anime', 'basket', 'manga', 'kurukafa', 'panik', 'eclipse',
+    'coin-btc', 'coin-eth', 'coin-sol', 'coin-bnb', 'coin-xrp', 'coin-doge', 'coin-avax', 'coin-ada']);
+const ikonOnbellek = new Map();
+export function ikon(ad) {
+    if (ad instanceof Gio.Icon)
+        return ad;
+    if (!ikonOnbellek.has(ad)) {
+        ikonOnbellek.set(ad, OZEL_IKONLAR.has(ad)
+            ? Gio.FileIcon.new(Gio.File.new_for_path(dosya(`ikon/${ad}-mono.svg`)))
+            : Gio.ThemedIcon.new(ad));
+    }
+    return ikonOnbellek.get(ad);
+}
+export function ikonOnbellegiTemizle() {
+    ikonOnbellek.clear();
+}
+export function stIkon(ad, boyut = 16, stil = 'flugel-ikon') {
+    return new St.Icon({gicon: ikon(ad), icon_size: boyut, style_class: stil, y_align: Clutter.ActorAlign.CENTER});
+}
+
+// ---------- komutlar (hepsi eşzamansız; kabuk asla beklemez) ----------
+export function komutCiktisi(argv, iptal = null) {
+    return new Promise(coz => {
+        let p;
+        try {
+            p = Gio.Subprocess.new(argv, Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE);
+        } catch (e) {
+            coz(null);
+            return;
+        }
+        p.communicate_utf8_async(null, iptal, (proc, res) => {
+            try {
+                coz(proc.communicate_utf8_finish(res)[1]);
+            } catch (e) {
+                coz(null);
+            }
+        });
+    });
+}
+
+export async function jsonAl(argv, iptal = null) {
+    const cikti = await komutCiktisi(argv, iptal);
+    if (cikti === null)
+        return {hata: 'komut çalışmadı'};
+    try {
+        return JSON.parse(cikti);
+    } catch (e) {
+        return {hata: String(e).slice(0, 60)};
+    }
+}
+
+export function ekranGoruntusu() {
+    try {
+        Main.screenshotUI.open().catch(() => {});
+    } catch (e) {
+        Main.notify('Ekran görüntüsü', 'Açılamadı');
+    }
+}
+
+export function calistir(komut) {
+    if (komut === '__ekran__')
+        return ekranGoruntusu();
+    try {
+        GLib.spawn_command_line_async(komut);
+    } catch (e) {
+        Main.notify('FLUGEL Island', `Çalıştırılamadı: ${komut}`);
+    }
+    return undefined;
+}
+
+export function bash(betik) {
+    try {
+        Gio.Subprocess.new(['bash', '-c', betik], Gio.SubprocessFlags.NONE);
+    } catch (e) {
+        Main.notify('FLUGEL Island', String(e));
+    }
+}
+
+// ---------- metin biçimleri ----------
+export const kac = t => GLib.markup_escape_text(String(t ?? ''), -1);
+export function para(n, ondalik) {
+    if (n === null || n === undefined)
+        return '-';
+    if (ondalik === undefined)
+        ondalik = n >= 100 ? 0 : (n >= 1 ? 2 : 4);
+    return n.toLocaleString('en-US', {minimumFractionDigits: ondalik, maximumFractionDigits: ondalik});
+}
+// Normalde renk yok (siyah-beyaz); sadece sorun varsa uyarı rengi
+export function renkSicak(t) {
+    t = parseInt(t);
+    return isNaN(t) ? null : (t >= 85 ? KIRMIZI : (t >= 72 ? SARI : null));
+}
+export const renkYuzde = y => (y >= 90 ? KIRMIZI : (y >= 75 ? SARI : null));
+export const renkli = (metin, renk) => (renk ? `<span foreground="${renk}">${metin}</span>` : metin);
+export const soluk = m => `<span foreground="${SOLUK}">${m}</span>`;
+export const degisim = d => ((d === null || d === undefined) ? '' : `${d >= 0 ? '▲' : '▼'}${Math.abs(d).toFixed(1)}%`);
+
+const AYLAR = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+export const kisaTarih = t => {
+    const p = (t || '').split('-');
+    return p.length === 3 ? `${parseInt(p[2])} ${AYLAR[parseInt(p[1]) - 1]}` : t;
+};
+export const bugun = () => GLib.DateTime.new_now_local().format('%Y-%m-%d');
+
+export function geriSayim(ts) {
+    const fark = ts - Math.floor(Date.now() / 1000);
+    if (fark <= 0)
+        return 'yayında';
+    const g = Math.floor(fark / 86400), sa = Math.floor((fark % 86400) / 3600), dk = Math.floor((fark % 3600) / 60);
+    return g > 0 ? `${g}g ${sa}sa` : (sa > 0 ? `${sa}sa ${dk}dk` : `${Math.max(dk, 1)}dk`);
+}
+
+// ---------- menü satırları (Island kartındaki sayfalar PopupMenuSection kullanır) ----------
+export function bilgiSatiri(menu, metin, ikonAdi) {
+    const item = new PopupMenu.PopupBaseMenuItem({reactive: false, can_focus: false});
+    if (ikonAdi)
+        item.add_child(stIkon(ikonAdi, 16, 'popup-menu-icon'));
+    const l = new St.Label({y_align: Clutter.ActorAlign.CENTER, x_expand: true});
+    l.clutter_text.line_wrap = true;
+    l.clutter_text.set_markup(metin);
+    item.add_child(l);
+    item.label = l;
+    menu.addMenuItem(item);
+    return item;
+}
+export function menuOgesi(menu, ad, komut, ikonAdi) {
+    const it = ikonAdi ? new PopupMenu.PopupImageMenuItem(ad, ikon(ikonAdi)) : new PopupMenu.PopupMenuItem(ad);
+    it.connect('activate', () => (typeof komut === 'function' ? komut() : calistir(komut)));
+    menu.addMenuItem(it);
+    return it;
+}
+export function altMenu(menu, baslik, ikonAdi) {
+    const alt = new PopupMenu.PopupSubMenuMenuItem(baslik, !!ikonAdi);
+    if (ikonAdi)
+        alt.icon.gicon = ikon(ikonAdi);
+    menu.addMenuItem(alt);
+    return alt;
+}
+export function baslik(menu, metin) {
+    menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem(metin));
+}
+
+// ---------- üzerine gelince açıklama (ipucu) ----------
+export function ipucuEkle(aktor, metin) {
+    let etiket = null, zaman = 0;
+    const gizle = () => {
+        if (zaman)
+            GLib.source_remove(zaman);
+        zaman = 0;
+        etiket?.destroy();
+        etiket = null;
+    };
+    aktor.connect('notify::hover', () => {
+        if (!aktor.hover)
+            return gizle();
+        if (zaman || etiket)
+            return undefined;
+        zaman = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 450, () => {
+            zaman = 0;
+            const yazi = typeof metin === 'function' ? metin() : metin;
+            if (!aktor.hover || aktor.menu?.isOpen || !yazi || !aktor.get_stage())
+                return GLib.SOURCE_REMOVE;
+            etiket = new St.Label({text: yazi, style_class: 'flugel-ipucu'});
+            Main.layoutManager.addTopChrome(etiket);
+            const [x, y] = aktor.get_transformed_position();
+            const [w, h] = aktor.get_transformed_size();
+            const m = Main.layoutManager.findMonitorForActor(aktor) ?? Main.layoutManager.primaryMonitor;
+            const lx = Math.max(m.x + 4, Math.min(Math.round(x + w / 2 - etiket.width / 2), m.x + m.width - etiket.width - 4));
+            etiket.set_position(lx, Math.round(y + h + 6));
+            etiket.opacity = 0;
+            etiket.ease({opacity: 255, duration: 140, mode: Clutter.AnimationMode.EASE_OUT_QUAD});
+            return GLib.SOURCE_REMOVE;
+        });
+        return undefined;
+    });
+    aktor.connect('button-press-event', () => {
+        gizle();
+        return Clutter.EVENT_PROPAGATE;
+    });
+    aktor.connect('destroy', gizle);
+}
+
+// Simge düğmesi (kart başlığı, hızlı başlatma, etkinlik eylemleri)
+export function dugme(ikonAdi, ipucu, eylem, {boyut = 16, stil = 'flugel-dugme', etiket = null} = {}) {
+    const d = new St.Button({style_class: stil, can_focus: true, accessible_name: ipucu, y_align: Clutter.ActorAlign.CENTER});
+    if (etiket) {
+        const kutu = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_align: Clutter.ActorAlign.CENTER});
+        kutu.add_child(new St.Icon({gicon: ikon(ikonAdi), icon_size: boyut, x_align: Clutter.ActorAlign.CENTER}));
+        kutu.add_child(new St.Label({text: etiket, style_class: 'flugel-dugme-etiket', x_align: Clutter.ActorAlign.CENTER}));
+        d.set_child(kutu);
+    } else {
+        d.set_child(new St.Icon({gicon: ikon(ikonAdi), icon_size: boyut}));
+    }
+    d.connect('clicked', () => eylem());
+    if (ipucu)
+        ipucuEkle(d, ipucu);
+    return d;
+}
