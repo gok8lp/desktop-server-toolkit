@@ -338,8 +338,9 @@ GUN_AD = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", 
 AY_AD = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
 
 
-def maclar_yerel():
+def maclar_yerel(lig_listesi=None):
     """Sunucu kapaliysa ayni veriyi bu PC'de ESPN'den hesaplar (sunucudaki akis.py island_maclar ile ayni bicim)."""
+    lig_listesi = lig_listesi or MAC_LIGLER
     import datetime as dt
     from concurrent.futures import ThreadPoolExecutor
     bugun = dt.date.today()
@@ -353,7 +354,7 @@ def maclar_yerel():
         except Exception:
             return []
     tablo, gorulen = {g: {} for g in gunler}, set()
-    isler = [(l, y, g) for l, y in MAC_LIGLER for g0 in gunler for g in (g0 - dt.timedelta(days=1), g0)]
+    isler = [(l, y, g) for l, y in lig_listesi for g0 in gunler for g in (g0 - dt.timedelta(days=1), g0)]
     with ThreadPoolExecutor(8) as h:
         for sonuc in h.map(getir, sorted(set(isler))):
             for lig, e in sonuc:
@@ -372,7 +373,7 @@ def maclar_yerel():
                 tablo[g].setdefault(lig, []).append({
                     "ev": takim(t["home"]), "dep": takim(t["away"]), "ts": ts, "durum": st["state"],
                     "detay": st.get("shortDetail"), "link": next((l["href"] for l in e.get("links", []) if "summary" in l.get("rel", [])), None)})
-    sira = [l for l, _ in MAC_LIGLER]
+    sira = [l for l, _ in lig_listesi]
 
     def ligler(g, sadece_biten=False):
         out = []
@@ -395,11 +396,60 @@ def maclar_yerel():
             "canli": any(m["durum"] == "in" for g in gunler for l in tablo[g].values() for m in l), "zaman": int(time.time()), "yedek": True}
 
 
+# milli takim maclari (sunucu listesinde yok; bu PC'de ESPN'den, 5 dk onbellek)
+MILLI_LIGLER = [("Dünya Kupası", "soccer/fifa.world"), ("Dünya Kupası Elemeleri", "soccer/fifa.worldq.uefa"),
+                ("Uluslar Ligi", "soccer/uefa.nations"), ("Avrupa Şampiyonası Elemeleri", "soccer/uefa.euroq"),
+                ("Hazırlık maçları", "soccer/fifa.friendly")]
+# HLTV'deki gibi 0-5 yildiz: lig agirligi + buyuk takimlar + derbi (futbol/basketbol icin kendi olcumuz)
+LIG_YILDIZ = {"Şampiyonlar Ligi": 2, "Dünya Kupası": 3, "Avrupa Ligi": 1, "Süper Lig": 1, "Premier Lig": 1, "La Liga": 1,
+              "Serie A": 1, "Bundesliga": 1, "Ligue 1": 1, "NBA": 1, "Uluslar Ligi": 1, "Dünya Kupası Elemeleri": 1,
+              "Avrupa Şampiyonası Elemeleri": 1}
+BUYUKLER = ["galatasaray", "fenerbahce", "besiktas", "trabzonspor", "real madrid", "barcelona", "bayern", "man city",
+            "manchester city", "liverpool", "arsenal", "chelsea", "man united", "manchester united", "paris saint", "psg",
+            "internazionale", "inter milan", "ac milan", "juventus", "atletico", "dortmund", "napoli", "tottenham",
+            "lakers", "celtics", "warriors", "nuggets", "thunder", "knicks", "turkey", "turkiye", "spain", "france",
+            "england", "germany", "argentina", "brazil", "portugal", "italy", "netherlands"]
+DERBILER = [("galatasaray", "fenerbahce"), ("galatasaray", "besiktas"), ("fenerbahce", "besiktas"),
+            ("trabzonspor", "fenerbahce"), ("trabzonspor", "galatasaray"), ("trabzonspor", "besiktas"),
+            ("real madrid", "barcelona"), ("real madrid", "atletico"), ("barcelona", "espanyol"),
+            ("man united", "man city"), ("manchester united", "manchester city"), ("liverpool", "everton"),
+            ("liverpool", "man united"), ("liverpool", "manchester united"), ("arsenal", "tottenham"), ("chelsea", "arsenal"),
+            ("internazionale", "ac milan"), ("inter milan", "ac milan"), ("roma", "lazio"), ("juventus", "torino"),
+            ("juventus", "internazionale"), ("dortmund", "schalke"), ("bayern", "dortmund"), ("paris saint", "marseille"),
+            ("psg", "marseille"), ("celtic", "rangers"), ("boca", "river"), ("lakers", "clippers"), ("lakers", "celtics"),
+            ("knicks", "nets"), ("turkey", "greece"), ("england", "scotland"), ("argentina", "brazil")]
+
+
+def sade(ad):
+    import unicodedata
+    return unicodedata.normalize("NFKD", (ad or "").lower()).encode("ascii", "ignore").decode()
+
+
+def mac_isaretle(lig, m):
+    ev, dep = sade(m["ev"].get("ad")), sade(m["dep"].get("ad"))
+    var = lambda ad, k: k in ad
+    derbi = any((var(ev, a) and var(dep, b)) or (var(ev, b) and var(dep, a)) for a, b in DERBILER)
+    buyuk = sum(1 for ad in (ev, dep) if any(var(ad, b) for b in BUYUKLER))
+    milli = lig in dict(MILLI_LIGLER)
+    m["tur"] = "basketbol" if "NBA" in lig or "basket" in lig.lower() else ("milli" if milli else "futbol")
+    m["derbi"] = derbi
+    m["yildiz"] = max(0, min(5, LIG_YILDIZ.get(lig, 0) + buyuk + (2 if derbi else 0)))
+
+
 def maclar():
     try:
         d = island("/api/maclar?island=1")
     except Exception:
         d = maclar_yerel()
+    ek = cached("maclar-milli", 300, lambda: maclar_yerel(MILLI_LIGLER))
+    if "hata" not in ek:
+        for k in ("bugun", "yarin"):
+            d.setdefault(k, []).extend(ek.get(k, []))
+        gun = {g["tarih"]: g for g in d.get("gecmis", [])}
+        for g in ek.get("gecmis", []):
+            if g["tarih"] in gun:
+                gun[g["tarih"]]["ligler"].extend(g["ligler"])
+        d["canli"] = d.get("canli") or ek.get("canli")
     logolar = [t.get("logo") for bolum in (d.get("bugun", []), d.get("yarin", []), *[g["ligler"] for g in d.get("gecmis", [])])
                for lig in bolum for m in lig["maclar"] for t in (m["ev"], m["dep"])]
     yollar = resimleri_onbellekle(logolar, "logo", (48,))
@@ -408,6 +458,7 @@ def maclar():
             for m in lig["maclar"]:
                 for t in (m["ev"], m["dep"]):
                     t["logo_yol"] = (yollar.get(t.get("logo")) or {}).get(48)
+                mac_isaretle(lig["lig"], m)
     return d
 
 

@@ -441,3 +441,17 @@
 .flugel-kripto-istat-deger { font-size: 10.5pt; font-weight: 700; color: #ffffff; font-feature-settings: "tnum"; }
 .flugel-kripto-isaret { color: #e8c66b; }
 .flugel-arama:error { box-shadow: inset 0 0 0 1px #f07b7b; }
+
+/* maçlar: kategoriler, yıldızlar, favori, işlem çubuğu, CS2 raund vurgusu */
+.flugel-mac-kategoriler { spacing: 4px; }
+.flugel-cip-kucuk { padding: 3px 10px; font-size: 8.5pt; }
+.flugel-mac-yildiz { font-size: 8.5pt; width: 62px; }
+.flugel-mac-favori { background-color: rgba(232, 198, 107, 0.07); }
+.flugel-mac-favori:hover { background-color: rgba(232, 198, 107, 0.13); }
+.flugel-mac-favori-ad { color: #e8c66b; font-weight: 700; }
+.flugel-mac-derbi { font-size: 7.5pt; font-weight: 800; color: #e8c66b; border: 1px solid rgba(232, 198, 107, 0.6); border-radius: 6px; padding: 0 5px; }
+.flugel-mac-lig { font-size: 8pt; color: #8a8a94; max-width: 150px; }
+.flugel-mac-canli-rozet { background-color: #8fd6a0; color: #000000; }
+.flugel-mac-islem { spacing: 5px; padding: 4px 8px 8px 70px; }
+.flugel-mac-islem-secili { background-color: rgba(232, 198, 107, 0.22); color: #f6e2a8; }
+.flugel-mac-kapsul-raund { color: #8fd6a0; transition-duration: 300ms; }

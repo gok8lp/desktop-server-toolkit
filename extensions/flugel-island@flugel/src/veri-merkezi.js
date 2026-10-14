@@ -17,6 +17,8 @@ const KAYNAKLAR = {
     // izleme listesi + alarm koinleri (fiyat alarmları bununla denetlenir)
     kizle: [a => [VERI, 'kripto-izle', izlenenler(a).join(',') || 'BTC'], null, 'yenileme-kripto'],
     maclar: [[VERI, 'maclar'], 'maclar-island', 'yenileme-maclar'],
+    // CS2 (HLTV): bu PC'deki cs2-veri botu; ayar kapalıysa çalışmaz
+    cs2: [a => (a.get_boolean('cs2-etkin') ? [`${H}/.local/bin/cs2-veri`, String(Math.max(20, a.get_int('yenileme-cs2') - 5))] : null), 'cs2', 'yenileme-cs2'],
     basket: [[VERI, 'basket'], 'basket', null],
     anime: [[VERI, 'anime'], 'anime', 'yenileme-anime'],
     vm: [[`${H}/.local/bin/vm`, 'liste'], null, null],
@@ -76,7 +78,12 @@ export class VeriMerkezi {
         if (zorla && k[1])
             GLib.unlink(`${ONBELLEK}/${k[1]}.json`);
         this._suruyor.add(tur);
-        const veri = await jsonAl(typeof k[0] === 'function' ? k[0](this._ayar) : k[0], this._iptal);
+        const argv = typeof k[0] === 'function' ? k[0](this._ayar) : k[0];
+        if (!argv) {
+            this._suruyor.delete(tur);
+            return;
+        }
+        const veri = await jsonAl(argv, this._iptal);
         this._suruyor.delete(tur);
         if (this._iptal.is_cancelled())
             return;

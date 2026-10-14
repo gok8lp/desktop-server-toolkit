@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""CS2 maclari (Island Maclar sekmesi + kapsulde canli raund): HLTV maclar sayfasi.
+Kullanim: cs2-veri [en_eski_sn]   (varsayilan 45; canli mac yokken 300 sn onbellek)
+HLTV Cloudflare arkasinda oldugu icin curl_cffi (tarayici TLS imzasi) kullanilir; kurulu degilse
+~/.local/share/flugel-island/venv icindeki Python ile yeniden calisir. HLTV'ye ulasilamazsa bo3.gg acik API'si.
+Cikti: {"canli": [...], "yaklasan": [...], "kaynak": "hltv"|"bo3", "zaman": ts}   (sistem-bakim)"""
+import hashlib, html, json, os, re, sys, time, urllib.request
+
+try:
+    from curl_cffi import requests as creq
+except ImportError:
+    _v = os.path.expanduser("~/.local/share/flugel-island/venv/bin/python")
+    if os.path.exists(_v) and sys.prefix != os.path.dirname(os.path.dirname(_v)):
+        os.execv(_v, [_v, os.path.abspath(__file__), *sys.argv[1:]])
+    creq = None
+
+ONBELLEK = os.path.expanduser("~/.cache/sistem-bakim/cs2.json")
+LOGO = os.path.expanduser("~/.cache/flugel-island/logo")
+UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36"
+
+
+def al(url, ikili=False):
+    if creq:
+        r = creq.get(url, impersonate="chrome", timeout=15)
+        r.raise_for_status()
+        return r.content if ikili else r.text
+    ham = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=15).read()
+    return ham if ikili else ham.decode("utf-8", "replace")
+
+
+def logo(url):
+    """takim logosunu bir kez indirir (svg oldugu gibi, png/jpg oldugu gibi); yol ya da None"""
+    if not url:
+        return None
+    url = html.unescape(url)
+    uzanti = ".svg" if ".svg" in url.split("?")[0] else ".png"
+    yol = os.path.join(LOGO, "cs2-" + hashlib.sha1(url.split("?")[0].encode()).hexdigest()[:16] + uzanti)
+    if os.path.exists(yol):
+        return yol if os.path.getsize(yol) else None
+    os.makedirs(LOGO, exist_ok=True)
+    try:
+        veri = al(url, ikili=True)
+    except Exception:
+        veri = b""
+    open(yol, "wb").write(veri)
+    return yol if veri else None
+
+
+def hltv():
+    t = al("https://www.hltv.org/matches")
+    parcalar = re.split(r'(?=<div class="match-wrapper)', t)[1:]
+    canli, yaklasan = [], []
+    simdi = time.time()
+    for p in parcalar:
+        a = lambda ad: (re.search(ad + r'="([^"]*)"', p) or [None, None])[1]
+        mid = a("data-match-id")
+        if not mid:
+            continue
+        takimlar = re.findall(r'<div class="match-teamname[^"]*">([^<]+)</div>', p)
+        if len(takimlar) < 2:
+            continue  # takimlari belli olmayan (TBD) maclar
+        logolar = re.findall(r'<img alt="[^"]*" src="([^"]+)" class="match-team-logo', p)
+        etkinlik = re.search(r'data-event-headline="([^"]*)"', p)
+        asama = re.search(r'<div class="match-stage [^"]*">([^<]+)</div>', p)
+        link = re.search(r'href="(/matches/\d+/[^"]+)"', p)
+        t1, t2 = a("team1"), a("team2")
+        m = {"id": int(mid), "yildiz": int(a("data-stars") or 0), "canli": a("live") == "true",
+             "etkinlik": html.unescape(etkinlik[1]) if etkinlik else "", "asama": html.unescape(asama[1]) if asama else "",
+             "lan": a("lan") == "true", "bo": (re.search(r'<div class="match-meta">(bo\d)</div>', p) or [None, ""])[1],
+             "link": "https://www.hltv.org" + link[1] if link else None,
+             "takim1": {"ad": html.unescape(takimlar[0]), "id": t1, "logo": logolar[0] if logolar else None},
+             "takim2": {"ad": html.unescape(takimlar[1]), "id": t2, "logo": logolar[1] if len(logolar) > 1 else None}}
+        unix = a("data-unix")
+        m["ts"] = int(unix) // 1000 if unix else int(simdi)
+        haritalar = a("data-maps")
+        m["haritalar"] = haritalar.split(",") if haritalar else []
+        if m["canli"]:
+            for k, tid in (("takim1", t1), ("takim2", t2)):
+                r = re.search(r'data-livescore-current-map-score="(\d+)" data-livescore-team="' + str(tid) + '"', p)
+                h = re.search(r'data-livescore-maps-won-for="" data-livescore-team="' + str(tid) + r'"[^>]*>(\d+)<', p)
+                m[k]["raund"] = int(r[1]) if r else 0
+                m[k]["harita"] = int(h[1]) if h else 0
+            no = m["takim1"]["harita"] + m["takim2"]["harita"]
+            m["simdiki_harita"] = m["haritalar"][no] if no < len(m["haritalar"]) else None
+            m["harita_no"] = no + 1
+            canli.append(m)
+        elif m["ts"] - simdi < 36 * 3600:
+            yaklasan.append(m)
+    canli.sort(key=lambda m: -m["yildiz"])
+    yaklasan.sort(key=lambda m: m["ts"])
+    return {"canli": canli, "yaklasan": yaklasan[:40], "kaynak": "hltv"}
+
+
+def bo3():
+    kok = "https://api.bo3.gg/api/v1/matches?page%5Blimit%5D=40&with=teams,tournament&filter%5Bmatches.discipline_id%5D%5Beq%5D=1"
+    canli, yaklasan = [], []
+    for durum, hedef in (("current", canli), ("upcoming", yaklasan)):
+        d = json.loads(al(kok + f"&filter%5Bmatches.status%5D%5Bin%5D={durum}&sort=start_date"))
+        for r in d.get("results", []):
+            t1, t2 = r.get("team1") or {}, r.get("team2") or {}
+            if not t1.get("name") or not t2.get("name"):
+                continue
+            ts = int(time.mktime(time.strptime(r["start_date"][:19], "%Y-%m-%dT%H:%M:%S")) - time.timezone)
+            hedef.append({"id": r["id"], "yildiz": int(r.get("stars") or 0), "canli": durum == "current",
+                          "etkinlik": (r.get("tournament") or {}).get("name", ""), "asama": "", "bo": f"bo{r.get('bo_type', '')}",
+                          "link": f"https://bo3.gg/matches/{r['slug']}", "ts": ts, "haritalar": [],
+                          "takim1": {"ad": t1["name"], "logo": t1.get("image_url"), "harita": r.get("team1_score", 0)},
+                          "takim2": {"ad": t2["name"], "logo": t2.get("image_url"), "harita": r.get("team2_score", 0)}})
+    return {"canli": canli, "yaklasan": yaklasan[:40], "kaynak": "bo3"}
+
+
+def main():
+    yas = int(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1].isdigit() else 45
+    try:
+        eski = json.load(open(ONBELLEK))
+        sinir = yas if eski.get("canli") else max(yas, 300)
+        if time.time() - os.path.getmtime(ONBELLEK) < sinir:
+            print(json.dumps(eski))
+            return
+    except Exception:
+        eski = None
+    try:
+        d = hltv()
+    except Exception as e:
+        try:
+            d = bo3()
+            d["not"] = f"HLTV: {str(e)[:60]}"
+        except Exception as e2:
+            if eski:
+                eski["eski"] = True
+                print(json.dumps(eski))
+            else:
+                print(json.dumps({"hata": str(e2)[:80]}))
+            return
+    for m in d["canli"] + [m for m in d["yaklasan"] if m["yildiz"] >= 1][:20]:
+        for k in ("takim1", "takim2"):
+            m[k]["logo_yol"] = logo(m[k].get("logo"))
+    d["zaman"] = int(time.time())
+    os.makedirs(os.path.dirname(ONBELLEK), exist_ok=True)
+    json.dump(d, open(ONBELLEK + ".yeni", "w"))
+    os.replace(ONBELLEK + ".yeni", ONBELLEK)
+    print(json.dumps(d))
+
+
+if __name__ == "__main__":
+    main()

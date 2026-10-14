@@ -4,6 +4,7 @@ import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import Pango from 'gi://Pango';
 import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 import {ikon} from './ortak.js';
 import {dugme} from './bilesenler.js';
 import {_} from './dil.js';
@@ -105,6 +106,20 @@ export class EtkinlikGorunumu {
         this._macDep.text = m.dep;
         this._macSkor.text = m.skor;
         this._macDk.text = [m.dakika, m.ek].filter(Boolean).join(' · ');
+        if (m.vurgu && m.vurguNo !== this._vurguNo) {
+            this._vurguNo = m.vurguNo;
+            const hedef = m.vurgu === 'ev' ? this._macEv : this._macDep;
+            for (const l of [this._macEv, this._macDep])
+                l.remove_style_class_name('flugel-mac-kapsul-raund');
+            hedef.add_style_class_name('flugel-mac-kapsul-raund');
+            if (this._vurguId)
+                GLib.source_remove(this._vurguId);
+            this._vurguId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 4500, () => {
+                this._vurguId = 0;
+                hedef.remove_style_class_name('flugel-mac-kapsul-raund');
+                return GLib.SOURCE_REMOVE;
+            });
+        }
         this._mac.show();
         for (const c of this.actor.get_children()) {
             if (c !== this._mac)
@@ -193,6 +208,9 @@ export class EtkinlikGorunumu {
     }
 
     destroy() {
+        if (this._vurguId)
+            GLib.source_remove(this._vurguId);
+        this._vurguId = 0;
         this.actor.destroy();
     }
 }

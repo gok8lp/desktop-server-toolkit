@@ -455,8 +455,64 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         g.add(anahtar(a, 'mac-canli-etkinlik', _('Canlı maç kapsülde'), _('Canlı maç olunca skor adada görünür')));
         g.add(sayi(a, 'basket-yakin-dk', _('Maçım yaklaşıyor'), _('dakika kala'), 15, 720, 15));
         g.add(sayi(a, 'yenileme-maclar', _('Maç yenileme'), _('saniye (canlı maç varken sunucu 2 dk\'da bir günceller)'), 60, 3600, 30));
+        g.add(sayi(a, 'mac-min-yildiz', _('Öne çıkanlar'), _('en az bu kadar yıldızlı maçlar (favoriler, derbiler, özel maçlar her zaman)'), 0, 5, 1));
         sayfa.add(g);
-        sifirla(a, ['mac-canli-etkinlik', 'basket-yakin-dk', 'yenileme-maclar'], sayfa);
+
+        // favori takımlar: ada göre (aksan ve büyük/küçük harf önemsiz); Island'da maça tıklayınca da eklenir
+        const fav = new Adw.PreferencesGroup({title: _('Favori takımlar'),
+            description: _('Favori takımların maçları her listede en üstte; canlıysa kapsülde önce onlar gösterilir.')});
+        const favSatir = [];
+        const favYaz = () => {
+            favSatir.splice(0).forEach(r => fav.remove(r));
+            for (const t of a.get_strv('mac-favoriler')) {
+                const r = new Adw.ActionRow({title: t});
+                const sil = new Gtk.Button({icon_name: 'user-trash-symbolic', valign: Gtk.Align.CENTER, css_classes: ['flat'],
+                    tooltip_text: _('Favorilerden çıkar')});
+                sil.connect('clicked', () => a.set_strv('mac-favoriler', a.get_strv('mac-favoriler').filter(x => x !== t)));
+                r.add_suffix(sil);
+                fav.add(r);
+                favSatir.push(r);
+            }
+            const ekle = new Adw.EntryRow({title: _('Takım ekle (ör. Galatasaray, Eternal Fire)'), show_apply_button: true});
+            ekle.connect('apply', () => {
+                const t = ekle.text.trim();
+                if (t && !a.get_strv('mac-favoriler').includes(t))
+                    a.set_strv('mac-favoriler', [...a.get_strv('mac-favoriler'), t]);
+                ekle.text = '';
+            });
+            fav.add(ekle);
+            favSatir.push(ekle);
+        };
+        favYaz();
+        const favId = a.connect('changed::mac-favoriler', () => favYaz());
+        sayfa.connect('destroy', () => a.disconnect(favId));
+        sayfa.add(fav);
+
+        // kategoriler
+        const kat = new Adw.PreferencesGroup({title: _('Kategoriler'), description: _('Maçlar sekmesinde gösterilecek bölümler')});
+        for (const [k, ad] of [['onemli', _('Öne çıkanlar')], ['futbol', _('Futbol')], ['basketbol', _('Basketbol')], ['milli', _('Milli maçlar')],
+            ['derbi', _('Derbiler')], ['takimlar', _('Takımlarım')], ['ozel', _('Özel maçlar')], ['cs2', 'CS2']]) {
+            const row = new Adw.SwitchRow({title: ad, active: a.get_strv('mac-kategoriler').includes(k)});
+            row.connect('notify::active', () => {
+                const sira = ['onemli', 'futbol', 'basketbol', 'milli', 'derbi', 'takimlar', 'ozel', 'cs2'];
+                const s = new Set(a.get_strv('mac-kategoriler'));
+                if (row.active)
+                    s.add(k);
+                else
+                    s.delete(k);
+                a.set_strv('mac-kategoriler', sira.filter(x => s.has(x)));
+            });
+            kat.add(row);
+        }
+        sayfa.add(kat);
+
+        const cs = new Adw.PreferencesGroup({title: 'CS2', description: _('Kaynak: HLTV maçlar sayfası (bu PC\'deki cs2-veri botu); ulaşılamazsa bo3.gg')});
+        cs.add(anahtar(a, 'cs2-etkin', _('CS2 maçları'), _('Canlı raund skoru, harita, HLTV yıldızları')));
+        cs.add(sayi(a, 'cs2-min-yildiz', _('Kapsülde canlı CS2'), _('en az HLTV yıldızı (favori takımlar her zaman)'), 0, 5, 1));
+        cs.add(sayi(a, 'yenileme-cs2', _('CS2 yenileme'), _('saniye (canlıyken raundları yakalamak için kısa tut)'), 20, 600, 5));
+        sayfa.add(cs);
+        sifirla(a, ['mac-canli-etkinlik', 'basket-yakin-dk', 'yenileme-maclar', 'mac-min-yildiz', 'mac-favoriler', 'mac-kategoriler',
+            'cs2-etkin', 'cs2-min-yildiz', 'yenileme-cs2'], sayfa);
         return sayfa;
     }
 

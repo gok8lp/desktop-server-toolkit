@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 22:56+0300\n"
+"POT-Creation-Date: 2026-10-14 23:04+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -530,6 +530,79 @@ msgstr "Match refresh"
 msgid "saniye (canlı maç varken sunucu 2 dk'da bir günceller)"
 msgstr "seconds (the server updates every 2 min during live matches)"
 
+msgid "Öne çıkanlar"
+msgstr ""
+
+msgid ""
+"en az bu kadar yıldızlı maçlar (favoriler, derbiler, özel maçlar her zaman)"
+msgstr ""
+
+msgid "Favori takımlar"
+msgstr ""
+
+msgid ""
+"Favori takımların maçları her listede en üstte; canlıysa kapsülde önce onlar "
+"gösterilir."
+msgstr ""
+
+msgid "Favorilerden çıkar"
+msgstr ""
+
+msgid "Takım ekle (ör. Galatasaray, Eternal Fire)"
+msgstr ""
+
+msgid "Kategoriler"
+msgstr ""
+
+msgid "Maçlar sekmesinde gösterilecek bölümler"
+msgstr ""
+
+msgid "Futbol"
+msgstr ""
+
+msgid "Basketbol"
+msgstr ""
+
+#, fuzzy
+msgid "Milli maçlar"
+msgstr "Matches"
+
+msgid "Derbiler"
+msgstr ""
+
+#, fuzzy
+msgid "Takımlarım"
+msgstr "Keyboard shortcuts"
+
+#, fuzzy
+msgid "Özel maçlar"
+msgstr "My matches"
+
+msgid ""
+"Kaynak: HLTV maçlar sayfası (bu PC'deki cs2-veri botu); ulaşılamazsa bo3.gg"
+msgstr ""
+
+#, fuzzy
+msgid "CS2 maçları"
+msgstr "My matches"
+
+msgid "Canlı raund skoru, harita, HLTV yıldızları"
+msgstr ""
+
+#, fuzzy
+msgid "Kapsülde canlı CS2"
+msgstr "Capsule opacity"
+
+msgid "en az HLTV yıldızı (favori takımlar her zaman)"
+msgstr ""
+
+#, fuzzy
+msgid "CS2 yenileme"
+msgstr "Match refresh"
+
+msgid "saniye (canlıyken raundları yakalamak için kısa tut)"
+msgstr ""
+
 msgid ""
 "Sadece MyAnimeList / AniList ve yasal yayın platformlarına bağlantı verilir"
 msgstr "Only MyAnimeList / AniList and legal streaming platforms are linked"
@@ -1020,6 +1093,14 @@ msgid "Maçlar sekmesi"
 msgstr "Matches tab"
 
 #, javascript-format
+msgid "son raund: %s"
+msgstr ""
+
+#, javascript-format
+msgid "seri %s"
+msgstr ""
+
+#, javascript-format
 msgid "Maç %s · %s"
 msgstr "Match %s · %s"
 
@@ -1273,6 +1354,10 @@ msgstr "Added (right-click to remove)"
 msgid "Tıkla: ekle"
 msgstr "Click to add"
 
+#, fuzzy
+msgid "bitti"
+msgstr "Final"
+
 #, javascript-format
 msgid "%s sa %s dk kaldı"
 msgstr "%s h %s min left"
@@ -1280,6 +1365,12 @@ msgstr "%s h %s min left"
 #, javascript-format
 msgid "%s dk kaldı"
 msgstr "%s min left"
+
+msgid "Milli"
+msgstr ""
+
+msgid "Özel"
+msgstr ""
 
 #, javascript-format
 msgid "Takip: %s"
@@ -1310,11 +1401,82 @@ msgstr "Ankara basketball fixtures"
 msgid "canlı"
 msgstr "live"
 
-msgid "Maç verisi alınamadı (sunucu?)"
-msgstr "Match data unavailable (server?)"
+#, fuzzy
+msgid "Canlı"
+msgstr "live"
+
+msgid "Yaklaşan (36 saat)"
+msgstr ""
+
+msgid "HLTV'ye ulaşılamadı; bo3.gg verisi"
+msgstr ""
+
+msgid "Bu gün için öne çıkan maç yok"
+msgstr ""
+
+msgid "Derbi yok"
+msgstr ""
+
+msgid "Favori takımlarının maçı yok"
+msgstr ""
+
+msgid "Favori takım yok: bir maça tıklayıp takımı ekle"
+msgstr ""
+
+msgid "Özel maç yok: bir maça tıklayıp sabitle"
+msgstr ""
+
+#, fuzzy
+msgid "CS2 maçı yok"
+msgstr "No matches"
+
+msgid "CS2 kapalı (Ayarlar)"
+msgstr ""
 
 msgid "Maç yok"
 msgstr "No matches"
+
+msgid "Takımlarım ve özel maçlar"
+msgstr ""
+
+msgid "DERBİ"
+msgstr ""
+
+msgid "CANLI"
+msgstr ""
+
+msgid "Bitti"
+msgstr "Final"
+
+msgid "Tıkla: favori, özel maç, maç sayfası"
+msgstr ""
+
+#, javascript-format
+msgid "HLTV: %s yıldız"
+msgstr ""
+
+msgid "Tıkla: favori, kapsülde takip, maç sayfası"
+msgstr ""
+
+#, javascript-format
+msgid "%s favoride"
+msgstr ""
+
+#, javascript-format
+msgid "%s favorilere"
+msgstr ""
+
+msgid "Özelden çıkar"
+msgstr ""
+
+msgid "Özel maç"
+msgstr ""
+
+msgid "Takibi bırak"
+msgstr ""
+
+msgid "Kapsülde takip et"
+msgstr ""
 
 msgid "Hakemlik verisi yok"
 msgstr "No referee data"
@@ -1325,12 +1487,6 @@ msgstr "No assignments today or tomorrow"
 #, javascript-format
 msgid "Sıradaki: %s %s · %s — %s"
 msgstr "Next: %s %s · %s — %s"
-
-msgid "Bitti"
-msgstr "Final"
-
-msgid " · tıkla: ESPN maç sayfası"
-msgstr " · click: ESPN match page"
 
 msgid "Tümü"
 msgstr ""
@@ -2073,6 +2229,12 @@ msgstr " · GPU passthrough"
 #, javascript-format
 msgid "IP %s · %s açık"
 msgstr "IP %s · up %s"
+
+#~ msgid "Maç verisi alınamadı (sunucu?)"
+#~ msgstr "Match data unavailable (server?)"
+
+#~ msgid " · tıkla: ESPN maç sayfası"
+#~ msgstr " · click: ESPN match page"
 
 #, fuzzy
 #~ msgid "Tıklayınca:"
