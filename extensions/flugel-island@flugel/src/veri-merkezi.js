@@ -12,6 +12,8 @@ const KAYNAKLAR = {
     canli: [[VERI, 'canli'], 'canli', 'yenileme-kripto'],
     pc: [[VERI, 'pc'], null, 'yenileme-pc'],
     kripto: [[VERI, 'kripto'], 'kripto', null],
+    grafik: [[VERI, 'grafik'], null, null],
+    maclar: [[VERI, 'maclar'], 'maclar-island', 'yenileme-maclar'],
     basket: [[VERI, 'basket'], 'basket', null],
     anime: [[VERI, 'anime'], 'anime', 'yenileme-anime'],
     vm: [[`${H}/.local/bin/vm`, 'liste'], null, null],

@@ -34,6 +34,14 @@
       <default>'cift'</default>
       <summary>Panik onayı: cift = ikinci tık, basili = 0,6 sn basılı tutma</summary>
     </key>
+    <key name="anime-secili" type="as">
+      <default>[]</default>
+      <summary>Takip dışından eklenen animeler (MAL kimlikleri)</summary>
+    </key>
+    <key name="manga-secili" type="as">
+      <default>[]</default>
+      <summary>Takip dışından eklenen mangalar (MAL kimlikleri)</summary>
+    </key>
     <key name="pip-konum" type="s">
       <default>''</default>
       <summary>Resim içinde resim penceresinin son konumu ve boyutu (JSON; boş = sol alt köşe)</summary>
@@ -97,6 +105,18 @@
       <default>5.0</default>
       <summary>Kripto büyük değişim eşiği (24 saatlik %)</summary>
     </key>
+    <key name="mac-canli-etkinlik" type="b">
+      <default>true</default>
+      <summary>Canlı maç olunca kapsülde canlı etkinlik olarak göster</summary>
+    </key>
+    <key name="kripto-varliklar" type="as">
+      <default>['BTC', 'ETH', 'USD', 'EUR']</default>
+      <summary>Kripto sekmesinde gösterilecek varlıklar (BTC, ETH, USD, EUR)</summary>
+    </key>
+    <key name="kripto-renk" type="b">
+      <default>false</default>
+      <summary>Değişimde renk kullan (kapalıysa siyah-beyaz)</summary>
+    </key>
     <key name="basket-yakin-dk" type="i">
       <range min="15" max="720"/>
       <default>120</default>
@@ -159,6 +179,11 @@
       <range min="300" max="7200"/>
       <default>900</default>
       <summary>Anime listesi yenileme aralığı (sn)</summary>
+    </key>
+    <key name="yenileme-maclar" type="i">
+      <range min="60" max="3600"/>
+      <default>300</default>
+      <summary>Maçlar yenileme aralığı (sn; canlı maç varken sunucu 2 dk'da bir günceller)</summary>
     </key>
     <key name="pil-carpani" type="i">
       <range min="1" max="10"/>

@@ -268,8 +268,14 @@ export class ResimKaro {
         bin.add_child(this._rozet);
         this.actor.set_child(bin);
         this.actor.set_pivot_point(0.5, 0.5);
-        if (o.eylem)
-            this.actor.connect('clicked', () => this._o.eylem());
+        // sol tık: eylem, sağ tık: sagTik (ör. listeden kaldır)
+        this.actor.button_mask = St.ButtonMask.ONE | St.ButtonMask.THREE;
+        this.actor.connect('clicked', (_b, dugmeNo) => {
+            if (dugmeNo === 3)
+                this._o.sagTik?.();
+            else
+                this._o.eylem?.();
+        });
         this.actor.connect('notify::hover', () => this._hover());
         this.actor.connect('destroy', () => {
             if (onizlemeSahibi === this.actor)

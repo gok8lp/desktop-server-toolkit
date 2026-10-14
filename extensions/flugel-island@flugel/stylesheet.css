@@ -99,7 +99,7 @@
   color: #b4b4bc;
 }
 .flugel-sekme:hover { background-color: rgba(255, 255, 255, 0.09); color: #ffffff; }
-.flugel-sekme:checked { background-color: #ffffff; color: #000000; }
+.flugel-sekme:checked { background-color: rgba(255, 255, 255, 0.24); color: #ffffff; box-shadow: inset 0 -2px 0 #ffffff; }
 .flugel-sekme-etiket { font-size: 8.5pt; margin-top: 2px; }
 .flugel-rozet {
   font-size: 7pt;
@@ -257,3 +257,63 @@
 .flugel-vm-rozet { margin-top: 2px; }
 .flugel-vm-dugmeler { spacing: 6px; margin-top: 6px; }
 .flugel-soluk { color: #9a9aa5; }
+
+/* kripto */
+.flugel-kripto-kartlar { spacing: 8px; }
+.flugel-kripto-kart {
+  padding: 10px 12px;
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #f2f2f4;
+}
+.flugel-kripto-kart:hover { background-color: rgba(255, 255, 255, 0.11); }
+.flugel-kripto-simge { font-size: 15pt; font-weight: 800; color: #ffffff; }
+.flugel-kripto-ad { font-size: 9pt; color: #9a9aa5; }
+.flugel-kripto-fiyat { font-size: 12pt; font-weight: 700; color: #ffffff; margin-top: 2px; font-feature-settings: "tnum"; }
+.flugel-kripto-degisim { font-size: 9pt; color: #cfcfd6; font-feature-settings: "tnum"; }
+.flugel-buyuk-grafik {
+  spacing: 8px;
+  padding: 12px 14px;
+  margin: 6px 2px;
+  border-radius: 18px;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.flugel-buyuk-ust { spacing: 6px; }
+.flugel-buyuk-baslik { font-weight: 800; font-size: 11pt; color: #ffffff; }
+.flugel-buyuk-alt { font-size: 9pt; color: #9a9aa5; font-feature-settings: "tnum"; }
+.flugel-cip { padding: 4px 12px; border-radius: 999px; background-color: rgba(255, 255, 255, 0.08); color: #d0d0d6; font-size: 9pt; }
+.flugel-cip:hover { background-color: rgba(255, 255, 255, 0.15); }
+.flugel-cip:checked { background-color: #f2f2f4; color: #000000; }
+
+/* maçlar */
+.flugel-benim-kart { spacing: 6px; padding: 10px 12px; border-radius: 18px; background-color: rgba(255, 255, 255, 0.08); }
+.flugel-benim-satir { spacing: 10px; }
+.flugel-benim-baslik { font-weight: 700; color: #ffffff; }
+.flugel-benim-alt { font-size: 9pt; color: #9a9aa5; }
+.flugel-benim-bos { color: #d0d0d6; }
+.flugel-benim-kalan { margin-left: 6px; }
+.flugel-cipler { spacing: 6px; padding: 6px 0; }
+.flugel-mac-listesi { spacing: 2px; }
+.flugel-lig-baslik { spacing: 6px; padding: 8px 6px 2px 6px; color: #8a8a94; }
+.flugel-lig-ad { font-size: 9pt; font-weight: 700; color: #8a8a94; }
+.flugel-mac-satir { padding: 6px 8px; border-radius: 12px; color: #f2f2f4; }
+.flugel-mac-satir:hover { background-color: rgba(255, 255, 255, 0.08); }
+.flugel-mac-canli { background-color: rgba(255, 255, 255, 0.10); }
+.flugel-mac-takim { font-size: 9.5pt; }
+.flugel-mac-ev { text-align: right; }
+.flugel-mac-logo { margin: 0 6px; }
+.flugel-mac-skor { font-weight: 800; text-align: center; font-feature-settings: "tnum"; }
+.flugel-mac-durum { font-size: 8pt; color: #9a9aa5; margin-left: 8px; }
+
+/* anime / manga */
+.flugel-arama {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #f2f2f4;
+  caret-color: #ffffff;
+  selected-color: #000000;
+  selection-background-color: #f2f2f4;
+}
+.flugel-arama:focus { background-color: rgba(255, 255, 255, 0.12); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4); }
+.flugel-ekle-karo { background-color: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.25); }

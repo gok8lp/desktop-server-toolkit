@@ -13,6 +13,7 @@ export class BasketProvider {
     enable(manager, settings) {
         this._manager = manager;
         this._settings = settings;
+        this._macAbone = this._ortam.veri.abone('maclar', d => this._canliYaz(d));
         this._abonelik = this._ortam.veri.abone('island', s => {
             this._gelecek = s?.basket?.gelecek ?? this._gelecek ?? [];
             this._yaz();
@@ -26,11 +27,36 @@ export class BasketProvider {
 
     disable() {
         this._abonelik?.();
+        this._macAbone?.();
+        this._manager?.remove(`${this.id}:canli`);
         if (this._dakikaId)
             GLib.source_remove(this._dakikaId);
         this._dakikaId = 0;
         this._manager?.remove(`${this.id}:mac`);
         this._manager = null;
+    }
+
+    // canlı maç (sunucudaki Maçlar verisi): kapsülde skor
+    _canliYaz(d) {
+        if (!this._manager)
+            return;
+        const id = `${this.id}:canli`;
+        const canlilar = (d?.bugun ?? []).flatMap(l => l.maclar.filter(m => m.durum === 'in').map(m => ({...m, lig: l.lig})));
+        if (!this._settings.get_boolean('mac-canli-etkinlik') || !canlilar.length) {
+            this._manager.remove(id);
+            return;
+        }
+        const m = canlilar[0];
+        this._manager.update(createActivity({
+            id, providerId: this.id, tier: 'persistent', slot: 'either',
+            priority: oncelik(this._settings, this.id, 30),
+            glyph: /NBA/.test(m.lig) ? 'basket' : 'top',
+            label: `${m.ev?.ad} ${m.ev?.skor ?? ''}–${m.dep?.skor ?? ''} ${m.dep?.ad}`,
+            sublabel: `${m.lig}${m.detay ? ` · ${m.detay}` : ''}${canlilar.length > 1 ? ` · +${canlilar.length - 1} canlı` : ''}`,
+            data: {kisa: `${m.ev?.skor ?? ''}–${m.dep?.skor ?? ''}`, eylemler: [
+                {ikon: 'top', ipucu: 'Maçlar sekmesi', fn: () => this._ortam.sekmeAc('basket')},
+            ]},
+        }));
     }
 
     _yaz() {
