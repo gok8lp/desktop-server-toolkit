@@ -60,6 +60,10 @@ export class IslandGorunumu {
         this._balon.add_child(this._balonZemin);
         this._balon.add_child(this._balonGorunum.actor);
 
+        // menü çapası: Hızlı Ayarlar ve takvim bunun altında (kapsülün altında, ortada) açılır
+        this.capa = new St.Widget({opacity: 0, reactive: false, width: 2});
+        Main.layoutManager.uiGroup.add_child(this.capa);
+
         for (const a of [this._kok, this._balon]) {
             Main.layoutManager.addChrome(a, {affectsStruts: false, trackFullscreen: true});
             // panelin hemen üstü; açılır menüler ve sistem pencereleri (parola, kapatma) yine üstte kalır
@@ -141,6 +145,8 @@ export class IslandGorunumu {
         this._kok.set_size(w, h);
         this._kok.set_position(Math.round(m.x + (m.width - w) / 2), this._ustY());
         this._kompakt.set_height(this._kapsulYuksekligi());
+        this.capa.set_size(2, this._kapsulYuksekligi());
+        this.capa.set_position(Math.round(m.x + m.width / 2 - 1), this._ustY());
         // kapsül siyahından kartın nötr camına, yükseklikle orantılı geçiş
         const kh = this._kapsulYuksekligi();
         const t = Math.max(0, Math.min(1, (h - kh) / Math.max(1, kh * 3)));
@@ -499,6 +505,7 @@ export class IslandGorunumu {
             this._bos.destroy();
         this._kok.destroy();
         this._balon.destroy();
+        this.capa.destroy();
         this._kok = this._balon = null;
     }
 }

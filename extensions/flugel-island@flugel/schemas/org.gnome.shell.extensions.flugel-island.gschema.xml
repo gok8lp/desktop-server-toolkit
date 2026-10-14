@@ -21,6 +21,10 @@
       <default>-1</default>
       <summary>Island'ın gösterileceği ekran (-1 = birincil ekran)</summary>
     </key>
+    <key name="ust-cubuk-sade" type="b">
+      <default>true</default>
+      <summary>Üst çubukta sadece Island kalsın (saat, pil, Hızlı Ayarlar, tepsi, Etkinlikler gizlenir; kısayollar çalışır)</summary>
+    </key>
     <key name="pip-konum" type="s">
       <default>''</default>
       <summary>Resim içinde resim penceresinin son konumu ve boyutu (JSON; boş = sol alt köşe)</summary>

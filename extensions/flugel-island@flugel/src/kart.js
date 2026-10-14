@@ -12,7 +12,8 @@ const AYLAR = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz',
 
 export class Kart {
     // sayfalar: [{id, ad, ikon, sayfa}]  (sayfa: sayfalar/sayfa.js Sayfa örneği)
-    constructor({ayarlar, ekip, sayfalar, ayarlariAc}) {
+    constructor({ayarlar, ekip, sayfalar, ayarlariAc, tepsi, ustCubuk}) {
+        this._tepsi = tepsi;
         this._ayar = ayarlar;
         this._sayfalar = sayfalar;
         this._canliGorunumler = new Map();
@@ -41,6 +42,14 @@ export class Kart {
         ipucuEkle(zaman, 'Takvim ve bildirimler (sağ tık da açar)');
         ust.add_child(zaman);
         ust.add_child(new St.Widget({x_expand: true}));
+        // üst çubuktan taşınanlar: Hızlı Ayarlar (pil, ses, ağ), takvim/bildirimler, Etkinlikler
+        const sonra = fn => () => {
+            this.kapatIstendi?.();
+            fn();
+        };
+        ust.add_child(dugme('org.gnome.Settings-symbolic', 'Hızlı ayarlar: ses, ağ, pil, güç', sonra(() => ustCubuk.hizliAyarlar())));
+        ust.add_child(dugme('x-office-calendar-symbolic', 'Takvim ve bildirimler', sonra(() => ustCubuk.takvim())));
+        ust.add_child(dugme('focus-windows-symbolic', 'Etkinlikler: pencereler ve uygulamalar', sonra(() => ustCubuk.etkinlikler())));
         this._sabitDugme = dugme('view-pin-symbolic', 'Açık tut', () => this.sabitleIstendi?.());
         ust.add_child(this._sabitDugme);
         ust.add_child(dugme('emblem-system-symbolic', 'Island ayarları', () => {
@@ -49,6 +58,10 @@ export class Kart {
         }));
         ust.add_child(dugme('window-close-symbolic', 'Kapat', () => this.kapatIstendi?.()));
         this.actor.add_child(ust);
+
+        // arka plan uygulamaları (tepsi) — simge yoksa görünmez
+        this.actor.add_child(tepsi.actor);
+        tepsi.disMenuKapandi = () => this.disMenuKapandi?.();
 
         // canlı etkinlikler
         this._canli = new St.BoxLayout({style_class: 'flugel-kart-canli', orientation: Clutter.Orientation.VERTICAL, visible: false});
@@ -201,7 +214,7 @@ export class Kart {
     }
 
     disMenuAcik() {
-        return this._sayfalar.some(s => s.sayfa.disMenuAcik());
+        return this._tepsi.disMenuAcik() || this._sayfalar.some(s => s.sayfa.disMenuAcik());
     }
 
     destroy() {
@@ -210,6 +223,7 @@ export class Kart {
         this._boyutId = 0;
         for (const s of this._sayfalar)
             s.sayfa.destroy();
+        this._tepsi.destroy();
         this._canliGorunumler.clear();
         this.actor.destroy();
     }

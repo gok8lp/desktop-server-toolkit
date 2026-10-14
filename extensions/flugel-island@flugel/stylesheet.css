@@ -156,7 +156,11 @@
 .flugel-ekip-ad { font-size: 13pt; }
 .flugel-ekip-soz { color: #d0d0d6; }
 
-/* tepsi */
+/* üst çubuk: sadece Island kalınca zemin saydam */
+#panel.flugel-sade-panel { background-color: transparent; }
+
+/* tepsi satırı (kart başlığının altında) */
+.flugel-tepsi-satir { padding: 2px 6px; border-radius: 14px; background-color: rgba(255, 255, 255, 0.05); }
 .flugel-tepsi { spacing: 4px; padding: 2px 0; }
 .flugel-tepsi .panel-button { border-radius: 12px; padding: 4px 8px; }
 .flugel-tepsi .panel-button:hover { background-color: rgba(255, 255, 255, 0.12); }

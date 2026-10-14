@@ -68,7 +68,7 @@ export class PowerProvider {
             glyph: this._proxy.get_cached_property('IconName')?.deepUnpack() || 'battery-symbolic',
             label: `${Math.round(pct)}%`,
             sublabel: state === 1 ? 'Şarj oluyor' : state === 4 ? 'Dolu' : 'Pilde',
-            data: { mini: true, kisa: plugged0 ? '' : `${Math.round(pct)}%`, renk: lowNow ? KIRMIZI : null },
+            data: { mini: true, kisa: `${Math.round(pct)}%`, renk: lowNow ? KIRMIZI : null },
         }));
 
         // Plug/unplug transient.

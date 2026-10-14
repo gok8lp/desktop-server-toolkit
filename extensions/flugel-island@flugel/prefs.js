@@ -72,6 +72,8 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         tetik.connect('notify::selected', () => ayar.set_string('tetik', tetik.selected === 1 ? 'click' : 'hover'));
         davranis.add(tetik);
         davranis.add(sayiSatiri(ayar, 'hover-gecikme', 'Üzerine gelince açılma gecikmesi', 'milisaniye', 0, 2000, 20));
+        davranis.add(anahtarSatiri(ayar, 'ust-cubuk-sade', 'Üst çubukta sadece Island',
+            'Saat, pil, Hızlı Ayarlar, tepsi ve Etkinlikler Island\'ın içine taşınır; kısayollar çalışmaya devam eder'));
         davranis.add(sayiSatiri(ayar, 'monitor', 'Ekran', '-1 = birincil ekran; 0, 1… = ekran sırası', -1, 7, 1));
         sayfa.add(davranis);
 

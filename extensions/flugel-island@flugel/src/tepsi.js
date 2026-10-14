@@ -1,12 +1,11 @@
-// FLUGEL Island — "Tepsi" sekmesi: arka planda çalışan uygulamaların simgeleri (AppIndicator: Telegram, Steam…).
-// FLUGEL v1'deki "^" tepsisinin yerini alır: simgeler üst çubuktan alınıp buraya taşınır, eklenti kapanınca
-// geri konur. Simgenin kendi menüsü açıkken kart kapanmaz.
+// FLUGEL Island — tepsi satırı: arka planda çalışan uygulamaların simgeleri (AppIndicator: Telegram, Steam…).
+// Kartın başlığının altında tek satır; simge yoksa satır gizlenir. Simgeler üst çubuktan alınıp buraya
+// taşınır, eklenti kapanınca geri konur. Simgenin kendi menüsü açıkken kart kapanmaz.
 import St from 'gi://St';
 import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
-import {Sayfa} from './sayfa.js';
-import {bilgiSatiri, ipucuEkle, soluk} from '../ortak.js';
+import Clutter from 'gi://Clutter';
+import {ipucuEkle} from './ortak.js';
 
 const tepsiAnahtari = c => Object.keys(Main.panel.statusArea).find(k =>
     k.startsWith('appindicator-') && Main.panel.statusArea[k]?.container === c);
@@ -15,15 +14,12 @@ const tepsiAdi = c => {
     return i?._indicator?.title || i?._indicator?.id || i?.accessible_name || 'Uygulama';
 };
 
-export class TepsiSayfa extends Sayfa {
+export class Tepsi {
     constructor() {
-        super();
-        const satir = new PopupMenu.PopupBaseMenuItem({reactive: false, can_focus: false});
-        this._kutu = new St.BoxLayout({style_class: 'flugel-tepsi', x_expand: true});
-        satir.add_child(this._kutu);
-        this.addMenuItem(satir);
-        this._bos = bilgiSatiri(this, soluk('Arka planda simgesi olan uygulama yok'));
-        bilgiSatiri(this, `<small>${soluk('Simgeye tıkla: uygulamanın kendi menüsü açılır')}</small>`);
+        this.disMenuKapandi = null;
+        this.actor = new St.BoxLayout({style_class: 'flugel-tepsi-satir', x_align: Clutter.ActorAlign.CENTER, visible: false});
+        this._kutu = new St.BoxLayout({style_class: 'flugel-tepsi'});
+        this.actor.add_child(this._kutu);
 
         this._menuIdleri = new Map();
         this._bekleyenler = new Set();
@@ -74,9 +70,7 @@ export class TepsiSayfa extends Sayfa {
     }
 
     _say() {
-        const n = this._kutu.get_n_children();
-        this._bos.visible = n === 0;
-        this.rozetDegisti?.(n ? String(n) : '');
+        this.actor.visible = this._kutu.get_n_children() > 0;
     }
 
     disMenuAcik() {
@@ -96,6 +90,6 @@ export class TepsiSayfa extends Sayfa {
             this._kutu.remove_child(c);
             Main.panel._rightBox.insert_child_at_index(c, 0);
         }
-        super.destroy();
+        this.actor.destroy();
     }
 }

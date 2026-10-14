@@ -31,7 +31,8 @@ import {KriptoSayfa} from './src/sayfalar/kripto.js';
 import {BasketSayfa} from './src/sayfalar/basket.js';
 import {AnimeSayfa} from './src/sayfalar/anime.js';
 import {EkipSayfa} from './src/sayfalar/ekip.js';
-import {TepsiSayfa} from './src/sayfalar/tepsi.js';
+import {Tepsi} from './src/tepsi.js';
+import {UstCubuk} from './src/ust-cubuk.js';
 
 import {PrivacyProvider} from './src/providers/privacy.js';
 import {PanikProvider} from './src/providers/panik.js';
@@ -106,10 +107,18 @@ export default class FlugelIsland extends Extension {
             {id: 'basket', ad: 'Basket', ikon: 'basket', sayfa: new BasketSayfa(o)},
             {id: 'anime', ad: 'Anime', ikon: 'anime', sayfa: new AnimeSayfa(o)},
             {id: 'ekip', ad: 'Ekip', ikon: 'avatar-default-symbolic', sayfa: new EkipSayfa(o)},
-            {id: 'tepsi', ad: 'Tepsi', ikon: 'view-more-horizontal-symbolic', sayfa: new TepsiSayfa(o)},
         ];
-        this._kart = new Kart({ayarlar: this._ayar, ekip: this._ekip, sayfalar, ayarlariAc: () => this.openPreferences()});
+        // üst çubuk düğmeleri kartta; çapa ada kurulunca bağlanır
+        const ustCubukVekil = {
+            hizliAyarlar: () => this._ustCubuk?.hizliAyarlar(),
+            takvim: () => this._ustCubuk?.takvim(),
+            etkinlikler: () => this._ustCubuk?.etkinlikler(),
+        };
+        this._kart = new Kart({ayarlar: this._ayar, ekip: this._ekip, sayfalar, ayarlariAc: () => this.openPreferences(),
+            tepsi: new Tepsi(), ustCubuk: ustCubukVekil});
         this._ada = new IslandGorunumu({ayarlar: this._ayar, yonetici: this._yonetici, kart: this._kart, ekip: this._ekip});
+        this._ustCubuk = new UstCubuk(this._ayar, this._ada.capa);
+        this._ustCubuk.enable();
 
         // Saat artık adada: GNOME'un saati görünmez olur ama yerinde kalır; takvim/bildirim menüsü
         // (sağ tık ya da Super+V) yine ondan açılır.
@@ -186,6 +195,8 @@ export default class FlugelIsland extends Extension {
         this._ayarIdleri = null;
         this._saglayicilariKapat();
         this._veri?.destroy();
+        this._ustCubuk?.disable();
+        this._ustCubuk = null;
         this._ada?.destroy();
         this._kart?.destroy();
         if (this._tarihMenu)
