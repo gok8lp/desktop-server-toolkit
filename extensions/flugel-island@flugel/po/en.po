@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 22:27+0300\n"
+"POT-Creation-Date: 2026-10-14 22:33+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -659,6 +659,59 @@ msgstr "Battery Saver"
 msgid "Parlaklık %40, animasyonsuz"
 msgstr "40% brightness, no animations"
 
+#, fuzzy
+msgid "Tasarruf"
+msgstr "Battery Saver"
+
+#, fuzzy
+msgid "Dengeli"
+msgstr "Kept awake"
+
+msgid "Performans"
+msgstr ""
+
+msgid "Açık · tıkla: kapat"
+msgstr ""
+
+msgid "Kapalı · tıkla: aç"
+msgstr ""
+
+msgid "Açık"
+msgstr "Running"
+
+#, fuzzy
+msgid "Uçak modu"
+msgstr "Panic mode"
+
+#, fuzzy
+msgid "Tüm kablosuz bağlantılar"
+msgstr "Wireless devices"
+
+#, fuzzy
+msgid "Gece ışığı"
+msgstr "Keyboard light"
+
+msgid "Ekran rengini ısıtır"
+msgstr ""
+
+msgid "Rahatsız etme"
+msgstr ""
+
+msgid "Bildirim afişleri gösterilmez (listede kalır)"
+msgstr ""
+
+msgid "Güç modu"
+msgstr ""
+
+msgid "Tıkla: tasarruf → dengeli → performans"
+msgstr ""
+
+msgid "Mikrofon"
+msgstr "Microphone"
+
+msgid "Sessiz"
+msgstr ""
+
 msgid "Pazar"
 msgstr "Sunday"
 
@@ -733,6 +786,18 @@ msgstr "Keep open"
 
 msgid "Island ayarları"
 msgstr "Island settings"
+
+msgid "Ses"
+msgstr "Sound"
+
+msgid "Sesi kapat / aç"
+msgstr ""
+
+msgid "Parlaklık"
+msgstr "Brightness"
+
+msgid "kapalı"
+msgstr "off"
 
 msgid "komut çalışmadı"
 msgstr "command failed"
@@ -821,6 +886,10 @@ msgstr "Add to desktop"
 
 msgid "Dosyalar"
 msgstr "Files"
+
+#, fuzzy
+msgid "Sağ tık: kaldır"
+msgstr "Added (right-click to remove)"
 
 msgid "Süresiz"
 msgstr "Indefinitely"
@@ -942,17 +1011,8 @@ msgstr "%d new"
 msgid "Bildirimler"
 msgstr "Notifications"
 
-msgid "Ses"
-msgstr "Sound"
-
-msgid "Parlaklık"
-msgstr "Brightness"
-
 msgid "Klavye ışığı"
 msgstr "Keyboard light"
-
-msgid "Mikrofon"
-msgstr "Microphone"
 
 msgid "pencereler gizli, ses kapalı"
 msgstr "windows hidden, sound muted"
@@ -1186,6 +1246,10 @@ msgstr "%s min"
 msgid "Uygulamalar"
 msgstr "Apps"
 
+#, fuzzy
+msgid "Uygulama ara…"
+msgstr "Apps"
+
 msgid "Zorla kapat"
 msgstr "Force quit"
 
@@ -1221,6 +1285,19 @@ msgstr "Hidden windows and sound come back"
 
 msgid "Araçlar"
 msgstr "Tools"
+
+#, fuzzy
+msgid "Hızlı ayarlar"
+msgstr "Quick Settings (sound, network, battery)"
+
+#, fuzzy
+msgid "Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır"
+msgstr ""
+"This season and the rest of my MAL list; right-click added ones to remove"
+
+#, fuzzy
+msgid "Tıkla: sabitle"
+msgstr "Click to add"
 
 msgid "Video"
 msgstr "Video"
@@ -1530,15 +1607,20 @@ msgstr "😊 key"
 msgid "Emoji seçici (K380s gülen yüz tuşu)"
 msgstr "Emoji picker (K380s smiley key)"
 
-msgid "Sabitlenmiş"
-msgstr "Pinned"
+msgid "Klavye kısayolları"
+msgstr "Keyboard shortcuts"
+
+#, fuzzy
+msgid "Tuş kısayolları"
+msgstr "Keyboard shortcuts"
+
+#, fuzzy
+msgid "Sunucu ve proje klasörleri"
+msgstr "Server: home folder"
 
 #, javascript-format
 msgid "Kısayol: %s · tıklayınca şimdi yapar"
 msgstr "Shortcut: %s · click to do it now"
-
-msgid "Klavye kısayolları"
-msgstr "Keyboard shortcuts"
 
 msgid "Şimdi yenile"
 msgstr "Refresh now"
@@ -1569,14 +1651,18 @@ msgstr "24 hours %s · source %s"
 msgid "Bu bilgisayar"
 msgstr "This computer"
 
-msgid "Pil Tasarrufu (parlaklık %40, animasyonsuz)"
-msgstr "Battery Saver (40% brightness, no animations)"
+#, fuzzy
+msgid "Sunucu"
+msgstr "Server home"
 
-msgid "Sunucu (flugelserver)"
-msgstr "Server (flugelserver)"
+msgid "Tıkla: ayrıntılar ve sıcaklık grafiği"
+msgstr ""
 
-msgid "Aç"
-msgstr "Open"
+msgid "Tıkla: ayrıntılar, diskler, konteynerler"
+msgstr ""
+
+msgid "Durum + AI"
+msgstr ""
 
 msgid "Sunucu durumu + yapay zekâ analizi"
 msgstr "Server status + AI analysis"
@@ -1589,6 +1675,40 @@ msgstr "This PC: System Monitor"
 
 msgid "Sunucuya terminalle bağlan"
 msgstr "Connect to the server in a terminal"
+
+msgid "Pil Tasarrufu (parlaklık %40, animasyonsuz)"
+msgstr "Battery Saver (40% brightness, no animations)"
+
+msgid "Durumu şimdi sor"
+msgstr "Check status now"
+
+msgid "Aç"
+msgstr "Open"
+
+#, fuzzy
+msgid "Pil"
+msgstr "On battery"
+
+msgid "Durum"
+msgstr ""
+
+#, fuzzy
+msgid "okunamadı"
+msgstr "Could not read: %s"
+
+msgid "İYİ"
+msgstr "OK"
+
+#, fuzzy
+msgid "ulaşılamıyor"
+msgstr "Server: unreachable"
+
+msgid "Sunucu (flugelserver)"
+msgstr "Server (flugelserver)"
+
+#, javascript-format
+msgid "CPU sıcaklığı son %s dk: %s   ·   GPU: %s"
+msgstr ""
 
 #, javascript-format
 msgid "Okunamadı: %s"
@@ -1619,18 +1739,12 @@ msgstr "no network"
 msgid "açık"
 msgstr "on"
 
-msgid "kapalı"
-msgstr "off"
-
 msgid "Sunucuya ulaşılamıyor"
 msgstr "Server unreachable"
 
 #, javascript-format
 msgid "Durum <b>%s</b>%s%s"
 msgstr "Status <b>%s</b>%s%s"
-
-msgid "İYİ"
-msgstr "OK"
 
 msgid " (eski veri)"
 msgstr " (stale data)"
@@ -1678,9 +1792,6 @@ msgstr "Windows without GPU (same disk); connect through the console"
 msgid "Mullvad + Tailscale çıkış düğümü"
 msgstr "Mullvad + Tailscale exit node"
 
-msgid "Açık"
-msgstr "Running"
-
 msgid "Duraklatıldı"
 msgstr "Paused"
 
@@ -1695,9 +1806,6 @@ msgstr "Moonlight (Windows GPU streaming)"
 
 msgid "Yönetici"
 msgstr "Manager"
-
-msgid "Durumu şimdi sor"
-msgstr "Check status now"
 
 msgid "Sunucuya ulaşılamadı"
 msgstr "Could not reach the server"
@@ -1724,3 +1832,6 @@ msgstr " · GPU passthrough"
 #, javascript-format
 msgid "IP %s · %s açık"
 msgstr "IP %s · up %s"
+
+#~ msgid "Sabitlenmiş"
+#~ msgstr "Pinned"

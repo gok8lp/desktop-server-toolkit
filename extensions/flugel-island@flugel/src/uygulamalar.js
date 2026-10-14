@@ -20,10 +20,11 @@ export function sabitKarolar(ayar, {sonra} = {}) {
     const sistem = Shell.AppSystem.get_default();
     return ayar.get_strv('sabit-uygulamalar').map(id => sistem.lookup_app(id)).filter(Boolean).map(app => new Karo({
         ikon: app.get_icon(), etiket: KISA[app.get_id()] ?? app.get_name(), boyut: 28,
-        ipucu: {baslik: app.get_name(), ayrinti: app.get_description() ?? ''},
+        ipucu: {baslik: app.get_name(), ayrinti: `${app.get_description() ?? ''}\n${_('Sağ tık: kaldır')}`.trim()},
         eylem: () => {
             sonra?.();
             uygulamaAc(app.get_id());
         },
+        sagTik: () => ayar.set_strv('sabit-uygulamalar', ayar.get_strv('sabit-uygulamalar').filter(x => x !== app.get_id())),
     }));
 }

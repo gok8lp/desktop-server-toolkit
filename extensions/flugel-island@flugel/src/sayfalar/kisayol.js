@@ -1,11 +1,13 @@
 // FLUGEL Island — "Kısayollar" sekmesi: Windows'taki gibi simge ızgarası. Üstte sabitlenmiş uygulamalar,
 // sonra gruplar (klasörler, uygulamalar, okul, sunucu, araçlar, bakım), en altta klavye kısayolları
 // (simge + tuş rozeti; tıklayınca aynı işi yapar). Ayrıntılar sadece üzerine gelince balonda.
+import St from 'gi://St';
+import Clutter from 'gi://Clutter';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Sayfa} from './sayfa.js';
-import {H, calistir, ekranGoruntusu} from '../ortak.js';
+import {H, calistir, ekranGoruntusu, ikon} from '../ortak.js';
 import {Karo, Izgara, bolum} from '../bilesenler.js';
-import {sabitKarolar, ECLIPSE} from '../uygulamalar.js';
+import {ECLIPSE} from '../uygulamalar.js';
 import {_, f} from '../dil.js';
 
 const ac = yol => `nautilus "${yol}"`;
@@ -92,48 +94,107 @@ const KLAVYE = o => [
     [_('😊 tuşu'), _('Emoji seçici (K380s gülen yüz tuşu)'), 'face-smile-symbolic', () => calistir('flatpak run it.mijorus.smile')],
 ];
 
+// kategori → [simge, vurgu rengi] (renk sakin: sadece simge ve hafif zemin)
+const KATEGORI = {
+    0: ['folder-symbolic', '#e8c66b'], 1: ['view-app-grid-symbolic', '#7fb2ff'], 2: ['x-office-document-symbolic', '#8fd6a0'],
+    3: ['network-server-symbolic', '#c49bff'], 4: ['applications-utilities-symbolic', '#ff9f7a'],
+    5: ['emblem-system-symbolic', '#f07b7b'], 6: ['input-keyboard-symbolic', '#b8b8c4'],
+};
+const rgba = (hex, a) => `rgba(${parseInt(hex.slice(1, 3), 16)},${parseInt(hex.slice(3, 5), 16)},${parseInt(hex.slice(5, 7), 16)},${a})`;
+
 export class KisayolSayfa extends Sayfa {
     constructor(o) {
         super();
         this._o = o;
-        const genislik = Math.round(o.ayarlar.get_int('kart-genislik') - 48);
-        const kapat = () => this.close();
-        this._sabitIzgara = new Izgara({genislik, karoGenisligi: 84});
-        this.actor.add_child(bolum(_('Sabitlenmiş'), this._sabitIzgara));
-        this._sabitYaz();
-        this._ayarId = o.ayarlar.connect('changed::sabit-uygulamalar', () => this._sabitYaz());
+        this._genislik = Math.round(o.ayarlar.get_int('kart-genislik') - 48);
+        // ana görünüm: büyük kategori karoları; tıklayınca detaya kayarak iner
+        this._ana = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true});
+        this._detay = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, visible: false});
+        this.actor.add_child(this._ana);
+        this.actor.add_child(this._detay);
+        const iz = new Izgara({genislik: this._genislik, karoGenisligi: 150, bosluk: 10});
+        const gruplar = [...GRUPLAR(), [_('Klavye kısayolları'), null]];
+        gruplar.forEach(([baslik, ogeler], i) => {
+            const [ik, renk] = KATEGORI[i];
+            const k = iz.ekle(new Karo({ikon: ik, etiket: baslik, boyut: 30, stil: 'flugel-kategori',
+                ipucu: {baslik, ayrinti: ogeler ? ogeler.slice(0, 5).map(x => x[0]).join(', ') + (ogeler.length > 5 ? '…' : '') : _('Tuş kısayolları')},
+                eylem: () => this._detayAc(i)}));
+            k.actor.style = `${k.actor.style ?? ''} background-color: ${rgba(renk, 0.13)};`;
+            k._simge.style = `color: ${renk};`;
+        });
+        this._ana.add_child(bolum(_('Kısayollar'), iz));
+    }
 
-        for (const [baslik, ogeler] of GRUPLAR()) {
-            const iz = new Izgara({genislik, karoGenisligi: 84});
-            for (const [kisa, aciklama, komut, ik] of ogeler) {
-                iz.ekle(new Karo({ikon: ik, etiket: kisa, ipucu: {baslik: aciklama, ayrinti: komut.replace(H, '~')},
+    _detayAc(i) {
+        const gruplar = GRUPLAR();
+        const [baslik, ogeler] = gruplar[i] ?? [_('Klavye kısayolları'), null];
+        const [ik, renk] = KATEGORI[i];
+        const kapat = () => this.close();
+        this._detay.destroy_all_children();
+        const ust = new St.BoxLayout({style_class: 'flugel-detay-ust'});
+        const geri = new St.Button({style_class: 'flugel-dugme flugel-geri', can_focus: true,
+            child: new St.Icon({icon_name: 'go-previous-symbolic', icon_size: 16})});
+        geri.connect('clicked', () => this._anaDon());
+        ust.add_child(geri);
+        const simge = new St.Icon({gicon: ikon(ik), icon_size: 20, style: `color: ${renk};`, y_align: Clutter.ActorAlign.CENTER});
+        ust.add_child(simge);
+        ust.add_child(new St.Label({text: baslik, style_class: 'flugel-detay-baslik', y_align: Clutter.ActorAlign.CENTER}));
+        this._detay.add_child(ust);
+        const karo = ([kisa, aciklama, komut, sk], buyuk) => new Karo({ikon: sk, etiket: kisa, boyut: buyuk ? 34 : 24,
+            stil: buyuk ? 'flugel-karo-buyuk' : '', ipucu: {baslik: aciklama, ayrinti: komut.replace(H, '~')},
+            eylem: () => {
+                kapat();
+                calistir(komut);
+            }});
+        if (ogeler && i === 0) {
+            // klasörler: önce büyük ana klasörler, sonra sunucu ve proje klasörleri
+            const anaIz = new Izgara({genislik: this._genislik, karoGenisligi: 112, bosluk: 10});
+            ogeler.slice(0, 7).forEach(x => anaIz.ekle(karo(x, true)));
+            this._detay.add_child(bolum('', anaIz));
+            const digerIz = new Izgara({genislik: this._genislik, karoGenisligi: 92});
+            ogeler.slice(7).forEach(x => digerIz.ekle(karo(x, false)));
+            this._detay.add_child(bolum(_('Sunucu ve proje klasörleri'), digerIz));
+        } else if (ogeler) {
+            const iz2 = new Izgara({genislik: this._genislik, karoGenisligi: 92});
+            ogeler.forEach(x => iz2.ekle(karo(x, false)));
+            this._detay.add_child(bolum('', iz2));
+        } else {
+            const klavye = new Izgara({genislik: this._genislik, karoGenisligi: 108});
+            for (const [tus, ne, sk, fn] of KLAVYE(this._o)) {
+                klavye.ekle(new Karo({ikon: sk, etiket: tus, stil: 'flugel-karo-tus', ipucu: {baslik: ne, ayrinti: f(_('Kısayol: %s · tıklayınca şimdi yapar'), tus)},
                     eylem: () => {
                         kapat();
-                        calistir(komut);
+                        fn();
                     }}));
             }
-            this.actor.add_child(bolum(baslik, iz));
+            this._detay.add_child(bolum('', klavye));
         }
-
-        const klavye = new Izgara({genislik, karoGenisligi: 108});
-        for (const [tus, ne, ik, fn] of KLAVYE(o)) {
-            klavye.ekle(new Karo({ikon: ik, etiket: tus, stil: 'flugel-karo-tus', ipucu: {baslik: ne, ayrinti: f(_('Kısayol: %s · tıklayınca şimdi yapar'), tus)},
-                eylem: () => {
-                    kapat();
-                    fn();
-                }}));
-        }
-        this.actor.add_child(bolum(_('Klavye kısayolları'), klavye));
+        this._gecis(this._ana, this._detay, 1);
     }
 
-    _sabitYaz() {
-        this._sabitIzgara.temizle();
-        for (const k of sabitKarolar(this._o.ayarlar, {sonra: () => this.close()}))
-            this._sabitIzgara.ekle(k);
+    _anaDon() {
+        this._gecis(this._detay, this._ana, -1);
     }
 
-    destroy() {
-        this._o.ayarlar.disconnect(this._ayarId);
-        super.destroy();
+    // kayarak geçiş (sağa doğru detay, sola doğru geri)
+    _gecis(eski, yeni, yon) {
+        const anim = St.Settings.get().enable_animations;
+        eski.remove_all_transitions();
+        yeni.remove_all_transitions();
+        eski.hide();
+        yeni.show();
+        if (!anim)
+            return;
+        yeni.opacity = 0;
+        yeni.translation_x = 28 * yon;
+        yeni.ease({opacity: 255, translation_x: 0, duration: 220, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+    }
+
+    kapandi() {
+        super.kapandi();
+        if (this._detay.visible) {
+            this._detay.hide();
+            this._ana.show();
+        }
     }
 }

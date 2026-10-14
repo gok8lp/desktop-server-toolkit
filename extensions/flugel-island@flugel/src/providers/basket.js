@@ -51,10 +51,12 @@ export class BasketProvider {
         this._manager.update(createActivity({
             id, providerId: this.id, tier: 'persistent', slot: 'either',
             priority: oncelik(this._settings, this.id, 30),
-            glyph: /NBA/.test(m.lig) ? 'basket' : 'top',
+            glyph: /NBA/.test(m.lig) ? 'basket' : 'emblem-default-symbolic',
             label: `${m.ev?.ad} ${m.ev?.skor ?? ''}–${m.dep?.skor ?? ''} ${m.dep?.ad}`,
             sublabel: `${m.lig}${m.detay ? ` · ${m.detay}` : ''}${canlilar.length > 1 ? f(_(' · +%s canlı'), canlilar.length - 1) : ''}`,
-            data: {kisa: `${m.ev?.skor ?? ''}–${m.dep?.skor ?? ''}`, eylemler: [
+            data: {mac: {ev: m.ev?.ad ?? '', dep: m.dep?.ad ?? '', evLogo: m.ev?.logo_yol ?? null, depLogo: m.dep?.logo_yol ?? null,
+                skor: `${m.ev?.skor ?? '0'} – ${m.dep?.skor ?? '0'}`, dakika: (m.detay ?? '').replace(/ - .*$/, ''),
+                ek: canlilar.length > 1 ? `+${canlilar.length - 1}` : ''}, eylemler: [
                 {ikon: 'top', ipucu: _('Maçlar sekmesi'), fn: () => this._ortam.sekmeAc('basket')},
             ]},
         }));

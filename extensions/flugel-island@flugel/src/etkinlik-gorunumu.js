@@ -3,6 +3,7 @@
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import Pango from 'gi://Pango';
+import Gio from 'gi://Gio';
 import {ikon} from './ortak.js';
 import {dugme} from './bilesenler.js';
 import {_} from './dil.js';
@@ -82,8 +83,42 @@ export class EtkinlikGorunumu {
         this.actor.add_child(govde);
     }
 
+    // kapsülde canlı maç: [logo] Ev  1 – 1  Dep [logo]  dakika
+    _macGoster(m) {
+        if (!this._mac) {
+            this._mac = new St.BoxLayout({style_class: 'flugel-mac-kapsul', x_expand: true, y_align: Clutter.ActorAlign.CENTER});
+            const logo = () => new St.Icon({icon_size: 18, y_align: Clutter.ActorAlign.CENTER, style_class: 'flugel-mac-kapsul-logo'});
+            this._macEvLogo = logo();
+            this._macEv = etiket('flugel-mac-kapsul-takim');
+            this._macSkor = etiket('flugel-mac-kapsul-skor');
+            this._macDep = etiket('flugel-mac-kapsul-takim');
+            this._macDepLogo = logo();
+            this._macDk = etiket('flugel-mac-kapsul-dakika');
+            for (const c of [this._macEvLogo, this._macEv, this._macSkor, this._macDep, this._macDepLogo, this._macDk])
+                this._mac.add_child(c);
+            this.actor.add_child(this._mac);
+        }
+        const ikonYol = y => (y ? Gio.FileIcon.new(Gio.File.new_for_path(y)) : ikon('emblem-default-symbolic'));
+        this._macEvLogo.gicon = ikonYol(m.evLogo);
+        this._macDepLogo.gicon = ikonYol(m.depLogo);
+        this._macEv.text = m.ev;
+        this._macDep.text = m.dep;
+        this._macSkor.text = m.skor;
+        this._macDk.text = [m.dakika, m.ek].filter(Boolean).join(' · ');
+        this._mac.show();
+        for (const c of this.actor.get_children()) {
+            if (c !== this._mac)
+                c.hide();
+        }
+    }
+
     guncelle(a) {
         const d = a.data ?? {};
+        if (d.mac && (this.bicim === 'kompakt' || this.bicim === 'flas')) {
+            this.id = a.id;
+            this._macGoster(d.mac);
+            return;
+        }
         if (this.bicim === 'bildirim') {
             this.id = a.id;
             this._simge.gicon = ikon(a.glyph ?? 'mail-unread-symbolic');

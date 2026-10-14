@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 22:27+0300\n"
+"POT-Creation-Date: 2026-10-14 22:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -637,6 +637,54 @@ msgstr ""
 msgid "Parlaklık %40, animasyonsuz"
 msgstr ""
 
+msgid "Tasarruf"
+msgstr ""
+
+msgid "Dengeli"
+msgstr ""
+
+msgid "Performans"
+msgstr ""
+
+msgid "Açık · tıkla: kapat"
+msgstr ""
+
+msgid "Kapalı · tıkla: aç"
+msgstr ""
+
+msgid "Açık"
+msgstr ""
+
+msgid "Uçak modu"
+msgstr ""
+
+msgid "Tüm kablosuz bağlantılar"
+msgstr ""
+
+msgid "Gece ışığı"
+msgstr ""
+
+msgid "Ekran rengini ısıtır"
+msgstr ""
+
+msgid "Rahatsız etme"
+msgstr ""
+
+msgid "Bildirim afişleri gösterilmez (listede kalır)"
+msgstr ""
+
+msgid "Güç modu"
+msgstr ""
+
+msgid "Tıkla: tasarruf → dengeli → performans"
+msgstr ""
+
+msgid "Mikrofon"
+msgstr ""
+
+msgid "Sessiz"
+msgstr ""
+
 msgid "Pazar"
 msgstr ""
 
@@ -710,6 +758,18 @@ msgid "Açık tut"
 msgstr ""
 
 msgid "Island ayarları"
+msgstr ""
+
+msgid "Ses"
+msgstr ""
+
+msgid "Sesi kapat / aç"
+msgstr ""
+
+msgid "Parlaklık"
+msgstr ""
+
+msgid "kapalı"
 msgstr ""
 
 msgid "komut çalışmadı"
@@ -798,6 +858,9 @@ msgid "Masaüstüne ekle"
 msgstr ""
 
 msgid "Dosyalar"
+msgstr ""
+
+msgid "Sağ tık: kaldır"
 msgstr ""
 
 msgid "Süresiz"
@@ -920,16 +983,7 @@ msgstr ""
 msgid "Bildirimler"
 msgstr ""
 
-msgid "Ses"
-msgstr ""
-
-msgid "Parlaklık"
-msgstr ""
-
 msgid "Klavye ışığı"
-msgstr ""
-
-msgid "Mikrofon"
 msgstr ""
 
 msgid "pencereler gizli, ses kapalı"
@@ -1163,6 +1217,9 @@ msgstr ""
 msgid "Uygulamalar"
 msgstr ""
 
+msgid "Uygulama ara…"
+msgstr ""
+
 msgid "Zorla kapat"
 msgstr ""
 
@@ -1197,6 +1254,15 @@ msgid "Gizlenen pencereler ve ses geri gelir"
 msgstr ""
 
 msgid "Araçlar"
+msgstr ""
+
+msgid "Hızlı ayarlar"
+msgstr ""
+
+msgid "Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır"
+msgstr ""
+
+msgid "Tıkla: sabitle"
 msgstr ""
 
 msgid "Video"
@@ -1505,14 +1571,17 @@ msgstr ""
 msgid "Emoji seçici (K380s gülen yüz tuşu)"
 msgstr ""
 
-msgid "Sabitlenmiş"
+msgid "Klavye kısayolları"
+msgstr ""
+
+msgid "Tuş kısayolları"
+msgstr ""
+
+msgid "Sunucu ve proje klasörleri"
 msgstr ""
 
 #, javascript-format
 msgid "Kısayol: %s · tıklayınca şimdi yapar"
-msgstr ""
-
-msgid "Klavye kısayolları"
 msgstr ""
 
 msgid "Şimdi yenile"
@@ -1544,13 +1613,16 @@ msgstr ""
 msgid "Bu bilgisayar"
 msgstr ""
 
-msgid "Pil Tasarrufu (parlaklık %40, animasyonsuz)"
+msgid "Sunucu"
 msgstr ""
 
-msgid "Sunucu (flugelserver)"
+msgid "Tıkla: ayrıntılar ve sıcaklık grafiği"
 msgstr ""
 
-msgid "Aç"
+msgid "Tıkla: ayrıntılar, diskler, konteynerler"
+msgstr ""
+
+msgid "Durum + AI"
 msgstr ""
 
 msgid "Sunucu durumu + yapay zekâ analizi"
@@ -1563,6 +1635,37 @@ msgid "Bu PC: Sistem İzleyici"
 msgstr ""
 
 msgid "Sunucuya terminalle bağlan"
+msgstr ""
+
+msgid "Pil Tasarrufu (parlaklık %40, animasyonsuz)"
+msgstr ""
+
+msgid "Durumu şimdi sor"
+msgstr ""
+
+msgid "Aç"
+msgstr ""
+
+msgid "Pil"
+msgstr ""
+
+msgid "Durum"
+msgstr ""
+
+msgid "okunamadı"
+msgstr ""
+
+msgid "İYİ"
+msgstr ""
+
+msgid "ulaşılamıyor"
+msgstr ""
+
+msgid "Sunucu (flugelserver)"
+msgstr ""
+
+#, javascript-format
+msgid "CPU sıcaklığı son %s dk: %s   ·   GPU: %s"
 msgstr ""
 
 #, javascript-format
@@ -1594,17 +1697,11 @@ msgstr ""
 msgid "açık"
 msgstr ""
 
-msgid "kapalı"
-msgstr ""
-
 msgid "Sunucuya ulaşılamıyor"
 msgstr ""
 
 #, javascript-format
 msgid "Durum <b>%s</b>%s%s"
-msgstr ""
-
-msgid "İYİ"
 msgstr ""
 
 msgid " (eski veri)"
@@ -1653,9 +1750,6 @@ msgstr ""
 msgid "Mullvad + Tailscale çıkış düğümü"
 msgstr ""
 
-msgid "Açık"
-msgstr ""
-
 msgid "Duraklatıldı"
 msgstr ""
 
@@ -1669,9 +1763,6 @@ msgid "Moonlight (Windows GPU akışı)"
 msgstr ""
 
 msgid "Yönetici"
-msgstr ""
-
-msgid "Durumu şimdi sor"
 msgstr ""
 
 msgid "Sunucuya ulaşılamadı"

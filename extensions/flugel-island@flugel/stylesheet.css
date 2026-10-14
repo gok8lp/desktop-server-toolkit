@@ -17,14 +17,14 @@
 
 .flugel-island { color: #f4f4f6; }
 
-.flugel-bos { spacing: 8px; padding: 0 14px; }
+.flugel-bos { spacing: 10px; padding: 0 14px; }
 .flugel-saat {
   font-weight: 700;
   font-size: 10.5pt;
   font-feature-settings: "tnum";
   color: #ffffff;
 }
-.flugel-mini-kutu { spacing: 3px; }
+.flugel-mini-kutu { spacing: 6px; }
 .flugel-mini { color: #e8e8ec; }
 .flugel-mini-metin { font-size: 8.5pt; font-weight: 600; color: #d6d6dc; font-feature-settings: "tnum"; }
 
@@ -359,3 +359,38 @@
 .flugel-bildirim-simge { border-radius: 10px; }
 .flugel-bildirim-baslik { font-size: 10.5pt; font-weight: 800; color: #ffffff; }
 .flugel-bildirim-metin { font-size: 9.5pt; color: #d6d6dc; }
+
+/* kapsülde canlı maç */
+.flugel-mac-kapsul { spacing: 7px; }
+.flugel-mac-kapsul-takim { font-size: 9.5pt; font-weight: 700; color: #ffffff; max-width: 190px; }
+.flugel-mac-kapsul-skor { font-size: 10.5pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; padding: 0 2px; }
+.flugel-mac-kapsul-dakika { font-size: 8.5pt; font-weight: 800; color: #000000; background-color: #8fd6a0;
+  border-radius: 999px; padding: 0 6px; margin-left: 2px; }
+.flugel-etkinlik-kompakt .flugel-etkinlik-baslik { max-width: 240px; }
+.flugel-etkinlik-kompakt .flugel-etkinlik-alt { max-width: 170px; }
+
+/* kısayollar: kategori karoları ve detay */
+.flugel-kategori { padding: 18px 8px 14px 8px; border-radius: 20px; }
+.flugel-kategori .flugel-karo-etiket { font-size: 9.5pt; font-weight: 700; color: #f2f2f4; margin-top: 8px; max-width: 140px; }
+.flugel-kategori:hover { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18); }
+.flugel-karo-buyuk { padding: 14px 6px 12px 6px; border-radius: 20px; }
+.flugel-karo-buyuk .flugel-karo-etiket { font-size: 9pt; font-weight: 700; }
+.flugel-detay-ust { spacing: 8px; padding: 2px 4px 8px 0; }
+.flugel-detay-baslik { font-size: 11pt; font-weight: 800; color: #ffffff; }
+.flugel-geri { padding: 6px; }
+
+/* sistem: sade kartlar */
+.flugel-sistem-kartlar { spacing: 10px; padding-bottom: 4px; }
+.flugel-sistem-kart { padding: 12px 14px; border-radius: 20px; background-color: rgba(255, 255, 255, 0.06); color: #f2f2f4; }
+.flugel-sistem-kart:hover { background-color: rgba(255, 255, 255, 0.10); }
+.flugel-sistem-kart-baslik { font-weight: 800; font-size: 10.5pt; color: #ffffff; }
+.flugel-sistem-degerler { spacing: 16px; padding: 8px 0 6px 0; }
+.flugel-sistem-deger-sayi { font-size: 12pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }
+.flugel-sistem-deger-ad { font-size: 8pt; color: #9a9aa5; }
+.flugel-sistem-derece { font-size: 15pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; min-width: 64px; }
+
+/* ses / parlaklık çubukları */
+.flugel-cubuklar { spacing: 4px; padding: 4px 6px; }
+.flugel-cubuk-satir { spacing: 10px; }
+.flugel-cubuk-yuzde { font-size: 9pt; color: #cfcfd6; min-width: 44px; font-feature-settings: "tnum"; }
+.flugel-cubuklar .slider { -barlevel-active-background-color: #f2f2f4; -barlevel-background-color: rgba(255, 255, 255, 0.16); -slider-handle-radius: 8px; color: #ffffff; }

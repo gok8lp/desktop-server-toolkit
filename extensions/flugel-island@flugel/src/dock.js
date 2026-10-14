@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 import Clutter from 'gi://Clutter';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-const OLCEK = 1.1;
+const OLCEK = 1.12;
 
 function bul(kok, ad) {
     if (!kok)
@@ -63,21 +63,25 @@ export class DockBuyume {
     }
 
     _bagla(kap) {
-        const simge = kap.get_first_child?.();
-        if (!simge || this._simgeler.has(simge) || !('hover' in simge))
+        const dugme = kap.get_first_child?.();
+        if (!dugme || this._simgeler.has(dugme) || !('hover' in dugme))
             return;
-        simge.set_pivot_point(0.5, 1);
-        this._simgeler.set(simge, simge.connect('notify::hover', () => {
+        // tüm düğme değil, sadece içteki simge büyür (merkezden): vurgu kutusu yerinde kalır, dock'tan taşmaz
+        const simge = dugme.icon?.icon ?? dugme.icon?._iconBin ?? null;
+        if (!simge)
+            return;
+        simge.set_pivot_point(0.5, 0.5);
+        this._simgeler.set(dugme, [simge, dugme.connect('notify::hover', () => {
             const animasyon = St.Settings.get().enable_animations && !this._guc?.seyrek;
-            const hedef = simge.hover && animasyon ? OLCEK : 1;
-            simge.ease({scale_x: hedef, scale_y: hedef, duration: 160, mode: Clutter.AnimationMode.EASE_OUT_QUAD});
-        }));
+            const hedef = dugme.hover && animasyon ? OLCEK : 1;
+            simge.ease({scale_x: hedef, scale_y: hedef, duration: 140, mode: Clutter.AnimationMode.EASE_OUT_QUAD});
+        })]);
     }
 
     _birak() {
-        for (const [simge, id] of this._simgeler) {
+        for (const [dugme, [simge, id]] of this._simgeler) {
             try {
-                simge.disconnect(id);
+                dugme.disconnect(id);
                 simge.remove_transition('scale-x');
                 simge.remove_transition('scale-y');
                 simge.set_scale(1, 1);

@@ -13,6 +13,7 @@ import {bash, calistir, ekranGoruntusu, ikon} from '../ortak.js';
 import {Karo, Izgara, bolum} from '../bilesenler.js';
 import {sabitKarolar} from '../uygulamalar.js';
 import {UYKU_KIPLERI} from '../uyku.js';
+import {HizliAyarlar} from '../hizli-ayarlar.js';
 import {_, f} from '../dil.js';
 
 function surecOldur(pid, ad) {
@@ -39,6 +40,14 @@ export class HizliSayfa extends Sayfa {
 
         this._sabit = new Izgara({genislik: this._genislik, karoGenisligi: 84});
         this.actor.add_child(bolum(_('Uygulamalar'), this._sabit));
+        // uygulama ekleme paneli (sistemdeki her uygulama, arama kutulu)
+        this._uygPanel = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel', visible: false});
+        this._uygArama = new St.Entry({style_class: 'flugel-arama', hint_text: _('Uygulama ara…'), can_focus: true, x_expand: true});
+        this._uygArama.clutter_text.connect('text-changed', () => this._uygYaz());
+        this._uygPanel.add_child(this._uygArama);
+        this._uygIzgara = new Izgara({genislik: this._genislik - 16, karoGenisligi: 92});
+        this._uygPanel.add_child(this._uygIzgara.actor);
+        this.actor.add_child(this._uygPanel);
         this._sabitYaz();
         this._ayarId = o.ayarlar.connect('changed::sabit-uygulamalar', () => this._sabitYaz());
 
@@ -67,6 +76,9 @@ export class HizliSayfa extends Sayfa {
             ipucu: {baslik: _('Paniği geri al'), ayrinti: _('Gizlenen pencereler ve ses geri gelir')},
             eylem: () => this._panik.geriAl()}));
         this.actor.add_child(bolum(_('Araçlar'), araclar));
+        this._hizliAyar = new HizliAyarlar();
+        this._ayarIzgara = new Izgara({genislik: this._genislik, karoGenisligi: 84});
+        this.actor.add_child(bolum(_('Hızlı ayarlar'), this._ayarIzgara));
 
         // açılır alt panel (zorla kapat listesi / uyku süreleri)
         this._alt = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel', visible: false});
@@ -83,14 +95,93 @@ export class HizliSayfa extends Sayfa {
         this._sabit.temizle();
         for (const k of sabitKarolar(this._o.ayarlar, {sonra: () => this.close()}))
             this._sabit.ekle(k);
+        this._ekleKaro = this._sabit.ekle(new Karo({ikon: 'list-add-symbolic', etiket: _('Ekle'), boyut: 28,
+            stil: 'flugel-ekle-karo', ipucu: {baslik: _('Uygulama ekle'), ayrinti: _('Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır')},
+            eylem: () => this._uygAcKapa()}));
+    }
+
+    // ---------- uygulama ekleme ----------
+    _uygAcKapa() {
+        if (this._uygPanel.visible) {
+            this._uygKapat();
+            return;
+        }
+        this._uygPanel.show();
+        this._ekleKaro?.secili(true);
+        this._uygArama.text = '';
+        this._uygYaz();
+        if (!this._grab) {
+            let kok = this.actor;
+            while (kok && kok.name !== 'flugelIsland')
+                kok = kok.get_parent();
+            if (kok) {
+                this._grab = Main.pushModal(kok, {actionMode: Shell.ActionMode.POPUP});
+                this._uygArama.grab_key_focus();
+            }
+        }
+    }
+
+    _uygKapat() {
+        if (this._grab) {
+            Main.popModal(this._grab);
+            this._grab = null;
+        }
+        this._uygPanel.hide();
+        this._uygIzgara.temizle();
+        this._ekleKaro?.secili(false);
+    }
+
+    _uygYaz() {
+        this._uygIzgara.temizle();
+        const ara = this._uygArama.text.trim().toLocaleLowerCase('tr');
+        const sabit = new Set(this._o.ayarlar.get_strv('sabit-uygulamalar'));
+        const sistem = Shell.AppSystem.get_default();
+        const liste = sistem.get_installed().filter(i => i.should_show() && !sabit.has(i.get_id()))
+            .filter(i => !ara || i.get_name().toLocaleLowerCase('tr').includes(ara) || (i.get_id() ?? '').includes(ara))
+            .sort((x, y) => x.get_name().localeCompare(y.get_name(), 'tr')).slice(0, 48);
+        for (const i of liste) {
+            this._uygIzgara.ekle(new Karo({ikon: i.get_icon() ?? 'application-x-executable-symbolic', etiket: i.get_name(), boyut: 28,
+                ipucu: {baslik: i.get_name(), ayrinti: _('Tıkla: sabitle')},
+                eylem: () => {
+                    this._o.ayarlar.set_strv('sabit-uygulamalar', [...this._o.ayarlar.get_strv('sabit-uygulamalar'), i.get_id()]);
+                    this._uygYaz();
+                }}));
+        }
     }
 
     goster() {
         this._durumYaz();
+        this._ayarlarYaz();
+    }
+
+    gizle() {
+        this._uygKapat();
+    }
+
+    // Hızlı Ayarlar'daki anahtarlar (Wi-Fi, Bluetooth, uçak, gece ışığı, rahatsız etme, güç, mikrofon)
+    async _ayarlarYaz() {
+        const durumlar = await this._hizliAyar.durumlar();
+        if (!this.actor.get_stage())
+            return;
+        this._ayarIzgara.temizle();
+        for (const d of durumlar) {
+            const k = this._ayarIzgara.ekle(new Karo({ikon: d.ikon, etiket: d.ad, ipucu: {baslik: d.ad, ayrinti: d.ayrinti},
+                eylem: async () => {
+                    await this._hizliAyar.degistir(d.id);
+                    // servis durumu güncellesin diye kısa bekleme
+                    this._ayarBekleId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 400, () => {
+                        this._ayarBekleId = 0;
+                        this._ayarlarYaz();
+                        return GLib.SOURCE_REMOVE;
+                    });
+                }}));
+            k.secili(d.acik);
+        }
     }
 
     kapandi() {
         super.kapandi();
+        this._uygKapat();
         this._altKapat();
         this._panikOnayIptal();
     }
@@ -255,7 +346,8 @@ export class HizliSayfa extends Sayfa {
     }
 
     destroy() {
-        for (const id of [this._panikOnayId, this._basiliId]) {
+        this._uygKapat();
+        for (const id of [this._panikOnayId, this._basiliId, this._ayarBekleId]) {
             if (id)
                 GLib.source_remove(id);
         }

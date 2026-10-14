@@ -176,7 +176,9 @@ export class IslandGorunumu {
         const [, dogal] = icerik.get_preferred_width(h);
         const carpan = this._ayar.get_double('genislik-carpani');
         const enAz = Math.round((gorunum === 'bos' ? 132 : 180) * s * carpan);
-        const enCok = Math.round((gorunum === 'flas' ? 520 : 440) * s * carpan);
+        // canlı maçta takımlar kesilmeden görünsün diye kapsül daha geniş olabilir
+        const macVar = !!(this._vm?.leading ?? this._vm?.trailing)?.data?.mac && gorunum === 'kompakt';
+        const enCok = Math.round((gorunum === 'flas' ? 520 : macVar ? 660 : 440) * s * carpan);
         return {w: Math.max(enAz, Math.min(enCok, Math.ceil(dogal))), h, r: h / 2};
     }
 
