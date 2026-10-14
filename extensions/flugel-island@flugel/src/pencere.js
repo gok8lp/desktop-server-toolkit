@@ -1,14 +1,12 @@
 // FLUGEL Island — pencere yardımcıları (FLUGEL v1 panelinden):
 //  * Uygulama sağ tık menüsüne "Masaüstüne ekle"
-//  * Resim içinde resim (Chrome/YouTube) pencereleri her zaman üstte ve tüm çalışma alanlarında
+//  (resim içinde resim pencereleri artık pip.js'te)
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {InjectionManager} from 'resource:///org/gnome/shell/extensions/extension.js';
 import {AppMenu} from 'resource:///org/gnome/shell/ui/appMenu.js';
 import {H} from './ortak.js';
-
-const PIP = /picture[- ]in[- ]picture|pencere i[cç]inde pencere|resim i[cç]inde resim/i;
 
 function masaustuneEkle(app) {
     const kaynak = app?.app_info?.get_filename?.();
@@ -41,34 +39,9 @@ export class PencereYardimcisi {
             }
             this._flugelMasaustu.visible = !!this._app?.app_info?.get_filename?.();
         });
-
-        this._pipBaslik = new Map();
-        this._pipId = global.display.connect('window-created', (_d, w) => {
-            this._pip(w);
-            const baslikId = w.connect('notify::title', () => this._pip(w));
-            const gitId = w.connect('unmanaged', () => {
-                w.disconnect(baslikId);
-                w.disconnect(gitId);
-                this._pipBaslik?.delete(w);
-            });
-            this._pipBaslik.set(w, [baslikId, gitId]);
-        });
-    }
-
-    _pip(w) {
-        if (w && PIP.test(w.get_title() ?? '') && !w.is_above()) {
-            w.make_above();
-            w.stick();
-        }
     }
 
     disable() {
-        if (this._pipId)
-            global.display.disconnect(this._pipId);
-        this._pipId = 0;
-        for (const [w, idler] of this._pipBaslik ?? [])
-            idler.forEach(id => w.disconnect(id));
-        this._pipBaslik = null;
         this._enj?.clear();
         this._enj = null;
         // eklenen "Masaüstüne ekle" eylemi açık kalan menülerden de kaldırılır

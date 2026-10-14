@@ -19,6 +19,7 @@ import {GucDurumu, TasarrufGostergesi} from './src/guc.js';
 import {PanikDenetci} from './src/panik.js';
 import {EkipYoneticisi} from './src/ekip.js';
 import {PencereYardimcisi} from './src/pencere.js';
+import {PipYoneticisi} from './src/pip.js';
 import {Kart} from './src/kart.js';
 import {IslandGorunumu} from './src/island-gorunumu.js';
 
@@ -92,6 +93,8 @@ export default class FlugelIsland extends Extension {
         this._tasarruf = new TasarrufGostergesi(this._guc);
         this._pencere = new PencereYardimcisi();
         this._pencere.enable();
+        this._pip = new PipYoneticisi(this._ayar);
+        this._pip.enable();
 
         const o = {veri: this._veri, panik: this._panik, guc: this._guc, ekip: this._ekip, ayarlar: this._ayar};
         const sayfalar = [
@@ -188,6 +191,7 @@ export default class FlugelIsland extends Extension {
         if (this._tarihMenu)
             this._tarihMenu.opacity = 255;
         this._tarihMenu = null;
+        this._pip?.disable();
         this._pencere?.disable();
         this._tasarruf?.destroy();
         this._gucAbone?.();
@@ -196,7 +200,7 @@ export default class FlugelIsland extends Extension {
         this._panik?.destroy();
         this._yonetici?.destroy();
         ikonOnbellegiTemizle();
-        this._ada = this._kart = this._veri = this._pencere = this._tasarruf = this._guc = null;
+        this._ada = this._kart = this._veri = this._pencere = this._pip = this._tasarruf = this._guc = null;
         this._ekip = this._panik = this._yonetici = this._ortam = this._ayar = null;
     }
 }
