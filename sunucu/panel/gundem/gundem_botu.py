@@ -223,7 +223,7 @@ def hakem_maclari():
     for m in d.get("gelecek", []):
         tarih = " ".join(x for x in (m.get("tarih"), m.get("saat")) if x)
         mac = " – ".join(x for x in (m.get("ev"), m.get("dep")) if x) or "Maç"
-        ogeler.append({"baslik": f"🏀 {mac}", "etiket": " · ".join(x for x in (tarih, m.get("gorev"), m.get("salon")) if x),
+        ogeler.append({"baslik": f"{mac}", "etiket": " · ".join(x for x in (tarih, m.get("gorev"), m.get("salon")) if x),
                        "link": m.get("link") or "https://www.ankarabasket.org.tr", "ts": 0, "hakem": True})
     return ogeler, d.get("guncelleme")
 
@@ -240,7 +240,7 @@ def maclari_yaz():
             pass
     hakem, gunc = hakem_maclari()
     if not hakem:
-        hakem = [{"baslik": "🏀 Hakemlik ataması yok", "etiket": f"bülten {gunc or '?'} tarandı",
+        hakem = [{"baslik": "Hakemlik ataması yok", "etiket": f"bülten {gunc or '?'} tarandı",
                   "link": "https://www.ankarabasket.org.tr", "ts": 0}]
     yaz("maclar.json", {"ogeler": hakem + ESPN_ON["veri"][:30], "hakem": hakem,
                         "guncelleme": datetime.now(TR).strftime("%H:%M")})
@@ -255,7 +255,7 @@ def sorunlari_yaz():
     except Exception:
         durum, sorunlar, degisti = "BILINMIYOR", ["ai-gozcu durum dosyasi okunamadi"], 0
     for s in sorunlar:
-        ogeler.append({"baslik": f"⚠ {s}", "etiket": "şimdi", "link": "/durum", "tur": "sorun"})
+        ogeler.append({"baslik": f"! {s}", "etiket": "şimdi", "link": "/durum", "tur": "sorun"})
     if durum == "IYI":
         ogeler.append({"baslik": "✓ Sunucu sağlıklı — sorun yok", "etiket": f"kontrol {once(degisti)} önce",
                        "link": "/durum", "tur": "iyi"})
@@ -302,7 +302,7 @@ def ics_yaz():
     try:
         for m in json.load(open(os.path.join(BOT, "maclar.json"), encoding="utf-8")).get("gelecek", []):
             b = datetime.strptime(f"{m['tarih']} {m.get('saat') or '00:00'}", "%Y-%m-%d %H:%M").replace(tzinfo=TR)
-            olaylar.append((b.timestamp(), 90, f"🏀 {m.get('gorev', 'Maç')}: {m.get('ev')} – {m.get('dep')} ({m.get('salon')})", ""))
+            olaylar.append((b.timestamp(), 90, f"{m.get('gorev', 'Maç')}: {m.get('ev')} – {m.get('dep')} ({m.get('salon')})", ""))
     except Exception:
         pass
     s = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//flugel//gundem-botu//TR", "CALSCALE:GREGORIAN"]

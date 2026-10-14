@@ -3,6 +3,8 @@
 # Kullanim: bildirim "mesaj"   |  bildirim --seviye UYARI "mesaj"
 SEV=BILGI; [ "$1" = "--seviye" ] && { SEV=$2; shift 2; }
 MSG="$*"; MSG=$(printf '%b' "${MSG//%/\\x}"); MSG=${MSG//+/ }
+# emojiler tek renkli simgelere cevrilir (Telegram + kayit + Island)
+command -v emoji-sembol >/dev/null && MSG=$(printf "%s" "$MSG" | emoji-sembol)
 [ -z "$MSG" ] && exit 0
 TS=$(date '+%F %T')
 echo "$TS|$SEV|$MSG" | tr '\n' ' ' >> /var/log/sistem-bildirim.log; echo >> /var/log/sistem-bildirim.log

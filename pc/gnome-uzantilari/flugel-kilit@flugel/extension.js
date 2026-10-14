@@ -11,7 +11,7 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 const H = GLib.get_home_dir();
 const VERI = `${H}/.local/bin/ust-panel-veri`;
-const EKIP = `${H}/.local/share/gnome-shell/extensions/flugel-panel@flugel/ekip`;
+const EKIP = `${H}/.local/share/gnome-shell/extensions/flugel-kilit-panel@flugel/ekip`;
 const KARAKTERLER = ['emilia', 'subaru', 'beatrice', 'rem', 'ram', 'julius', 'anastasia', 'meili', 'shaula'];
 
 function veriAl(tur, geri) {
@@ -42,10 +42,10 @@ function kalan(sn) {
 const Kart = GObject.registerClass(
 class Kart extends St.BoxLayout {
     _init(baslik) {
-        super._init({vertical: true, style_class: 'flugel-kart'});
-        this._baslik = new St.Label({text: baslik, style_class: 'flugel-kart-baslik'});
-        this._deger = new St.Label({text: '…', style_class: 'flugel-kart-deger'});
-        this._alt = new St.Label({text: ' ', style_class: 'flugel-kart-alt'});
+        super._init({vertical: true, style_class: 'flugel-kilit-kart'});
+        this._baslik = new St.Label({text: baslik, style_class: 'flugel-kilit-kart-baslik'});
+        this._deger = new St.Label({text: '…', style_class: 'flugel-kilit-kart-deger'});
+        this._alt = new St.Label({text: ' ', style_class: 'flugel-kilit-kart-alt'});
         for (const l of [this._baslik, this._deger, this._alt]) {
             l.clutter_text.ellipsize = 3;
             this.add_child(l);
@@ -68,7 +68,7 @@ class KilitPanosu extends St.BoxLayout {
         this._ad = KARAKTERLER[Math.floor(Math.random() * KARAKTERLER.length)];
         this._acik = Gio.FileIcon.new(Gio.File.new_for_path(`${EKIP}/${this._ad}-acik.svg`));
         this._kapali = Gio.FileIcon.new(Gio.File.new_for_path(`${EKIP}/${this._ad}-kapali.svg`));
-        this._karakter = new St.Icon({gicon: this._acik, icon_size: 72, style_class: 'flugel-karakter',
+        this._karakter = new St.Icon({gicon: this._acik, icon_size: 72, style_class: 'flugel-kilit-karakter',
             y_align: Clutter.ActorAlign.CENTER});
         this.add_child(this._karakter);
 
@@ -78,7 +78,7 @@ class KilitPanosu extends St.BoxLayout {
         this._sunucu = new Kart('SUNUCU');
         for (const k of [this._kripto, this._anime, this._pil, this._sunucu])
             this.add_child(k);
-        this._anime.add_style_class_name('flugel-kart-genis');
+        this._anime.add_style_class_name('flugel-kilit-kart-genis');
 
         this._zamanlayicilar = [];
         this._zamanlayicilar.push(GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 60, () => {
@@ -175,7 +175,7 @@ export default class FlugelKilit extends Extension {
         // duz siyah zemin (bulanik masaustu yerine) + saatin ustunde FLUGEL yazisi
         const dialog = Main.screenShield._dialog;
         this._zemin?.destroy();
-        this._zemin = new St.Widget({style_class: 'flugel-zemin'});
+        this._zemin = new St.Widget({style_class: 'flugel-kilit-zemin'});
         this._zemin.add_constraint(new Clutter.BindConstraint({source: dialog, coordinate: Clutter.BindCoordinate.ALL}));
         this._zemin.connect('destroy', () => {
             this._zemin = null;
@@ -183,7 +183,7 @@ export default class FlugelKilit extends Extension {
         dialog.insert_child_above(this._zemin, dialog._backgroundGroup);
 
         this._yazi?.destroy();
-        this._yazi = new St.Label({text: 'FLUGEL', style_class: 'flugel-yazi', x_align: Clutter.ActorAlign.CENTER});
+        this._yazi = new St.Label({text: 'FLUGEL', style_class: 'flugel-kilit-yazi', x_align: Clutter.ActorAlign.CENTER});
         this._yazi.connect('destroy', () => {
             this._yazi = null;
         });

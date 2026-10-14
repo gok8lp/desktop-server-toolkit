@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+"""Emojileri tek renkli metin simgelerine cevirir (Telegram ve Island bildirimleri icin; kullanici emoji istemiyor).
+Kullanim: echo "metin" | emoji-sembol      ya da   emoji-sembol "metin"      (sistem-bakim)
+Bilinen emojiler anlamina uygun bir simgeye, digerleri (suslemeler) bosluga cevrilir. Simgeler emoji olarak
+cizilmeyen Unicode karakterleridir (onay, carpi, geometrik sekiller, oklar)."""
+import re, sys
+
+HARITA = {
+    "✅": "✓", "✔": "✓", "☑": "✓", "❌": "✗", "❎": "✗", "✖": "✗", "⚠": "!", "🚨": "‼", "‼": "‼", "❗": "!", "❕": "!",
+    "❓": "?", "❔": "?", "🚫": "⊘", "⛔": "⊘", "🔴": "●", "🟠": "●", "🟡": "●", "🟢": "●", "🔵": "●", "⚪": "○", "⚫": "●",
+    "🕐": "◷", "⏰": "◷", "⏱": "◷", "⌛": "◷", "⏳": "◷", "📅": "▦", "🗓": "▦",
+    "📺": "▸", "🎬": "▸", "▶": "▸", "🎮": "▸", "📦": "■", "🖼": "▣", "📋": "≡", "📝": "≡", "📊": "▤", "📈": "↗", "📉": "↘",
+    "🛡": "◆", "🔒": "◆", "🔐": "◆", "🔑": "◆", "🔧": "•", "🛠": "•", "🧰": "•", "🧹": "•", "🔌": "•", "💾": "▪", "💽": "▪",
+    "🔢": "#", "🔄": "↻", "🔁": "↻", "🔃": "↻", "📍": "•", "👤": "•", "🔔": "•", "💬": "•", "📌": "•", "🌐": "◎", "🌍": "◎",
+    "🌎": "◎", "🌏": "◎", "🌅": "☼", "☀": "☼", "🌙": "☾", "🏀": "●", "⚽": "●", "🏆": "★", "🌟": "★", "⭐": "★", "✨": "*",
+    "❤": "♡", "💙": "♡", "🧡": "♡", "💚": "♡", "🤍": "♡", "🖤": "♡", "➡": "→", "⬅": "←", "⬆": "↑", "⬇": "↓", "🔺": "▲",
+    "🔻": "▼", "🆕": "+", "🆙": "↑", "🔥": "!", "💥": "!", "🚀": "↑", "⚡": "!", "📢": "!", "📣": "!", "💡": "i", "ℹ": "i",
+}
+# geriye kalan emoji (piktogram, bayrak, ten rengi, birlestiriciler) tamamen atilir
+EMOJI = re.compile("[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U00002B00-\U00002BFF\U0001F1E6-\U0001F1FF]")
+ARTIK = re.compile("[︎️‍⃣]")
+SIMGELER = set(HARITA.values())
+
+
+def cevir(metin):
+    metin = ARTIK.sub("", metin)
+    for e, s in HARITA.items():
+        metin = metin.replace(e, s)
+    metin = EMOJI.sub(lambda m: m.group(0) if m.group(0) in SIMGELER else "", metin)
+    return re.sub(r"[ \t]{2,}", " ", metin).strip()
+
+
+if __name__ == "__main__":
+    girdi = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else sys.stdin.read()
+    sys.stdout.write(cevir(girdi))

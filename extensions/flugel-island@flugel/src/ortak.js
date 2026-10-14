@@ -107,9 +107,22 @@ export function bash(betik) {
 }
 
 // ---------- metin biçimleri ----------
-// sunucudan gelen metinlerdeki emojiler arayüzde gösterilmez
-export const emojisiz = t => String(t ?? '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]/gu, '').replace(/\u{FE0F}|\u{200D}/gu, '')
-    .replace(/[ \t]{2,}/g, ' ').trim();
+// sunucudan gelen metinlerdeki emojiler tek renkli simgelere çevrilir (sunucudaki emoji-sembol ile aynı eşleme);
+// karşılığı olmayan süs emojileri atılır. ✓ ✗ ★ ▲ gibi metin simgeleri korunur.
+const EMOJI_SIMGE = {'✅': '✓', '✔': '✓', '❌': '✗', '✖': '✗', '⚠': '!', '🚨': '‼', '❗': '!', '❓': '?', '🚫': '⊘',
+    '🔴': '●', '🟢': '●', '🟡': '●', '🟠': '●', '🕐': '◷', '⏰': '◷', '📅': '▦', '📺': '▸', '🎬': '▸', '📦': '■',
+    '🖼': '▣', '📋': '≡', '📝': '≡', '📊': '▤', '📈': '↗', '📉': '↘', '🛡': '◆', '🔒': '◆', '🔑': '◆', '💾': '▪',
+    '🔢': '#', '🔄': '↻', '🔁': '↻', '🌐': '◎', '🌍': '◎', '🌅': '☼', '☀': '☼', '🌙': '☾', '🏀': '●', '⚽': '●',
+    '🏆': '★', '🌟': '★', '⭐': '★', '✨': '*', '❤': '♡', '➡': '→', '⬅': '←', '⬆': '↑', '⬇': '↓', '🔥': '!', '💥': '!',
+    '⚡': '!', '💡': 'i', 'ℹ': 'i'};
+const METIN_SIMGE = new Set([...Object.values(EMOJI_SIMGE), '★', '☆', '✓', '✗', '✕', '♡', '☼', '☾']);
+export function emojisiz(t) {
+    let m = String(t ?? '').replace(/︎|️|‍|⃣/gu, '');
+    for (const [e, k] of Object.entries(EMOJI_SIMGE))
+        m = m.replaceAll(e, k);
+    return m.replace(/\p{Extended_Pictographic}/gu, c => (METIN_SIMGE.has(c) ? c : ''))
+        .replace(/\p{Regional_Indicator}|\p{Emoji_Modifier}/gu, '').replace(/[ \t]{2,}/g, ' ').trim();
+}
 export const kac = t => GLib.markup_escape_text(String(t ?? ''), -1);
 export function para(n, ondalik) {
     if (n === null || n === undefined)

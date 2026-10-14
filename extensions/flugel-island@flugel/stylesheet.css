@@ -69,6 +69,8 @@
   spacing: 10px;
   color: #f2f2f4;
 }
+/* başka eklentilerin aynı adlı sınıfları karta sızmasın (zemin ve köşe adanın kendi zemininden gelir) */
+.flugel-island .flugel-kart { background-color: transparent; border: 0; box-shadow: none; border-radius: 0; min-width: 0; max-width: 10000px; }
 .flugel-kart-ust { spacing: 10px; }
 .flugel-kart-saat { font-size: 20pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }
 .flugel-kart-tarih { font-size: 9.5pt; color: #9a9aa5; }

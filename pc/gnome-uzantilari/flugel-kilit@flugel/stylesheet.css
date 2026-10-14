@@ -1,7 +1,7 @@
 /* Flugel kilit ekrani — siyah-beyaz cam kartlar */
 .flugel-kilit { spacing: 14px; margin-top: 46px; }
-.flugel-karakter { margin-right: 6px; }
-.flugel-kart {
+.flugel-kilit-karakter { margin-right: 6px; }
+.flugel-kilit-kart {
   min-width: 150px; max-width: 220px;
   padding: 12px 18px;
   border-radius: 18px;
@@ -10,12 +10,12 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   spacing: 3px;
 }
-.flugel-kart-genis { min-width: 210px; max-width: 280px; }
-.flugel-kart-baslik { font-size: 8pt; font-weight: 700; letter-spacing: 2px; color: rgba(255, 255, 255, 0.55); }
-.flugel-kart-deger { font-size: 14pt; font-weight: 700; color: #f2f2f5; }
-.flugel-kart-alt { font-size: 9pt; color: rgba(255, 255, 255, 0.62); }
-.flugel-zemin { background-color: #000000; }
-.flugel-yazi {
+.flugel-kilit-kart-genis { min-width: 210px; max-width: 280px; }
+.flugel-kilit-kart-baslik { font-size: 8pt; font-weight: 700; letter-spacing: 2px; color: rgba(255, 255, 255, 0.55); }
+.flugel-kilit-kart-deger { font-size: 14pt; font-weight: 700; color: #f2f2f5; }
+.flugel-kilit-kart-alt { font-size: 9pt; color: rgba(255, 255, 255, 0.62); }
+.flugel-kilit-zemin { background-color: #000000; }
+.flugel-kilit-yazi {
   font-family: "Cinzel";
   font-size: 46pt;
   font-weight: 400;

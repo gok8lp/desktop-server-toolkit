@@ -69,7 +69,7 @@ function kart(o) {
       <img loading="lazy" src="https://www.google.com/s2/favicons?domain=${alanAdi(o.link)}&sz=64" alt="" onerror="this.remove()">${kac([...o.kaynak][0])}</div>`;
   const medya = o.resim ? `<div class="medya" ${yt ? `data-video="${o.video}"` : ""}><img loading="lazy" referrerpolicy="no-referrer" src="${kac(o.resim)}" alt=""
       onerror="this.closest('.medya').remove()">${yt ? '<div class="oynat"></div>' : ""}</div>` : "";
-  const onemli = o.onem >= 80 ? `<span class="ates" title="${kac(o.neden || "AI: senin için önemli")}">🔥</span>` : "";
+  const onemli = o.onem >= 80 ? `<span class="ates" title="${kac(o.neden || "AI: senin için önemli")}">▲</span>` : "";
   const etiket = (o.etiketler || []).filter(e => e !== "fragman").slice(0, 3).map(e => `<span class="etiket">#${kac(e)}</span>`).join("");
   return `<article class="kart ${o.okundu ? "okundu" : ""} ${o.uyari ? "uyarili" : ""}" data-id="${o.id}" data-ts="${o.ts}">
     ${avatar}
@@ -84,7 +84,7 @@ function kart(o) {
         <button class="eylem kaydet ${o.kayitli ? "aktif" : ""}" data-kaydet title="Kaydet">${IKON.kayitli}</button>
         <button class="eylem" data-paylas title="Bağlantıyı kopyala">${IKON.paylas}</button>
         ${o.kume_sayi ? `<button class="eylem kume" data-kume>+${o.kume_sayi} kaynak</button>` : ""}
-        ${o.cevrildi ? `<span class="cevrildi">🌐 ${o.dil === "ja" ? "Japoncadan" : "İngilizceden"} çevrildi</span>` : ""}
+        ${o.cevrildi ? `<span class="cevrildi">◎ ${o.dil === "ja" ? "Japoncadan" : "İngilizceden"} çevrildi</span>` : ""}
       </div>
       <div class="kume-liste" hidden></div>
     </div></article>`;
@@ -145,7 +145,7 @@ setInterval(async () => {
   if (!l.length) return;
   sonUyari = Math.floor(Date.now() / 1000);
   l.forEach(o => {
-    toast(`🔔 ${o.baslik_goster}`, o.link);
+    toast(`• ${o.baslik_goster}`, o.link);
     if ("Notification" in window && Notification.permission === "granted")
       new Notification("FLUGEL · takip ettiğin konu", { body: o.baslik_goster, icon: "/ikon.svg" }).onclick = () => open(o.link);
   });
@@ -158,9 +158,9 @@ function toast(metin, link) {
 
 // ---------- sayfalar ----------
 const SEKMELER = {
-  ana: [["ana", "Sana özel"], ["one", "🔥 Öne çıkanlar"], ["uyari", "🔔 Takip"], ["gundem", "Gündem"]],
+  ana: [["ana", "Sana özel"], ["one", "▲ Öne çıkanlar"], ["uyari", "Takip"], ["gundem", "Gündem"]],
   oyun: [["oyun", "Haberler"], ["playstation", "PlayStation"], ["oyun:oneri", "Öneriler"], ["oyun:cok_satan", "Çok satanlar"], ["oyun:yeni", "Yeni çıkanlar"]],
-  anime: [["anime", "Listem"], ["anime:sezon", "Bu sezon"], ["anime:haber", "Haberler"], ["japonya", "🇯🇵 Japonya"], ["anime:manga", "Manga"]],
+  anime: [["anime", "Listem"], ["anime:sezon", "Bu sezon"], ["anime:haber", "Haberler"], ["japonya", "Japonya"], ["anime:manga", "Manga"]],
   film: [["film:dizi", "Bugün çıkan diziler"], ["film", "Haber & fragman"]],
   fiyat: [["fiyat", "Fırsatlar"], ["fiyat:epic", "Ücretsiz"], ["oyun:indirim", "Steam indirim"]],
   maclar: [["maclar", "Hafta sonu"], ["maclar:yakin", "Önümüzdeki 3 gün"]],
@@ -195,8 +195,8 @@ async function sayfaAc(k, zorla) {
   if (k === "oyun") ust = await oyunSeridi("oneri", "Senin için öneriler", "Steam'de çok olumlu (%85+) yeni ve popüler oyunlar");
   if (k === "anime:haber") ust = '<div class="bolum-baslik">Anime haberleri <small>İngilizce kaynaklar sunucudaki yapay zekâyla Türkçeye çevrilir</small></div>';
   if (k === "japonya") ust = '<div class="bolum-baslik">Japonya\'dan <small>Japon anime/manga basını (アニメ！アニメ！) · Japoncadan Türkçeye çevrilir</small></div>';
-  if (k === "one") ust = '<div class="bolum-baslik">🔥 Öne çıkanlar <small>Yapay zekâ son 36 saatin haberlerini senin ilgi alanlarına göre puanladı</small></div>';
-  if (k === "uyari") ust = '<div class="bolum-baslik">🔔 Takip ettiğin konular <small><a href="#/ayarlar" style="color:var(--mavi)">kelimeleri düzenle</a></small></div>';
+  if (k === "one") ust = '<div class="bolum-baslik">▲ Öne çıkanlar <small>Yapay zekâ son 36 saatin haberlerini senin ilgi alanlarına göre puanladı</small></div>';
+  if (k === "uyari") ust = '<div class="bolum-baslik">Takip ettiğin konular <small><a href="#/ayarlar" style="color:var(--mavi)">kelimeleri düzenle</a></small></div>';
   if (k === "fragman") ust = '<div class="bolum-baslik">Fragmanlar <small>oyun, anime, film ve dizi kanallarından · tıkla burada izle</small></div>';
   ic.innerHTML = ust + `<div id="akis" class="${izgaraMi(kat) ? "izgara" : ""}"></div>`;
   await dahaFazla();
@@ -218,8 +218,8 @@ function animeKapak(a, i) {
     <div class="alt"><div class="ad">${kac(a.ad)}</div><div class="mini">${kac(a.liste || "")}${a.toplam && a.liste ? ` · ${a.ilerleme}/${a.toplam}` : ""}</div>
       ${a.toplam && a.liste ? `<div class="ilerleme"><i style="width:${yuzde}%"></i></div>` : ""}
       <div class="dugmeler">${a.izle ? `<a class="cr" href="${kac(a.izle)}" target="_blank" rel="noopener" title="${kac((a.izle_yerleri || [])[0]?.site || "Crunchyroll")}'da izle">▶ İzle</a>` : ""}
-        ${a.oku ? `<a class="cr" href="${kac(a.oku)}" target="_blank" rel="noopener">📖 Oku</a>` : ""}
-        ${a.fragman ? `<button class="cr ikincil" data-video="${a.fragman}" title="Fragman">🎬</button>` : ""}
+        ${a.oku ? `<a class="cr" href="${kac(a.oku)}" target="_blank" rel="noopener">Oku</a>` : ""}
+        ${a.fragman ? `<button class="cr ikincil" data-video="${a.fragman}" title="Fragman">▸</button>` : ""}
         <a class="cr ikincil" href="${kac(a.mal || a.anilist)}" target="_blank" rel="noopener">MAL</a>
         ${a.imdb ? `<a class="cr ikincil" href="${kac(a.imdb)}" target="_blank" rel="noopener">IMDb</a>` : ""}</div>
       ${digerleri ? `<div class="diger-yer">Ayrıca: ${digerleri}</div>` : ""}</div></div>`;
@@ -234,7 +234,7 @@ async function animeSayfa(ic) {
       <div class="soluk" style="font-size:13px">${one.sonraki ? `Sıradaki: ${one.sonraki.episode}. bölüm · ${kalan(one.sonraki.airingAt)}` : "Listende"}</div>
       <h2>${kac(one.ad)}</h2><div class="soluk">${(one.turler || []).join(" · ")}</div>
       <a class="cr" href="${kac(one.izle)}" target="_blank" rel="noopener">▶ ${kac((one.izle_yerleri || [])[0]?.site || "Crunchyroll")}'da izle</a>
-      ${one.fragman ? `<button class="cr ikincil" data-video="${one.fragman}">🎬 Fragman</button>` : ""}</div></div>` : ""}
+      ${one.fragman ? `<button class="cr ikincil" data-video="${one.fragman}">▸ Fragman</button>` : ""}</div></div>` : ""}
     <div class="bolum-baslik">Yayındaki animelerin <small>geri sayım canlı · yasal yayın sitesine bağlanır</small></div>
     <div class="serit">${yayinda.map(animeKapak).join("") || '<p class="soluk">Şu an yayında olan yok</p>'}</div>
     <div class="bolum-baslik">Son 24 saatte çıkan bölümler <small>popülerliğe göre</small></div>
@@ -246,7 +246,7 @@ async function animeSayfa(ic) {
 async function sezonSayfa(ic) {
   ic.innerHTML = '<div class="iskelet"></div>';
   const d = await animeAl();
-  ic.innerHTML = `<div class="bolum-baslik">Bu sezonun en popülerleri <small>AniList · 🎬 ile fragmanı izle</small></div>
+  ic.innerHTML = `<div class="bolum-baslik">Bu sezonun en popülerleri <small>AniList · ▸ ile fragmanı izle</small></div>
     <div class="kapak-izgara">${(d.sezon || []).map(animeKapak).join("")}</div>`;
   egimKur(ic); $("#nobet").innerHTML = "";
 }
@@ -355,8 +355,8 @@ function macSatir(m) {
 async function macSayfa(ic, hs) {
   ic.innerHTML = '<div class="iskelet"></div><div class="iskelet"></div>';
   const d = await api(`/api/maclar?hafta_sonu=${hs ? 1 : 0}`);
-  const hakem = d.hakem?.length ? `<div class="hakem"><b>🏀 Hakemlik görevlerin</b>${d.hakem.map(m => `<div style="margin-top:6px">${kac(m.tarih)} ${kac(m.saat)} · ${kac(m.ev)} – ${kac(m.dep)}<div class="soluk">${kac(m.salon)} · ${kac(m.gorev)}</div></div>`).join("")}</div>`
-    : `<div class="hakem"><b>🏀 Hakemlik</b><div class="soluk" style="margin-top:4px">Bu dönem atanmış maçın yok — bültenler saatte bir taranıyor.</div></div>`;
+  const hakem = d.hakem?.length ? `<div class="hakem"><b>Hakemlik görevlerin</b>${d.hakem.map(m => `<div style="margin-top:6px">${kac(m.tarih)} ${kac(m.saat)} · ${kac(m.ev)} – ${kac(m.dep)}<div class="soluk">${kac(m.salon)} · ${kac(m.gorev)}</div></div>`).join("")}</div>`
+    : `<div class="hakem"><b>Hakemlik</b><div class="soluk" style="margin-top:4px">Bu dönem atanmış maçın yok — bültenler saatte bir taranıyor.</div></div>`;
   ic.innerHTML = hakem + (d.gunler || []).map(g => `<div class="gun">${kac(g.gun)}</div>` + (g.ligler.length ? g.ligler.map(l => `<div class="lig"><h3>${kac(l.lig)}<span class="soluk">${l.maclar.length} maç</span></h3>${l.maclar.map(macSatir).join("")}</div>`).join("") : '<p class="bos">Bu gün maç yok</p>')).join("");
   $("#nobet").innerHTML = "";
 }
@@ -378,10 +378,10 @@ async function sunucuSayfa(ic) {
   const dk = ts => ts ? Math.max(0, Math.round((Date.now() / 1000 - ts) / 60)) + " dk önce" : "—";
   const kaynakTablo = `<div class="kutu" style="margin:16px"><h2>Kaynaklar <small class="soluk" style="font-size:13px;font-weight:500">canlı · önemliler 1 dk, diğerleri 3 dk, YouTube 5 dk'da bir kontrol</small></h2>
     <div class="tablo"><div class="t-bas"><span>Kaynak</span><span>Son kontrol</span><span>Son yeni haber</span><span>Gecikme</span></div>
-    ${kl.map(x => `<div class="${x.hata ? "t-hata" : ""}"><span>${x.hata ? "⚠ " : ""}${kac(x.ad)}</span><span>${dk(x.son_kontrol)}</span><span>${dk(x.son_yeni)}${x.yeni_sayi ? ` · ${x.yeni_sayi}` : ""}</span>
+    ${kl.map(x => `<div class="${x.hata ? "t-hata" : ""}"><span>${x.hata ? "! " : ""}${kac(x.ad)}</span><span>${dk(x.son_kontrol)}</span><span>${dk(x.son_yeni)}${x.yeni_sayi ? ` · ${x.yeni_sayi}` : ""}</span>
       <span title="${x.olcum} haberde ölçüldü">${x.hata ? kac(x.hata) : x.gecikme_dk != null ? "~" + x.gecikme_dk + " dk" : "ölçülüyor"}</span></div>`).join("")}</div></div>`;
   ic.innerHTML = `<div class="kutu" style="margin:16px"><h2><span class="nokta ${d.durum === "IYI" ? "" : "kotu"}"></span>${d.durum === "IYI" ? "Her şey yolunda" : "Sorun var"}</h2>
-    ${(d.sorunlar || []).map(s => `<div class="oge"><b>⚠ ${kac(s)}</b></div>`).join("")}
+    ${(d.sorunlar || []).map(s => `<div class="oge"><b>! ${kac(s)}</b></div>`).join("")}
     ${(d.bildirimler || []).map(b => `<div class="oge"><b>${kac(b.metin)}</b><small>${kac(b.zaman)} · ${kac(b.seviye)}</small></div>`).join("")}</div>
     <div class="kutu" style="margin:16px"><h2>FLUGEL Akış</h2><div class="oge"><b>${st.kaynak || "?"} kaynak · ${st.toplam || 0} gönderi</b>
       <small>${st.cevrilen || 0} haber Türkçeye çevrildi · ${st.puanlanan || 0} haber AI tarafından puanlandı</small></div></div>
@@ -396,13 +396,13 @@ async function ayarSayfa(ic) {
   const kelimeler = await api("/api/takip").catch(() => []);
   const bildirim = !("Notification" in window) ? "Bu tarayıcı desteklemiyor" : Notification.permission === "granted" ? "Açık ✓"
     : !isSecureContext ? "Bildirim için uygulamayı https (Tailscale) adresinden aç" : "Kapalı";
-  ic.innerHTML = `<div class="kutu" style="margin:16px"><h2>🔔 Takip ettiğin kelimeler</h2>
+  ic.innerHTML = `<div class="kutu" style="margin:16px"><h2>Takip ettiğin kelimeler</h2>
     <div class="oge"><small>Yeni bir haberde bu kelimeler geçince: uygulamada uyarı + bildirim + Telegram'a mesaj.</small></div>
     <div class="ciplar">${kelimeler.map(k => `<span class="cip">${kac(k)}<button data-takip-sil="${kac(k)}">✕</button></span>`).join("")}</div>
     <form class="ara" id="takip-form" style="margin:8px 16px 16px"><input placeholder="ör. Silksong, RTX 5090, One Piece" maxlength="40"><button>Ekle</button></form></div>
     <div class="kutu" style="margin:16px"><h2>Bildirimler</h2><div class="oge"><b>${bildirim}</b>
       ${"Notification" in window && Notification.permission !== "granted" && isSecureContext ? '<button class="ai-buyuk" style="width:auto;padding:8px 18px;margin-top:8px;font-size:14px" data-bildirim-ac>Bildirimlere izin ver</button>' : ""}</div></div>
-    <div class="kutu" style="margin:16px"><h2>📱 Telefon</h2>
+    <div class="kutu" style="margin:16px"><h2>Telefon</h2>
       <a class="oge" href="/indir/FLUGEL.apk"><b>Android uygulamasını indir (APK)</b><small>Sadece Tailscale ağında çalışır · ek izin istemez, yalnızca bu sayfayı açar</small></a>
       <div class="oge"><b>iPhone / diğer</b><small>https://flugelserver.tail42f1f4.ts.net:8443 adresini aç → Paylaş → Ana ekrana ekle</small></div></div>`;
   $("#takip-form").onsubmit = async e => { e.preventDefault(); const v = $("input", e.target).value.trim(); if (v) { await api("/api/takip", { kelime: v }); ayarSayfa(ic); } };
@@ -418,7 +418,7 @@ async function sagSutun() {
     $("#kutu-anime").innerHTML = `<h2>Sıradaki bölümler</h2>` + l.map(a => `<a class="oge" href="${kac(a.izle)}" target="_blank" rel="noopener" style="display:flex;gap:10px;align-items:center">
       <img src="${kac(a.kapak)}" style="width:38px;height:54px;object-fit:cover;border-radius:6px" alt=""><span><b>${kac(a.ad)}</b><small>${a.sonraki.episode}. bölüm <span data-geri="${a.sonraki.airingAt}">· ${kalan(a.sonraki.airingAt)}</span></small></span></a>`).join("");
   }).catch(() => {});
-  api("/api/akis?k=one&n=5").then(l => { if (l.length) $("#kutu-one").innerHTML = `<h2>🔥 Kaçırma</h2>` + l.slice(0, 4).map(o => `<a class="oge" href="${kac(o.link)}" target="_blank" rel="noopener"><small>${kac(o.kaynak)} · ${once(o.ts)}</small><b>${kac(o.baslik_goster)}</b></a>`).join(""); });
+  api("/api/akis?k=one&n=5").then(l => { if (l.length) $("#kutu-one").innerHTML = `<h2>▲ Kaçırma</h2>` + l.slice(0, 4).map(o => `<a class="oge" href="${kac(o.link)}" target="_blank" rel="noopener"><small>${kac(o.kaynak)} · ${once(o.ts)}</small><b>${kac(o.baslik_goster)}</b></a>`).join(""); });
   api("/api/gundemde").then(l => $("#kutu-gundemde").innerHTML = `<h2>Gündemde</h2>` + l.slice(0, 7).map((g, i) => `<div class="oge"><small>${i + 1} · son 12 saatte</small><b>${kac(g.konu)}</b><small>${g.sayi} haber</small></div>`).join(""));
   api("/api/maclar?hafta_sonu=1").then(d => {
     const l = (d.gunler || []).flatMap(g => g.ligler.filter(x => ["Süper Lig", "NBA", "Şampiyonlar Ligi", "Premier Lig"].includes(x.lig)).flatMap(x => x.maclar.slice(0, 3).map(m => ({ ...m, lig: x.lig, gun: g.gun })))).slice(0, 5);
@@ -489,7 +489,7 @@ async function aiGonder(metin, ek = {}) {
       cevap.textContent += coz.decode(value, { stream: true });
       $("#ai-mesajlar").scrollTop = 1e9;
     }
-  } catch (err) { cevap.textContent = "⚠ Bağlantı hatası: " + err; }
+  } catch (err) { cevap.textContent = "! Bağlantı hatası: " + err; }
   cevap.classList.remove("yaziyor");
   aiGecmis.push({ role: "assistant", content: cevap.textContent });
 }

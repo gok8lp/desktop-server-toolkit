@@ -54,7 +54,7 @@ KAYNAKLAR = [
     ("oyun", "Push Square", "https://www.pushsquare.com/feeds/latest", "en", 1, "playstation"),
     ("oyun", "PlayStation LifeStyle", "https://www.playstationlifestyle.net/feed/", "en", 3, "playstation"),
     # oyun — dunya
-    ("oyun", "IGN", "https://feeds.feedburner.com/ign/news", "en", 1, ""),
+    ("oyun", "IGN", "https://feeds.ign.com/ign/news", "en", 1, ""),
     ("oyun", "VGC", "https://www.videogameschronicle.com/feed/", "en", 1, ""),
     ("oyun", "Eurogamer", "https://www.eurogamer.net/feed", "en", 3, ""),
     ("oyun", "GameSpot", "https://www.gamespot.com/feeds/news/", "en", 3, ""),
@@ -639,9 +639,11 @@ def gun_adi(d):
     return f"{GUN[d.weekday()]} {d.day} {AY[d.month - 1]}"
 
 
-def mac_verisi(hafta_sonu=True):
+def mac_verisi(hafta_sonu=True, gunler=None):
     bugun = datetime.now(TR).date()
-    if hafta_sonu:
+    if gunler is not None:
+        pass
+    elif hafta_sonu:
         cmt = bugun + timedelta(days=(5 - bugun.weekday()) % 7) if bugun.weekday() != 6 else bugun - timedelta(days=1)
         gunler = [d for d in (cmt, cmt + timedelta(days=1)) if d >= bugun]
     else:
@@ -685,6 +687,50 @@ def mac_verisi(hafta_sonu=True):
     return {"gunler": [{"gun": gun_adi(g), "tarih": str(g), "ligler": [{"lig": l, "maclar": sorted(tablo[g][l], key=lambda m: m["ts"])}
                                                                         for l in sira if l in tablo[g]]} for g in gunler],
             "hakem": hakem}
+
+
+def island_maclar():
+    """FLUGEL Island (PC) Maçlar sekmesi: hakemlik görevlerim + bugün/yarın maçları + son 2 günün sonuçları."""
+    bugun = datetime.now(TR).date()
+    gunler = [bugun - timedelta(days=2), bugun - timedelta(days=1), bugun, bugun + timedelta(days=1)]
+    v = mac_verisi(gunler=gunler)
+    by = {g["tarih"]: g["ligler"] for g in v["gunler"]}
+    alanlar = ("ev", "dep", "ts", "durum", "detay", "link")
+
+    def kucult(ligler, sadece_biten=False):
+        sonuc = []
+        for lig in ligler:
+            ms = [{k: m.get(k) for k in alanlar} for m in lig["maclar"] if not sadece_biten or m["durum"] == "post"]
+            if ms:
+                sonuc.append({"lig": lig["lig"], "maclar": ms})
+        return sonuc
+    try:
+        bot = json.load(open(os.path.join(BOT, "maclar.json"), encoding="utf-8"))
+    except Exception:
+        bot = {}
+    hepsi = bot.get("maclar", [])
+    b, y = str(bugun), str(bugun + timedelta(days=1))
+    benim = {"bugun": [m for m in hepsi if m.get("tarih") == b], "yarin": [m for m in hepsi if m.get("tarih") == y],
+             "yaklasan": [m for m in bot.get("gelecek", []) if m.get("tarih", "") > y][:5],
+             "gecmis": sorted([m for m in hepsi if m.get("tarih", "") < b],
+                              key=lambda m: (m.get("tarih", ""), m.get("saat", "")), reverse=True)[:5],
+             "guncelleme": bot.get("guncelleme"), "isimler": bot.get("isimler", [])}
+    canli = any(m["durum"] == "in" for g in v["gunler"] for lig in g["ligler"] for m in lig["maclar"])
+    return {"benim": benim, "bugun": kucult(by.get(b, [])), "yarin": kucult(by.get(y, [])),
+            "gecmis": [{"tarih": str(g), "gun": gun_adi(g), "ligler": kucult(by.get(str(g), []), True)} for g in gunler[1::-1]],
+            "canli": canli, "zaman": int(time.time())}
+
+
+def island_maclar_onbellek():
+    """Canlı maç varken 2 dk, yokken 15 dk önbellek."""
+    z, v = ONBELLEK.get("island_maclar", (0, None))
+    if v is None or time.time() - z > (120 if v.get("canli") else 900):
+        try:
+            v = island_maclar()
+            ONBELLEK["island_maclar"] = (time.time(), v)
+        except Exception as e:
+            print(time.strftime("%T"), "island_maclar HATA", type(e).__name__, e, flush=True)
+    return v or {}
 
 
 # ------------------------------------------------------------------ sunucu durumu + gundemde
@@ -1020,6 +1066,8 @@ class Sunucu(BaseHTTPRequestHandler):
             if u.path == "/api/uygulamalar":
                 return self._json(onbellek("uygulamalar", 60, uygulamalar_verisi) or {})
             if u.path == "/api/maclar":
+                if q.get("island") == "1":          # FLUGEL Island: benim maçlarım + bugün/yarın/geçmiş
+                    return self._json(island_maclar_onbellek())
                 hs = q.get("hafta_sonu", "1") == "1"
                 return self._json(onbellek("maclar" if hs else "maclar3", 600, lambda: mac_verisi(hs)) or {})
             if u.path == "/api/durum":
@@ -1036,6 +1084,17 @@ class Sunucu(BaseHTTPRequestHandler):
                     g = gec.get(ad.replace(" ▶", ""))
                     l.append({"ad": ad, **d, "gecikme_dk": round(g[0] / 60, 1) if g else None, "olcum": g[1] if g else 0})
                 return self._json(sorted(l, key=lambda x: (x.get("hata") is None, -(x.get("son_yeni") or 0))))
+            if u.path == "/api/island":          # FLUGEL Island (PC ust cubuk) icin tek, hafif durum paketi
+                try:
+                    d = json.load(open(os.path.join(DURUM, "island.json"), encoding="utf-8"))
+                except (OSError, ValueError):
+                    d = {"durum": "?", "hata": "island.json okunamadi"}
+                d["eski"] = time.time() - d.get("zaman", 0) > 90
+                with db() as c:
+                    d["takip"] = [{"baslik": r["b"], "link": r["link"], "kaynak": r["kaynak"], "ts": r["eklendi"]} for r in c.execute(
+                        "SELECT COALESCE(baslik_tr, baslik) b, link, kaynak, eklendi FROM oge WHERE uyari=1 AND eklendi > ? ORDER BY eklendi DESC LIMIT 3",
+                        (int(time.time()) - 1800,))]
+                return self._json(d)
             if u.path == "/api/istatistik":
                 with db() as c:
                     return self._json({"toplam": c.execute("SELECT COUNT(*) FROM oge").fetchone()[0],
@@ -1097,9 +1156,9 @@ class Sunucu(BaseHTTPRequestHandler):
                         if j.get("message", {}).get("content"):
                             parca(j["message"]["content"])
             except urllib.error.URLError:
-                parca("⚠ Yapay zekâya ulaşılamadı. GPU'lu Windows sanal makinesi açıkken Ollama durur; kapatınca geri gelir.")
+                parca("! Yapay zekâya ulaşılamadı. GPU'lu Windows sanal makinesi açıkken Ollama durur; kapatınca geri gelir.")
             except Exception as e:
-                parca(f"⚠ Hata: {e}")
+                parca(f"! Hata: {e}")
             self.wfile.write(b"0\r\n\r\n")
             return
         return self._json({"hata": "bilinmeyen"}, 404)
