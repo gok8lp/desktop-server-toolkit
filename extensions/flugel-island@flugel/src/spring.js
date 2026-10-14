@@ -89,6 +89,8 @@ export function springProgress(actor, onFrame, {response = 0.5, damping = 0.78, 
     const duration = Math.ceil(1000 * 6 / (zeta * omega));
     const timeline = new Clutter.Timeline({actor, duration});
     let done = false;
+    // aktör yok edilirse (eklenti kapanışı, kabuk kapanışı) yay sessizce durur
+    const yokId = actor.connect('destroy', () => handle.stop());
     const handle = {
         stop() {
             if (done)
@@ -108,6 +110,7 @@ export function springProgress(actor, onFrame, {response = 0.5, damping = 0.78, 
             return;
         done = true;
         active.delete(handle);
+        actor.disconnect(yokId);
         onFrame(1);
         onComplete?.();
     });

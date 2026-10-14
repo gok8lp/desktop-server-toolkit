@@ -84,8 +84,8 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         gorunum.add(sayiSatiri(ayar, 'saydamlik', 'Kapsül opaklığı', '% (100 = tam siyah)', 40, 100, 1));
         gorunum.add(sayiSatiri(ayar, 'kart-saydamlik', 'Kart opaklığı', '% (koyu nötr cam)', 60, 100, 1));
         gorunum.add(sayiSatiri(ayar, 'animasyon-hizi', 'Animasyon hızı', 'çarpan (1 = iOS gibi)', 0.5, 2.0, 0.05, 2));
-        gorunum.add(anahtarSatiri(ayar, 'ekip-kapsulde', 'Kapsülde Re:Zero karakteri'));
-        gorunum.add(anahtarSatiri(ayar, 'ekip-otomatik', 'Karakteri otomatik değiştir', 'pildeyken 4 kat seyrek, salınım yok'));
+        gorunum.add(anahtarSatiri(ayar, 'ekip-surpriz', 'Re:Zero sürprizi',
+            'Ara sıra bir karakter adanın kenarında görünür; kapsüle 5 hızlı tık da çağırır'));
         sayfa.add(gorunum);
 
         const eski = new Adw.PreferencesGroup({title: 'Eski panel',

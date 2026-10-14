@@ -24,6 +24,7 @@ export class VeriMerkezi {
         this._aboneler = new Map();
         this._zamanlar = new Map();
         this._suruyor = new Set();
+        this._zaman = new Map();
         this._iptal = new Gio.Cancellable();
         this._seyrek = false;
         this._ayarId = this._ayar.connect('changed', (_s, anahtar) => {
@@ -50,6 +51,13 @@ export class VeriMerkezi {
         return () => this._aboneler.get(tur)?.delete(fn);
     }
 
+    // veri `yas` saniyeden eskiyse yenile (kart her açıldığında boşuna süreç başlatılmasın)
+    tazele(tur, yas = 30) {
+        const t = this._zaman.get(tur);
+        if (!t || GLib.get_monotonic_time() - t > yas * 1e6)
+            this.yenile(tur);
+    }
+
     son(tur) {
         return this._veri.get(tur) ?? null;
     }
@@ -66,6 +74,7 @@ export class VeriMerkezi {
         if (this._iptal.is_cancelled())
             return;
         this._veri.set(tur, veri);
+        this._zaman.set(tur, GLib.get_monotonic_time());
         for (const fn of this._aboneler.get(tur) ?? []) {
             try {
                 fn(veri);

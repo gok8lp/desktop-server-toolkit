@@ -31,10 +31,12 @@ export class KriptoSayfa extends Sayfa {
     goster() {
         this._ozetYaz();
         this._listeYaz();
-        this._veri.yenile('kripto');
+        this._veri.tazele('kripto', 60);
     }
 
     _ozetYaz() {
+        if (!this.degisti('canli', this._veri.son('canli')))
+            return;
         const d = this._veri.son('canli') ?? {};
         this._ozet.removeAll();
         const satir = (s, k, ik) => bilgiSatiri(this._ozet, s ? `<b>${k} ${para(s.fiyat, 0)} $</b>  ${soluk(degisim(s.degisim))}` : `${k} …`, ik);
@@ -46,6 +48,8 @@ export class KriptoSayfa extends Sayfa {
     }
 
     _listeYaz() {
+        if (!this.degisti('kripto', this._veri.son('kripto')))
+            return;
         const d = this._veri.son('kripto');
         this._liste.removeAll();
         if (!d) {

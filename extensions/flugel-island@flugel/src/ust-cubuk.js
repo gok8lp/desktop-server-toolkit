@@ -56,11 +56,19 @@ export class UstCubuk {
     }
 
     _gizle(c) {
-        if (this._gizli.has(c) || tepsiSimgesiMi(c))
+        if (tepsiSimgesiMi(c))
             return;
-        this._gizli.set(c, {opacity: c.opacity, genislik: c.width_set ? c.width : -1});
+        const ic = c.get_first_child();
+        if (!this._gizli.has(c)) {
+            this._gizli.set(c, {opacity: c.opacity, genislik: c.width_set ? c.width : -1,
+                icStil: ic?.style ?? null});
+        }
+        // görünür (mapped) kalır ki Super+S / Super+V gibi kısayollar çalışsın: saydam, sıfır genişlik, dolgusuz.
+        // GNOME bir kabı yeniden eklerse (oturum kipi değişince) child-added ile tekrar uygulanır.
         c.opacity = 0;
         c.set_width(0);
+        if (ic)
+            ic.style = 'padding: 0; margin: 0; spacing: 0;';
     }
 
     _geriAl() {
@@ -73,6 +81,9 @@ export class UstCubuk {
         for (const [c, eski] of this._gizli) {
             c.opacity = eski.opacity;
             c.set_width(eski.genislik);
+            const ic = c.get_first_child();
+            if (ic)
+                ic.style = eski.icStil;
         }
         this._gizli.clear();
         for (const [menu, eski] of this._menuler) {

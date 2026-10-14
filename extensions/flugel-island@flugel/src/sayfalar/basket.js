@@ -34,10 +34,12 @@ export class BasketSayfa extends Sayfa {
 
     goster() {
         this._yaz();
-        this._veri.yenile('basket');
+        this._veri.tazele('basket', 120);
     }
 
     _yaz() {
+        if (!this.degisti('basket', this._veri.son('basket')))
+            return;
         this._bolum.removeAll();
         const d = this._veri.son('basket');
         if (!d) {

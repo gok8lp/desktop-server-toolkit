@@ -3,6 +3,24 @@
 // Bir alt menü açılınca öncekini kapatır (akordeon), menülerdeki davranışla aynı.
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
+// Ada büyürken/küçülürken sayfa yeniden kurulmaz: gelen veri animasyon bitince işlenir (kasma olmasın).
+export const Animasyon = {
+    suruyor: false,
+    bekleyen: new Map(),
+    bitti() {
+        this.suruyor = false;
+        const isler = [...this.bekleyen.values()];
+        this.bekleyen.clear();
+        for (const fn of isler) {
+            try {
+                fn();
+            } catch (e) {
+                console.error('FLUGEL Island: ertelenen çizim', e);
+            }
+        }
+    },
+};
+
 export class Sayfa extends PopupMenu.PopupMenuSection {
     constructor() {
         super();
@@ -21,8 +39,23 @@ export class Sayfa extends PopupMenu.PopupMenuSection {
 
     // veri gelince sadece sayfa ekrandaysa çiz (kapalı kartta boşuna menü kurulmaz)
     gorunurse(fn) {
-        if (this.actor.mapped)
+        if (!this.actor.mapped)
+            return;
+        if (Animasyon.suruyor)
+            Animasyon.bekleyen.set(this, fn);
+        else
             fn();
+    }
+
+    // aynı veri tekrar çizilmez (kart her açıldığında menüler baştan kurulmasın)
+    degisti(anahtar, veri) {
+        // içerik karşılaştırılır: her yenilemede yeni nesne gelir ama çoğu zaman içerik aynıdır
+        this._cizilen ??= new Map();
+        const imza = veri === null || veri === undefined ? String(veri) : JSON.stringify(veri);
+        if (this._cizilen.get(anahtar) === imza)
+            return false;
+        this._cizilen.set(anahtar, imza);
+        return true;
     }
 
     // sekme seçilince / kart bu sekmeyle açılınca
@@ -32,6 +65,11 @@ export class Sayfa extends PopupMenu.PopupMenuSection {
     gizle() {}
 
     // kart kapanınca: açık alt menüleri kapat
+    destroy() {
+        Animasyon.bekleyen.delete(this);
+        super.destroy();
+    }
+
     kapandi() {
         this._acikAlt?.close(false);
         this._acikAlt = null;

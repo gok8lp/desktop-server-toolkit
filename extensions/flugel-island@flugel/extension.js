@@ -17,7 +17,7 @@ import {eklentiYolu, ikonOnbellegiTemizle} from './src/ortak.js';
 import {VeriMerkezi} from './src/veri-merkezi.js';
 import {GucDurumu, TasarrufGostergesi} from './src/guc.js';
 import {PanikDenetci} from './src/panik.js';
-import {EkipYoneticisi} from './src/ekip.js';
+import {EkipSurprizi} from './src/ekip.js';
 import {PencereYardimcisi} from './src/pencere.js';
 import {PipYoneticisi} from './src/pip.js';
 import {Kart} from './src/kart.js';
@@ -30,7 +30,6 @@ import {VmSayfa} from './src/sayfalar/vm.js';
 import {KriptoSayfa} from './src/sayfalar/kripto.js';
 import {BasketSayfa} from './src/sayfalar/basket.js';
 import {AnimeSayfa} from './src/sayfalar/anime.js';
-import {EkipSayfa} from './src/sayfalar/ekip.js';
 import {Tepsi} from './src/tepsi.js';
 import {UstCubuk} from './src/ust-cubuk.js';
 
@@ -86,10 +85,9 @@ export default class FlugelIsland extends Extension {
         this._guc = new GucDurumu();
         this._veri = new VeriMerkezi(this._ayar);
         this._panik = new PanikDenetci();
-        this._ekip = new EkipYoneticisi(this._ayar);
+        this._ekip = new EkipSurprizi(this._ayar, this._panik);
         this._gucAbone = this._guc.abone(g => {
             this._veri.seyrekModu(g.seyrek);
-            this._ekip.seyrekModu(g.seyrek);
         });
         this._tasarruf = new TasarrufGostergesi(this._guc);
         this._pencere = new PencereYardimcisi();
@@ -106,7 +104,6 @@ export default class FlugelIsland extends Extension {
             {id: 'kripto', ad: 'Kripto', ikon: 'coin-btc', sayfa: new KriptoSayfa(o)},
             {id: 'basket', ad: 'Basket', ikon: 'basket', sayfa: new BasketSayfa(o)},
             {id: 'anime', ad: 'Anime', ikon: 'anime', sayfa: new AnimeSayfa(o)},
-            {id: 'ekip', ad: 'Ekip', ikon: 'avatar-default-symbolic', sayfa: new EkipSayfa(o)},
         ];
         // üst çubuk düğmeleri kartta; çapa ada kurulunca bağlanır
         const ustCubukVekil = {
@@ -114,7 +111,7 @@ export default class FlugelIsland extends Extension {
             takvim: () => this._ustCubuk?.takvim(),
             etkinlikler: () => this._ustCubuk?.etkinlikler(),
         };
-        this._kart = new Kart({ayarlar: this._ayar, ekip: this._ekip, sayfalar, ayarlariAc: () => this.openPreferences(),
+        this._kart = new Kart({ayarlar: this._ayar, sayfalar, ayarlariAc: () => this.openPreferences(),
             tepsi: new Tepsi(), ustCubuk: ustCubukVekil});
         this._ada = new IslandGorunumu({ayarlar: this._ayar, yonetici: this._yonetici, kart: this._kart, ekip: this._ekip});
         this._ustCubuk = new UstCubuk(this._ayar, this._ada.capa);

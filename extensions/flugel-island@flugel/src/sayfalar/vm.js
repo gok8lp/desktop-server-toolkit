@@ -68,6 +68,8 @@ export class VmSayfa extends Sayfa {
     }
 
     _yaz() {
+        if (!this.degisti('vm', this._liste))
+            return;
         this._bolum.removeAll();
         const liste = this._liste;
         if (!liste) {

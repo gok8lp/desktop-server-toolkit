@@ -9,6 +9,7 @@ import GLib from 'gi://GLib';
 import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {springProgress} from './spring.js';
+import {Animasyon} from './sayfalar/sayfa.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
 import {ikon, KAPSUL_RGB, KART_RGB} from './ortak.js';
 
@@ -44,11 +45,10 @@ export class IslandGorunumu {
 
         // boştaki içerik: [karakter] [sunucu] saat [pil]
         this._bos = new St.BoxLayout({style_class: 'flugel-bos', x_align: Clutter.ActorAlign.CENTER, y_align: Clutter.ActorAlign.CENTER});
-        this._bosEkip = ekip.ikonOlustur(18, 'kapsul');
         this._bosSol = new St.BoxLayout({style_class: 'flugel-mini-kutu', y_align: Clutter.ActorAlign.CENTER});
         this._saat = new St.Label({style_class: 'flugel-saat', y_align: Clutter.ActorAlign.CENTER});
         this._bosSag = new St.BoxLayout({style_class: 'flugel-mini-kutu', y_align: Clutter.ActorAlign.CENTER});
-        for (const c of [this._bosEkip, this._bosSol, this._saat, this._bosSag])
+        for (const c of [this._bosSol, this._saat, this._bosSag])
             this._bos.add_child(c);
 
         // ikinci balon (bölünmüş durum)
@@ -77,11 +77,17 @@ export class IslandGorunumu {
         this._kok.connect('notify::hover', () => this._hoverDegisti());
         this._balon.connect('notify::hover', () => this._hoverDegisti());
         this._kok.connect('button-release-event', (_a, e) => this._tiklandi(e));
+        // 5 hızlı tık → Re:Zero sürprizi
+        this._kok.connect('button-press-event', () => {
+            this._ekip.tik();
+            return Clutter.EVENT_PROPAGATE;
+        });
+        ekip.baglan(this._kok);
         this._balon.connect('button-release-event', (_a, e) => this._tiklandi(e));
         this._monitorId = Main.layoutManager.connect('monitors-changed', () => this._yerlestir(true));
         this._panelId = Main.panel.connect('notify::height', () => this._yerlestir(true));
         this._ayarId = this._ayar.connect('changed', (_s, k) => {
-            if (['saydamlik', 'kart-saydamlik', 'genislik-carpani', 'kart-genislik', 'monitor', 'ekip-kapsulde'].includes(k))
+            if (['saydamlik', 'kart-saydamlik', 'genislik-carpani', 'kart-genislik', 'monitor'].includes(k))
                 this._yerlestir(true);
         });
         this._kart.kapatIstendi = () => this.daralt();
@@ -90,6 +96,7 @@ export class IslandGorunumu {
         this._kart.disMenuKapandi = () => this._hoverDegisti();
 
         this._abonelik = this._yonetici.subscribe(vm => this._uygula(vm));
+        this._zaman(4000, () => this._isit());
     }
 
     // ---------- yerleşim ----------
@@ -149,7 +156,7 @@ export class IslandGorunumu {
         this.capa.set_position(Math.round(m.x + m.width / 2 - 1), this._ustY());
         // kapsül siyahından kartın nötr camına, yükseklikle orantılı geçiş
         const kh = this._kapsulYuksekligi();
-        const t = Math.max(0, Math.min(1, (h - kh) / Math.max(1, kh * 3)));
+        const t = Math.round(10 * Math.max(0, Math.min(1, (h - kh) / Math.max(1, kh * 3)))) / 10;
         this._radiusYaz(this._zemin, Math.max(0, Math.min(g.r, h / 2)), t);
         this._balonYerlestir();
     }
@@ -183,6 +190,7 @@ export class IslandGorunumu {
         if (anlik) {
             this._yay?.stop();
             this._yay = null;
+            Animasyon.bitti();
             this._geoUygula(hedef);
         } else {
             this._bicimle(hedef);
@@ -208,6 +216,7 @@ export class IslandGorunumu {
         // açılırken hafif yaylanır, kapanırken daha sönümlü (iOS'taki gibi)
         const buyuyor = hedef.h > bas.h + 1 || hedef.w > bas.w + 1;
         const hiz = this._ayar.get_double('animasyon-hizi');
+        Animasyon.suruyor = true;
         this._yay = springProgress(this._kok, p => this._geoUygula({
             w: lerp(bas.w, hedef.w, p), h: lerp(bas.h, hedef.h, p), r: lerp(bas.r, hedef.r, Math.min(p, 1)),
         }), {
@@ -215,6 +224,7 @@ export class IslandGorunumu {
             damping: buyuyor ? 0.78 : 0.88,
             onComplete: () => {
                 this._yay = null;
+                Animasyon.bitti();
                 bitince?.();
             },
         });
@@ -339,6 +349,19 @@ export class IslandGorunumu {
         this._bicimle(this._hedef('genis'));
     }
 
+    // Kartı görünmez (opaklık 0) olarak bir kez açıp her sekmeyi çizer: simgeler, stiller ve menüler önceden
+    // hazırlanır, ilk gerçek açılışta takılma olmaz. Kapsül dışına taşan kısım kırpılır, hiçbir şey görünmez.
+    _isit() {
+        if (this._durum === 'genis' || !this._kok.mapped)
+            return;
+        this._kartKutu.opacity = 0;
+        this._kartKutu.show();
+        this._kart.isit(() => {
+            if (this._durum !== 'genis')
+                this._kartKutu.hide();
+        });
+    }
+
     // kart içeriği büyüyüp küçülünce (sekme değişimi, alt menü) ada yayla yeni boyuta gider
     _kartBoyutu() {
         if (this._durum !== 'genis')
@@ -367,7 +390,6 @@ export class IslandGorunumu {
             if (a.data.kisa)
                 kutu.add_child(new St.Label({text: a.data.kisa, style_class: 'flugel-mini-metin', y_align: Clutter.ActorAlign.CENTER}));
         });
-        this._bosEkip.visible = this._ayar.get_boolean('ekip-kapsulde');
         if (this._durum === 'bos')
             this._bicimle(this._hedef('bos'));
     }
@@ -490,6 +512,7 @@ export class IslandGorunumu {
     destroy() {
         this._abonelik?.();
         this._yay?.stop();
+        Animasyon.bitti();
         this._disariyiIzle(false);
         for (const id of this._zamanlar)
             GLib.source_remove(id);

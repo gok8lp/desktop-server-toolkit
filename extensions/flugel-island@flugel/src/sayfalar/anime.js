@@ -42,6 +42,8 @@ export class AnimeSayfa extends Sayfa {
     }
 
     _yaz() {
+        if (!this.degisti('anime', this._veri.son('anime')))
+            return;
         this._bolum.removeAll();
         const d = this._veri.son('anime');
         if (!d) {

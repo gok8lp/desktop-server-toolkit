@@ -47,11 +47,13 @@ export class SistemSayfa extends Sayfa {
         this._pcYaz(this._veri.son('pc'));
         this._sunucuYaz(this._veri.son('island'));
         // kart açıkken ayrıca tazele (zamanlayıcıyı beklemeden)
-        this._veri.yenile('pc');
-        this._veri.yenile('island');
+        this._veri.tazele('pc', 15);
+        this._veri.tazele('island', 20);
     }
 
     _pcYaz(p) {
+        if (!this.degisti('pc', p))
+            return;
         this._pc.removeAll();
         if (!p || p.hata) {
             bilgiSatiri(this._pc, `Okunamadı: ${kac(p?.hata)}`);
@@ -65,6 +67,8 @@ export class SistemSayfa extends Sayfa {
     }
 
     _sunucuYaz(s) {
+        if (!this.degisti('sunucu', s))
+            return;
         this._sunucu.removeAll();
         if (!s || s.hata) {
             bilgiSatiri(this._sunucu, renkli('Sunucuya ulaşılamıyor', SARI), 'network-server-symbolic');

@@ -12,7 +12,7 @@ const AYLAR = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz',
 
 export class Kart {
     // sayfalar: [{id, ad, ikon, sayfa}]  (sayfa: sayfalar/sayfa.js Sayfa örneği)
-    constructor({ayarlar, ekip, sayfalar, ayarlariAc, tepsi, ustCubuk}) {
+    constructor({ayarlar, sayfalar, ayarlariAc, tepsi, ustCubuk}) {
         this._tepsi = tepsi;
         this._ayar = ayarlar;
         this._sayfalar = sayfalar;
@@ -26,8 +26,6 @@ export class Kart {
 
         // başlık
         const ust = new St.BoxLayout({style_class: 'flugel-kart-ust'});
-        this._ekip = ekip.ikonOlustur(30, 'kart');
-        ust.add_child(this._ekip);
         const zaman = new St.Button({style_class: 'flugel-zaman-dugme', can_focus: true, y_align: Clutter.ActorAlign.CENTER});
         const zamanKutu = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL});
         this._saat = new St.Label({style_class: 'flugel-kart-saat'});
@@ -170,6 +168,25 @@ export class Kart {
         this._secili?.sayfa.goster();
     }
 
+    // açılıştan sonra boşta: her sekme bir kez çizilir (ilk açılışta/geçişte takılma olmasın)
+    isit(bitince) {
+        const sira = [...this._sayfalar];
+        const ilk = this._secili;
+        const adim = () => {
+            const s = sira.shift();
+            if (!s || !this.actor.mapped) {
+                if (ilk)
+                    this.sekmeSec(ilk.id, false);
+                this._isitId = 0;
+                bitince?.();
+                return GLib.SOURCE_REMOVE;
+            }
+            this.sekmeSec(s.id, false);
+            return GLib.SOURCE_CONTINUE;
+        };
+        this._isitId = GLib.timeout_add(GLib.PRIORITY_LOW, 150, adim);
+    }
+
     kapandi() {
         for (const s of this._sayfalar)
             s.sayfa.kapandi();
@@ -218,6 +235,9 @@ export class Kart {
     }
 
     destroy() {
+        if (this._isitId)
+            GLib.source_remove(this._isitId);
+        this._isitId = 0;
         if (this._boyutId)
             GLib.source_remove(this._boyutId);
         this._boyutId = 0;

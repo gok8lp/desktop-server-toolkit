@@ -60,13 +60,9 @@
       <default>1.0</default>
       <summary>Animasyon hızı çarpanı (sistemde "animasyonları azalt" açıksa animasyon hiç yapılmaz)</summary>
     </key>
-    <key name="ekip-kapsulde" type="b">
+    <key name="ekip-surpriz" type="b">
       <default>true</default>
-      <summary>Boştaki kapsülde Re:Zero karakterini göster</summary>
-    </key>
-    <key name="ekip-otomatik" type="b">
-      <default>true</default>
-      <summary>Re:Zero karakterini otomatik değiştir</summary>
+      <summary>Re:Zero sürprizi: ara sıra bir karakter adanın kenarında görünür (5 hızlı tık da çağırır)</summary>
     </key>
 
     <!-- Canlı etkinlikler -->
