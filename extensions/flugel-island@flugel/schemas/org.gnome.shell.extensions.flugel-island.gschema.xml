@@ -7,6 +7,15 @@
 
   <schema id="org.gnome.shell.extensions.flugel-island" path="/org/gnome/shell/extensions/flugel-island/">
     <!-- Davranış -->
+    <key name="dil" type="s">
+      <choices><choice value="sistem"/><choice value="tr"/><choice value="en"/></choices>
+      <default>'sistem'</default>
+      <summary>Arayüz dili (sistem, Türkçe, English)</summary>
+    </key>
+    <key name="vm-gizli" type="as">
+      <default>[]</default>
+      <summary>Sanal makineler sekmesinde gizlenen VM'ler</summary>
+    </key>
     <key name="tetik" enum="org.gnome.shell.extensions.flugel-island.Tetik">
       <default>'hover'</default>
       <summary>Kartı açma biçimi</summary>

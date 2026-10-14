@@ -27,9 +27,14 @@ const sure = sn => {
 };
 
 export class VmSayfa extends Sayfa {
-    constructor({veri}) {
+    constructor({veri, ayarlar}) {
         super();
         this._veri = veri;
+        this._ayar = ayarlar;
+        this._gizliId = ayarlar.connect('changed::vm-gizli', () => {
+            this._cizilen?.clear();
+            this.gorunurse(() => this._yaz());
+        });
         this._kutu = new St.BoxLayout({style_class: 'flugel-vm-kartlar', x_align: Clutter.ActorAlign.CENTER});
         this.actor.add_child(bolum('Sunucudaki sanal makineler', this._kutu));
         const araclar = new Izgara({sutun: 3});
@@ -100,7 +105,8 @@ export class VmSayfa extends Sayfa {
             this._kutu.add_child(new St.Label({text: 'Sunucuya ulaşılamadı', style_class: 'flugel-soluk'}));
             return;
         }
-        for (const v of this._liste)
+        const gizli = new Set(this._ayar.get_strv('vm-gizli'));
+        for (const v of this._liste.filter(x => !gizli.has(x.ad)))
             this._kutu.add_child(this._kart(v));
     }
 
@@ -146,6 +152,7 @@ export class VmSayfa extends Sayfa {
             GLib.source_remove(this._sikId);
         this._sikId = 0;
         this._aboneler.forEach(f => f());
+        this._ayar.disconnect(this._gizliId);
         super.destroy();
     }
 }
