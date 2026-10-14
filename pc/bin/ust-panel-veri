@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Ust panel eklentisi icin veri: kripto fiyatlari, bu PC ve sunucu durumu (JSON).
-Kullanim: ust-panel-veri kripto | pc | sunucu     (sistem-bakim)
+Kullanim: ust-panel-veri kripto | canli | pc | sunucu | island | basket | anime     (sistem-bakim)
 Evde LAN, disarida Tailscale uzerinden sunucuya ulasir (ssh config Match kurali)."""
 import json, os, subprocess, sys, time, urllib.request
 
@@ -178,7 +178,30 @@ print(json.dumps({
 '''
 
 
+ISLAND_ADRESLER = ("http://192.168.0.15:3012/api/island", "https://flugelserver.tail42f1f4.ts.net:8443/api/island")
+
+
+def island():
+    """Sunucunun hazirladigi tek durum paketi (v2): once ev agi, olmazsa Tailscale. SSH acmaz."""
+    son = None
+    for i, adres in enumerate(ISLAND_ADRESLER):
+        try:
+            with urllib.request.urlopen(adres, timeout=3 if i == 0 else 8) as y:
+                d = json.load(y)
+            d["kaynak"] = "lan" if i == 0 else "tailscale"
+            return d
+        except Exception as e:  # sonraki adresi dene
+            son = e
+    raise RuntimeError(f"sunucuya ulasilamadi: {son}")
+
+
 def sunucu():
+    """v1 panelinin bekledigi bicim; once /api/island, olmazsa eski SSH yolu."""
+    try:
+        d = island()
+        return {**d, "sorunlar": "; ".join(d.get("sorunlar") or []), "vm": str(d.get("vm_acik", 0))}
+    except Exception:
+        pass
     r = subprocess.run(["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=6", "-o", "ControlPath=none",
                         "flugelserver", "python3", "-"], input=UZAK, capture_output=True, text=True, timeout=25)
     if r.returncode != 0 or not r.stdout.strip():
@@ -223,5 +246,7 @@ if __name__ == "__main__":
         print(json.dumps(cached("basket", 280, basket)))
     elif ne == "sunucu":
         print(json.dumps(cached("sunucu", 50, sunucu)))
+    elif ne == "island":
+        print(json.dumps(cached("island", 15, island)))
     else:
         print(json.dumps(pc()))
