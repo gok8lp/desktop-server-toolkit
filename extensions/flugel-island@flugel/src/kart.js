@@ -5,17 +5,30 @@ import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
+import {MedyaOynatici} from './medya.js';
+import {yumusakAc} from './hizli-detay.js';
+import * as SystemActions from 'resource:///org/gnome/shell/misc/systemActions.js';
+import Gio from 'gi://Gio';
+
 import {ikon} from './ortak.js';
-import {dugme, ipucuBagla, onizlemeAcik} from './bilesenler.js';
+import {Karo, dugme, ipucuBagla, onizlemeAcik} from './bilesenler.js';
 import {CalismaAlanlari} from './calisma-alanlari.js';
+import {HavaDurumu} from './hava.js';
 import {_} from './dil.js';
+
+// ekranı karart: Mutter'ın güç tasarrufu kipi (3 = kapalı); fare/klavye ile geri gelir
+function ekraniKapat() {
+    Gio.DBus.session.call('org.gnome.Mutter.DisplayConfig', '/org/gnome/Mutter/DisplayConfig', 'org.freedesktop.DBus.Properties',
+        'Set', new GLib.Variant('(ssv)', ['org.gnome.Mutter.DisplayConfig', 'PowerSaveMode', new GLib.Variant('i', 3)]),
+        null, Gio.DBusCallFlags.NONE, 2000, null, null);
+}
 
 const GUNLER = () => [_('Pazar'), _('Pazartesi'), _('Salı'), _('Çarşamba'), _('Perşembe'), _('Cuma'), _('Cumartesi')];
 const AYLAR = () => [_('Ocak'), _('Şubat'), _('Mart'), _('Nisan'), _('Mayıs'), _('Haziran'), _('Temmuz'), _('Ağustos'), _('Eylül'), _('Ekim'), _('Kasım'), _('Aralık')];
 
 export class Kart {
     // sayfalar: [{id, ad, ikon, sayfa}]  (sayfa: sayfalar/sayfa.js Sayfa örneği)
-    constructor({ayarlar, sayfalar, ayarlariAc, tepsi, ustCubuk}) {
+    constructor({ayarlar, veri, sayfalar, ayarlariAc, tepsi, ustCubuk}) {
         this._tepsi = tepsi;
         this._ayar = ayarlar;
         this._sayfalar = sayfalar;
@@ -43,6 +56,9 @@ export class Kart {
         });
         ipucuBagla(zaman, _('Takvim ve bildirimler (sağ tık da açar)'));
         ust.add_child(zaman);
+        // hava durumu (Atoll'daki hava küçük aracı gibi)
+        this._hava = new HavaDurumu(veri);
+        ust.add_child(this._hava.actor);
         ust.add_child(new St.Widget({x_expand: true}));
         // çalışma alanları (üst çubuğun solundaki ekran değiştirici)
         this.calismaAlanlari = new CalismaAlanlari();
@@ -56,6 +72,9 @@ export class Kart {
         ust.add_child(dugme('view-grid-symbolic', _('Hızlı ayarlar: ses, ağ, pil, güç'), sonra(() => ustCubuk.hizliAyarlar())));
         ust.add_child(dugme('x-office-calendar-symbolic', _('Takvim ve bildirimler'), sonra(() => ustCubuk.takvim())));
         ust.add_child(dugme('focus-windows-symbolic', _('Etkinlikler: pencereler ve uygulamalar'), sonra(() => ustCubuk.etkinlikler())));
+        this._gucDugme = dugme('system-shutdown-symbolic', _('Güç: ekranı kapat, kilitle, askıya al, yeniden başlat, kapat'),
+            () => this._gucAcKapa());
+        ust.add_child(this._gucDugme);
         this._sabitDugme = dugme('view-pin-symbolic', _('Açık tut'), () => this.sabitleIstendi?.());
         ust.add_child(this._sabitDugme);
         ust.add_child(dugme('emblem-system-symbolic', _('Island ayarları'), () => {
@@ -64,6 +83,25 @@ export class Kart {
         }));
         ust.add_child(dugme('window-close-symbolic', _('Kapat'), () => this.kapatIstendi?.()));
         this.actor.add_child(ust);
+        // güç paneli (başlığın altında yayla açılır)
+        this._gucPanel = new St.BoxLayout({style_class: 'flugel-alt-panel flugel-guc-panel', x_expand: true, visible: false,
+            clip_to_allocation: true});
+        const sistem = SystemActions.getDefault();
+        const gucKaro = (ikonAdi, ad, ipucu, fn, tehlikeli = false) => {
+            const k = new Karo({ikon: ikonAdi, etiket: ad, ipucu, genislik: 96, stil: tehlikeli ? 'flugel-guc-tehlike' : '', eylem: () => {
+                this._gucAcKapa(false);
+                this.kapatIstendi?.();
+                fn();
+            }});
+            this._gucPanel.add_child(k.actor);
+        };
+        gucKaro('video-display-symbolic', _('Ekranı kapat'), _('Ekran kararır; fareyi oynatınca ya da tuşa basınca açılır'), () => ekraniKapat());
+        gucKaro('system-lock-screen-symbolic', _('Kilitle'), _('Ekranı kilitle (Super+L)'), () => sistem.activateLockScreen());
+        gucKaro('weather-clear-night-symbolic', _('Askıya al'), _('Uyku: pil çok az harcar, kapak açılınca devam eder'), () => sistem.activateSuspend());
+        gucKaro('system-log-out-symbolic', _('Oturumu kapat'), _('GNOME onay penceresi açılır'), () => sistem.activateLogout());
+        gucKaro('system-reboot-symbolic', _('Yeniden başlat'), _('GNOME onay penceresi açılır (geri sayımlı)'), () => sistem.activateRestart(), true);
+        gucKaro('system-shutdown-symbolic', _('Kapat'), _('GNOME onay penceresi açılır (geri sayımlı)'), () => sistem.activatePowerOff(), true);
+        this.actor.add_child(this._gucPanel);
 
         // arka plan uygulamaları (tepsi) — simge yoksa görünmez
         this.actor.add_child(tepsi.actor);
@@ -160,6 +198,17 @@ export class Kart {
         this._tarih.text = `${t.get_day_of_month()} ${AYLAR()[t.get_month() - 1]} ${GUNLER()[t.get_day_of_week() % 7]}`;
     }
 
+    _gucAcKapa(ac = !this._gucPanel.visible) {
+        if (ac === this._gucPanel.visible)
+            return;
+        if (ac)
+            this._gucDugme.add_style_pseudo_class('checked');
+        else
+            this._gucDugme.remove_style_pseudo_class('checked');
+        yumusakAc(this._gucPanel, ac, () => this._boyutBildir());
+        this._boyutBildir();
+    }
+
     sekmeSec(id, animasyon = true) {
         const yeni = this._sayfalar.find(s => s.id === id);
         if (!yeni || this._secili === yeni)
@@ -181,10 +230,13 @@ export class Kart {
         if (this.actor.mapped)
             yeni.sayfa.goster();
         this._kaydirma.vadjustment.value = 0;
-        if (animasyon && this.actor.mapped) {
+        if (animasyon && this.actor.mapped && St.Settings.get().enable_animations) {
+            // sağdaki sekmeye geçince sayfa sağdan, soldakine geçince soldan kayarak gelir
+            const sira = s => this._sayfalar.indexOf(s);
+            const yon = eski && sira(yeni) < sira(eski) ? -1 : 1;
             yeni.sayfa.actor.opacity = 0;
-            yeni.sayfa.actor.translation_y = 8;
-            yeni.sayfa.actor.ease({opacity: 255, translation_y: 0, duration: 220, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+            yeni.sayfa.actor.translation_x = 26 * yon;
+            yeni.sayfa.actor.ease({opacity: 255, translation_x: 0, duration: 240, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
         }
         this._ayar.set_string('son-sekme', id);
         this._seciciYerlestir(animasyon);
@@ -217,6 +269,15 @@ export class Kart {
         this.saatYaz();
         this._sayfaYuksekligi();
         this._secili?.sayfa.goster();
+        // bölümler sırayla, hafifçe yukarı kayarak belirir (ada büyürken)
+        if (St.Settings.get().enable_animations) {
+            this.actor.get_children().filter(c => c.visible).forEach((c, i) => {
+                c.remove_transition('opacity');
+                c.opacity = 0;
+                c.translation_y = 10;
+                c.ease({opacity: 255, translation_y: 0, delay: 70 + i * 45, duration: 280, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+            });
+        }
     }
 
     // açılıştan sonra boşta: her sekme bir kez çizilir (ilk açılışta/geçişte takılma olmasın)
@@ -239,6 +300,10 @@ export class Kart {
     }
 
     kapandi() {
+        if (this._gucPanel.visible) {
+            this._gucPanel.hide();
+            this._gucDugme.remove_style_pseudo_class('checked');
+        }
         for (const s of this._sayfalar)
             s.sayfa.kapandi();
     }
@@ -265,7 +330,7 @@ export class Kart {
         liste.forEach((a, i) => {
             let g = this._canliGorunumler.get(a.id);
             if (!g) {
-                g = new EtkinlikGorunumu('satir');
+                g = a.data?.medya ? new MedyaOynatici(this._ayar) : new EtkinlikGorunumu('satir');
                 this._canliGorunumler.set(a.id, g);
                 this._canli.add_child(g.actor);
             }
@@ -286,6 +351,7 @@ export class Kart {
     }
 
     destroy() {
+        this._hava?.destroy();
         if (this._seciciId)
             GLib.source_remove(this._seciciId);
         this._seciciId = 0;

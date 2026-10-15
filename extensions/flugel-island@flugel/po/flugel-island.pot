@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 17:17+0300\n"
+"POT-Creation-Date: 2026-10-15 17:48+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,6 +153,24 @@ msgstr ""
 msgid "Değişince kısa süre göster"
 msgstr ""
 
+msgid "Zamanlayıcı"
+msgstr ""
+
+msgid "Geri sayım kapsülde; bitince ses ve duyuru"
+msgstr ""
+
+msgid "İndirmeler"
+msgstr ""
+
+msgid "İndirilenler klasöründe süren indirme; bitince Aç / Klasörde göster"
+msgstr ""
+
+msgid "Rahatsız etme göstergesi"
+msgstr ""
+
+msgid "Rahatsız etme açıkken kapsülün yanında küçük ay"
+msgstr ""
+
 msgid "Bu sayfayı varsayılana döndür"
 msgstr ""
 
@@ -231,6 +249,18 @@ msgid "Üzerine gelince açılma gecikmesi"
 msgstr ""
 
 msgid "milisaniye"
+msgstr ""
+
+msgid "Hava durumu şehri (kart başlığı; boş = kapalı)"
+msgstr ""
+
+msgid "Oynatıcıda iki parmakla yatay kaydırma"
+msgstr ""
+
+msgid "Önceki / sonraki parça"
+msgstr ""
+
+msgid "10 sn geri / ileri sar"
 msgstr ""
 
 msgid "Ekran"
@@ -758,6 +788,80 @@ msgstr ""
 msgid "Ayar dosyası seç"
 msgstr ""
 
+msgid "Süre doldu"
+msgstr ""
+
+msgid "Yeniden başlat"
+msgstr ""
+
+#, javascript-format
+msgid "Zamanlayıcı duraklatıldı · %s"
+msgstr ""
+
+#, javascript-format
+msgid "Zamanlayıcı · %s"
+msgstr ""
+
+#, javascript-format
+msgid "toplam %s"
+msgstr ""
+
+msgid "Devam"
+msgstr ""
+
+msgid "Duraklat"
+msgstr ""
+
+msgid "+1 dakika"
+msgstr ""
+
+msgid "Süre seç"
+msgstr ""
+
+msgid "1 sa"
+msgstr ""
+
+#, javascript-format
+msgid "%s dk"
+msgstr ""
+
+msgid "+1 dk"
+msgstr ""
+
+msgid "+5 dk"
+msgstr ""
+
+msgid "İptal"
+msgstr ""
+
+msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgstr ""
+
+msgid "Henüz kopyalanan metin yok"
+msgstr ""
+
+msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgstr ""
+
+msgid "Kopyalandı"
+msgstr ""
+
+#, javascript-format
+msgid "%s kopyalandı"
+msgstr ""
+
+msgid "Renk seçici"
+msgstr ""
+
+msgid "Ekrandan renk seç"
+msgstr ""
+
+msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
+msgstr ""
+
+msgid "Tıkla: kopyala"
+msgstr ""
+
 #, javascript-format
 msgid "Çalışma alanı %s / %s"
 msgstr ""
@@ -787,6 +891,50 @@ msgstr ""
 msgid "Parlaklık %40, animasyonsuz"
 msgstr ""
 
+msgid "Açık"
+msgstr ""
+
+msgid "Az bulutlu"
+msgstr ""
+
+msgid "Parçalı bulutlu"
+msgstr ""
+
+msgid "Sisli"
+msgstr ""
+
+msgid "Çisenti"
+msgstr ""
+
+msgid "Yağmur"
+msgstr ""
+
+msgid "Kuvvetli yağmur"
+msgstr ""
+
+msgid "Kar"
+msgstr ""
+
+msgid "Yoğun kar"
+msgstr ""
+
+msgid "Sağanak"
+msgstr ""
+
+msgid "Şiddetli sağanak"
+msgstr ""
+
+msgid "Gök gürültülü fırtına"
+msgstr ""
+
+#, javascript-format
+msgid "En yüksek %s° · en düşük %s° · hissedilen %s°"
+msgstr ""
+
+#, javascript-format
+msgid "Nem %%%s · rüzgâr %s km/sa · gün doğumu %s · batımı %s"
+msgstr ""
+
 msgid "Tasarruf"
 msgstr ""
 
@@ -800,9 +948,6 @@ msgid "Açık · tıkla: kapat"
 msgstr ""
 
 msgid "Kapalı · tıkla: aç"
-msgstr ""
-
-msgid "Açık"
 msgstr ""
 
 msgid "Uçak modu"
@@ -985,10 +1130,40 @@ msgstr ""
 msgid "Etkinlikler: pencereler ve uygulamalar"
 msgstr ""
 
+msgid "Güç: ekranı kapat, kilitle, askıya al, yeniden başlat, kapat"
+msgstr ""
+
 msgid "Açık tut"
 msgstr ""
 
 msgid "Island ayarları"
+msgstr ""
+
+msgid "Ekranı kapat"
+msgstr ""
+
+msgid "Ekran kararır; fareyi oynatınca ya da tuşa basınca açılır"
+msgstr ""
+
+msgid "Kilitle"
+msgstr ""
+
+msgid "Ekranı kilitle (Super+L)"
+msgstr ""
+
+msgid "Askıya al"
+msgstr ""
+
+msgid "Uyku: pil çok az harcar, kapak açılınca devam eder"
+msgstr ""
+
+msgid "Oturumu kapat"
+msgstr ""
+
+msgid "GNOME onay penceresi açılır"
+msgstr ""
+
+msgid "GNOME onay penceresi açılır (geri sayımlı)"
 msgstr ""
 
 msgid "Ses"
@@ -1001,6 +1176,24 @@ msgid "Uygulama sesleri ve çıkış cihazı"
 msgstr ""
 
 msgid "Parlaklık"
+msgstr ""
+
+msgid "10 sn geri"
+msgstr ""
+
+msgid "Önceki"
+msgstr ""
+
+msgid "Oynat / duraklat"
+msgstr ""
+
+msgid "Sonraki"
+msgstr ""
+
+msgid "10 sn ileri"
+msgstr ""
+
+msgid "Çıkış cihazı"
 msgstr ""
 
 msgid "komut çalışmadı"
@@ -1204,6 +1397,27 @@ msgstr ""
 msgid "Kablosuz aygıtlar"
 msgstr ""
 
+#, javascript-format
+msgid "%s dosya indiriliyor"
+msgstr ""
+
+#, javascript-format
+msgid "İndiriliyor: %s"
+msgstr ""
+
+msgid "İndirilenler klasörü"
+msgstr ""
+
+#, javascript-format
+msgid "İndirildi: %s"
+msgstr ""
+
+msgid "Aç"
+msgstr ""
+
+msgid "Klasörde göster"
+msgstr ""
+
 msgid "Caps Lock açık"
 msgstr ""
 
@@ -1243,16 +1457,7 @@ msgstr ""
 msgid "Kripto sekmesi"
 msgstr ""
 
-msgid "Önceki"
-msgstr ""
-
-msgid "Duraklat"
-msgstr ""
-
 msgid "Oynat"
-msgstr ""
-
-msgid "Sonraki"
 msgstr ""
 
 msgid "duraklatıldı"
@@ -1260,6 +1465,15 @@ msgstr ""
 
 #, javascript-format
 msgid "%d yeni"
+msgstr ""
+
+msgid "Rahatsız etme açık"
+msgstr ""
+
+msgid "Bildirim afişleri gösterilmiyor"
+msgstr ""
+
+msgid "Rahatsız etmeyi kapat"
 msgstr ""
 
 msgid "Klavye ışığı"
@@ -1572,9 +1786,6 @@ msgstr ""
 msgid "%s sa kaldı"
 msgstr ""
 
-msgid "1 sa"
-msgstr ""
-
 msgid "8 sa"
 msgstr ""
 
@@ -1586,10 +1797,6 @@ msgstr ""
 
 #, javascript-format
 msgid "%s sa %s dk"
-msgstr ""
-
-#, javascript-format
-msgid "%s dk"
 msgstr ""
 
 msgid "Uygulama ara…"
@@ -1608,6 +1815,24 @@ msgid "Görüntü"
 msgstr ""
 
 msgid "Alan, pencere ya da tüm ekran (Print, Shift+Super+S)"
+msgstr ""
+
+msgid "Geri sayım kapsülde görünür; bitince ses ve duyuru"
+msgstr ""
+
+msgid "Pano"
+msgstr ""
+
+msgid "Pano geçmişi"
+msgstr ""
+
+msgid "Son kopyalanan metinler (sadece bu oturumda, bellekte)"
+msgstr ""
+
+msgid "Renk seç"
+msgstr ""
+
+msgid "Tıkla: geçmiş ve seçici · sağ tık: hemen ekrandan seç (HEX panoya)"
 msgstr ""
 
 msgid "Kayıt"
@@ -1757,9 +1982,6 @@ msgstr ""
 msgid "Sunucu: ana disk (fotoğraf, medya)"
 msgstr ""
 
-msgid "İndirmeler"
-msgstr ""
-
 msgid "Sunucu: indirmeler"
 msgstr ""
 
@@ -1905,9 +2127,6 @@ msgid "Ayarlar"
 msgstr ""
 
 msgid "GNOME ayarları"
-msgstr ""
-
-msgid "Kilitle"
 msgstr ""
 
 msgid "Ekranı kilitle"
@@ -2109,9 +2328,6 @@ msgid "Pil Tasarrufu (parlaklık %40, animasyonsuz)"
 msgstr ""
 
 msgid "Durumu şimdi sor"
-msgstr ""
-
-msgid "Aç"
 msgstr ""
 
 msgid "Pil"

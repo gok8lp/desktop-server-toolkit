@@ -51,6 +51,9 @@ import {NotificationProvider} from './src/providers/notification.js';
 import {BildirimProvider} from './src/providers/bildirim.js';
 import {OtomatikGuncelleme} from './src/guncelleme.js';
 import {KeyboardProvider} from './src/providers/keyboard.js';
+import {IndirmeProvider} from './src/providers/indirme.js';
+import {OdakProvider} from './src/providers/odak.js';
+import {ZamanlayiciProvider, pano} from './src/araclar.js';
 import {_, dilKur} from './src/dil.js';
 
 // Ayarlardaki kimlik → sağlayıcı (her açılışta yeni örnek; eski örnekten hiçbir şey taşınmaz)
@@ -70,6 +73,9 @@ const SAGLAYICILAR = {
     'bildirim': o => new BildirimProvider(o),
     'akis': o => new AkisProvider(o),
     'keyboard': () => new KeyboardProvider(),
+    'zamanlayici': o => new ZamanlayiciProvider(o),
+    'indirme': () => new IndirmeProvider(),
+    'odak': () => new OdakProvider(),
 };
 
 export default class FlugelIsland extends Extension {
@@ -89,6 +95,7 @@ export default class FlugelIsland extends Extension {
             console.warn('FLUGEL Island: flugel-panel de açık; ikisi birlikte kullanılmamalı (kur-island betiği eskisini kapatır)');
 
         this._ayar = this.getSettings();
+        this._ayarGoc();
         // arayüz dili (sistem / Türkçe / English) — ayarlar penceresi değiştirince Island'ı yeniden başlatır
         dilKur(this.path, this._ayar.get_string('dil'));
         this._yonetici = new ActivityManager();
@@ -109,6 +116,7 @@ export default class FlugelIsland extends Extension {
         this._guncelleme = new OtomatikGuncelleme(this._ayar);
 
         this._uyku = new UykuEngeli(this._yonetici, this._ayar);
+        pano.baslat();
         const o = {veri: this._veri, panik: this._panik, uyku: this._uyku, guc: this._guc, ekip: this._ekip, ayarlar: this._ayar,
             ustCubuk: {
                 hizliAyarlar: () => this._ustCubuk?.hizliAyarlar(),
@@ -125,7 +133,7 @@ export default class FlugelIsland extends Extension {
             {id: 'anime', ad: _('Anime ve manga'), aciklama: _('Takip ettiklerim'), ikon: 'anime', sayfa: new AnimeSayfa(o)},
             {id: 'bildirim', ad: _('Bildirimler'), aciklama: _('Sunucudan gelen son 24 saat; kategori susturma'), ikon: 'preferences-system-notifications-symbolic', sayfa: new BildirimlerSayfa(o)},
         ];
-        this._kart = new Kart({ayarlar: this._ayar, sayfalar, ayarlariAc: () => this.openPreferences(),
+        this._kart = new Kart({ayarlar: this._ayar, veri: this._veri, sayfalar, ayarlariAc: () => this.openPreferences(),
             tepsi: new Tepsi(), ustCubuk: o.ustCubuk});
         this._ada = new IslandGorunumu({ayarlar: this._ayar, yonetici: this._yonetici, kart: this._kart, ekip: this._ekip});
         this._ustCubuk = new UstCubuk(this._ayar, this._ada.capa);
@@ -153,6 +161,23 @@ export default class FlugelIsland extends Extension {
         // kısa süreli etkinlikler: sabit tik yok; sadece en yakın bitiş anında uyanılır
         this._sureAbone = this._yonetici.subscribe(() => this._sureyiPlanla());
         this._veri.baslat();
+    }
+
+    // yeni sürümde eklenen canlı etkinlik kaynakları, kullanıcının kayıtlı listelerine de eklenir (bir kez)
+    _ayarGoc() {
+        const a = this._ayar;
+        if (a.get_int('ayar-surumu') >= 3)
+            return;
+        const yeni = ['zamanlayici', 'indirme', 'odak'];
+        for (const k of ['etkin-saglayicilar', 'oncelik-sirasi']) {
+            const l = a.get_strv(k);
+            const eksik = yeni.filter(x => !l.includes(x));
+            if (eksik.length) {
+                const i = Math.max(0, l.indexOf('media') + 1);
+                a.set_strv(k, [...l.slice(0, i), ...eksik, ...l.slice(i)]);
+            }
+        }
+        a.set_int('ayar-surumu', 3);
     }
 
     _saglayicilariKur() {
@@ -214,6 +239,7 @@ export default class FlugelIsland extends Extension {
         if (this._tarihMenu)
             this._tarihMenu.opacity = 255;
         this._tarihMenu = null;
+        pano.durdur();
         this._uyku?.destroy();
         this._uyku = null;
         this._guncelleme?.destroy();

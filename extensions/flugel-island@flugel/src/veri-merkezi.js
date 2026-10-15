@@ -21,6 +21,8 @@ const KAYNAKLAR = {
     basket: [[VERI, 'basket'], 'basket', null],
     anime: [[VERI, 'anime'], 'anime', 'yenileme-anime'],
     vm: [[`${H}/.local/bin/vm`, 'liste'], null, null],
+    // hava durumu (Open-Meteo); şehir ayarı boşsa çalışmaz
+    hava: [a => (a.get_string('hava-konum').trim() ? [VERI, 'hava', a.get_string('hava-konum').trim()] : null), null, 'yenileme-hava'],
 };
 
 export class VeriMerkezi {
@@ -38,6 +40,8 @@ export class VeriMerkezi {
                 this._hepsiniPlanla();
             if (anahtar === 'kripto-varliklar')
                 this.yenile('kizle');
+            if (anahtar === 'hava-konum')
+                this.yenile('hava');
         });
     }
 

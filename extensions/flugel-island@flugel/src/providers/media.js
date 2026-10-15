@@ -76,10 +76,21 @@ export class MediaProvider {
                 }
                 if (!this._manager || this._players.has(busName))
                     return;
-                const kayit = {proxy, duraklatildi: 0};
+                const kayit = {proxy, duraklatildi: 0, ad: null};
                 kayit.propsHandler = proxy.connect('g-properties-changed', () => this._refresh(busName));
                 this._players.set(busName, kayit);
                 this._refresh(busName);
+                // oynatıcının görünen adı (Spotify, Chromium, mpv…) bir kez okunur
+                this._dbus.call(busName, MPRIS_PATH, 'org.freedesktop.DBus.Properties', 'Get',
+                    new GLib.Variant('(ss)', ['org.mpris.MediaPlayer2', 'Identity']), null, Gio.DBusCallFlags.NONE, 2000,
+                    this._iptal, (_b, r) => {
+                        try {
+                            kayit.ad = this._dbus.call_finish(r).deepUnpack()[0].deepUnpack();
+                            this._refresh(busName);
+                        } catch (e) {
+                            // Identity vermeyen oynatıcı
+                        }
+                    });
             });
     }
 
@@ -130,6 +141,11 @@ export class MediaProvider {
         if (coz(proxy.get_cached_property('CanGoNext')))
             eylemler.push({ikon: 'media-skip-forward-symbolic', ipucu: _('Sonraki'), fn: () => this._cagir(busName, 'Next')});
 
+        const medya = {bus: busName, baslik: title, sanatci: artist, album: coz(metadata['xesam:album']) ?? '', kapakUrl: artUrl,
+            caliyor, uzunluk: Number(coz(metadata['mpris:length']) ?? 0), parca: coz(metadata['mpris:trackid']) ?? '',
+            sarilabilir: !!coz(proxy.get_cached_property('CanSeek')), oncekiVar: !!coz(proxy.get_cached_property('CanGoPrevious')),
+            sonrakiVar: !!coz(proxy.get_cached_property('CanGoNext')), hiz: Number(coz(proxy.get_cached_property('Rate')) ?? 1),
+            oynatici: kayit.ad ?? busName.slice(MPRIS_BUS_PREFIX.length).split('.')[0]};
         this._manager.update(createActivity({
             id: `${this.id}:${busName}`,
             providerId: this.id,
@@ -140,7 +156,7 @@ export class MediaProvider {
             glyph: kapak ? null : (caliyor ? 'media-playback-start-symbolic' : 'media-playback-pause-symbolic'),
             label: title,
             sublabel: artist || null,
-            data: {kapak, kapakUrl: artUrl, kisa: caliyor ? '' : _('duraklatıldı'), eylemler},
+            data: {kapak, kapakUrl: artUrl, kisa: caliyor ? '' : _('duraklatıldı'), eylemler, medya},
         }));
     }
 

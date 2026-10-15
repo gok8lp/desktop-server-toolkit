@@ -114,6 +114,8 @@ export class Karo {
         // sol tık: eylem, sağ tık: sagTik (ör. sabitlenmiş uygulamayı kaldır)
         this.actor.button_mask = St.ButtonMask.ONE | St.ButtonMask.THREE;
         this.actor.connect('clicked', (_b, n) => (n === 3 ? this._o.sagTik?.() : this._o.eylem?.()));
+        this.actor.track_hover = true;
+        yayliBasma(this.actor, {basik: 0.92});
         if (o.ipucu)
             ipucuBagla(this.actor, () => this._o.ipucu);
         this.rozet(o.rozet);
@@ -406,6 +408,36 @@ export class ResimKaro {
     }
 }
 
+// Basınca yaylanma: düğme basılıyken hafifçe içe göçer, bırakınca yayla eski boyuna sıçrar (Atoll/iOS hissi).
+// Dokunmatik yüzeyde de çalışır; animasyonlar kapalıysa hiçbir şey yapmaz.
+export function yayliBasma(aktor, {basik = 0.88, buyume = 1} = {}) {
+    aktor.set_pivot_point(0.5, 0.5);
+    const animasyon = () => St.Settings.get().enable_animations;
+    aktor.connect('button-press-event', () => {
+        if (animasyon())
+            aktor.ease({scale_x: basik, scale_y: basik, duration: 90, mode: Clutter.AnimationMode.EASE_OUT_QUAD});
+        return Clutter.EVENT_PROPAGATE;
+    });
+    const birak = () => {
+        if (animasyon())
+            aktor.ease({scale_x: buyume, scale_y: buyume, duration: 320, mode: Clutter.AnimationMode.EASE_OUT_BACK});
+        return Clutter.EVENT_PROPAGATE;
+    };
+    aktor.connect('button-release-event', birak);
+    aktor.connect('leave-event', birak);
+}
+
+// üzerine gelince hafifçe büyüme (karolar)
+export function hoverBuyume(aktor, oran = 1.04) {
+    aktor.set_pivot_point(0.5, 0.5);
+    aktor.connect('notify::hover', () => {
+        if (!St.Settings.get().enable_animations)
+            return;
+        const o = aktor.hover ? oran : 1;
+        aktor.ease({scale_x: o, scale_y: o, duration: 160, mode: Clutter.AnimationMode.EASE_OUT_QUAD});
+    });
+}
+
 // Simge düğmesi (kart başlığı, hızlı başlatma, etkinlik eylemleri)
 export function dugme(ikonAdi, ipucu, eylem, {boyut = 16, stil = 'flugel-dugme', etiket = null} = {}) {
     const d = new St.Button({style_class: stil, can_focus: true, accessible_name: ipucu, y_align: Clutter.ActorAlign.CENTER});
@@ -418,6 +450,7 @@ export function dugme(ikonAdi, ipucu, eylem, {boyut = 16, stil = 'flugel-dugme',
         d.set_child(new St.Icon({gicon: ikon(ikonAdi), icon_size: boyut}));
     }
     d.connect('clicked', () => eylem());
+    yayliBasma(d);
     if (ipucu)
         ipucuBagla(d, ipucu);
     return d;

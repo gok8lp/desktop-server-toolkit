@@ -27,6 +27,9 @@ const SAGLAYICILAR = () => ({
     'notification': [_('Bildirim afişi'), _('Gelen bildirimleri adada da göster')],
     'akis': [_('FLUGEL Akış takip kelimesi'), _('Takip ettiğin bir kelime haberlerde geçince')],
     'keyboard': [_('Caps Lock / klavye düzeni'), _('Değişince kısa süre göster')],
+    'zamanlayici': [_('Zamanlayıcı'), _('Geri sayım kapsülde; bitince ses ve duyuru')],
+    'indirme': [_('İndirmeler'), _('İndirilenler klasöründe süren indirme; bitince Aç / Klasörde göster')],
+    'odak': [_('Rahatsız etme göstergesi'), _('Rahatsız etme açıkken kapsülün yanında küçük ay')],
 });
 const VM_ADLARI = {'W11-GPU': 'Windows (GPU)', 'W11': 'Windows', 'mullvad-ts': 'Ubuntu VPN'};
 const DOCK_SEMA = 'org.gnome.shell.extensions.dash-to-dock';
@@ -124,6 +127,15 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         this._baglan(a, seritId);
         g.add(serit);
         g.add(sayi(a, 'hover-gecikme', _('Üzerine gelince açılma gecikmesi'), _('milisaniye'), 0, 2000, 20));
+        // hava durumu şehri (kart başlığında; boşsa gösterilmez)
+        const hava = new Adw.EntryRow({title: _('Hava durumu şehri (kart başlığı; boş = kapalı)'), text: a.get_string('hava-konum'),
+            show_apply_button: true});
+        hava.connect('apply', () => a.set_string('hava-konum', hava.text.trim()));
+        g.add(hava);
+        const [medyaKay, medyaKayId] = secim(a, 'medya-kaydirma', _('Oynatıcıda iki parmakla yatay kaydırma'), null,
+            [['parca', _('Önceki / sonraki parça')], ['sarma', _('10 sn geri / ileri sar')]]);
+        this._baglan(a, medyaKayId);
+        g.add(medyaKay);
         g.add(sayi(a, 'monitor', _('Ekran'), _('-1 = birincil ekran; 0, 1… = ekran sırası'), -1, 7, 1));
         const [panik, panikId] = secim(a, 'panik-onay', _('Panik onayı'), _('Yanlışlıkla basılmasın'),
             [['cift', _('İkinci tık')], ['basili', _('0,6 sn basılı tut')]]);

@@ -674,6 +674,69 @@ def kripto_liste():
     return d
 
 
+# ---------- hava durumu (Open-Meteo, anahtarsiz; Island kart basligi) ----------
+HAVA_KOD = {0: "Açık", 1: "Az bulutlu", 2: "Parçalı bulutlu", 3: "Kapalı", 45: "Sisli", 48: "Kırağılı sis",
+            51: "Hafif çisenti", 53: "Çisenti", 55: "Yoğun çisenti", 61: "Hafif yağmur", 63: "Yağmur", 65: "Kuvvetli yağmur",
+            66: "Dondurucu yağmur", 67: "Dondurucu yağmur", 71: "Hafif kar", 73: "Kar", 75: "Yoğun kar", 77: "Kar taneleri",
+            80: "Sağanak", 81: "Sağanak", 82: "Şiddetli sağanak", 85: "Kar sağanağı", 86: "Kar sağanağı",
+            95: "Gök gürültülü fırtına", 96: "Dolulu fırtına", 99: "Dolulu fırtına"}
+
+
+def hava_simge(kod, gunduz=True):
+    if kod in (0, 1):
+        return "weather-clear-symbolic" if gunduz else "weather-clear-night-symbolic"
+    if kod == 2:
+        return "weather-few-clouds-symbolic" if gunduz else "weather-few-clouds-night-symbolic"
+    if kod == 3:
+        return "weather-overcast-symbolic"
+    if kod in (45, 48):
+        return "weather-fog-symbolic"
+    if kod in (71, 73, 75, 77, 85, 86):
+        return "weather-snow-symbolic"
+    if kod in (95, 96, 99):
+        return "weather-storm-symbolic"
+    if kod in (51, 53, 55, 80):
+        return "weather-showers-scattered-symbolic"
+    return "weather-showers-symbolic"
+
+
+def hava(sehir):
+    sehir = (sehir or "").strip()
+    if not sehir:
+        return {"hata": "konum yok"}
+
+    def konum():
+        q = urllib.parse.quote(sehir)
+        d = json.load(urllib.request.urlopen(f"https://geocoding-api.open-meteo.com/v1/search?name={q}&count=1&language=tr", timeout=10))
+        r = (d.get("results") or [None])[0]
+        if not r:
+            raise RuntimeError("şehir bulunamadı")
+        return {"ad": r["name"], "lat": r["latitude"], "lon": r["longitude"], "tz": r.get("timezone", "auto")}
+    k = cached("hava-konum-" + "".join(c for c in sehir.lower() if c.isalnum()), 30 * 86400, konum)
+    if "hata" in k:
+        return k
+
+    def al():
+        url = (f"https://api.open-meteo.com/v1/forecast?latitude={k['lat']}&longitude={k['lon']}"
+               "&current=temperature_2m,apparent_temperature,weather_code,is_day,wind_speed_10m,relative_humidity_2m"
+               "&hourly=temperature_2m,weather_code,precipitation_probability&daily=temperature_2m_max,temperature_2m_min,"
+               "sunrise,sunset&forecast_days=2&timezone=" + urllib.parse.quote(k.get("tz") or "auto"))
+        d = json.load(urllib.request.urlopen(url, timeout=10))
+        c = d["current"]
+        simdi = c["time"][:13]
+        saatler = d["hourly"]["time"]
+        i0 = next((i for i, t in enumerate(saatler) if t[:13] >= simdi), 0)
+        saatlik = [{"saat": saatler[i][11:16], "derece": round(d["hourly"]["temperature_2m"][i]),
+                    "simge": hava_simge(d["hourly"]["weather_code"][i]), "yagis": d["hourly"]["precipitation_probability"][i]}
+                   for i in range(i0 + 1, min(i0 + 7, len(saatler)))]
+        return {"sehir": k["ad"], "kod": c["weather_code"], "derece": round(c["temperature_2m"]), "hissedilen": round(c["apparent_temperature"]),
+                "durum": HAVA_KOD.get(c["weather_code"], ""), "simge": hava_simge(c["weather_code"], bool(c.get("is_day", 1))),
+                "nem": c.get("relative_humidity_2m"), "ruzgar": round(c.get("wind_speed_10m") or 0),
+                "en_yuksek": round(d["daily"]["temperature_2m_max"][0]), "en_dusuk": round(d["daily"]["temperature_2m_min"][0]),
+                "gun_dogumu": d["daily"]["sunrise"][0][11:16], "gun_batimi": d["daily"]["sunset"][0][11:16], "saatlik": saatlik}
+    return cached("hava-" + "".join(c for c in sehir.lower() if c.isalnum()), 900, al)
+
+
 if __name__ == "__main__":
     ne = sys.argv[1] if len(sys.argv) > 1 else "pc"
     if ne == "kripto":
@@ -684,6 +747,8 @@ if __name__ == "__main__":
         print(json.dumps(grafik()))
     elif ne == "kripto-izle":
         print(json.dumps(kripto_izle((sys.argv[2] if len(sys.argv) > 2 else "BTC,ETH").split(","))))
+    elif ne == "hava":
+        print(json.dumps(hava(" ".join(sys.argv[2:]))))
     elif ne == "kripto-liste":
         print(json.dumps(kripto_liste()))
     elif ne == "koin":

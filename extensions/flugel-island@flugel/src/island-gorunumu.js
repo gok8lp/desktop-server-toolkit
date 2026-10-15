@@ -363,9 +363,21 @@ export class IslandGorunumu {
             // saat her zaman adada: etkinlik gösterilirken de sağda durur
             yeni = new St.BoxLayout({x_expand: true, y_align: Clutter.ActorAlign.CENTER});
             yeni.add_child(this._kompaktGorunum.actor);
-            this._kompaktSaat = new St.Label({style_class: 'flugel-kompakt-saat', y_align: Clutter.ActorAlign.CENTER,
+            const saat = new St.Label({style_class: 'flugel-kompakt-saat', y_align: Clutter.ActorAlign.CENTER,
                 text: GLib.DateTime.new_now_local().format('%H:%M')});
+            // içerik değişince eski etiket yok edilir: saat güncellemesi ona dokunmasın
+            saat.connect('destroy', () => {
+                if (this._kompaktSaat === saat)
+                    this._kompaktSaat = null;
+            });
+            this._kompaktSaat = saat;
             yeni.add_child(this._kompaktSaat);
+        }
+        // yeni bir etkinlik kapsüle gelince kapsül hafifçe "pıt" eder (kart kapanırken değil)
+        if (!kartKapandi && gorunum === 'kompakt' && a && St.Settings.get().enable_animations && this._kok.mapped) {
+            this._kok.set_pivot_point(0.5, 0);
+            this._kok.ease({scale_x: 1.045, scale_y: 1.045, duration: 110, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+                onComplete: () => this._kok.ease({scale_x: 1, scale_y: 1, duration: 380, mode: Clutter.AnimationMode.EASE_OUT_BACK})});
         }
         // zaten solarak giden (bir önceki geçişten kalan) aktörlere dokunulmaz; kendi kendilerine kalkarlar
         const eski = this._kompakt.get_children().filter(c => c !== yeni && !c._flugelGidiyor);

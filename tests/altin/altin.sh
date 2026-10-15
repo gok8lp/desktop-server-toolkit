@@ -38,6 +38,10 @@ a "__A.kaydir(-1, false); 1" >/dev/null; sleep 0.8
 a "__A.yaz('kart açıkken üst şeritte tekerlek çalışma alanı değiştirir', global.workspace_manager.get_active_workspace_index() !== __A.ws1, String(global.workspace_manager.get_active_workspace_index())); __A.git(10, 800); 1" >/dev/null; sleep 1.5
 isaret HIZLI
 . "$D/hizli-detay.sh"
+isaret MEDYA
+. "$D/medya.sh"
+isaret ARACLAR
+. "$D/araclar.sh"
 isaret DUGMELER
 . "$D/ust-dugmeler.sh"
 isaret PENCERE

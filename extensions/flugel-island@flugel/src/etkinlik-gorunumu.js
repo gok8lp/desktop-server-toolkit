@@ -7,6 +7,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import {ikon} from './ortak.js';
 import {dugme} from './bilesenler.js';
+import {Esitleyici} from './medya.js';
 import {_} from './dil.js';
 
 function etiket(stil, metin = '') {
@@ -189,6 +190,18 @@ export class EtkinlikGorunumu {
         }
         this._kisa.text = d.kisa ?? '';
         this._kisa.visible = !!this._kisa.text && this.bicim !== 'flas';
+        // çalan medya: kapsülün sağında dans eden ekolayzer (Atoll gibi)
+        if (d.medya && this.bicim === 'kompakt') {
+            if (!this._esit) {
+                this._esit = new Esitleyici({cubuk: 4, yukseklik: 12, genislik: 3});
+                this.actor.add_child(this._esit.actor);
+            }
+            this._esit.actor.show();
+            this._esit.caliyor = d.medya.caliyor;
+        } else if (this._esit) {
+            this._esit.caliyor = false;
+            this._esit.actor.hide();
+        }
 
         if (this.bicim === 'satir')
             this._eylemleriKur(d);

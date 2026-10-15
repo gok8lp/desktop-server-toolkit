@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 17:07+0300\n"
+"POT-Creation-Date: 2026-10-15 17:35+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -158,6 +158,28 @@ msgstr "Caps Lock / keyboard layout"
 msgid "Değişince kısa süre göster"
 msgstr "Show briefly when it changes"
 
+#
+msgid "Zamanlayıcı"
+msgstr "Timer"
+
+msgid "Geri sayım kapsülde; bitince ses ve duyuru"
+msgstr "Countdown in the capsule; sound and notice when done"
+
+msgid "İndirmeler"
+msgstr "Downloads"
+
+msgid "İndirilenler klasöründe süren indirme; bitince Aç / Klasörde göster"
+msgstr ""
+"Downloads in progress in the Downloads folder; when done: Open / Show in "
+"folder"
+
+#
+msgid "Rahatsız etme göstergesi"
+msgstr "Do Not Disturb indicator"
+
+msgid "Rahatsız etme açıkken kapsülün yanında küçük ay"
+msgstr "A small moon next to the capsule while Do Not Disturb is on"
+
 msgid "Bu sayfayı varsayılana döndür"
 msgstr "Reset this page to defaults"
 
@@ -247,6 +269,18 @@ msgstr "Hover delay"
 
 msgid "milisaniye"
 msgstr "milliseconds"
+
+msgid "Hava durumu şehri (kart başlığı; boş = kapalı)"
+msgstr "Weather city (card header; empty = off)"
+
+msgid "Oynatıcıda iki parmakla yatay kaydırma"
+msgstr "Two-finger horizontal swipe on the player"
+
+msgid "Önceki / sonraki parça"
+msgstr "Previous / next track"
+
+msgid "10 sn geri / ileri sar"
+msgstr "Seek 10 s back / forward"
 
 msgid "Ekran"
 msgstr "Display"
@@ -807,6 +841,85 @@ msgstr "Save settings"
 msgid "Ayar dosyası seç"
 msgstr "Choose settings file"
 
+msgid "Süre doldu"
+msgstr "Time's up"
+
+msgid "Yeniden başlat"
+msgstr "Restart"
+
+#, javascript-format
+msgid "Zamanlayıcı duraklatıldı · %s"
+msgstr "Timer paused · %s"
+
+#, javascript-format
+msgid "Zamanlayıcı · %s"
+msgstr "Timer · %s"
+
+#, javascript-format
+msgid "toplam %s"
+msgstr "total %s"
+
+msgid "Devam"
+msgstr "Resume"
+
+msgid "Duraklat"
+msgstr "Pause"
+
+#
+msgid "+1 dakika"
+msgstr "+1 minute"
+
+#
+msgid "Süre seç"
+msgstr "Choose a duration"
+
+#
+msgid "1 sa"
+msgstr "1 h"
+
+#, javascript-format
+msgid "%s dk"
+msgstr "%s min"
+
+msgid "+1 dk"
+msgstr "+1 min"
+
+msgid "+5 dk"
+msgstr "+5 min"
+
+msgid "İptal"
+msgstr "Cancel"
+
+msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgstr "Clipboard history (this session only, in memory)"
+
+msgid "Henüz kopyalanan metin yok"
+msgstr "Nothing copied yet"
+
+msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgstr "Click: copy again · right-click: remove"
+
+#
+msgid "Kopyalandı"
+msgstr "Copied"
+
+#, javascript-format
+msgid "%s kopyalandı"
+msgstr "%s copied"
+
+msgid "Renk seçici"
+msgstr "Color picker"
+
+msgid "Ekrandan renk seç"
+msgstr "Pick a color from the screen"
+
+msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
+msgstr "Picked colors appear here (copied to the clipboard as HEX)"
+
+#
+msgid "Tıkla: kopyala"
+msgstr "Click: copy"
+
 #, javascript-format
 msgid "Çalışma alanı %s / %s"
 msgstr "Workspace %s / %s"
@@ -836,6 +949,51 @@ msgstr "Battery Saver"
 msgid "Parlaklık %40, animasyonsuz"
 msgstr "40% brightness, no animations"
 
+msgid "Açık"
+msgstr "Running"
+
+msgid "Az bulutlu"
+msgstr "Mostly clear"
+
+msgid "Parçalı bulutlu"
+msgstr "Partly cloudy"
+
+msgid "Sisli"
+msgstr "Foggy"
+
+msgid "Çisenti"
+msgstr "Drizzle"
+
+msgid "Yağmur"
+msgstr "Rain"
+
+msgid "Kuvvetli yağmur"
+msgstr "Heavy rain"
+
+#
+msgid "Kar"
+msgstr "Snow"
+
+msgid "Yoğun kar"
+msgstr "Heavy snow"
+
+msgid "Sağanak"
+msgstr "Showers"
+
+msgid "Şiddetli sağanak"
+msgstr "Violent showers"
+
+msgid "Gök gürültülü fırtına"
+msgstr "Thunderstorm"
+
+#, javascript-format
+msgid "En yüksek %s° · en düşük %s° · hissedilen %s°"
+msgstr "High %s° · low %s° · feels like %s°"
+
+#, javascript-format
+msgid "Nem %%%s · rüzgâr %s km/sa · gün doğumu %s · batımı %s"
+msgstr "Humidity %s%% · wind %s km/h · sunrise %s · sunset %s"
+
 #
 msgid "Tasarruf"
 msgstr "Power saver"
@@ -852,9 +1010,6 @@ msgstr "On · click: turn off"
 
 msgid "Kapalı · tıkla: aç"
 msgstr "Off · click: turn on"
-
-msgid "Açık"
-msgstr "Running"
 
 #
 msgid "Uçak modu"
@@ -1052,11 +1207,43 @@ msgstr "Calendar & notifications"
 msgid "Etkinlikler: pencereler ve uygulamalar"
 msgstr "Activities: windows and apps"
 
+msgid "Güç: ekranı kapat, kilitle, askıya al, yeniden başlat, kapat"
+msgstr "Power: screen off, lock, suspend, restart, shut down"
+
 msgid "Açık tut"
 msgstr "Keep open"
 
 msgid "Island ayarları"
 msgstr "Island settings"
+
+#
+msgid "Ekranı kapat"
+msgstr "Screen off"
+
+msgid "Ekran kararır; fareyi oynatınca ya da tuşa basınca açılır"
+msgstr "The screen goes dark; move the mouse or press a key to wake it"
+
+msgid "Kilitle"
+msgstr "Lock"
+
+#
+msgid "Ekranı kilitle (Super+L)"
+msgstr "Lock the screen (Super+L)"
+
+msgid "Askıya al"
+msgstr "Suspend"
+
+msgid "Uyku: pil çok az harcar, kapak açılınca devam eder"
+msgstr "Sleep: uses very little battery, resumes when the lid opens"
+
+msgid "Oturumu kapat"
+msgstr "Log out"
+
+msgid "GNOME onay penceresi açılır"
+msgstr "GNOME's confirmation dialog opens"
+
+msgid "GNOME onay penceresi açılır (geri sayımlı)"
+msgstr "GNOME's confirmation dialog opens (with countdown)"
 
 msgid "Ses"
 msgstr "Sound"
@@ -1069,6 +1256,25 @@ msgstr "App volumes and output device"
 
 msgid "Parlaklık"
 msgstr "Brightness"
+
+msgid "10 sn geri"
+msgstr "Back 10 s"
+
+msgid "Önceki"
+msgstr "Previous"
+
+msgid "Oynat / duraklat"
+msgstr "Play / pause"
+
+msgid "Sonraki"
+msgstr "Next"
+
+msgid "10 sn ileri"
+msgstr "Forward 10 s"
+
+#
+msgid "Çıkış cihazı"
+msgstr "Output device"
 
 msgid "komut çalışmadı"
 msgstr "command failed"
@@ -1274,6 +1480,29 @@ msgstr "%%%s · charge it"
 msgid "Kablosuz aygıtlar"
 msgstr "Wireless devices"
 
+#, javascript-format
+msgid "%s dosya indiriliyor"
+msgstr "Downloading %s files"
+
+#, javascript-format
+msgid "İndiriliyor: %s"
+msgstr "Downloading: %s"
+
+#
+msgid "İndirilenler klasörü"
+msgstr "Downloads folder"
+
+#, javascript-format
+msgid "İndirildi: %s"
+msgstr "Downloaded: %s"
+
+msgid "Aç"
+msgstr "Open"
+
+#
+msgid "Klasörde göster"
+msgstr "Show in folder"
+
 msgid "Caps Lock açık"
 msgstr "Caps Lock on"
 
@@ -1314,17 +1543,8 @@ msgstr "%s $ · 24 hours"
 msgid "Kripto sekmesi"
 msgstr "Crypto tab"
 
-msgid "Önceki"
-msgstr "Previous"
-
-msgid "Duraklat"
-msgstr "Pause"
-
 msgid "Oynat"
 msgstr "Play"
-
-msgid "Sonraki"
-msgstr "Next"
 
 msgid "duraklatıldı"
 msgstr "paused"
@@ -1332,6 +1552,18 @@ msgstr "paused"
 #, javascript-format
 msgid "%d yeni"
 msgstr "%d new"
+
+#
+msgid "Rahatsız etme açık"
+msgstr "Do Not Disturb is on"
+
+#
+msgid "Bildirim afişleri gösterilmiyor"
+msgstr "Notification banners are hidden"
+
+#
+msgid "Rahatsız etmeyi kapat"
+msgstr "Turn off Do Not Disturb"
 
 msgid "Klavye ışığı"
 msgstr "Keyboard light"
@@ -1647,10 +1879,6 @@ msgstr "%s: mute for 8 hours"
 msgid "%s sa kaldı"
 msgstr "%s h left"
 
-#
-msgid "1 sa"
-msgstr "1 h"
-
 msgid "8 sa"
 msgstr "8 h"
 
@@ -1663,10 +1891,6 @@ msgstr "Force quitting"
 #, javascript-format
 msgid "%s sa %s dk"
 msgstr "%s h %s min"
-
-#, javascript-format
-msgid "%s dk"
-msgstr "%s min"
 
 #
 msgid "Uygulama ara…"
@@ -1686,6 +1910,27 @@ msgstr "Screenshot"
 
 msgid "Alan, pencere ya da tüm ekran (Print, Shift+Super+S)"
 msgstr "Area, window or whole screen (Print, Shift+Super+S)"
+
+msgid "Geri sayım kapsülde görünür; bitince ses ve duyuru"
+msgstr "The countdown shows in the capsule; sound and notice when done"
+
+msgid "Pano"
+msgstr "Clipboard"
+
+#
+msgid "Pano geçmişi"
+msgstr "Clipboard history"
+
+msgid "Son kopyalanan metinler (sadece bu oturumda, bellekte)"
+msgstr "Recently copied text (this session only, in memory)"
+
+msgid "Renk seç"
+msgstr "Pick color"
+
+msgid "Tıkla: geçmiş ve seçici · sağ tık: hemen ekrandan seç (HEX panoya)"
+msgstr ""
+"Click: history and picker · right-click: pick from the screen now (HEX to "
+"clipboard)"
 
 msgid "Kayıt"
 msgstr "Record"
@@ -1839,9 +2084,6 @@ msgstr "Eclipse workspace"
 msgid "Sunucu: ana disk (fotoğraf, medya)"
 msgstr "Server: main disk (photos, media)"
 
-msgid "İndirmeler"
-msgstr "Downloads"
-
 msgid "Sunucu: indirmeler"
 msgstr "Server: downloads"
 
@@ -1988,9 +2230,6 @@ msgstr "Settings"
 
 msgid "GNOME ayarları"
 msgstr "GNOME Settings"
-
-msgid "Kilitle"
-msgstr "Lock"
 
 msgid "Ekranı kilitle"
 msgstr "Lock screen"
@@ -2208,9 +2447,6 @@ msgstr "Battery Saver (40% brightness, no animations)"
 
 msgid "Durumu şimdi sor"
 msgstr "Check status now"
-
-msgid "Aç"
-msgstr "Open"
 
 #
 msgid "Pil"

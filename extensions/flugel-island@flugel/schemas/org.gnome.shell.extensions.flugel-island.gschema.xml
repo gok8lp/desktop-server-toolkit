@@ -65,6 +65,28 @@
       <default>'haftalik'</default>
       <summary>Otomatik güncelleme (apt, snap, flatpak): kapalı, günlük, haftalık</summary>
     </key>
+    <key name="renk-gecmisi" type="as">
+      <default>[]</default>
+      <summary>Renk seçiciyle alınan son renkler (HEX)</summary>
+    </key>
+    <key name="hava-konum" type="s">
+      <default>''</default>
+      <summary>Hava durumu için şehir (boşsa hava gösterilmez)</summary>
+    </key>
+    <key name="yenileme-hava" type="i">
+      <range min="300" max="7200"/>
+      <default>900</default>
+      <summary>Hava durumu yenileme aralığı (sn)</summary>
+    </key>
+    <key name="ayar-surumu" type="i">
+      <default>0</default>
+      <summary>İç kullanım: ayar göçü (yeni canlı etkinlik kaynakları eski listelere eklenir)</summary>
+    </key>
+    <key name="medya-kaydirma" type="s">
+      <choices><choice value="parca"/><choice value="sarma"/></choices>
+      <default>'parca'</default>
+      <summary>Oynatıcıda iki parmakla yatay kaydırma: parca = önceki/sonraki parça, sarma = 10 sn geri/ileri</summary>
+    </key>
     <key name="ust-serit" type="s">
       <choices><choice value="renkli"/><choice value="gizli"/><choice value="seffaf"/></choices>
       <default>'renkli'</default>
@@ -125,11 +147,11 @@
 
     <!-- Canlı etkinlikler -->
     <key name="etkin-saglayicilar" type="as">
-      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'akis']</default>
+      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'zamanlayici', 'indirme', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'odak', 'akis']</default>
       <summary>Açık canlı etkinlik kaynakları</summary>
     </key>
     <key name="oncelik-sirasi" type="as">
-      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'notification', 'akis', 'keyboard']</default>
+      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'zamanlayici', 'indirme', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'odak', 'notification', 'akis', 'keyboard']</default>
       <summary>Canlı etkinliklerin öncelik sırası (ilk = en önemli)</summary>
     </key>
     <key name="transient-duration-ms" type="i">

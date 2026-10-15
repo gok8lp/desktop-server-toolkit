@@ -467,3 +467,37 @@
 .flugel-anahtar-acik { background-color: #f2f2f4; color: #000000; }
 .flugel-karo-detay-acik { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45); }
 .flugel-uyg-ses-dugme:checked { background-color: rgba(255, 255, 255, 0.16); }
+
+/* medya oynatıcı (Atoll'dan esinlenildi) */
+.flugel-oynatici { spacing: 8px; padding: 12px 14px; border-radius: 22px; background-color: rgba(255, 255, 255, 0.06); }
+.flugel-oynatici-ust { spacing: 12px; }
+.flugel-oynatici-kapak { width: 64px; height: 64px; border-radius: 14px; background-color: rgba(255, 255, 255, 0.08); color: #9a9aa5; }
+.flugel-oynatici-baslik { font-size: 11.5pt; font-weight: 800; color: #ffffff; }
+.flugel-oynatici-sanatci { font-size: 10pt; color: #b4b4bc; }
+.flugel-oynatici-kaynak { font-size: 8pt; color: #7a7a84; margin-top: 2px; }
+.flugel-oynatici-ilerleme { spacing: 10px; }
+.flugel-oynatici-sure { font-size: 8.5pt; color: #9a9aa5; min-width: 38px; text-align: center; font-feature-settings: "tnum"; }
+.flugel-oynatici-cubuk { -barlevel-height: 5px; -barlevel-active-background-color: #ffffff; -barlevel-background-color: rgba(255, 255, 255, 0.18); -slider-handle-radius: 6px; }
+.flugel-oynatici-denetim { spacing: 14px; }
+.flugel-oynatici-dugme { padding: 8px; border-radius: 999px; color: #ffffff; }
+.flugel-oynatici-dugme:hover { background-color: rgba(255, 255, 255, 0.10); }
+.flugel-oynatici-dugme:checked { background-color: rgba(255, 255, 255, 0.16); }
+.flugel-oynatici-dugme-buyuk { padding: 10px; background-color: rgba(255, 255, 255, 0.12); }
+.flugel-oynatici-dugme-buyuk:hover { background-color: rgba(255, 255, 255, 0.20); }
+.flugel-oynatici-cikis { padding: 6px; color: #b4b4bc; }
+.flugel-esitleyici { spacing: 2px; }
+.flugel-esitleyici-cubuk { border-radius: 2px; background-color: #ffffff; }
+.flugel-etkinlik-kompakt .flugel-esitleyici { margin-left: 6px; }
+
+/* güç paneli */
+.flugel-guc-panel { spacing: 6px; padding: 8px; }
+.flugel-guc-tehlike .flugel-karo-simge { color: #f07b7b; }
+
+/* Atoll'dan uyarlanan araçlar */
+.flugel-sayac-buyuk { font-size: 26pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; padding: 4px 0; }
+.flugel-renk-ornek { padding: 4px 8px; border-radius: 10px; background-color: rgba(255, 255, 255, 0.06); }
+.flugel-renk-ornek:hover { background-color: rgba(255, 255, 255, 0.12); }
+.flugel-renk-kare { width: 16px; height: 16px; border-radius: 5px; border: 1px solid rgba(255, 255, 255, 0.25); }
+.flugel-hava { padding: 2px 8px; border-radius: 12px; margin-left: 6px; color: #e6e6ea; }
+.flugel-hava:hover { background-color: rgba(255, 255, 255, 0.08); }
+.flugel-hava-derece { font-size: 10.5pt; font-weight: 700; font-feature-settings: "tnum"; }

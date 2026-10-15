@@ -16,6 +16,7 @@ import {UYKU_KIPLERI} from '../uyku.js';
 import {HizliAyarlar} from '../hizli-ayarlar.js';
 import {SesParlaklik} from '../kontroller.js';
 import {BluetoothPaneli, WifiPaneli, yumusakAc} from '../hizli-detay.js';
+import {PanoPaneli, RenkPaneli, ZamanlayiciPaneli, renkSec} from '../araclar.js';
 import {_, f} from '../dil.js';
 
 function surecOldur(pid, ad) {
@@ -71,6 +72,20 @@ export class HizliSayfa extends Sayfa {
             eylem: () => {
                 this.close();
                 ekranGoruntusu();
+            }}));
+        // Atoll'dan uyarlanan araçlar: zamanlayıcı, pano geçmişi, renk seçici (altta yayla açılan paneller)
+        this._zamanKaro = araclar.ekle(new Karo({ikon: 'alarm-symbolic', etiket: _('Zamanlayıcı'),
+            ipucu: {baslik: _('Zamanlayıcı'), ayrinti: _('Geri sayım kapsülde görünür; bitince ses ve duyuru')},
+            eylem: () => this._detayAcKapa('zaman')}));
+        araclar.ekle(new Karo({ikon: 'edit-paste-symbolic', etiket: _('Pano'),
+            ipucu: {baslik: _('Pano geçmişi'), ayrinti: _('Son kopyalanan metinler (sadece bu oturumda, bellekte)')},
+            eylem: () => this._detayAcKapa('pano')}));
+        araclar.ekle(new Karo({ikon: 'color-select-symbolic', etiket: _('Renk seç'),
+            ipucu: {baslik: _('Renk seçici'), ayrinti: _('Tıkla: geçmiş ve seçici · sağ tık: hemen ekrandan seç (HEX panoya)')},
+            eylem: () => this._detayAcKapa('renk'),
+            sagTik: () => {
+                this.close();
+                renkSec(this._o.ayarlar).catch(() => {});
             }}));
         araclar.ekle(new Karo({ikon: 'camera-video-symbolic', etiket: _('Kayıt'),
             ipucu: {baslik: _('Ekran kaydı'), ayrinti: _('Kooha: MP4 ya da GIF')},
@@ -209,7 +224,9 @@ export class HizliSayfa extends Sayfa {
             if (ayni)
                 return;
             this._detayId = id;
-            this._detay = id === 'wifi' ? new WifiPaneli({kapat: () => this.close()}) : new BluetoothPaneli({kapat: () => this.close()});
+            const kapat = () => this.close();
+            this._detay = {wifi: () => new WifiPaneli({kapat}), bt: () => new BluetoothPaneli({kapat}), zaman: () => new ZamanlayiciPaneli(),
+                pano: () => new PanoPaneli({kapat}), renk: () => new RenkPaneli({ayarlar: this._o.ayarlar, kapat})}[id]();
             this._detayKap.add_child(this._detay.actor);
             yumusakAc(this._detayKap, true, () => gorunurKaydir(this._detayKap));
             this._ayarlarYaz();
