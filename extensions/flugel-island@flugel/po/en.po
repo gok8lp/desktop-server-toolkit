@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 17:35+0300\n"
+"POT-Creation-Date: 2026-10-15 18:46+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -58,6 +58,12 @@ msgstr "Anime & manga"
 
 msgid "Takip ettiklerim"
 msgstr "What I follow"
+
+msgid "Akış"
+msgstr "Feed"
+
+msgid "FLUGEL Akış: haberler, oyun, anime, takip"
+msgstr "FLUGEL Feed: news, games, anime, follows"
 
 msgid "Bildirimler"
 msgstr "Notifications"
@@ -229,12 +235,17 @@ msgstr ""
 "Becomes a notch stuck to the top edge; slides down when the pointer reaches "
 "the top center"
 
+msgid "Çentik: ada ekrana gömülü, hep görünür (MacBook gibi)"
+msgstr ""
+"Notch: the island is built into the screen, always visible (like a MacBook)"
+
 msgid "Uygulamayla birlikte (uygulama adanın altına yerleşir)"
 msgstr "Together with the app (the app sits below the island)"
 
 #
-msgid "Çentik: sadece fareyle (oyun modu)"
-msgstr "Notch: pointer only (game mode)"
+#
+msgid "Gizli çentik: sadece fareyle (oyun modu)"
+msgstr "Hidden notch: pointer only (game mode)"
 
 #
 msgid "Çentik: bildirim ve ses/parlaklıkta da"
@@ -254,15 +265,20 @@ msgstr ""
 "Colored: the strip takes the app's color, the island sits in the app's "
 "header and covers nothing"
 
+msgid "Yok, ada çentik (pencere tüm ekranı kullanır)"
+msgstr "None, the island is a notch (the window uses the whole screen)"
+
 #
-msgid "Uygulamanın renginde"
-msgstr "In the app's color"
+#
+msgid "Uygulamanın renginde şerit"
+msgstr "Strip in the app's color"
 
-msgid "Yok (ada pencerenin üstünde çentik olur)"
-msgstr "None (the island becomes a notch over the window)"
+msgid "Yok, ada gizli çentik (fareyle iner)"
+msgstr "None, the island is a hidden notch (slides down with the pointer)"
 
-msgid "Şeffaf"
-msgstr "Transparent"
+#
+msgid "Şeffaf şerit"
+msgstr "Transparent strip"
 
 msgid "Üzerine gelince açılma gecikmesi"
 msgstr "Hover delay"
@@ -1633,11 +1649,63 @@ msgstr "Shut down gracefully"
 msgid "FLUGEL Akış"
 msgstr "FLUGEL Feed"
 
-msgid "Akış"
-msgstr "Feed"
-
 msgid "Haberi aç"
 msgstr "Open the article"
+
+msgid "Sana özel"
+msgstr "For you"
+
+#
+msgid "Takip"
+msgstr "Following"
+
+#
+msgid "Oyun"
+msgstr "Games"
+
+msgid "Teknoloji"
+msgstr "Tech"
+
+msgid "Gündem"
+msgstr "Headlines"
+
+msgid "Film"
+msgstr "Film"
+
+#
+msgid "Kaydedilenler"
+msgstr "Saved"
+
+#, javascript-format
+msgid "%s sa"
+msgstr "%s h"
+
+#, javascript-format
+msgid "%s gün"
+msgstr "%s d"
+
+msgid "Yenile"
+msgstr "Refresh"
+
+msgid "FLUGEL Akış'ı tarayıcıda aç"
+msgstr "Open FLUGEL Feed in the browser"
+
+msgid "Yükleniyor…"
+msgstr "Loading…"
+
+msgid "FLUGEL Akış'a ulaşılamadı (sunucu?)"
+msgstr "Could not reach FLUGEL Feed (server?)"
+
+msgid "Bu kategoride haber yok"
+msgstr "No news in this category"
+
+#, javascript-format
+msgid "Önem %s"
+msgstr "Importance %s"
+
+#
+msgid "Tıkla: aç · sağ tık: kaydet"
+msgstr "Click: open · right-click: save"
 
 msgid "Manga"
 msgstr "Manga"
@@ -1657,9 +1725,6 @@ msgstr "Airing schedule"
 msgid "Bu sezonun yayın takvimi (AniList)"
 msgstr "This season's airing schedule (AniList)"
 
-msgid "Yenile"
-msgstr "Refresh"
-
 msgid "Listeyi şimdi yenile"
 msgstr "Refresh the list now"
 
@@ -1669,9 +1734,6 @@ msgstr "%sh"
 
 msgid "Alınamadı"
 msgstr "Unavailable"
-
-msgid "Yükleniyor…"
-msgstr "Loading…"
 
 msgid "Ekle"
 msgstr "Add"
@@ -2592,6 +2654,9 @@ msgstr " · GPU passthrough"
 #, javascript-format
 msgid "IP %s · %s açık"
 msgstr "IP %s · up %s"
+
+#~ msgid "Yok (ada pencerenin üstünde çentik olur)"
+#~ msgstr "None (the island becomes a notch over the window)"
 
 #
 #~ msgid "Canlı etkinliklerde de (maç skoru…)"

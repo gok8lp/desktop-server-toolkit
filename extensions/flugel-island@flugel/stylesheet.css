@@ -501,3 +501,15 @@
 .flugel-hava { padding: 2px 8px; border-radius: 12px; margin-left: 6px; color: #e6e6ea; }
 .flugel-hava:hover { background-color: rgba(255, 255, 255, 0.08); }
 .flugel-hava-derece { font-size: 10.5pt; font-weight: 700; font-feature-settings: "tnum"; }
+
+/* Akış sekmesi */
+.flugel-akis-ust { spacing: 6px; }
+.flugel-akis-liste { spacing: 6px; }
+.flugel-akis-kart { padding: 10px; border-radius: 16px; background-color: rgba(255, 255, 255, 0.05); color: #f2f2f4; }
+.flugel-akis-kart:hover { background-color: rgba(255, 255, 255, 0.10); }
+.flugel-akis-okundu { opacity: 0.6; }
+.flugel-akis-resim { width: 120px; height: 68px; border-radius: 10px; background-color: rgba(255, 255, 255, 0.06); }
+.flugel-akis-kaynak { font-size: 8.5pt; color: #9a9aa5; }
+.flugel-akis-onemli { font-size: 8pt; color: #e8c66b; }
+.flugel-akis-baslik { font-size: 10.5pt; font-weight: 700; }
+.flugel-akis-ozet { font-size: 9pt; color: #c4c4cc; margin-top: 4px; }

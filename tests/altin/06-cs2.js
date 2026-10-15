@@ -4,6 +4,8 @@
     E._ayar.set_boolean('mac-canli-etkinlik', true);
     E._ayar.set_boolean('cs2-etkin', true);
     E._ayar.set_int('cs2-takip', 999001);
+    // gerçek HLTV yenilemesi testin sahte verisine karışmasın
+    E._ayar.set_int('yenileme-cs2', 600);
     A.cs2 = (r1, r2, h1 = 0, h2 = 0, no = 1) => ({canli: [{id: 999001, yildiz: 3, canli: true, etkinlik: 'Test Cup', bo: 'bo3',
         harita_no: no, simdiki_harita: ['Mirage', 'Inferno', 'Nuke'][no - 1], haritalar: ['Mirage', 'Inferno', 'Nuke'],
         takim1: {ad: 'Eternal Fire', raund: r1, harita: h1}, takim2: {ad: 'Vitality', raund: r2, harita: h2}}], yaklasan: [], zaman: Date.now()});

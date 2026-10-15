@@ -52,7 +52,7 @@ export class Kart {
         zaman.set_child(zamanKutu);
         zaman.connect('clicked', () => {
             this.kapatIstendi?.();
-            Main.panel.toggleCalendar();
+            ustCubuk.takvim();
         });
         ipucuBagla(zaman, _('Takvim ve bildirimler (sağ tık da açar)'));
         ust.add_child(zaman);

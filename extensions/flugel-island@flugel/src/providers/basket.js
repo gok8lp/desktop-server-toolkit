@@ -115,7 +115,7 @@ export class BasketProvider {
             label: `${t1.ad} ${r1}–${r2} ${t2.ad}`,
             sublabel: [m.simdiki_harita, f(_('seri %s'), seri), sonRaund, m.etkinlik].filter(Boolean).join(' · '),
             data: {mac: {ev: t1.ad ?? '', dep: t2.ad ?? '', evLogo: t1.logo_yol ?? null, depLogo: t2.logo_yol ?? null,
-                skor: `${r1} – ${r2}`, dakika: m.simdiki_harita ?? 'CS2', ek: seri, vurgu, vurguNo},
+                skor: `${r1} – ${r2}`, dakika: m.simdiki_harita ?? 'CS2', ek: seri, vurgu, vurguNo, vurguAnahtar: `${m.id}:${vurguNo}`},
             eylemler: [
                 {ikon: 'input-gaming-symbolic', ipucu: _('Maçlar sekmesi'), fn: () => this._ortam.sekmeAc('basket')},
             ]},

@@ -113,8 +113,10 @@ export class EtkinlikGorunumu {
         this._macDep.text = m.dep;
         this._macSkor.text = m.skor;
         this._macDk.text = [m.dakika, m.ek].filter(Boolean).join(' · ');
-        if (m.vurgu && m.vurguNo !== this._vurguNo) {
-            this._vurguNo = m.vurguNo;
+        // vurgu maça özel anahtarla izlenir: kapsülde maç değişince sayaçlar karışmasın
+        const anahtar = m.vurguAnahtar ?? m.vurguNo;
+        if (m.vurgu && anahtar !== this._vurguAnahtar) {
+            this._vurguAnahtar = anahtar;
             const hedef = m.vurgu === 'ev' ? this._macEv : this._macDep;
             for (const l of [this._macEv, this._macDep])
                 l.remove_style_class_name('flugel-mac-kapsul-raund');

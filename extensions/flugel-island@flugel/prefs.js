@@ -117,13 +117,15 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         g.add(tetik);
         const [te, teId] = secim(a, 'tam-ekran-kipi', _('Tam ekranda ada'),
             _('Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar'),
-            [['birlikte', _('Uygulamayla birlikte (uygulama adanın altına yerleşir)')], ['gizli', _('Çentik: sadece fareyle (oyun modu)')],
+            [['centik', _('Çentik: ada ekrana gömülü, hep görünür (MacBook gibi)')], ['birlikte', _('Uygulamayla birlikte (uygulama adanın altına yerleşir)')],
+                ['gizli', _('Gizli çentik: sadece fareyle (oyun modu)')],
                 ['bildirim', _('Çentik: bildirim ve ses/parlaklıkta da')], ['canli', _('Çentik: canlı etkinliklerde de')]]);
         this._baglan(a, teId);
         g.add(te);
         const [serit, seritId] = secim(a, 'ust-serit', _('Büyütülmüş pencerede üst şerit'),
             _('Renkli: şerit uygulamanın rengini alır, ada uygulamanın başlığına gömülü durur ve hiçbir şeyi örtmez'),
-            [['renkli', _('Uygulamanın renginde')], ['gizli', _('Yok (ada pencerenin üstünde çentik olur)')], ['seffaf', _('Şeffaf')]]);
+            [['centik', _('Yok, ada çentik (pencere tüm ekranı kullanır)')], ['renkli', _('Uygulamanın renginde şerit')],
+                ['gizli', _('Yok, ada gizli çentik (fareyle iner)')], ['seffaf', _('Şeffaf şerit')]]);
         this._baglan(a, seritId);
         g.add(serit);
         g.add(sayi(a, 'hover-gecikme', _('Üzerine gelince açılma gecikmesi'), _('milisaniye'), 0, 2000, 20));

@@ -85,6 +85,7 @@ export class IslandGorunumu {
         this._kok.connect('destroy', () => this._saatBirak());
 
         this._kok.connect('notify::hover', () => this._hoverDegisti());
+        this._kok.connect('notify::visible', () => this._kavisYerlestir());
         this._balon.connect('notify::hover', () => this._hoverDegisti());
         this._kok.connect('button-release-event', (_a, e) => this._tiklandi(e));
         // kapsül üzerinde tekerlek: çalışma alanı değiştir (kart açıkken sayfa kayar, karışmaz)
@@ -171,7 +172,7 @@ export class IslandGorunumu {
 
     _ustY() {
         const m = this._monitor();
-        if (this._te?.aktif)
+        if (this._te?.aktif || this._centik)
             return m.y;    // çentik: üst kenara yapışık
         return m.y + Math.round((Main.panel.height - this._kapsulYuksekligi()) / 2);
     }
@@ -221,6 +222,7 @@ export class IslandGorunumu {
         const kh = this._kapsulYuksekligi();
         const t = Math.round(10 * Math.max(0, Math.min(1, (h - kh) / Math.max(1, kh * 3)))) / 10;
         this._radiusYaz(this._zemin, Math.max(0, Math.min(g.r, h / 2)), t);
+        this._kavisYerlestir();
         this._balonYerlestir();
     }
 
@@ -230,8 +232,12 @@ export class IslandGorunumu {
         const [cr, cg, cb] = KAPSUL_RGB.map((v, i) => Math.round(v + (KART_RGB[i] - v) * t));
         const alfa = (a0 + (a1 - a0) * t).toFixed(2);
         // tam ekranda çentik: üst köşeler düz, alt köşeler yuvarlak, tam siyah
-        const kose = this._te?.aktif ? `0px 0px ${css}px ${css}px` : `${css}px`;
-        const stil = this._te?.aktif ? `border-radius: ${kose}; background-color: rgba(0,0,0,1);`
+        const centik = this._te?.aktif || this._centik;
+        const kose = centik ? `0px 0px ${css}px ${css}px` : `${css}px`;
+        // çentikte kapsül tam siyah (ekranın bir parçası gibi); kart açılınca yine nötr cama geçer
+        // çentikte kenarlık yok: üst kenarda gri bir piksel çizgisi kalmasın, ekranın siyahına kesintisiz bağlansın
+        const stil = centik && t === 0 ? `border-radius: ${kose}; border-width: 0; background-color: rgba(0,0,0,1);`
+            : centik ? `border-radius: ${kose}; border-width: 0; background-color: rgba(${cr},${cg},${cb},${Math.max(0.97, alfa)});`
             : `border-radius: ${kose}; background-color: rgba(${cr},${cg},${cb},${alfa});`;
         if (zemin.style !== stil)
             zemin.style = stil;
@@ -570,8 +576,20 @@ export class IslandGorunumu {
             this._birlikte.basla(m, Main.panel.height || Math.round(32 * this._s));
         else
             this._birlikte.bitir();
-        const aktif = !Main.overview.visible && ((tam && !birlikte) || this._pencereKapliyor(m));
-        this._te.tam = tam && !birlikte;
+        // çentik kipi: ada ekranın üst kenarına gömülü, hep görünür; pencereler ekranın tamamını kullanır
+        const centik = !Main.overview.visible && (tam ? this._teKip() === 'centik' : this._ayar.get_string('ust-serit') === 'centik');
+        if (centik !== this._centik) {
+            this._centik = centik;
+            this._kavisGoster();
+            this._yerlestir(true);
+        }
+        // tam ekran uygulama kompozitörü atlamasın (ada üstünde çizilebilsin)
+        if (centik && tam)
+            this._unred(true);
+        else if (!this._te.aktif)
+            this._unred(false);
+        const aktif = !Main.overview.visible && !centik && ((tam && !birlikte) || this._pencereKapliyor(m));
+        this._te.tam = tam && !birlikte && !centik;
         if (aktif === this._te.aktif)
             return;
         this._te.aktif = aktif;
@@ -592,6 +610,76 @@ export class IslandGorunumu {
 
     _teKip() {
         return this._ayar.get_string('tam-ekran-kipi');
+    }
+
+    // Çentiğin ekran kenarına bağlandığı yerdeki iç kavisler (MacBook çentiği gibi): kapsülün iki üst yanında,
+    // kare içinden çeyrek daire çıkarılmış siyah parçalar. Böylece ada ekranın bir parçasıymış gibi görünür.
+    _kavisKur() {
+        const s = this._s;
+        const r = Math.round(13 * s);
+        const yap = sol => {
+            const a = new St.DrawingArea({width: r, height: r, reactive: false, visible: false});
+            a.connect('repaint', alan => {
+                const cr = alan.get_context();
+                try {
+                    const [w, h] = alan.get_surface_size();
+                    cr.setSourceRGBA(0, 0, 0, 1);
+                    // siyah bölge: üst kenar + çentiğe bakan kenar + içe kıvrılan çeyrek daire
+                    if (sol) {
+                        cr.moveTo(0, 0);
+                        cr.lineTo(w, 0);
+                        cr.lineTo(w, h);
+                        cr.arcNegative(0, h, w, 0, -Math.PI / 2);
+                    } else {
+                        cr.moveTo(w, 0);
+                        cr.lineTo(0, 0);
+                        cr.lineTo(0, h);
+                        cr.arc(w, h, w, Math.PI, 1.5 * Math.PI);
+                    }
+                    cr.closePath();
+                    cr.fill();
+                } finally {
+                    cr.$dispose();
+                }
+            });
+            Main.layoutManager.addChrome(a, {affectsStruts: false, trackFullscreen: false});
+            return a;
+        };
+        this._kavisR = r;
+        this._kavisSol = yap(true);
+        this._kavisSag = yap(false);
+    }
+
+    _kavisGoster() {
+        if (!this._kavisSol)
+            this._kavisKur();
+        const goster = !!this._centik && this._kok.visible;
+        for (const a of [this._kavisSol, this._kavisSag]) {
+            a.visible = goster;
+            a.queue_repaint();
+        }
+        this._kavisYerlestir();
+    }
+
+    _kavisYerlestir() {
+        if (!this._kavisSol)
+            return;
+        // kapsülle birlikte görünür/gizlenir (çentik kipindeyken)
+        const goster = !!this._centik && this._kok.visible && this._kok.opacity > 0;
+        if (this._kavisSol.visible !== goster) {
+            for (const a of [this._kavisSol, this._kavisSag]) {
+                a.visible = goster;
+                a.queue_repaint();
+            }
+        }
+        if (!goster)
+            return;
+        const m = this._monitor();
+        const r = this._kavisR;
+        this._kavisSol.set_position(this._kok.x - r, m.y);
+        this._kavisSag.set_position(this._kok.x + this._kok.width, m.y);
+        for (const a of [this._kavisSol, this._kavisSag])
+            Main.layoutManager.uiGroup.set_child_above_sibling(a, this._kok);
     }
 
     _unred(kapat) {
@@ -720,7 +808,11 @@ export class IslandGorunumu {
             return true;
         }
         if (dugme === Clutter.BUTTON_SECONDARY) {
-            Main.panel.toggleCalendar?.();
+            const takvim = Main.panel.statusArea.dateMenu;
+            if (takvim?.mapped)
+                takvim.menu.toggle();
+            else
+                Main.panel.toggleCalendar?.();
             return true;
         }
         if (dugme === Clutter.BUTTON_PRIMARY) {
@@ -791,6 +883,9 @@ export class IslandGorunumu {
 
     // ---------- kapanış ----------
     destroy() {
+        this._kavisSol?.destroy();
+        this._kavisSag?.destroy();
+        this._kavisSol = this._kavisSag = null;
         this._birlikte?.destroy();
         this._abonelik?.();
         this._yay?.stop();

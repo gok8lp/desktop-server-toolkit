@@ -37,7 +37,7 @@ export class UstCubuk {
         // şerit: renkli = pencereler şeridin altından başlar, şerit alttaki uygulamanın rengini alır (ada hiçbir şeyi
         // örtmez); gizli = şerit yer ayırmaz, pencereler en üste uzanır, ada üstlerinde çentik olur; seffaf = GNOME gibi
         const serit = this._ayar.get_string('ust-serit');
-        if (serit === 'gizli')
+        if (serit === 'gizli' || serit === 'centik')
             this._seridiBosalt();
         else if (serit === 'renkli')
             this._seritRengi = new SeritRengi();
@@ -168,12 +168,24 @@ export class UstCubuk {
     }
 
     // kart başlığındaki düğmeler için
+    // Adadan (fareyle) açılınca menü doğrudan açılır: GNOME'un kısayol yolu ilk öğeye klavye odağı verir ve
+    // fareyle açılan menüde gereksiz beyaz odak çerçevesi görünür. Super+S / Super+V yine GNOME'un yolunu kullanır.
+    _menuAc(ind) {
+        if (!ind?.menu)
+            return;
+        if (!ind.mapped || !ind.reactive) {
+            Main.panel._toggleMenu?.(ind);
+            return;
+        }
+        ind.menu.toggle();
+    }
+
     hizliAyarlar() {
-        Main.panel.toggleQuickSettings();
+        this._menuAc(Main.panel.statusArea.quickSettings);
     }
 
     takvim() {
-        Main.panel.toggleCalendar();
+        this._menuAc(Main.panel.statusArea.dateMenu);
     }
 
     etkinlikler() {

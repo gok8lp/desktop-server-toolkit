@@ -6,7 +6,7 @@ set -u
 ADIM=$(readlink -f "$1"); BOYUT=${2:-2560x1600}
 T=$(mktemp -d /tmp/island-test.XXXX); mkdir -p "$T/config" "$T/foto"
 cp -r ~/.config/dconf "$T/config/"
-export XDG_CONFIG_HOME=$T/config T ADIM BOYUT KIP
+export XDG_CONFIG_HOME=$T/config T ADIM BOYUT KIP TEK
 # shellcheck disable=SC2016  # tek tırnak bilinçli: değişkenler iç kabukta açılır
 dbus-run-session -- bash -c '
   gnome-shell --headless --virtual-monitor "$BOYUT" --wayland --no-x11 --unsafe-mode ${KIP:+--mode=$KIP} > "$T/shell.log" 2>&1 &

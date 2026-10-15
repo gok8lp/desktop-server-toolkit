@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 17:48+0300\n"
+"POT-Creation-Date: 2026-10-15 18:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,6 +57,12 @@ msgid "Anime ve manga"
 msgstr ""
 
 msgid "Takip ettiklerim"
+msgstr ""
+
+msgid "Akış"
+msgstr ""
+
+msgid "FLUGEL Akış: haberler, oyun, anime, takip"
 msgstr ""
 
 msgid "Bildirimler"
@@ -216,10 +222,13 @@ msgid ""
 "Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar"
 msgstr ""
 
+msgid "Çentik: ada ekrana gömülü, hep görünür (MacBook gibi)"
+msgstr ""
+
 msgid "Uygulamayla birlikte (uygulama adanın altına yerleşir)"
 msgstr ""
 
-msgid "Çentik: sadece fareyle (oyun modu)"
+msgid "Gizli çentik: sadece fareyle (oyun modu)"
 msgstr ""
 
 msgid "Çentik: bildirim ve ses/parlaklıkta da"
@@ -236,13 +245,16 @@ msgid ""
 "durur ve hiçbir şeyi örtmez"
 msgstr ""
 
-msgid "Uygulamanın renginde"
+msgid "Yok, ada çentik (pencere tüm ekranı kullanır)"
 msgstr ""
 
-msgid "Yok (ada pencerenin üstünde çentik olur)"
+msgid "Uygulamanın renginde şerit"
 msgstr ""
 
-msgid "Şeffaf"
+msgid "Yok, ada gizli çentik (fareyle iner)"
+msgstr ""
+
+msgid "Şeffaf şerit"
 msgstr ""
 
 msgid "Üzerine gelince açılma gecikmesi"
@@ -1544,10 +1556,58 @@ msgstr ""
 msgid "FLUGEL Akış"
 msgstr ""
 
-msgid "Akış"
+msgid "Haberi aç"
 msgstr ""
 
-msgid "Haberi aç"
+msgid "Sana özel"
+msgstr ""
+
+msgid "Takip"
+msgstr ""
+
+msgid "Oyun"
+msgstr ""
+
+msgid "Teknoloji"
+msgstr ""
+
+msgid "Gündem"
+msgstr ""
+
+msgid "Film"
+msgstr ""
+
+msgid "Kaydedilenler"
+msgstr ""
+
+#, javascript-format
+msgid "%s sa"
+msgstr ""
+
+#, javascript-format
+msgid "%s gün"
+msgstr ""
+
+msgid "Yenile"
+msgstr ""
+
+msgid "FLUGEL Akış'ı tarayıcıda aç"
+msgstr ""
+
+msgid "Yükleniyor…"
+msgstr ""
+
+msgid "FLUGEL Akış'a ulaşılamadı (sunucu?)"
+msgstr ""
+
+msgid "Bu kategoride haber yok"
+msgstr ""
+
+#, javascript-format
+msgid "Önem %s"
+msgstr ""
+
+msgid "Tıkla: aç · sağ tık: kaydet"
 msgstr ""
 
 msgid "Manga"
@@ -1568,9 +1628,6 @@ msgstr ""
 msgid "Bu sezonun yayın takvimi (AniList)"
 msgstr ""
 
-msgid "Yenile"
-msgstr ""
-
 msgid "Listeyi şimdi yenile"
 msgstr ""
 
@@ -1579,9 +1636,6 @@ msgid "%ssa"
 msgstr ""
 
 msgid "Alınamadı"
-msgstr ""
-
-msgid "Yükleniyor…"
 msgstr ""
 
 msgid "Ekle"

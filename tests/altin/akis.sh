@@ -1,0 +1,10 @@
+# akis.sh — FLUGEL Akış sekmesi: kategoriler, haber kartları, özetin açılması
+a "__A.E()._yonetici.setPinned(true); __A.E()._kart.sekmeSec('akis', false); 1" >/dev/null; sleep 6
+a "const p = __A.sayfa('akis'); const n = p._liste.get_n_children(); __A.yaz('Akış sekmesi haberleri gösterir', n > 3, String(n)); 1" >/dev/null; foto akis
+a "const p = __A.sayfa('akis'); p._sec('oyun'); 1" >/dev/null
+for i in $(seq 1 60); do a "__A.sayfa('akis')._veriler.has('oyun')" | grep -q true && break; sleep 0.5; done; sleep 1.5
+a "const p = __A.sayfa('akis'); __A.yaz('Akış: kategori değişir', p._kat === 'oyun' && p._liste.get_n_children() > 1, String(p._liste.get_n_children())); __A.akKart = p._liste.get_children().find(k => __A.bul(k, c => (c.style_class ?? '').includes('flugel-akis-ozet') && c.text.length > 0).length); let sv = __A.akKart; while (sv && !(sv instanceof imports.gi.St.ScrollView)) sv = sv.get_parent(); if (sv) { const [, svY] = sv.get_transformed_position(); const [, kY] = __A.akKart.get_transformed_position(); sv.vadjustment.value = Math.max(0, kY - svY + sv.vadjustment.value - 10); } 1" >/dev/null; sleep 0.5
+a "__A.E()._yonetici.setPinned(true); __A.E()._kart.sekmeSec('akis', false); 1" >/dev/null; sleep 1.2
+a "const [x, y] = __A.merkez(__A.akKart); __A.git(x - 3, y); 1" >/dev/null; sleep 0.15
+a "const [x, y] = __A.merkez(__A.akKart); __A.git(x, y); 1" >/dev/null; sleep 0.6
+a "const p = __A.sayfa('akis'); const oz = __A.akKart && __A.bul(__A.akKart, c => (c.style_class ?? '').includes('flugel-akis-ozet'))[0]; __A.yaz('Akış: üzerine gelince özet açılır', !!oz && oz.visible, oz ? (oz.visible + ' hover=' + __A.akKart.hover + ' y=' + Math.round(__A.merkez(__A.akKart)[1]) + ' durum=' + __A.E()._ada.durum + ' üstteki=' + (() => { const [x, y] = __A.merkez(__A.akKart); const u = global.stage.get_actor_at_pos(imports.gi.Clutter.PickMode.REACTIVE, x, y); return u ? (u.style_class || u.name || u.constructor.name) : 'yok'; })()) : 'özetli haber yok'); __A.git(10, 800); __A.E()._yonetici.setPinned(false); 1" >/dev/null; sleep 1
