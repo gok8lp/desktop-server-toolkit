@@ -15,6 +15,6 @@ a "__A.pen.unmaximize(imports.gi.Meta.MaximizeFlags.BOTH); 1" >/dev/null; sleep 
 a "const m = Main.layoutManager.primaryMonitor; __A.pen.move_resize_frame(true, m.x + 100, m.y + 400, 800, 500); 1" >/dev/null; sleep 1.2
 a "const t = __A.E()._ada._te; __A.yaz('pencere aşağı inince ada normal görünür', !t.aktif && __A.E()._ada._kok.visible && __A.E()._ada._kok.translation_y === 0, JSON.stringify(t)); 1" >/dev/null; foto pencere-asagi
 a "__A.E()._ayar.set_boolean('ust-cubuk-sade', false); 1" >/dev/null; sleep 1
-a "__A.yaz('sade kapanınca şerit geri gelir', Main.layoutManager.panelBox.visible && Main.layoutManager._trackedActors.find(x => x.actor === Main.layoutManager.panelBox).affectsStruts); __A.E()._ayar.set_boolean('ust-cubuk-sade', true); 1" >/dev/null; sleep 1
-a "__A.yaz('sade açılınca şerit yine kalkar', !Main.layoutManager.panelBox.visible); 1" >/dev/null
+a "__A.yaz('sade kapanınca şerit geri gelir', Main.layoutManager.panelBox.translation_y === 0 && Main.layoutManager.panelBox.opacity === 255 && Main.layoutManager._trackedActors.find(x => x.actor === Main.layoutManager.panelBox).affectsStruts); __A.E()._ayar.set_boolean('ust-cubuk-sade', true); 1" >/dev/null; sleep 1
+a "__A.yaz('sade açılınca şerit yine kalkar', Main.layoutManager.panelBox.translation_y < 0 && Main.layoutManager.panelBox.opacity === 0); 1" >/dev/null
 kill $PP 2>/dev/null; sleep 1

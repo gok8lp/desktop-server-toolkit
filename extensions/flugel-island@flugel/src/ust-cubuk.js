@@ -93,23 +93,37 @@ export class UstCubuk {
         if (!kayit)
             return;
         this._serit = {kayit, struts: kayit.affectsStruts, girdi: kayit.affectsInputRegion, tamEkran: kayit.trackFullscreen,
-            gorunur: lm.panelBox.visible};
+            opaklik: lm.panelBox.opacity};
         kayit.affectsStruts = false;
         kayit.affectsInputRegion = false;
         kayit.trackFullscreen = false;   // tam ekrandan çıkınca GNOME şeridi geri göstermesin
-        lm.panelBox.hide();
+        // Gizlenmez (GNOME, Hızlı Ayarlar/Takvim menüsünü ve Super+S/Super+V'yi göstergesi ekrandayken açar):
+        // ekranın üstüne kaydırılır ve saydamlaştırılır; böylece tıklama yakalamaz, pencerelerin üstüne çizilmez.
+        Main.panel.reactive = false;
+        lm.panelBox.opacity = 0;
+        this._kaydir = () => {
+            lm.panelBox.translation_y = -lm.panelBox.height;
+        };
+        this._kaydir();
+        this._seritId = lm.panelBox.connect('notify::height', this._kaydir);
         lm._queueUpdateRegions();
     }
 
     _seridiGeriVer() {
         if (!this._serit)
             return;
-        const {kayit, struts, girdi, tamEkran, gorunur} = this._serit;
+        const {kayit, struts, girdi, tamEkran, opaklik} = this._serit;
         this._serit = null;
+        const kutu = Main.layoutManager.panelBox;
+        if (this._seritId)
+            kutu.disconnect(this._seritId);
+        this._seritId = 0;
         kayit.affectsStruts = struts;
         kayit.affectsInputRegion = girdi;
         kayit.trackFullscreen = tamEkran;
-        Main.layoutManager.panelBox.visible = gorunur;
+        kutu.translation_y = 0;
+        kutu.opacity = opaklik;
+        Main.panel.reactive = true;
         Main.layoutManager._queueUpdateRegions();
     }
 

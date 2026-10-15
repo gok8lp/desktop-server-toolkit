@@ -36,6 +36,8 @@ a "__A.yaz('dokunmatik: kapsülde iki parmakla çalışma alanı değişir', glo
 a "__A.yaz('imleç kalınca kart sonra açılır', __A.E()._ada.durum === 'genis', __A.E()._ada.durum); const [x, y] = __A.merkez(__A.E()._kart.ustSerit); __A.git(x + 60, y); 1" >/dev/null; sleep 0.4
 a "__A.kaydir(-1, false); 1" >/dev/null; sleep 0.8
 a "__A.yaz('kart açıkken üst şeritte tekerlek çalışma alanı değiştirir', global.workspace_manager.get_active_workspace_index() !== __A.ws1, String(global.workspace_manager.get_active_workspace_index())); __A.git(10, 800); 1" >/dev/null; sleep 1.5
+isaret DUGMELER
+. "$D/ust-dugmeler.sh"
 isaret PENCERE
 . "$D/pencere.sh"
 isaret CS2
