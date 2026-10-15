@@ -117,6 +117,8 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
             [['gizli', _('Sadece fareyle (oyun modu)')], ['bildirim', _('Bildirim ve ses/parlaklıkta da')], ['canli', _('Canlı etkinliklerde de (maç skoru…)')]]);
         this._baglan(a, teId);
         g.add(te);
+        g.add(anahtar(a, 'pencere-centik', _('Pencere altına gelince de çentik'),
+            _('Büyütülmüş pencereler ekranın en üstüne uzanır; ada onları örtmez, üst ortaya gelince iner')));
         g.add(sayi(a, 'hover-gecikme', _('Üzerine gelince açılma gecikmesi'), _('milisaniye'), 0, 2000, 20));
         g.add(sayi(a, 'monitor', _('Ekran'), _('-1 = birincil ekran; 0, 1… = ekran sırası'), -1, 7, 1));
         const [panik, panikId] = secim(a, 'panik-onay', _('Panik onayı'), _('Yanlışlıkla basılmasın'),

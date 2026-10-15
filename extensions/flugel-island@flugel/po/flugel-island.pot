@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 00:00+0300\n"
+"POT-Creation-Date: 2026-10-15 00:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,6 +205,14 @@ msgid "Bildirim ve ses/parlaklıkta da"
 msgstr ""
 
 msgid "Canlı etkinliklerde de (maç skoru…)"
+msgstr ""
+
+msgid "Pencere altına gelince de çentik"
+msgstr ""
+
+msgid ""
+"Büyütülmüş pencereler ekranın en üstüne uzanır; ada onları örtmez, üst "
+"ortaya gelince iner"
 msgstr ""
 
 msgid "Üzerine gelince açılma gecikmesi"

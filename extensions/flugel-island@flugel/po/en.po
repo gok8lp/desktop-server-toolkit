@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-14 23:04+0300\n"
+"POT-Creation-Date: 2026-10-15 00:15+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -216,6 +216,14 @@ msgstr "Also for notifications and volume/brightness"
 #
 msgid "Canlı etkinliklerde de (maç skoru…)"
 msgstr "Also for live activities (match score…)"
+
+msgid "Pencere altına gelince de çentik"
+msgstr ""
+
+msgid ""
+"Büyütülmüş pencereler ekranın en üstüne uzanır; ada onları örtmez, üst "
+"ortaya gelince iner"
+msgstr ""
 
 msgid "Üzerine gelince açılma gecikmesi"
 msgstr "Hover delay"

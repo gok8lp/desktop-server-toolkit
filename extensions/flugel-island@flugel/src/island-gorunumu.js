@@ -6,6 +6,7 @@
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
+import Meta from 'gi://Meta';
 import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {springProgress} from './spring.js';
@@ -131,6 +132,12 @@ export class IslandGorunumu {
             [global.display, global.display.connect('in-fullscreen-changed', () => this._tamEkranDenetle())],
             [Main.overview, Main.overview.connect('showing', () => this._tamEkranDenetle())],
             [Main.overview, Main.overview.connect('hidden', () => this._tamEkranDenetle())],
+            // bir pencere adanın durduğu üst orta bölgeye gelince (büyütülmüş tarayıcı vb.) de çentik olur
+            ...['restacked', 'window-created', 'grab-op-end'].map(s => [global.display, global.display.connect(s, () => this._kaplamaPlanla())]),
+            ...['size-changed', 'minimize', 'unminimize', 'map', 'destroy'].map(s =>
+                [global.window_manager, global.window_manager.connect(s, () => this._kaplamaPlanla())]),
+            [global.workspace_manager, global.workspace_manager.connect('active-workspace-changed', () => this._kaplamaPlanla())],
+            [this._ayar, this._ayar.connect('changed::pencere-centik', () => this._tamEkranDenetle())],
         ];
 
         this._abonelik = this._yonetici.subscribe(vm => this._uygula(vm));
@@ -498,9 +505,41 @@ export class IslandGorunumu {
     }
 
     // ---------- tam ekran (çentik) ----------
+    _kaplamaPlanla() {
+        if (this._kaplamaId)
+            return;
+        this._kaplamaId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+            this._kaplamaId = 0;
+            this._tamEkranDenetle();
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    // etkin çalışma alanında, adanın monitöründe görünen bir pencere kapsülün durduğu üst orta bölgeye giriyor mu
+    _pencereKapliyor(m) {
+        if (!m || !this._ayar.get_boolean('pencere-centik'))
+            return false;
+        const s = this._s;
+        const w = Math.round(480 * s), h = this._kapsulYuksekligi() + Math.round(6 * s);
+        const x1 = m.x + (m.width - w) / 2, x2 = x1 + w, y2 = m.y + h;
+        const ws = global.workspace_manager.get_active_workspace();
+        const turler = [Meta.WindowType.NORMAL, Meta.WindowType.DIALOG, Meta.WindowType.MODAL_DIALOG];
+        return global.get_window_actors().some(a => {
+            const p = a.meta_window;
+            if (!p || p.minimized || !p.showing_on_its_workspace() || !turler.includes(p.get_window_type()))
+                return false;
+            if (p.get_monitor() !== m.index || !(p.is_on_all_workspaces() || p.get_workspace() === ws))
+                return false;
+            const r = p.get_frame_rect();
+            return r.y < y2 && r.y + r.height > m.y && r.x < x2 && r.x + r.width > x1;
+        });
+    }
+
     _tamEkranDenetle() {
         const m = this._monitor();
-        const aktif = !!m?.inFullscreen && !Main.overview.visible;
+        const tam = !!m?.inFullscreen;
+        const aktif = !Main.overview.visible && (tam || this._pencereKapliyor(m));
+        this._te.tam = tam;
         if (aktif === this._te.aktif)
             return;
         this._te.aktif = aktif;
@@ -548,7 +587,9 @@ export class IslandGorunumu {
             this._kok.opacity = 255;
             return;
         }
-        this._unred(true);
+        // doğrudan tarama sadece gerçek tam ekranda kapatılır (oyun/video üstüne çizilebilsin)
+        if (this._te.tam)
+            this._unred(true);
         this._kok.translation_y = -this._kok.height - 4;
         this._kok.opacity = 255;
         this._kok.ease({translation_y: 0, duration: 260, mode: Clutter.AnimationMode.EASE_OUT_BACK});
@@ -580,7 +621,8 @@ export class IslandGorunumu {
             return;
         if (this._sicak.hover) {
             this._teAcId = this._iptal(this._teAcId);
-            this._teAcId = this._zaman(160, () => {
+            // pencere üstündeyken (sekmelere giderken) yanlışlıkla açılmasın diye biraz daha beklenir
+            this._teAcId = this._zaman(this._te.tam ? 160 : 380, () => {
                 this._teAcId = 0;
                 if (this._sicak.hover)
                     this._teGoster();
@@ -724,6 +766,9 @@ export class IslandGorunumu {
         for (const id of this._zamanlar)
             GLib.source_remove(id);
         this._zamanlar.clear();
+        if (this._kaplamaId)
+            GLib.source_remove(this._kaplamaId);
+        this._kaplamaId = 0;
         this._teIdler.forEach(([n, id]) => n.disconnect(id));
         this._unred(false);
         this._sicak.destroy();

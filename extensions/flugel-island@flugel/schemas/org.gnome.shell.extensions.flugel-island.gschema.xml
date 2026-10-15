@@ -65,6 +65,10 @@
       <default>'haftalik'</default>
       <summary>Otomatik güncelleme (apt, snap, flatpak): kapalı, günlük, haftalık</summary>
     </key>
+    <key name="pencere-centik" type="b">
+      <default>true</default>
+      <summary>Bir pencere adanın altına gelince (büyütülmüş tarayıcı vb.) ada tam ekrandaki gibi çentik olur</summary>
+    </key>
     <key name="tam-ekran-kipi" type="s">
       <choices><choice value="gizli"/><choice value="bildirim"/><choice value="canli"/></choices>
       <default>'bildirim'</default>
