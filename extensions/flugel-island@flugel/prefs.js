@@ -114,11 +114,15 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         g.add(tetik);
         const [te, teId] = secim(a, 'tam-ekran-kipi', _('Tam ekranda ada'),
             _('Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar'),
-            [['gizli', _('Sadece fareyle (oyun modu)')], ['bildirim', _('Bildirim ve ses/parlaklıkta da')], ['canli', _('Canlı etkinliklerde de (maç skoru…)')]]);
+            [['birlikte', _('Uygulamayla birlikte (uygulama adanın altına yerleşir)')], ['gizli', _('Çentik: sadece fareyle (oyun modu)')],
+                ['bildirim', _('Çentik: bildirim ve ses/parlaklıkta da')], ['canli', _('Çentik: canlı etkinliklerde de')]]);
         this._baglan(a, teId);
         g.add(te);
-        g.add(anahtar(a, 'pencere-centik', _('Pencere altına gelince de çentik'),
-            _('Büyütülmüş pencereler ekranın en üstüne uzanır; ada onları örtmez, üst ortaya gelince iner')));
+        const [serit, seritId] = secim(a, 'ust-serit', _('Büyütülmüş pencerede üst şerit'),
+            _('Renkli: şerit uygulamanın rengini alır, ada uygulamanın başlığına gömülü durur ve hiçbir şeyi örtmez'),
+            [['renkli', _('Uygulamanın renginde')], ['gizli', _('Yok (ada pencerenin üstünde çentik olur)')], ['seffaf', _('Şeffaf')]]);
+        this._baglan(a, seritId);
+        g.add(serit);
         g.add(sayi(a, 'hover-gecikme', _('Üzerine gelince açılma gecikmesi'), _('milisaniye'), 0, 2000, 20));
         g.add(sayi(a, 'monitor', _('Ekran'), _('-1 = birincil ekran; 0, 1… = ekran sırası'), -1, 7, 1));
         const [panik, panikId] = secim(a, 'panik-onay', _('Panik onayı'), _('Yanlışlıkla basılmasın'),

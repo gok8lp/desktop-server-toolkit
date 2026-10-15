@@ -65,13 +65,18 @@
       <default>'haftalik'</default>
       <summary>Otomatik güncelleme (apt, snap, flatpak): kapalı, günlük, haftalık</summary>
     </key>
+    <key name="ust-serit" type="s">
+      <choices><choice value="renkli"/><choice value="gizli"/><choice value="seffaf"/></choices>
+      <default>'renkli'</default>
+      <summary>Üst şerit: renkli = pencereler şeridin altından başlar, şerit uygulamanın rengini alır; gizli = pencereler en üste uzanır, ada çentik olur; seffaf = şeffaf şerit</summary>
+    </key>
     <key name="pencere-centik" type="b">
       <default>true</default>
       <summary>Bir pencere adanın altına gelince (büyütülmüş tarayıcı vb.) ada tam ekrandaki gibi çentik olur</summary>
     </key>
     <key name="tam-ekran-kipi" type="s">
-      <choices><choice value="gizli"/><choice value="bildirim"/><choice value="canli"/></choices>
-      <default>'bildirim'</default>
+      <choices><choice value="birlikte"/><choice value="gizli"/><choice value="bildirim"/><choice value="canli"/></choices>
+      <default>'birlikte'</default>
       <summary>Tam ekranda ada (çentik): gizli = sadece fareyle, bildirim = bildirim/ses gelince de, canli = canlı etkinlik varken de</summary>
     </key>
     <key name="sunucu-sessiz" type="s">

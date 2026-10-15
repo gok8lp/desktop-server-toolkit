@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 16:46+0300\n"
+"POT-Creation-Date: 2026-10-15 17:07+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -207,25 +207,40 @@ msgstr ""
 "Becomes a notch stuck to the top edge; slides down when the pointer reaches "
 "the top center"
 
-msgid "Sadece fareyle (oyun modu)"
-msgstr "Only with the pointer (game mode)"
-
-msgid "Bildirim ve ses/parlaklıkta da"
-msgstr "Also for notifications and volume/brightness"
+msgid "Uygulamayla birlikte (uygulama adanın altına yerleşir)"
+msgstr "Together with the app (the app sits below the island)"
 
 #
-msgid "Canlı etkinliklerde de (maç skoru…)"
-msgstr "Also for live activities (match score…)"
+msgid "Çentik: sadece fareyle (oyun modu)"
+msgstr "Notch: pointer only (game mode)"
 
-msgid "Pencere altına gelince de çentik"
-msgstr "Notch when a window is underneath"
+#
+msgid "Çentik: bildirim ve ses/parlaklıkta da"
+msgstr "Notch: also for notifications and volume/brightness"
+
+#
+msgid "Çentik: canlı etkinliklerde de"
+msgstr "Notch: also for live activities"
+
+msgid "Büyütülmüş pencerede üst şerit"
+msgstr "Top strip with maximized windows"
 
 msgid ""
-"Büyütülmüş pencereler ekranın en üstüne uzanır; ada onları örtmez, üst "
-"ortaya gelince iner"
+"Renkli: şerit uygulamanın rengini alır, ada uygulamanın başlığına gömülü "
+"durur ve hiçbir şeyi örtmez"
 msgstr ""
-"Maximized windows reach the top edge; the island does not cover them and "
-"slides down at the top center"
+"Colored: the strip takes the app's color, the island sits in the app's "
+"header and covers nothing"
+
+#
+msgid "Uygulamanın renginde"
+msgstr "In the app's color"
+
+msgid "Yok (ada pencerenin üstünde çentik olur)"
+msgstr "None (the island becomes a notch over the window)"
+
+msgid "Şeffaf"
+msgstr "Transparent"
 
 msgid "Üzerine gelince açılma gecikmesi"
 msgstr "Hover delay"
@@ -2341,3 +2356,17 @@ msgstr " · GPU passthrough"
 #, javascript-format
 msgid "IP %s · %s açık"
 msgstr "IP %s · up %s"
+
+#
+#~ msgid "Canlı etkinliklerde de (maç skoru…)"
+#~ msgstr "Also for live activities (match score…)"
+
+#~ msgid "Pencere altına gelince de çentik"
+#~ msgstr "Notch when a window is underneath"
+
+#~ msgid ""
+#~ "Büyütülmüş pencereler ekranın en üstüne uzanır; ada onları örtmez, üst "
+#~ "ortaya gelince iner"
+#~ msgstr ""
+#~ "Maximized windows reach the top edge; the island does not cover them and "
+#~ "slides down at the top center"

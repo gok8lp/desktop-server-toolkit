@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 16:55+0300\n"
+"POT-Creation-Date: 2026-10-15 17:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,21 +198,33 @@ msgid ""
 "Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar"
 msgstr ""
 
-msgid "Sadece fareyle (oyun modu)"
+msgid "Uygulamayla birlikte (uygulama adanın altına yerleşir)"
 msgstr ""
 
-msgid "Bildirim ve ses/parlaklıkta da"
+msgid "Çentik: sadece fareyle (oyun modu)"
 msgstr ""
 
-msgid "Canlı etkinliklerde de (maç skoru…)"
+msgid "Çentik: bildirim ve ses/parlaklıkta da"
 msgstr ""
 
-msgid "Pencere altına gelince de çentik"
+msgid "Çentik: canlı etkinliklerde de"
+msgstr ""
+
+msgid "Büyütülmüş pencerede üst şerit"
 msgstr ""
 
 msgid ""
-"Büyütülmüş pencereler ekranın en üstüne uzanır; ada onları örtmez, üst "
-"ortaya gelince iner"
+"Renkli: şerit uygulamanın rengini alır, ada uygulamanın başlığına gömülü "
+"durur ve hiçbir şeyi örtmez"
+msgstr ""
+
+msgid "Uygulamanın renginde"
+msgstr ""
+
+msgid "Yok (ada pencerenin üstünde çentik olur)"
+msgstr ""
+
+msgid "Şeffaf"
 msgstr ""
 
 msgid "Üzerine gelince açılma gecikmesi"

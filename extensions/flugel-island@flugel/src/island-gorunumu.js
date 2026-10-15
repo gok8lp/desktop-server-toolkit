@@ -10,6 +10,7 @@ import Meta from 'gi://Meta';
 import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {springProgress} from './spring.js';
+import {TamEkranBirlikte} from './tam-ekran.js';
 import {Animasyon} from './sayfalar/sayfa.js';
 import {CalismaAlanlari} from './calisma-alanlari.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
@@ -80,6 +81,8 @@ export class IslandGorunumu {
         this._saatKaynagi = new GnomeDesktop.WallClock({time_only: true});
         this._saatId = this._saatKaynagi.connect('notify::clock', () => this._saatYaz());
         this._saatYaz();
+        // kabuk kapanırken aktörler eklenti kapatılmadan yok edilir: saat sinyali ölü etikete dokunmasın
+        this._kok.connect('destroy', () => this._saatBirak());
 
         this._kok.connect('notify::hover', () => this._hoverDegisti());
         this._balon.connect('notify::hover', () => this._hoverDegisti());
@@ -125,6 +128,8 @@ export class IslandGorunumu {
         // varken kenardan aşağı kayar. Görünürken kompozitörün doğrudan taraması (unredirect) kapatılır ki
         // oyun/video üstünde çizilebilsin; gizlenince geri açılır.
         this._te = {aktif: false, acik: false, unred: false};
+        // "birlikte" kipi: tam ekran uygulama adanın şeridinin altına küçülür, ada görünür kalır (tam-ekran.js)
+        this._birlikte = new TamEkranBirlikte();
         this._sicak = new St.Widget({reactive: true, track_hover: true, opacity: 0, visible: false, name: 'flugelSicakBolge'});
         Main.layoutManager.addChrome(this._sicak, {affectsStruts: false, trackFullscreen: false});
         this._sicak.connect('notify::hover', () => this._sicakHover());
@@ -138,6 +143,8 @@ export class IslandGorunumu {
                 [global.window_manager, global.window_manager.connect(s, () => this._kaplamaPlanla())]),
             [global.workspace_manager, global.workspace_manager.connect('active-workspace-changed', () => this._kaplamaPlanla())],
             [this._ayar, this._ayar.connect('changed::pencere-centik', () => this._tamEkranDenetle())],
+            [this._ayar, this._ayar.connect('changed::tam-ekran-kipi', () => this._tamEkranDenetle())],
+            [this._ayar, this._ayar.connect('changed::ust-serit', () => this._tamEkranDenetle())],
         ];
 
         this._abonelik = this._yonetici.subscribe(vm => this._uygula(vm));
@@ -472,6 +479,13 @@ export class IslandGorunumu {
             this._bicimle(this._hedef('bos'));
     }
 
+    _saatBirak() {
+        if (this._saatKaynagi && this._saatId)
+            this._saatKaynagi.disconnect(this._saatId);
+        this._saatKaynagi = null;
+        this._saatId = 0;
+    }
+
     _caGorunur() {
         this._caMini.actor.visible = global.workspace_manager.n_workspaces > 1;
     }
@@ -517,7 +531,8 @@ export class IslandGorunumu {
 
     // etkin çalışma alanında, adanın monitöründe görünen bir pencere kapsülün durduğu üst orta bölgeye giriyor mu
     _pencereKapliyor(m) {
-        if (!m || !this._ayar.get_boolean('pencere-centik'))
+        // şerit pencerelere bırakıldıysa (ust-serit = gizli) pencereler adanın altına girebilir
+        if (!m || !this._ayar.get_boolean('pencere-centik') || this._ayar.get_string('ust-serit') !== 'gizli')
             return false;
         const s = this._s;
         const w = Math.round(480 * s), h = this._kapsulYuksekligi() + Math.round(6 * s);
@@ -538,8 +553,13 @@ export class IslandGorunumu {
     _tamEkranDenetle() {
         const m = this._monitor();
         const tam = !!m?.inFullscreen;
-        const aktif = !Main.overview.visible && (tam || this._pencereKapliyor(m));
-        this._te.tam = tam;
+        const birlikte = tam && this._teKip() === 'birlikte' && !Main.overview.visible;
+        if (birlikte)
+            this._birlikte.basla(m, Main.panel.height || Math.round(32 * this._s));
+        else
+            this._birlikte.bitir();
+        const aktif = !Main.overview.visible && ((tam && !birlikte) || this._pencereKapliyor(m));
+        this._te.tam = tam && !birlikte;
         if (aktif === this._te.aktif)
             return;
         this._te.aktif = aktif;
@@ -759,6 +779,7 @@ export class IslandGorunumu {
 
     // ---------- kapanış ----------
     destroy() {
+        this._birlikte?.destroy();
         this._abonelik?.();
         this._yay?.stop();
         Animasyon.bitti();
@@ -774,8 +795,7 @@ export class IslandGorunumu {
         this._sicak.destroy();
         this._caIdler.forEach(id => global.workspace_manager.disconnect(id));
         this._caMini.destroy();
-        this._saatKaynagi.disconnect(this._saatId);
-        this._saatKaynagi = null;
+        this._saatBirak();
         Main.layoutManager.disconnect(this._monitorId);
         Main.panel.disconnect(this._panelId);
         this._ayar.disconnect(this._ayarId);

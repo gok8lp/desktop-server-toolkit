@@ -9,6 +9,7 @@
 import St from 'gi://St';
 import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import {SeritRengi} from './serit-rengi.js';
 
 const tepsiSimgesiMi = c => Object.keys(Main.panel.statusArea).some(k =>
     k.startsWith('appindicator-') && Main.panel.statusArea[k]?.container === c);
@@ -24,7 +25,7 @@ export class UstCubuk {
     }
 
     enable() {
-        this._ayarId = this._ayar.connect('changed::ust-cubuk-sade', () => this._uygula());
+        this._ayarIdleri = ['changed::ust-cubuk-sade', 'changed::ust-serit'].map(s => this._ayar.connect(s, () => this._uygula()));
         this._uygula();
     }
 
@@ -33,7 +34,13 @@ export class UstCubuk {
         if (!this._ayar.get_boolean('ust-cubuk-sade'))
             return;
         Main.panel.add_style_class_name('flugel-sade-panel');
-        this._seridiBosalt();
+        // şerit: renkli = pencereler şeridin altından başlar, şerit alttaki uygulamanın rengini alır (ada hiçbir şeyi
+        // örtmez); gizli = şerit yer ayırmaz, pencereler en üste uzanır, ada üstlerinde çentik olur; seffaf = GNOME gibi
+        const serit = this._ayar.get_string('ust-serit');
+        if (serit === 'gizli')
+            this._seridiBosalt();
+        else if (serit === 'renkli')
+            this._seritRengi = new SeritRengi();
         const kutular = [Main.panel._leftBox, Main.panel._centerBox, Main.panel._rightBox];
         for (const kutu of kutular) {
             kutu.get_children().forEach(c => this._gizle(c));
@@ -128,6 +135,8 @@ export class UstCubuk {
     }
 
     _geriAl() {
+        this._seritRengi?.destroy();
+        this._seritRengi = null;
         this._seridiGeriVer();
         for (const id of this._bekleyen)
             GLib.source_remove(id);
@@ -172,9 +181,8 @@ export class UstCubuk {
     }
 
     disable() {
-        if (this._ayarId)
-            this._ayar.disconnect(this._ayarId);
-        this._ayarId = 0;
+        this._ayarIdleri?.forEach(id => this._ayar.disconnect(id));
+        this._ayarIdleri = null;
         this._geriAl();
     }
 }
