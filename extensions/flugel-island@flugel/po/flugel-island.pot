@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 16:41+0300\n"
+"POT-Creation-Date: 2026-10-15 16:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -823,6 +823,87 @@ msgstr ""
 msgid "Sessiz"
 msgstr ""
 
+msgid "Ağları yeniden tara"
+msgstr ""
+
+msgid "Wi-Fi ayarları"
+msgstr ""
+
+msgid "Kablosuz ağ kartı yok"
+msgstr ""
+
+msgid "Wi-Fi kapalı"
+msgstr ""
+
+msgid "Taranıyor…"
+msgstr ""
+
+msgid "Ağ bulunamadı"
+msgstr ""
+
+msgid "Bağlı · tıkla: bağlantıyı kes"
+msgstr ""
+
+msgid "Kayıtlı"
+msgstr ""
+
+#, javascript-format
+msgid "Sinyal %s%%"
+msgstr ""
+
+msgid "Bluetooth ayarları (yeni cihaz eşleştir)"
+msgstr ""
+
+msgid "Bluetooth bağdaştırıcısı yok"
+msgstr ""
+
+msgid "Bluetooth kapalı"
+msgstr ""
+
+msgid "Eşleşmiş cihaz yok"
+msgstr ""
+
+msgid "Ayrılıyor…"
+msgstr ""
+
+msgid "Bağlanıyor…"
+msgstr ""
+
+#, javascript-format
+msgid "Bağlı · pil %%%s"
+msgstr ""
+
+msgid "Bağlı"
+msgstr ""
+
+msgid "Bağlı değil"
+msgstr ""
+
+msgid "Tıkla: bağlantıyı kes"
+msgstr ""
+
+msgid "Tıkla: bağlan"
+msgstr ""
+
+msgid "Çıkış"
+msgstr ""
+
+msgid "Uygulamalar"
+msgstr ""
+
+msgid "Şu an ses çalan uygulama yok"
+msgstr ""
+
+#, javascript-format
+msgid "%s: sesi kapat / aç"
+msgstr ""
+
+msgid "kapalı"
+msgstr ""
+
+msgid "Ses ayarları"
+msgstr ""
+
 msgid "Pazar"
 msgstr ""
 
@@ -904,10 +985,10 @@ msgstr ""
 msgid "Sesi kapat / aç"
 msgstr ""
 
-msgid "Parlaklık"
+msgid "Uygulama sesleri ve çıkış cihazı"
 msgstr ""
 
-msgid "kapalı"
+msgid "Parlaklık"
 msgstr ""
 
 msgid "komut çalışmadı"
@@ -1499,9 +1580,6 @@ msgstr ""
 msgid "%s dk"
 msgstr ""
 
-msgid "Uygulamalar"
-msgstr ""
-
 msgid "Uygulama ara…"
 msgstr ""
 
@@ -1548,6 +1626,9 @@ msgid "Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır"
 msgstr ""
 
 msgid "Tıkla: sabitle"
+msgstr ""
+
+msgid "tıkla: ağlar/cihazlar · sağ tık: aç/kapat"
 msgstr ""
 
 msgid "Video"
@@ -1782,9 +1863,6 @@ msgid "Ağ"
 msgstr ""
 
 msgid "Ağ ayarları"
-msgstr ""
-
-msgid "Ses ayarları"
 msgstr ""
 
 msgid "Ekranlar"

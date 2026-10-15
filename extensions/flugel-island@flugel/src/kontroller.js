@@ -1,11 +1,13 @@
 // FLUGEL Island — ses ve parlaklık çubukları (GNOME'un kendi mikseri ve parlaklık yöneticisi).
-// Sistem sekmesinin en altında; simgeye tıklamak sesi kapatır/açar.
+// Hızlı sekmesinin en üstünde; simgeye tıklamak sesi kapatır/açar. Ses satırının sağındaki düğme uygulama
+// başına ses ve çıkış cihazı panelini yayla açar.
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as Volume from 'resource:///org/gnome/shell/ui/status/volume.js';
 import {Slider} from 'resource:///org/gnome/shell/ui/slider.js';
-import {ipucuBagla} from './bilesenler.js';
+import {gorunurKaydir, ipucuBagla} from './bilesenler.js';
+import {UygulamaSesleri, yumusakAc} from './hizli-detay.js';
 import {_} from './dil.js';
 
 function satir(ikonAdi, ad) {
@@ -38,6 +40,17 @@ export class SesParlaklik {
         this._idler.push([this._ses.dugme, this._ses.dugme.connect('clicked', () => this._sink?.change_is_muted(!this._sink.is_muted))]);
         this._sinkBagla();
 
+        // uygulama sesleri: düğme döner, panel yayla açılır
+        this._uygDugme = new St.Button({style_class: 'flugel-dugme flugel-dugme-kucuk flugel-uyg-ses-dugme', can_focus: true,
+            child: new St.Icon({icon_name: 'pan-down-symbolic', icon_size: 16}), y_align: Clutter.ActorAlign.CENTER});
+        this._uygDugme.child.set_pivot_point(0.5, 0.5);
+        ipucuBagla(this._uygDugme, _('Uygulama sesleri ve çıkış cihazı'));
+        this._ses.kutu.add_child(this._uygDugme);
+        this._uygKap = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, visible: false,
+            style_class: 'flugel-alt-panel', clip_to_allocation: true});
+        this.actor.add_child(this._uygKap);
+        this._idler.push([this._uygDugme, this._uygDugme.connect('clicked', () => this.uygulamalar(!this._uyg))]);
+
         // parlaklık (dizüstü ekranı; GNOME'un parlaklık yöneticisi)
         this._parlaklik = satir('display-brightness-symbolic', _('Parlaklık'));
         this.actor.add_child(this._parlaklik.kutu);
@@ -51,6 +64,23 @@ export class SesParlaklik {
             })]);
         }
         this._olcekBagla();
+    }
+
+    uygulamalar(ac) {
+        if (ac === !!this._uyg)
+            return;
+        this._uygDugme.child.ease({rotation_angle_z: ac ? 180 : 0, duration: 220, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        if (ac) {
+            this._uyg = new UygulamaSesleri();
+            this._uygKap.add_child(this._uyg.actor);
+            yumusakAc(this._uygKap, true, () => gorunurKaydir(this._uygKap));
+            this._uygDugme.add_style_pseudo_class('checked');
+        } else {
+            const eski = this._uyg;
+            this._uyg = null;
+            this._uygDugme.remove_style_pseudo_class('checked');
+            yumusakAc(this._uygKap, false, () => eski.destroy());
+        }
     }
 
     _sinkBagla() {
@@ -106,6 +136,8 @@ export class SesParlaklik {
     }
 
     destroy() {
+        this._uyg?.destroy();
+        this._uyg = null;
         if (this._sink && this._sinkIdler)
             this._sinkIdler.forEach(id => this._sink.disconnect(id));
         if (this._olcek && this._olcekId)

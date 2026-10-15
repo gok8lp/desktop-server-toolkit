@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 00:15+0300\n"
+"POT-Creation-Date: 2026-10-15 16:46+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -218,12 +218,14 @@ msgid "Canlı etkinliklerde de (maç skoru…)"
 msgstr "Also for live activities (match score…)"
 
 msgid "Pencere altına gelince de çentik"
-msgstr ""
+msgstr "Notch when a window is underneath"
 
 msgid ""
 "Büyütülmüş pencereler ekranın en üstüne uzanır; ada onları örtmez, üst "
 "ortaya gelince iner"
 msgstr ""
+"Maximized windows reach the top edge; the island does not cover them and "
+"slides down at the top center"
 
 msgid "Üzerine gelince açılma gecikmesi"
 msgstr "Hover delay"
@@ -872,6 +874,100 @@ msgstr "Microphone"
 msgid "Sessiz"
 msgstr "Muted"
 
+msgid "Ağları yeniden tara"
+msgstr "Rescan networks"
+
+#
+msgid "Wi-Fi ayarları"
+msgstr "Wi-Fi settings"
+
+#
+msgid "Kablosuz ağ kartı yok"
+msgstr "No wireless adapter"
+
+#
+msgid "Wi-Fi kapalı"
+msgstr "Wi-Fi is off"
+
+#
+msgid "Taranıyor…"
+msgstr "Scanning…"
+
+#
+#
+msgid "Ağ bulunamadı"
+msgstr "No networks found"
+
+msgid "Bağlı · tıkla: bağlantıyı kes"
+msgstr "Connected · click: disconnect"
+
+#
+msgid "Kayıtlı"
+msgstr "Saved"
+
+#, javascript-format
+msgid "Sinyal %s%%"
+msgstr "Signal %s%%"
+
+msgid "Bluetooth ayarları (yeni cihaz eşleştir)"
+msgstr "Bluetooth settings (pair a new device)"
+
+msgid "Bluetooth bağdaştırıcısı yok"
+msgstr "No Bluetooth adapter"
+
+msgid "Bluetooth kapalı"
+msgstr "Bluetooth is off"
+
+msgid "Eşleşmiş cihaz yok"
+msgstr "No paired devices"
+
+msgid "Ayrılıyor…"
+msgstr "Disconnecting…"
+
+#
+msgid "Bağlanıyor…"
+msgstr "Connecting…"
+
+#, javascript-format
+msgid "Bağlı · pil %%%s"
+msgstr "Connected · battery %%%s"
+
+#
+msgid "Bağlı"
+msgstr "Connected"
+
+#
+msgid "Bağlı değil"
+msgstr "Not connected"
+
+#
+#
+msgid "Tıkla: bağlantıyı kes"
+msgstr "Click: disconnect"
+
+#
+msgid "Tıkla: bağlan"
+msgstr "Click: connect"
+
+msgid "Çıkış"
+msgstr "Output"
+
+msgid "Uygulamalar"
+msgstr "Apps"
+
+msgid "Şu an ses çalan uygulama yok"
+msgstr "No app is playing sound"
+
+#, javascript-format
+msgid "%s: sesi kapat / aç"
+msgstr "%s: mute / unmute"
+
+msgid "kapalı"
+msgstr "off"
+
+msgid "Ses ayarları"
+msgstr "Sound settings"
+
 msgid "Pazar"
 msgstr "Sunday"
 
@@ -953,11 +1049,11 @@ msgstr "Sound"
 msgid "Sesi kapat / aç"
 msgstr "Mute / unmute"
 
+msgid "Uygulama sesleri ve çıkış cihazı"
+msgstr "App volumes and output device"
+
 msgid "Parlaklık"
 msgstr "Brightness"
-
-msgid "kapalı"
-msgstr "off"
 
 msgid "komut çalışmadı"
 msgstr "command failed"
@@ -1557,9 +1653,6 @@ msgstr "%s h %s min"
 msgid "%s dk"
 msgstr "%s min"
 
-msgid "Uygulamalar"
-msgstr "Apps"
-
 #
 msgid "Uygulama ara…"
 msgstr "Search apps…"
@@ -1611,6 +1704,9 @@ msgstr "Any app on the system; right-click to remove"
 #
 msgid "Tıkla: sabitle"
 msgstr "Click: pin"
+
+msgid "tıkla: ağlar/cihazlar · sağ tık: aç/kapat"
+msgstr "click: networks/devices · right-click: on/off"
 
 msgid "Video"
 msgstr "Video"
@@ -1847,9 +1943,6 @@ msgstr "Network"
 
 msgid "Ağ ayarları"
 msgstr "Network settings"
-
-msgid "Ses ayarları"
-msgstr "Sound settings"
 
 msgid "Ekranlar"
 msgstr "Displays"

@@ -432,3 +432,23 @@ export function bilesenleriTemizle() {
     onizleme?.destroy();
     onizleme = null;
 }
+
+// aktör kaydırılabilir kart alanında görünmüyorsa yumuşakça görünür hale kaydır (açılan paneller için)
+export function gorunurKaydir(aktor) {
+    let sv = aktor.get_parent();
+    while (sv && !(sv instanceof St.ScrollView))
+        sv = sv.get_parent();
+    if (!sv || !aktor.mapped)
+        return;
+    const adj = sv.vadjustment;
+    const [, svY] = sv.get_transformed_position();
+    const [, aY] = aktor.get_transformed_position();
+    const ust = aY - svY + adj.value, alt = ust + aktor.height;
+    let hedef = adj.value;
+    if (alt > adj.value + adj.page_size)
+        hedef = Math.min(ust, alt - adj.page_size);
+    else if (ust < adj.value)
+        hedef = ust;
+    if (hedef !== adj.value)
+        adj.ease(hedef, {duration: 260, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+}

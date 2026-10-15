@@ -3,6 +3,7 @@
 // taşınır, eklenti kapanınca geri konur. Simgenin kendi menüsü açıkken kart kapanmaz.
 import St from 'gi://St';
 import GLib from 'gi://GLib';
+import Shell from 'gi://Shell';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Clutter from 'gi://Clutter';
 import {ipucuBagla} from './bilesenler.js';
@@ -10,9 +11,21 @@ import {_} from './dil.js';
 
 const tepsiAnahtari = c => Object.keys(Main.panel.statusArea).find(k =>
     k.startsWith('appindicator-') && Main.panel.statusArea[k]?.container === c);
+// Bazı uygulamalar başlık yerine simge dosya adını verir ("Claude_status_icon_1", "steam_tray_mono"): okunur ada çevrilir
+const sadeAd = t => String(t ?? '').replace(/[_-]?(status[_-]?)?(tray[_-]?)?(icon|indicator|mono|dark|light|symbolic)([_-]?\d+)?$/i, '')
+    .replace(/[_-]?(status|tray)$/i, '').replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim()
+    .replace(/^./, h => h.toLocaleUpperCase());
 const tepsiAdi = c => {
     const i = c.get_first_child();
-    return i?._indicator?.title || i?._indicator?.id || i?.accessible_name || _('Uygulama');
+    for (const aday of [i?._indicator?.title, i?._indicator?.id, i?.accessible_name]) {
+        const ad = sadeAd(aday);
+        if (!ad || /^\d+$/.test(ad))
+            continue;
+        // kurulu bir uygulamayla eşleşirse onun gerçek adı ("telegram desktop" → "Telegram")
+        const bulunan = Shell.AppSystem.search(ad.toLowerCase())?.[0]?.[0];
+        return (bulunan && Shell.AppSystem.get_default().lookup_app(bulunan)?.get_name()) || ad;
+    }
+    return _('Uygulama');
 };
 
 export class Tepsi {

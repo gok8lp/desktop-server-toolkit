@@ -7,7 +7,6 @@ import {Sayfa} from './sayfa.js';
 import {H, KIRMIZI, SARI, bilgiSatiri, altMenu, calistir, ikon, kac, renkli, renkSicak, renkYuzde, soluk} from '../ortak.js';
 import {Karo, Izgara, bolum, ipucuBagla} from '../bilesenler.js';
 import {Grafik} from '../grafik.js';
-import {SesParlaklik} from '../kontroller.js';
 import {_, f} from '../dil.js';
 
 const SIRA = 60;   // grafikte tutulan son ölçüm sayısı (PC 15 sn → 15 dk, sunucu 20 sn → 20 dk)
@@ -109,8 +108,6 @@ export class SistemSayfa extends Sayfa {
         this.actor.add_child(this._detay);
 
         // ---------- en alt: ses ve parlaklık ----------
-        this._cubuklar = new SesParlaklik();
-        this.actor.add_child(bolum(_('Ses ve parlaklık'), this._cubuklar.actor));
 
         // veriler kapalı kartta da toplanır (grafik geçmişi), çizim sadece görünürken
         this._aboneler = [
@@ -274,7 +271,6 @@ export class SistemSayfa extends Sayfa {
     destroy() {
         this._aboneler.forEach(fn => fn());
         this._gucAbone?.();
-        this._cubuklar.destroy();
         super.destroy();
     }
 }

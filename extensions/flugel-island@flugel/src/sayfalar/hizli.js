@@ -10,10 +10,12 @@ import Shell from 'gi://Shell';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Sayfa} from './sayfa.js';
 import {bash, calistir, ekranGoruntusu, ikon} from '../ortak.js';
-import {Karo, Izgara, bolum} from '../bilesenler.js';
+import {Karo, Izgara, bolum, gorunurKaydir} from '../bilesenler.js';
 import {sabitKarolar} from '../uygulamalar.js';
 import {UYKU_KIPLERI} from '../uyku.js';
 import {HizliAyarlar} from '../hizli-ayarlar.js';
+import {SesParlaklik} from '../kontroller.js';
+import {BluetoothPaneli, WifiPaneli, yumusakAc} from '../hizli-detay.js';
 import {_, f} from '../dil.js';
 
 function surecOldur(pid, ad) {
@@ -37,6 +39,10 @@ export class HizliSayfa extends Sayfa {
         this._panik = o.panik;
         this._uyku = o.uyku;
         this._genislik = o.ayarlar.get_int('kart-genislik') - 48;
+
+        // ses ve parlaklık en üstte (uygulama sesleri sağdaki düğmeyle açılır)
+        this._cubuklar = new SesParlaklik();
+        this.actor.add_child(bolum(_('Ses ve parlaklık'), this._cubuklar.actor));
 
         this._sabit = new Izgara({genislik: this._genislik, karoGenisligi: 84});
         this.actor.add_child(bolum(_('Uygulamalar'), this._sabit));
@@ -78,7 +84,13 @@ export class HizliSayfa extends Sayfa {
         this.actor.add_child(bolum(_('Araçlar'), araclar));
         this._hizliAyar = new HizliAyarlar();
         this._ayarIzgara = new Izgara({genislik: this._genislik, karoGenisligi: 84});
-        this.actor.add_child(bolum(_('Hızlı ayarlar'), this._ayarIzgara));
+        // hızlı ayarlar ses/parlaklığın hemen altında (stok Hızlı Ayarlar gibi sistem denetimleri bir arada)
+        const ayarBolum = bolum(_('Hızlı ayarlar'), this._ayarIzgara);
+        this.actor.insert_child_at_index(ayarBolum, 1);
+        // Wi-Fi / Bluetooth ayrıntısı (karoya tıklayınca altta açılır; sağ tık hızlıca açar/kapatır)
+        this._detayKap = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, visible: false,
+            clip_to_allocation: true});
+        this.actor.insert_child_at_index(this._detayKap, 2);
 
         // açılır alt panel (zorla kapat listesi / uyku süreleri)
         this._alt = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel', visible: false});
@@ -156,6 +168,7 @@ export class HizliSayfa extends Sayfa {
 
     gizle() {
         this._uygKapat();
+        this._detayKapat();
     }
 
     // Hızlı Ayarlar'daki anahtarlar (Wi-Fi, Bluetooth, uçak, gece ışığı, rahatsız etme, güç, mikrofon)
@@ -164,23 +177,66 @@ export class HizliSayfa extends Sayfa {
         if (!this.actor.get_stage())
             return;
         this._ayarIzgara.temizle();
+        const degistir = async id => {
+            await this._hizliAyar.degistir(id);
+            // servis durumu güncellesin diye kısa bekleme
+            if (this._ayarBekleId)
+                GLib.source_remove(this._ayarBekleId);
+            this._ayarBekleId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 400, () => {
+                this._ayarBekleId = 0;
+                this._ayarlarYaz();
+                return GLib.SOURCE_REMOVE;
+            });
+        };
         for (const d of durumlar) {
-            const k = this._ayarIzgara.ekle(new Karo({ikon: d.ikon, etiket: d.ad, ipucu: {baslik: d.ad, ayrinti: d.ayrinti},
-                eylem: async () => {
-                    await this._hizliAyar.degistir(d.id);
-                    // servis durumu güncellesin diye kısa bekleme
-                    this._ayarBekleId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 400, () => {
-                        this._ayarBekleId = 0;
-                        this._ayarlarYaz();
-                        return GLib.SOURCE_REMOVE;
-                    });
-                }}));
+            const detayli = d.id === 'wifi' || d.id === 'bt';
+            const k = this._ayarIzgara.ekle(new Karo({ikon: d.ikon, etiket: d.ad,
+                ipucu: {baslik: d.ad, ayrinti: detayli ? `${d.acik ? _('Açık') : _('Kapalı')} · ${_('tıkla: ağlar/cihazlar · sağ tık: aç/kapat')}` : d.ayrinti},
+                eylem: () => (detayli ? this._detayAcKapa(d.id) : degistir(d.id)),
+                sagTik: detayli ? () => degistir(d.id) : null}));
             k.secili(d.acik);
+            if (detayli && this._detayId === d.id)
+                k.actor.add_style_class_name('flugel-karo-detay-acik');
         }
+    }
+
+    _detayAcKapa(id) {
+        const eski = this._detay;
+        const ayni = this._detayId === id;
+        this._detay = null;
+        this._detayId = null;
+        const kur = () => {
+            if (ayni)
+                return;
+            this._detayId = id;
+            this._detay = id === 'wifi' ? new WifiPaneli({kapat: () => this.close()}) : new BluetoothPaneli({kapat: () => this.close()});
+            this._detayKap.add_child(this._detay.actor);
+            yumusakAc(this._detayKap, true, () => gorunurKaydir(this._detayKap));
+            this._ayarlarYaz();
+        };
+        if (eski) {
+            yumusakAc(this._detayKap, false, () => {
+                eski.destroy();
+                kur();
+            });
+            if (ayni)
+                this._ayarlarYaz();
+        } else {
+            kur();
+        }
+    }
+
+    _detayKapat() {
+        this._detay?.destroy();
+        this._detay = null;
+        this._detayId = null;
+        this._detayKap.hide();
+        this._cubuklar.uygulamalar(false);
     }
 
     kapandi() {
         super.kapandi();
+        this._detayKapat();
         this._uygKapat();
         this._altKapat();
         this._panikOnayIptal();
@@ -346,6 +402,8 @@ export class HizliSayfa extends Sayfa {
     }
 
     destroy() {
+        this._detay?.destroy();
+        this._cubuklar.destroy();
         this._uygKapat();
         for (const id of [this._panikOnayId, this._basiliId, this._ayarBekleId]) {
             if (id)

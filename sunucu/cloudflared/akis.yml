@@ -4,4 +4,6 @@ credentials-file: /root/.cloudflared/<kimlik>.json
 ingress:
   - hostname: akis.<alan-adı>
     service: http://localhost:3012
+  - hostname: status.<alan-adı>
+    service: http://localhost:3004   # Uptime Kuma
   - service: http_status:404
