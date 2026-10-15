@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 18:58+0300\n"
+"POT-Creation-Date: 2026-10-15 19:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,6 +235,14 @@ msgid "Çentik: bildirim ve ses/parlaklıkta da"
 msgstr ""
 
 msgid "Çentik: canlı etkinliklerde de"
+msgstr ""
+
+msgid "Çentik altındakine yol versin"
+msgstr ""
+
+msgid ""
+"Yazı imleci çentiğin altına gelince ya da basılı tuşla sürüklerken ada "
+"yukarı çekilir · Super+Alt+I: gizle / geri getir"
 msgstr ""
 
 msgid "Büyütülmüş pencerede üst şerit"

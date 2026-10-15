@@ -122,6 +122,8 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
                 ['bildirim', _('Çentik: bildirim ve ses/parlaklıkta da')], ['canli', _('Çentik: canlı etkinliklerde de')]]);
         this._baglan(a, teId);
         g.add(te);
+        g.add(anahtar(a, 'ada-yol-ver', _('Çentik altındakine yol versin'),
+            _('Yazı imleci çentiğin altına gelince ya da basılı tuşla sürüklerken ada yukarı çekilir · Super+Alt+I: gizle / geri getir')));
         const [serit, seritId] = secim(a, 'ust-serit', _('Büyütülmüş pencerede üst şerit'),
             _('Renkli: şerit uygulamanın rengini alır, ada uygulamanın başlığına gömülü durur ve hiçbir şeyi örtmez'),
             [['centik', _('Yok, ada çentik (pencere tüm ekranı kullanır)')], ['renkli', _('Uygulamanın renginde şerit')],

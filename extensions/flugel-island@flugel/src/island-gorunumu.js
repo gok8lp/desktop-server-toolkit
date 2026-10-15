@@ -11,6 +11,7 @@ import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {springProgress} from './spring.js';
 import {TamEkranBirlikte} from './tam-ekran.js';
+import {Kacis} from './kacis.js';
 import {Animasyon} from './sayfalar/sayfa.js';
 import {CalismaAlanlari} from './calisma-alanlari.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
@@ -81,6 +82,16 @@ export class IslandGorunumu {
         this._saatKaynagi = new GnomeDesktop.WallClock({time_only: true});
         this._saatId = this._saatKaynagi.connect('notify::clock', () => this._saatYaz());
         this._saatYaz();
+        // çentik altında önemli bir şey varken (yazı imleci, sürükleme, kısayol) ada yukarı çekilir
+        const ada = this;
+        this._kacis = new Kacis(this._ayar, {
+            get kok() {
+                return ada._kok;
+            },
+            monitor: () => this._monitor(),
+            cekil: c => this._cekil(c),
+            kartAcik: () => this._durum === 'genis',
+        });
         // kabuk kapanırken aktörler eklenti kapatılmadan yok edilir: saat sinyali ölü etikete dokunmasın
         this._kok.connect('destroy', () => this._saatBirak());
 
@@ -614,6 +625,29 @@ export class IslandGorunumu {
 
     // Çentiğin ekran kenarına bağlandığı yerdeki iç kavisler (MacBook çentiği gibi): kapsülün iki üst yanında,
     // kare içinden çeyrek daire çıkarılmış siyah parçalar. Böylece ada ekranın bir parçasıymış gibi görünür.
+    // yol ver: kapsül, balon ve kavisler yukarı kayıp kaybolur; tıklamalar alttaki uygulamaya geçer
+    _cekil(cekil) {
+        if (cekil === !!this._cekik || !this._kok)
+            return;
+        this._cekik = cekil;
+        const h = this._kok.height + 6;
+        const anim = St.Settings.get().enable_animations;
+        for (const a of [this._kok, this._balon, this._kavisSol, this._kavisSag]) {
+            if (!a)
+                continue;
+            a.remove_transition('translation-y');
+            a.remove_transition('opacity');
+            a.reactive = !cekil && a !== this._kavisSol && a !== this._kavisSag;
+            if (anim) {
+                a.ease({translation_y: cekil ? -h : 0, opacity: cekil ? 0 : 255, duration: cekil ? 170 : 300,
+                    mode: cekil ? Clutter.AnimationMode.EASE_IN_QUAD : Clutter.AnimationMode.EASE_OUT_BACK});
+            } else {
+                a.translation_y = cekil ? -h : 0;
+                a.opacity = cekil ? 0 : 255;
+            }
+        }
+    }
+
     _kavisKur() {
         const s = this._s;
         const r = Math.round(13 * s);
@@ -883,6 +917,8 @@ export class IslandGorunumu {
 
     // ---------- kapanış ----------
     destroy() {
+        this._kacis?.destroy();
+        this._kacis = null;
         this._kavisSol?.destroy();
         this._kavisSag?.destroy();
         this._kavisSol = this._kavisSag = null;

@@ -82,6 +82,14 @@
       <default>0</default>
       <summary>İç kullanım: ayar göçü (yeni canlı etkinlik kaynakları eski listelere eklenir)</summary>
     </key>
+    <key name="ada-yol-ver" type="b">
+      <default>true</default>
+      <summary>Çentiğin altına yazı imleci gelince ya da basılı tuşla sürüklerken ada yukarı çekilir</summary>
+    </key>
+    <key name="ada-gizle-kisayol" type="as">
+      <default><![CDATA[['<Super><Alt>i']]]></default>
+      <summary>Adayı geçici gizle / geri getir</summary>
+    </key>
     <key name="medya-kaydirma" type="s">
       <choices><choice value="parca"/><choice value="sarma"/></choices>
       <default>'parca'</default>

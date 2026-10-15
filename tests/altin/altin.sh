@@ -48,6 +48,8 @@ isaret DUGMELER
 . "$D/ust-dugmeler.sh"
 isaret CENTIK
 . "$D/centik.sh"
+isaret KACIS
+. "$D/kacis.sh"
 isaret PENCERE
 . "$D/pencere.sh"
 isaret CS2
