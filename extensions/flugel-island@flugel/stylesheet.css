@@ -513,3 +513,17 @@
 .flugel-akis-onemli { font-size: 8pt; color: #e8c66b; }
 .flugel-akis-baslik { font-size: 10.5pt; font-weight: 700; }
 .flugel-akis-ozet { font-size: 9pt; color: #c4c4cc; margin-top: 4px; }
+
+/* Oyunlar sekmesi */
+.flugel-oyun-ara { spacing: 6px; }
+.flugel-oyun-karo { padding: 8px; border-radius: 14px; background-color: rgba(255, 255, 255, 0.05); color: #f2f2f4; }
+.flugel-oyun-karo:hover { background-color: rgba(255, 255, 255, 0.11); }
+.flugel-oyun-kapak { border-radius: 10px; background-color: rgba(255, 255, 255, 0.06); }
+.flugel-oyun-ad { font-size: 9.5pt; font-weight: 700; }
+.flugel-oyun-alt { font-size: 8.5pt; color: #9a9aa5; }
+.flugel-oyun-satir { padding: 8px 10px; border-radius: 14px; background-color: rgba(255, 255, 255, 0.05); color: #f2f2f4; }
+.flugel-oyun-satir:hover { background-color: rgba(255, 255, 255, 0.11); }
+.flugel-oyun-kucuk { width: 112px; height: 52px; border-radius: 8px; background-color: rgba(255, 255, 255, 0.06); }
+.flugel-oyun-indirim { font-size: 8.5pt; font-weight: 800; color: #000000; background-color: #8fd6a0; border-radius: 6px; padding: 1px 6px; }
+.flugel-oyun-eski { font-size: 8.5pt; color: #7a7a84; }
+.flugel-oyun-fiyat { font-size: 10.5pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }

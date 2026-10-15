@@ -41,6 +41,8 @@ export class UstCubuk {
             this._seridiBosalt();
         else if (serit === 'renkli')
             this._seritRengi = new SeritRengi();
+        else if (serit === 'siyah')
+            this._seritRengi = new SeritRengi('0,0,0');
         const kutular = [Main.panel._leftBox, Main.panel._centerBox, Main.panel._rightBox];
         for (const kutu of kutular) {
             kutu.get_children().forEach(c => this._gizle(c));

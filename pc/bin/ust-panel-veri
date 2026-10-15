@@ -783,6 +783,76 @@ def akis_isaret(kimlik, alan, deger):
     return r
 
 
+# ---------- oyunlar (Island "Oyunlar" sekmesi): sunucudaki FLUGEL Akis fiyat API'si + PlayStation Blog (PS Plus) ----------
+def _gorselle(ogeler, alan="resim"):
+    yollar = resimleri_onbellekle([o.get(alan) for o in ogeler if o.get(alan)], "kapak", (320,))
+    for o in ogeler:
+        o["resim_yol"] = (yollar.get(o.get(alan)) or {}).get(320)
+    return ogeler
+
+
+def oyunlar():
+    def al():
+        d = akis_istek("/api/oyunlar")
+        f = akis_istek("/api/fiyatlar")
+        return {"cok_satan": d.get("cok_satan", []), "yeni": d.get("yeni", []), "indirim": d.get("indirim", []),
+                "oneri": d.get("oneri", []), "firsatlar": f.get("firsatlar", []), "epic": f.get("epic", []), "zaman": int(time.time())}
+    d = cached("oyunlar-island", 1800, al)
+    for k in ("cok_satan", "yeni", "indirim", "oneri", "firsatlar", "epic"):
+        _gorselle(d.get(k, []))
+    return d
+
+
+def oyun_ara(soz):
+    soz = (soz or "").strip()[:60]
+    if len(soz) < 2:
+        return {"steam": [], "en_ucuz": []}
+    d = akis_istek("/api/fiyat?ara=" + urllib.parse.quote(soz))
+    _gorselle(d.get("steam", []))
+    _gorselle(d.get("en_ucuz", []))
+    return d
+
+
+def psplus():
+    """PS Plus: en son 'Monthly Games' (Essential) ve 'Game Catalog' (Extra/Premium) duyurusundaki oyunlar.
+    Kaynak: resmi PlayStation Blog PS Plus kategorisi RSS'i; oyun adlari 'Ad | PS5' basliklarindan, kapak hemen onceki gorselden."""
+    import html as H
+    import re
+
+    def al():
+        t = urllib.request.urlopen(urllib.request.Request("https://blog.playstation.com/category/ps-plus/feed/",
+                                                          headers={"User-Agent": "Mozilla/5.0 FLUGEL"}), timeout=15).read().decode("utf-8", "replace")
+        sonuc = {}
+        for it in re.findall(r"<item>(.*?)</item>", t, re.S):
+            baslik = H.unescape(re.search(r"<title>(.*?)</title>", it, re.S).group(1)).strip()
+            tur = "aylik" if "Monthly Games" in baslik else ("katalog" if "Game Catalog" in baslik else None)
+            if not tur or tur in sonuc:
+                continue
+            ic = H.unescape((re.search(r"<content:encoded>(.*?)</content:encoded>", it, re.S) or [None, ""])[1])
+            oyunlar_, son_resim, gorulen = [], None, set()
+            for m in re.finditer(r'<img[^>]+src="([^"]+)"|<(?:strong|h[2-4][^>]*)>([^<]{2,90}?)\s*\|\s*(PS[^<]{1,30})</', ic):
+                if m.group(1):
+                    if "tachyon" in m.group(1) or "/uploads/" in m.group(1):
+                        son_resim = m.group(1)
+                    continue
+                ad = m.group(2).strip()
+                if ad in gorulen:
+                    continue
+                gorulen.add(ad)
+                oyunlar_.append({"ad": ad, "platform": m.group(3).strip(), "resim": son_resim})
+            tarih = re.search(r"<pubDate>(.*?)</pubDate>", it)
+            sonuc[tur] = {"baslik": baslik, "link": re.search(r"<link>(.*?)</link>", it).group(1).strip(),
+                          "tarih": tarih.group(1)[:16] if tarih else "", "oyunlar": oyunlar_}
+            if len(sonuc) == 2:
+                break
+        return sonuc
+    d = cached("psplus", 6 * 3600, al)
+    for k in ("aylik", "katalog"):
+        if k in d:
+            _gorselle(d[k].get("oyunlar", []))
+    return d
+
+
 if __name__ == "__main__":
     ne = sys.argv[1] if len(sys.argv) > 1 else "pc"
     if ne == "kripto":
@@ -793,6 +863,12 @@ if __name__ == "__main__":
         print(json.dumps(grafik()))
     elif ne == "kripto-izle":
         print(json.dumps(kripto_izle((sys.argv[2] if len(sys.argv) > 2 else "BTC,ETH").split(","))))
+    elif ne == "oyunlar":
+        print(json.dumps(oyunlar()))
+    elif ne == "oyun-ara":
+        print(json.dumps(oyun_ara(" ".join(sys.argv[2:]))))
+    elif ne == "psplus":
+        print(json.dumps(psplus()))
     elif ne == "akis":
         print(json.dumps(akis(sys.argv[2] if len(sys.argv) > 2 else "ana", int(sys.argv[3]) if len(sys.argv) > 3 else 24)))
     elif ne == "akis-isaret":

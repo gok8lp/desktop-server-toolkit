@@ -221,6 +221,11 @@ export class IslandGorunumu {
     }
 
     _geoUygula(g) {
+        // ölçüm, yerleşim tam ortasında geçersiz (NaN) dönebilir: o kare atlanır, son geçerli boyut kalır
+        if (![g.w, g.h, g.r].every(Number.isFinite)) {
+            this.gecersizGeo = (this.gecersizGeo ?? 0) + 1;   // tanı (testler okur)
+            return;
+        }
         this._g = g;
         const m = this._monitor();
         const w = Math.max(1, Math.round(g.w)), h = Math.max(1, Math.round(g.h));
@@ -480,6 +485,8 @@ export class IslandGorunumu {
         if (this._durum !== 'genis')
             return;
         const hedef = this._hedef('genis');
+        if (!Number.isFinite(hedef.h) || !Number.isFinite(hedef.w))
+            return;
         if (Math.abs(hedef.h - this._g.h) > 1 || Math.abs(hedef.w - this._g.w) > 1)
             this._bicimle(hedef);
     }

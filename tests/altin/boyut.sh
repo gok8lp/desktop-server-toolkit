@@ -1,0 +1,5 @@
+# boyut.sh — sayfa içeriği kısa → uzun olunca kart büyür, uzun → kısa olunca küçülür (takılı kalmaz)
+a "__A.E()._yonetici.setPinned(true); __A.E()._kart.sekmeSec('basket', false); const p = __A.sayfa('basket'); p._kat = 'derbi'; p._yaz({animasyon: true}); 1" >/dev/null; sleep 1.5
+a "__A.kisaH = __A.E()._ada._kok.height; const p = __A.sayfa('basket'); p._kat = 'futbol'; p._yaz({animasyon: true}); 1" >/dev/null; sleep 1.5
+a "const h = __A.E()._ada._kok.height; const hedef = __A.E()._ada._hedef('genis').h; __A.yaz('kısa listeden uzun listeye geçince kart büyür', h > __A.kisaH + 20 && Math.abs(h - hedef) < 3, __A.kisaH + ' → ' + h + ' (hedef ' + hedef + ')'); __A.uzunH = h; const p = __A.sayfa('basket'); p._kat = 'derbi'; p._yaz({animasyon: true}); 1" >/dev/null; sleep 1.5
+a "const h = __A.E()._ada._kok.height; const hedef = __A.E()._ada._hedef('genis').h; __A.yaz('uzun listeden kısaya geçince kart küçülür', h < __A.uzunH - 20 && Math.abs(h - hedef) < 3, __A.uzunH + ' → ' + h + ' (hedef ' + hedef + ')'); __A.E()._yonetici.setPinned(false); 1" >/dev/null; sleep 1

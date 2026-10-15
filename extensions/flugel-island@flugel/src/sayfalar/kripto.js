@@ -215,6 +215,8 @@ export class KriptoSayfa extends Sayfa {
             if (kok)
                 this._grab = Main.pushModal(kok, {actionMode: Shell.ActionMode.POPUP});
         } else if (!ac && this._grab) {
+            // odaktaki yazı kutusundan önce odak alınır (giriş yöntemi uyarı vermesin)
+            global.stage.set_key_focus(null);
             Main.popModal(this._grab);
             this._grab = null;
         }

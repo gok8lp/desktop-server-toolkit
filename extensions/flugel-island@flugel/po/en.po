@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 19:24+0300\n"
+"POT-Creation-Date: 2026-10-15 19:51+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -58,6 +58,14 @@ msgstr "Anime & manga"
 
 msgid "Takip ettiklerim"
 msgstr "What I follow"
+
+#
+#
+msgid "Oyunlar"
+msgstr "Games"
+
+msgid "PS Plus, ücretsiz ve indirimdeki oyunlar, fiyat arama"
+msgstr "PS Plus, free and discounted games, price search"
 
 msgid "Akış"
 msgstr "Feed"
@@ -235,12 +243,13 @@ msgstr ""
 "Becomes a notch stuck to the top edge; slides down when the pointer reaches "
 "the top center"
 
+#
+msgid "Siyah bar: uygulama adanın altına yerleşir"
+msgstr "Black bar: the app sits below the island"
+
 msgid "Çentik: ada ekrana gömülü, hep görünür (MacBook gibi)"
 msgstr ""
 "Notch: the island is built into the screen, always visible (like a MacBook)"
-
-msgid "Uygulamayla birlikte (uygulama adanın altına yerleşir)"
-msgstr "Together with the app (the app sits below the island)"
 
 #
 #
@@ -274,6 +283,9 @@ msgid ""
 msgstr ""
 "Colored: the strip takes the app's color, the island sits in the app's "
 "header and covers nothing"
+
+msgid "Siyah bar (pencere altından başlar, ada barın içinde)"
+msgstr "Black bar (the window starts below it, the island sits in the bar)"
 
 msgid "Yok, ada çentik (pencere tüm ekranı kullanır)"
 msgstr "None, the island is a notch (the window uses the whole screen)"
@@ -2486,6 +2498,79 @@ msgstr "Click the chart to add a support/resistance line"
 msgid "Tıkla: işareti sil"
 msgstr "Click: delete mark"
 
+msgid "Ücretsiz"
+msgstr "Free"
+
+msgid "Fırsatlar"
+msgstr "Deals"
+
+msgid "Steam indirim"
+msgstr "Steam sale"
+
+msgid "Çok satanlar"
+msgstr "Top sellers"
+
+#
+msgid "Yeni çıkanlar"
+msgstr "New releases"
+
+#
+msgid "Öneriler"
+msgstr "Recommended"
+
+msgid "Oyun ara: Steam TR ve 30+ PC mağazasında fiyat karşılaştır…"
+msgstr "Search a game: compare prices on Steam TR and 30+ PC stores…"
+
+#
+msgid "PlayStation Blog'a ulaşılamadı"
+msgstr "Could not reach the PlayStation Blog"
+
+msgid "Bu ayın oyunları · Essential"
+msgstr "This month's games · Essential"
+
+msgid "Oyun kataloğu · Extra ve Premium"
+msgstr "Game Catalog · Extra and Premium"
+
+msgid "Duyuruyu aç (PlayStation Blog)"
+msgstr "Open the announcement (PlayStation Blog)"
+
+msgid "PS Store Türkiye · Fırsatlar"
+msgstr "PS Store Turkey · Deals"
+
+msgid "Sunucuya ulaşılamadı"
+msgstr "Could not reach the server"
+
+msgid "Şu an ücretsiz oyun yok"
+msgstr "No free games right now"
+
+#
+#
+msgid "Tıkla: sayfayı aç"
+msgstr "Click: open the page"
+
+msgid "Liste boş"
+msgstr "The list is empty"
+
+#, javascript-format
+msgid "Metacritic %s"
+msgstr "Metacritic %s"
+
+#, javascript-format
+msgid "Steam %%%s"
+msgstr "Steam %s%%"
+
+#
+#, javascript-format
+msgid "“%s” aranıyor…"
+msgstr "Searching for “%s”…"
+
+msgid "En ucuz · PC mağazaları (CheapShark)"
+msgstr "Cheapest · PC stores (CheapShark)"
+
+#
+msgid "en düşük fiyat"
+msgstr "lowest price"
+
 msgid "Bu bilgisayar"
 msgstr "This computer"
 
@@ -2638,9 +2723,6 @@ msgstr "Moonlight (Windows GPU streaming)"
 
 msgid "Yönetici"
 msgstr "Manager"
-
-msgid "Sunucuya ulaşılamadı"
-msgstr "Could not reach the server"
 
 msgid "yerel AI durdu"
 msgstr "local AI stopped"

@@ -44,8 +44,14 @@ isaret ARACLAR
 . "$D/araclar.sh"
 isaret AKIS
 . "$D/akis.sh"
+isaret OYUN
+. "$D/oyun.sh"
+isaret BOYUT
+. "$D/boyut.sh"
 isaret DUGMELER
 . "$D/ust-dugmeler.sh"
+isaret SIYAH
+. "$D/siyah.sh"
 isaret CENTIK
 . "$D/centik.sh"
 isaret KACIS

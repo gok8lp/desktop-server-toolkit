@@ -150,6 +150,8 @@ export class HizliSayfa extends Sayfa {
 
     _uygKapat() {
         if (this._grab) {
+            // odaktaki yazı kutusundan önce odak alınır (giriş yöntemi uyarı vermesin)
+            global.stage.set_key_focus(null);
             Main.popModal(this._grab);
             this._grab = null;
         }

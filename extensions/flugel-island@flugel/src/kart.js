@@ -173,6 +173,10 @@ export class Kart {
         }
         this.actor.add_child(this._kaydirma);
         this.actor.connect('notify::height', () => this._boyutBildir());
+        // Ada sabit boyuttayken kartın kendi yüksekliği değişmez: içerik (sayfa) uzayıp kısalınca kaydırma alanının
+        // içeriğinden izlenir. Yoksa kısa bir listeden uzun birine geçince kart kısa boyda takılı kalır.
+        this._sayfaKutu.connect('notify::height', () => this._boyutBildir());
+        this._sayfaKutu.connect('queue-relayout', () => this._boyutBildir());
 
         this._secili = null;
         const son = this._ayar.get_string('son-sekme');

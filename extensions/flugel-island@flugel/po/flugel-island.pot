@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 19:30+0300\n"
+"POT-Creation-Date: 2026-10-15 20:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,6 +57,12 @@ msgid "Anime ve manga"
 msgstr ""
 
 msgid "Takip ettiklerim"
+msgstr ""
+
+msgid "Oyunlar"
+msgstr ""
+
+msgid "PS Plus, ücretsiz ve indirimdeki oyunlar, fiyat arama"
 msgstr ""
 
 msgid "Akış"
@@ -222,10 +228,10 @@ msgid ""
 "Ekranın üst kenarına yapışık çentik olur; fare üst ortaya gelince aşağı kayar"
 msgstr ""
 
-msgid "Çentik: ada ekrana gömülü, hep görünür (MacBook gibi)"
+msgid "Siyah bar: uygulama adanın altına yerleşir"
 msgstr ""
 
-msgid "Uygulamayla birlikte (uygulama adanın altına yerleşir)"
+msgid "Çentik: ada ekrana gömülü, hep görünür (MacBook gibi)"
 msgstr ""
 
 msgid "Gizli çentik: sadece fareyle (oyun modu)"
@@ -251,6 +257,9 @@ msgstr ""
 msgid ""
 "Renkli: şerit uygulamanın rengini alır, ada uygulamanın başlığına gömülü "
 "durur ve hiçbir şeyi örtmez"
+msgstr ""
+
+msgid "Siyah bar (pencere altından başlar, ada barın içinde)"
 msgstr ""
 
 msgid "Yok, ada çentik (pencere tüm ekranı kullanır)"
@@ -2359,6 +2368,72 @@ msgstr ""
 msgid "Tıkla: işareti sil"
 msgstr ""
 
+msgid "Ücretsiz"
+msgstr ""
+
+msgid "Fırsatlar"
+msgstr ""
+
+msgid "Steam indirim"
+msgstr ""
+
+msgid "Çok satanlar"
+msgstr ""
+
+msgid "Yeni çıkanlar"
+msgstr ""
+
+msgid "Öneriler"
+msgstr ""
+
+msgid "Oyun ara: Steam TR ve 30+ PC mağazasında fiyat karşılaştır…"
+msgstr ""
+
+msgid "PlayStation Blog'a ulaşılamadı"
+msgstr ""
+
+msgid "Bu ayın oyunları · Essential"
+msgstr ""
+
+msgid "Oyun kataloğu · Extra ve Premium"
+msgstr ""
+
+msgid "Duyuruyu aç (PlayStation Blog)"
+msgstr ""
+
+msgid "PS Store Türkiye · Fırsatlar"
+msgstr ""
+
+msgid "Sunucuya ulaşılamadı"
+msgstr ""
+
+msgid "Şu an ücretsiz oyun yok"
+msgstr ""
+
+msgid "Tıkla: sayfayı aç"
+msgstr ""
+
+msgid "Liste boş"
+msgstr ""
+
+#, javascript-format
+msgid "Metacritic %s"
+msgstr ""
+
+#, javascript-format
+msgid "Steam %%%s"
+msgstr ""
+
+#, javascript-format
+msgid "“%s” aranıyor…"
+msgstr ""
+
+msgid "En ucuz · PC mağazaları (CheapShark)"
+msgstr ""
+
+msgid "en düşük fiyat"
+msgstr ""
+
 msgid "Bu bilgisayar"
 msgstr ""
 
@@ -2506,9 +2581,6 @@ msgid "Moonlight (Windows GPU akışı)"
 msgstr ""
 
 msgid "Yönetici"
-msgstr ""
-
-msgid "Sunucuya ulaşılamadı"
 msgstr ""
 
 msgid "yerel AI durdu"

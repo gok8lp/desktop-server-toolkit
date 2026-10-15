@@ -14,7 +14,9 @@ Gio._promisify(Shell.Screenshot.prototype, 'pick_color');
 const NOKTALAR = [0.03, 0.12, 0.24, 0.76, 0.88, 0.97];
 
 export class SeritRengi {
-    constructor() {
+    // sabit: '0,0,0' gibi bir renk verilirse uygulamadan okunmaz; pencere varken hep o renk (siyah bar)
+    constructor(sabit = null) {
+        this._sabit = sabit;
         this._cekim = new Shell.Screenshot();
         this._renk = null;
         const planla = () => this._planla();
@@ -71,6 +73,10 @@ export class SeritRengi {
         const p = this._hedef();
         if (!p) {
             this._yaz(null);
+            return;
+        }
+        if (this._sabit) {
+            this._yaz(this._sabit);
             return;
         }
         const r = p.get_frame_rect();

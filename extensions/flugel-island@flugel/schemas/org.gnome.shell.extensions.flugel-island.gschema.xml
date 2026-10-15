@@ -96,8 +96,8 @@
       <summary>Oynatıcıda iki parmakla yatay kaydırma: parca = önceki/sonraki parça, sarma = 10 sn geri/ileri</summary>
     </key>
     <key name="ust-serit" type="s">
-      <choices><choice value="centik"/><choice value="renkli"/><choice value="gizli"/><choice value="seffaf"/></choices>
-      <default>'centik'</default>
+      <choices><choice value="siyah"/><choice value="centik"/><choice value="renkli"/><choice value="gizli"/><choice value="seffaf"/></choices>
+      <default>'siyah'</default>
       <summary>Üst şerit: renkli = pencereler şeridin altından başlar, şerit uygulamanın rengini alır; gizli = pencereler en üste uzanır, ada çentik olur; seffaf = şeffaf şerit</summary>
     </key>
     <key name="pencere-centik" type="b">
@@ -106,7 +106,7 @@
     </key>
     <key name="tam-ekran-kipi" type="s">
       <choices><choice value="centik"/><choice value="birlikte"/><choice value="gizli"/><choice value="bildirim"/><choice value="canli"/></choices>
-      <default>'centik'</default>
+      <default>'birlikte'</default>
       <summary>Tam ekranda ada (çentik): gizli = sadece fareyle, bildirim = bildirim/ses gelince de, canli = canlı etkinlik varken de</summary>
     </key>
     <key name="sunucu-sessiz" type="s">
