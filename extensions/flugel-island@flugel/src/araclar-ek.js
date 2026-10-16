@@ -117,7 +117,6 @@ export function hesapla(ifade) {
         i += m[0].length;
         return m[0];
     };
-    let ifadeAl;
     const birincil = () => {
         const c = bak();
         if (c === '(') {
@@ -187,7 +186,7 @@ export function hesapla(ifade) {
             }
         }
     };
-    ifadeAl = () => {
+    function ifadeAl() {
         let v = carpim();
         for (;;) {
             const c = bak();
@@ -201,7 +200,7 @@ export function hesapla(ifade) {
             const fark = yuzde ? v * y : y;
             v = c === '+' ? v + fark : v - fark;
         }
-    };
+    }
     const v = ifadeAl();
     if (i < metin.length)
         throw new Error('fazla');
