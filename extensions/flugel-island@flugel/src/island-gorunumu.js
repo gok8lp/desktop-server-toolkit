@@ -19,7 +19,6 @@ import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
 import {ikon, KAPSUL_RGB, KART_RGB} from './ortak.js';
 
 const SOLMA_CIKIS = 110, SOLMA_GIRIS = 200;
-const lerp = (a, b, p) => a + (b - a) * p;
 
 export class IslandGorunumu {
     constructor({ayarlar, yonetici, kart, ekip}) {
