@@ -29,3 +29,8 @@ a "__A.yaz('araçlar sonrası kip yok', Main.modalCount === 0, String(Main.modal
 a "const ada = __A.E()._ada; __A.ssAsil = ada._ekranAsil; ada._ekranAsil = function () { __A.ssDurum = ada._durum + ' yay=' + !!ada._yay + ' kartKutu=' + ada._kartKutu.visible + '/' + ada._kartKutu.opacity; return Promise.resolve(); }; __A.E()._yonetici.setPinned(true); 1" >/dev/null; sleep 1.2
 a "Main.screenshotUI.open(); 1" >/dev/null; sleep 1.5
 a "const ada = __A.E()._ada; ada._ekranAsil = __A.ssAsil; __A.yaz('ekran görüntüsü: kart kapanıp oturduktan sonra yakalanır', /^(bos|kompakt) yay=false/.test(__A.ssDurum ?? '') && !__A.E()._yonetici.isPinned(), __A.ssDurum); 1" >/dev/null
+# uyku engelle paneli: kart kapanınca hatasız kapanır, açık kalıp takılmaz
+a "__A.E()._yonetici.setPinned(true); __A.E()._kart.sekmeSec('hizli', false); 1" >/dev/null; sleep 1.2
+a "const p = __A.sayfa('hizli'); p._ac('uyku'); __A.uykuAcik = p._alt.visible; 1" >/dev/null; sleep 0.5
+a "__A.E()._yonetici.setPinned(false); __A.E()._ada.daralt(); 1" >/dev/null; sleep 1.2
+a "const p = __A.sayfa('hizli'); __A.yaz('uyku engelle paneli: açılır, kart kapanınca kapanır (takılı kalmaz)', __A.uykuAcik && !p._alt.visible && p._altTur === null && p._acikAlt === null, String(p._alt.visible) + ' ' + p._altTur + ' ' + p._acikAlt); 1" >/dev/null

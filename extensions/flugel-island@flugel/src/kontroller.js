@@ -28,6 +28,8 @@ function satir(ikonAdi, ad) {
 export class SesParlaklik {
     constructor() {
         this.actor = new St.BoxLayout({style_class: 'flugel-cubuklar', orientation: Clutter.Orientation.VERTICAL, x_expand: true});
+        // kabuk kapanırken aktör C tarafında yok edilebilir: ses sinyalleri yok edilmiş öğelere dokunmasın
+        this.actor.connect('destroy', () => this._birak());
         this._idler = [];
 
         // ses
@@ -84,6 +86,8 @@ export class SesParlaklik {
     }
 
     _sinkBagla() {
+        if (this._birakildi)
+            return;
         if (this._sink && this._sinkIdler)
             this._sinkIdler.forEach(id => this._sink.disconnect(id));
         this._sink = this._mikser.get_default_sink();
@@ -95,6 +99,8 @@ export class SesParlaklik {
     }
 
     _sesOku() {
+        if (this._birakildi)
+            return;
         const s = this._sink;
         this._ses.kutu.reactive = !!s;
         if (!s)
@@ -135,15 +141,25 @@ export class SesParlaklik {
         oku();
     }
 
+    // ses/parlaklık kaynaklarından kopar (iki kez çağrılsa da güvenli)
+    _birak() {
+        if (this._birakildi)
+            return;
+        this._birakildi = true;
+        if (this._sink && this._sinkIdler)
+            this._sinkIdler.forEach(id => this._sink.disconnect(id));
+        this._sinkIdler = null;
+        if (this._olcek && this._olcekId)
+            this._olcek.disconnect(this._olcekId);
+        this._olcekId = 0;
+        this._idler.forEach(([n, id]) => n.disconnect(id));
+        this._idler = [];
+    }
+
     destroy() {
         this._uyg?.destroy();
         this._uyg = null;
-        if (this._sink && this._sinkIdler)
-            this._sinkIdler.forEach(id => this._sink.disconnect(id));
-        if (this._olcek && this._olcekId)
-            this._olcek.disconnect(this._olcekId);
-        this._idler.forEach(([n, id]) => n.disconnect(id));
-        this._idler = [];
+        this._birak();
         this.actor.destroy();
     }
 }

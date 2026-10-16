@@ -200,6 +200,7 @@ export class HizliSayfa extends Sayfa {
     gizle() {
         this._uygKapat();
         this._detayKapat();
+        this._altKapat();
     }
 
     // Hızlı Ayarlar'daki anahtarlar (Wi-Fi, Bluetooth, uçak, gece ışığı, rahatsız etme, güç, mikrofon)
@@ -299,17 +300,17 @@ export class HizliSayfa extends Sayfa {
         this._uykuKaro.secili(this._uyku.acik);
         this._uykuKaro.nokta(this._uyku.acik ? 'acik' : null);
         this._uykuKaro.guncelle({etiket: this._uyku.acik ? (this._uyku.kip === 'video' ? _('Video') : _('Uyanık')) : _('Uyku engelle')});
-        if (this._acikAlt === 'uyku')
+        if (this._altTur === 'uyku')
             this._uykuPaneli();
     }
 
     // ---------- alt panel ----------
     _ac(tur) {
-        if (this._acikAlt === tur) {
+        if (this._altTur === tur) {
             this._altKapat();
             return;
         }
-        this._acikAlt = tur;
+        this._altTur = tur;
         if (tur === 'zorla')
             this._zorlaPaneli();
         else
@@ -319,7 +320,7 @@ export class HizliSayfa extends Sayfa {
     }
 
     _altKapat() {
-        this._acikAlt = null;
+        this._altTur = null;
         this._alt.destroy_all_children();
         this._alt.hide();
         this._zorla.secili(false);
