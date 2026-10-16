@@ -46,6 +46,8 @@ isaret AKIS
 . "$D/akis.sh"
 isaret OYUN
 . "$D/oyun.sh"
+isaret OYUNISTEK
+. "$D/oyun-istek.sh"
 isaret BOYUT
 . "$D/boyut.sh"
 isaret DUGMELER

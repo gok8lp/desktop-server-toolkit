@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 19:51+0300\n"
+"POT-Creation-Date: 2026-10-16 19:52+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -193,6 +193,19 @@ msgstr "Do Not Disturb indicator"
 
 msgid "Rahatsız etme açıkken kapsülün yanında küçük ay"
 msgstr "A small moon next to the capsule while Do Not Disturb is on"
+
+#
+#
+#
+msgid "Oyun duyuruları"
+msgstr "Game alerts"
+
+msgid ""
+"İstek listendeki oyunun fiyatı düşünce, yeni PS Plus oyunları ve Epic'te "
+"yeni ücretsiz oyun"
+msgstr ""
+"When a game on your wishlist drops in price, new PS Plus games and a new "
+"free game on Epic"
 
 msgid "Bu sayfayı varsayılana döndür"
 msgstr "Reset this page to defaults"
@@ -1606,6 +1619,25 @@ msgstr "Turn off Do Not Disturb"
 msgid "Klavye ışığı"
 msgstr "Keyboard light"
 
+#
+msgid "Oyunlar sekmesi"
+msgstr "Games tab"
+
+#, javascript-format
+msgid "Fiyat düştü: %s"
+msgstr "Price drop: %s"
+
+#
+msgid "Yeni PS Plus aylık oyunları"
+msgstr "New PS Plus monthly games"
+
+#, javascript-format
+msgid "Epic'te ücretsiz: %s"
+msgstr "Free on Epic: %s"
+
+msgid "Sınırlı süre · hesabına ekle"
+msgstr "Limited time · add it to your account"
+
 msgid "pencereler gizli, ses kapalı"
 msgstr "windows hidden, sound muted"
 
@@ -2498,6 +2530,10 @@ msgstr "Click the chart to add a support/resistance line"
 msgid "Tıkla: işareti sil"
 msgstr "Click: delete mark"
 
+#
+msgid "İstek listem"
+msgstr "My wishlist"
+
 msgid "Ücretsiz"
 msgstr "Free"
 
@@ -2551,6 +2587,25 @@ msgstr "Click: open the page"
 msgid "Liste boş"
 msgstr "The list is empty"
 
+msgid ""
+"İstek listen boş: fiyat listelerinde ya da aramada bir oyuna sağ tıklayıp "
+"ekle. Fiyatı düşünce adada uyarı çıkar."
+msgstr ""
+"Your wishlist is empty: right-click a game in the price lists or search to "
+"add it. You get an alert in the island when its price drops."
+
+#
+#
+msgid "fiyat bekleniyor…"
+msgstr "waiting for price…"
+
+#, javascript-format
+msgid "en ucuz PC: %s"
+msgstr "cheapest PC: %s"
+
+msgid "Sağ tık: listeden çıkar · fiyatlar 3 saatte bir denetlenir"
+msgstr "Right-click: remove · prices are checked every 3 hours"
+
 #, javascript-format
 msgid "Metacritic %s"
 msgstr "Metacritic %s"
@@ -2558,6 +2613,21 @@ msgstr "Metacritic %s"
 #, javascript-format
 msgid "Steam %%%s"
 msgstr "Steam %s%%"
+
+#
+msgid "Tıkla: mağaza sayfası · sağ tık: istek listesinden çıkar"
+msgstr "Click: store page · right-click: remove from wishlist"
+
+msgid ""
+"Tıkla: mağaza sayfası · sağ tık: istek listesine ekle (fiyat düşünce uyarır)"
+msgstr ""
+"Click: store page · right-click: add to wishlist (alerts on price drop)"
+
+#
+#
+#
+msgid "Tıkla: mağaza sayfası"
+msgstr "Click: store page"
 
 #
 #, javascript-format

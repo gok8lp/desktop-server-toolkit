@@ -55,6 +55,7 @@ import {OtomatikGuncelleme} from './src/guncelleme.js';
 import {KeyboardProvider} from './src/providers/keyboard.js';
 import {IndirmeProvider} from './src/providers/indirme.js';
 import {OdakProvider} from './src/providers/odak.js';
+import {OyunProvider} from './src/providers/oyun.js';
 import {ZamanlayiciProvider, pano} from './src/araclar.js';
 import {_, dilKur} from './src/dil.js';
 
@@ -78,6 +79,7 @@ const SAGLAYICILAR = {
     'zamanlayici': o => new ZamanlayiciProvider(o),
     'indirme': () => new IndirmeProvider(),
     'odak': () => new OdakProvider(),
+    'oyun': o => new OyunProvider(o),
 };
 
 export default class FlugelIsland extends Extension {
@@ -170,9 +172,10 @@ export default class FlugelIsland extends Extension {
     // yeni sürümde eklenen canlı etkinlik kaynakları, kullanıcının kayıtlı listelerine de eklenir (bir kez)
     _ayarGoc() {
         const a = this._ayar;
-        if (a.get_int('ayar-surumu') >= 3)
+        const surum = a.get_int('ayar-surumu');
+        if (surum >= 4)
             return;
-        const yeni = ['zamanlayici', 'indirme', 'odak'];
+        const yeni = surum < 3 ? ['zamanlayici', 'indirme', 'odak', 'oyun'] : ['oyun'];
         for (const k of ['etkin-saglayicilar', 'oncelik-sirasi']) {
             const l = a.get_strv(k);
             const eksik = yeni.filter(x => !l.includes(x));
@@ -181,7 +184,7 @@ export default class FlugelIsland extends Extension {
                 a.set_strv(k, [...l.slice(0, i), ...eksik, ...l.slice(i)]);
             }
         }
-        a.set_int('ayar-surumu', 3);
+        a.set_int('ayar-surumu', 4);
     }
 
     _saglayicilariKur() {

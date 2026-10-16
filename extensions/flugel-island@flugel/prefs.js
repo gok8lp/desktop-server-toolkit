@@ -30,6 +30,7 @@ const SAGLAYICILAR = () => ({
     'zamanlayici': [_('Zamanlayıcı'), _('Geri sayım kapsülde; bitince ses ve duyuru')],
     'indirme': [_('İndirmeler'), _('İndirilenler klasöründe süren indirme; bitince Aç / Klasörde göster')],
     'odak': [_('Rahatsız etme göstergesi'), _('Rahatsız etme açıkken kapsülün yanında küçük ay')],
+    'oyun': [_('Oyun duyuruları'), _('İstek listendeki oyunun fiyatı düşünce, yeni PS Plus oyunları ve Epic\'te yeni ücretsiz oyun')],
 });
 const VM_ADLARI = {'W11-GPU': 'Windows (GPU)', 'W11': 'Windows', 'mullvad-ts': 'Ubuntu VPN'};
 const DOCK_SEMA = 'org.gnome.shell.extensions.dash-to-dock';

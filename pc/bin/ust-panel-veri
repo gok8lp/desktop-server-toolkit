@@ -301,9 +301,10 @@ def resim_yolu(url, klasor, boyut):
     return os.path.join(RESIM_KOK, klasor, f"{ad}-{boyut}.{'jpg' if klasor == 'kapak' else 'png'}")
 
 
-def resimleri_onbellekle(urller, klasor, boyutlar):
-    """urller icin her boyutta kucuk PNG uretir; {url: {boyut: yol}} dondurur (indirilemeyenler atlanir)."""
-    from concurrent.futures import ThreadPoolExecutor
+def resimleri_onbellekle(urller, klasor, boyutlar, sure=None):
+    """urller icin her boyutta kucuk PNG uretir; {url: {boyut: yol}} dondurur (indirilemeyenler atlanir).
+    sure (sn) verilirse o kadar beklenir: yetismeyen gorseller bir sonraki cagrida (onbellege inmis olur) gelir."""
+    from concurrent.futures import ThreadPoolExecutor, wait
     os.makedirs(os.path.join(RESIM_KOK, klasor), exist_ok=True)
 
     def bir(url):
@@ -327,8 +328,14 @@ def resimleri_onbellekle(urller, klasor, boyutlar):
             return url, yollar
         except Exception:
             return url, None
-    with ThreadPoolExecutor(6) as h:
-        return {u: y for u, y in h.map(bir, sorted(set(u for u in urller if u))) if y}
+    if sure is None:
+        with ThreadPoolExecutor(6) as h:
+            return {u: y for u, y in h.map(bir, sorted(set(u for u in urller if u))) if y}
+    h = ThreadPoolExecutor(6)
+    isler = [h.submit(bir, u) for u in sorted(set(u for u in urller if u))]
+    biten, _ = wait(isler, timeout=sure)
+    h.shutdown(wait=False, cancel_futures=True)
+    return {u: y for u, y in (i.result() for i in biten) if y}
 
 
 MAC_LIGLER = [("Süper Lig", "soccer/tur.1"), ("Premier Lig", "soccer/eng.1"), ("La Liga", "soccer/esp.1"),
@@ -765,7 +772,7 @@ def akis(kategori="ana", adet=24):
                    "okundu", "kayitli", "etiket", "dil")
         return {"ogeler": [{k: o.get(k) for k in alanlar} for o in ogeler if isinstance(o, dict)], "zaman": int(time.time())}
     d = cached(f"akis-{kategori.replace(':', '_')}", 120, al)
-    yollar = resimleri_onbellekle([o.get("resim") for o in d.get("ogeler", []) if o.get("resim")], "kapak", (240,))
+    yollar = resimleri_onbellekle([o.get("resim") for o in d.get("ogeler", []) if o.get("resim")], "kapak", (240,), sure=5)
     for o in d.get("ogeler", []):
         o["resim_yol"] = (yollar.get(o.get("resim")) or {}).get(240)
     return d
@@ -785,7 +792,7 @@ def akis_isaret(kimlik, alan, deger):
 
 # ---------- oyunlar (Island "Oyunlar" sekmesi): sunucudaki FLUGEL Akis fiyat API'si + PlayStation Blog (PS Plus) ----------
 def _gorselle(ogeler, alan="resim"):
-    yollar = resimleri_onbellekle([o.get(alan) for o in ogeler if o.get(alan)], "kapak", (320,))
+    yollar = resimleri_onbellekle([o.get(alan) for o in ogeler if o.get(alan)], "kapak", (320,), sure=6)
     for o in ogeler:
         o["resim_yol"] = (yollar.get(o.get(alan)) or {}).get(320)
     return ogeler
@@ -853,6 +860,50 @@ def psplus():
     return d
 
 
+# ---------- oyun istek listesi: Steam fiyati (TR bolgesi) + en ucuz PC fiyati (CheapShark), 3 saat onbellek ----------
+def oyun_takip(kimlikler):
+    from concurrent.futures import ThreadPoolExecutor
+    kimlikler = [k for k in kimlikler if k.isdigit()][:40]
+    if not kimlikler:
+        return {"oyunlar": {}, "zaman": int(time.time())}
+
+    def al():
+        sonuc = {k: {} for k in kimlikler}
+        try:
+            url = "https://store.steampowered.com/api/appdetails?filters=price_overview&cc=tr&appids=" + ",".join(kimlikler)
+            d = json.load(urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "FLUGEL-Island/2.6"}), timeout=12))
+            for k, v in d.items():
+                po = (v.get("data") or {}).get("price_overview") if isinstance(v.get("data"), dict) else None
+                if po:
+                    sonuc[k]["steam"] = {"fiyat": po["final"] / 100, "eski": po["initial"] / 100, "indirim": po["discount_percent"],
+                                         "para": po["currency"]}
+                elif v.get("success"):
+                    sonuc[k]["steam"] = {"fiyat": 0.0, "eski": 0.0, "indirim": 0, "para": "USD"}
+        except Exception as e:
+            sonuc["_hata"] = str(e)[:80]
+
+        def ucuz(k):
+            try:
+                istek = urllib.request.Request(f"https://www.cheapshark.com/api/1.0/games?steamAppID={k}",
+                                               headers={"User-Agent": "FLUGEL-Island/2.6 (personal GNOME extension)"})
+                l = json.load(urllib.request.urlopen(istek, timeout=10))
+                if l:
+                    g = l[0]
+                    return k, {"fiyat": float(g.get("cheapest") or 0), "link": f"https://www.cheapshark.com/redirect?dealID={g.get('cheapestDealID', '')}"}
+            except Exception:
+                pass
+            return k, None
+        with ThreadPoolExecutor(6) as h:
+            for k, u in h.map(ucuz, kimlikler):
+                if u and k in sonuc:
+                    sonuc[k]["en_ucuz"] = u
+        sonuc.pop("_hata", None)
+        return {"oyunlar": sonuc, "zaman": int(time.time())}
+    import hashlib
+    anahtar = "oyun-takip-" + hashlib.md5(",".join(sorted(kimlikler)).encode()).hexdigest()[:10]
+    return cached(anahtar, 3 * 3600, al)
+
+
 if __name__ == "__main__":
     ne = sys.argv[1] if len(sys.argv) > 1 else "pc"
     if ne == "kripto":
@@ -867,6 +918,8 @@ if __name__ == "__main__":
         print(json.dumps(oyunlar()))
     elif ne == "oyun-ara":
         print(json.dumps(oyun_ara(" ".join(sys.argv[2:]))))
+    elif ne == "oyun-takip":
+        print(json.dumps(oyun_takip((sys.argv[2] if len(sys.argv) > 2 else "").split(","))))
     elif ne == "psplus":
         print(json.dumps(psplus()))
     elif ne == "akis":
@@ -891,3 +944,7 @@ if __name__ == "__main__":
         print(json.dumps(cached("island", 15, island)))
     else:
         print(json.dumps(pc()))
+
+    # arka plan indirmeleri beklenmez: cikti verildi, surec hemen kapanir
+    sys.stdout.flush()
+    os._exit(0)

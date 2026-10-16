@@ -65,6 +65,19 @@
       <default>'haftalik'</default>
       <summary>Otomatik güncelleme (apt, snap, flatpak): kapalı, günlük, haftalık</summary>
     </key>
+    <key name="oyun-istek" type="s">
+      <default>'[]'</default>
+      <summary>Oyun istek listesi (JSON: Steam uygulama no, ad, son fiyat); fiyat düşünce adada uyarı</summary>
+    </key>
+    <key name="oyun-gorulen" type="s">
+      <default>'{}'</default>
+      <summary>İç kullanım: duyurulmuş PS Plus / Epic oyunları</summary>
+    </key>
+    <key name="yenileme-oyun" type="i">
+      <range min="1800" max="86400"/>
+      <default>10800</default>
+      <summary>Oyun fiyatları ve duyurular yenileme aralığı (sn)</summary>
+    </key>
     <key name="renk-gecmisi" type="as">
       <default>[]</default>
       <summary>Renk seçiciyle alınan son renkler (HEX)</summary>
@@ -155,11 +168,11 @@
 
     <!-- Canlı etkinlikler -->
     <key name="etkin-saglayicilar" type="as">
-      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'zamanlayici', 'indirme', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'odak', 'akis']</default>
+      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'zamanlayici', 'indirme', 'oyun', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'odak', 'akis']</default>
       <summary>Açık canlı etkinlik kaynakları</summary>
     </key>
     <key name="oncelik-sirasi" type="as">
-      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'zamanlayici', 'indirme', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'odak', 'notification', 'akis', 'keyboard']</default>
+      <default>['privacy', 'bildirim', 'panik', 'sunucu', 'gpu-vm', 'media', 'zamanlayici', 'indirme', 'oyun', 'basket', 'anime', 'kripto', 'osd', 'power', 'cihaz', 'odak', 'notification', 'akis', 'keyboard']</default>
       <summary>Canlı etkinliklerin öncelik sırası (ilk = en önemli)</summary>
     </key>
     <key name="transient-duration-ms" type="i">

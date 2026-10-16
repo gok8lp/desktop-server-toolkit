@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 20:14+0300\n"
+"POT-Creation-Date: 2026-10-16 19:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,6 +181,14 @@ msgid "Rahatsız etme göstergesi"
 msgstr ""
 
 msgid "Rahatsız etme açıkken kapsülün yanında küçük ay"
+msgstr ""
+
+msgid "Oyun duyuruları"
+msgstr ""
+
+msgid ""
+"İstek listendeki oyunun fiyatı düşünce, yeni PS Plus oyunları ve Epic'te "
+"yeni ücretsiz oyun"
 msgstr ""
 
 msgid "Bu sayfayı varsayılana döndür"
@@ -1508,6 +1516,23 @@ msgstr ""
 msgid "Klavye ışığı"
 msgstr ""
 
+msgid "Oyunlar sekmesi"
+msgstr ""
+
+#, javascript-format
+msgid "Fiyat düştü: %s"
+msgstr ""
+
+msgid "Yeni PS Plus aylık oyunları"
+msgstr ""
+
+#, javascript-format
+msgid "Epic'te ücretsiz: %s"
+msgstr ""
+
+msgid "Sınırlı süre · hesabına ekle"
+msgstr ""
+
 msgid "pencereler gizli, ses kapalı"
 msgstr ""
 
@@ -2368,6 +2393,9 @@ msgstr ""
 msgid "Tıkla: işareti sil"
 msgstr ""
 
+msgid "İstek listem"
+msgstr ""
+
 msgid "Ücretsiz"
 msgstr ""
 
@@ -2416,12 +2444,37 @@ msgstr ""
 msgid "Liste boş"
 msgstr ""
 
+msgid ""
+"İstek listen boş: fiyat listelerinde ya da aramada bir oyuna sağ tıklayıp "
+"ekle. Fiyatı düşünce adada uyarı çıkar."
+msgstr ""
+
+msgid "fiyat bekleniyor…"
+msgstr ""
+
+#, javascript-format
+msgid "en ucuz PC: %s"
+msgstr ""
+
+msgid "Sağ tık: listeden çıkar · fiyatlar 3 saatte bir denetlenir"
+msgstr ""
+
 #, javascript-format
 msgid "Metacritic %s"
 msgstr ""
 
 #, javascript-format
 msgid "Steam %%%s"
+msgstr ""
+
+msgid "Tıkla: mağaza sayfası · sağ tık: istek listesinden çıkar"
+msgstr ""
+
+msgid ""
+"Tıkla: mağaza sayfası · sağ tık: istek listesine ekle (fiyat düşünce uyarır)"
+msgstr ""
+
+msgid "Tıkla: mağaza sayfası"
 msgstr ""
 
 #, javascript-format

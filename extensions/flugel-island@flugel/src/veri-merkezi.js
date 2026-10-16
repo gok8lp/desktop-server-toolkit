@@ -6,6 +6,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import {VERI, H, ONBELLEK, jsonAl} from './ortak.js';
 import {izlenenler} from './kripto-ortak.js';
+import {istekListesi} from './oyun-ortak.js';
 
 // tür → [komut, önbellek dosyası (zorla yenilemede silinir), ayar anahtarı (saniye) | null = sadece istenince]
 const KAYNAKLAR = {
@@ -21,6 +22,10 @@ const KAYNAKLAR = {
     basket: [[VERI, 'basket'], 'basket', null],
     anime: [[VERI, 'anime'], 'anime', 'yenileme-anime'],
     vm: [[`${H}/.local/bin/vm`, 'liste'], null, null],
+    // oyunlar: PS Plus, Epic/fırsatlar/Steam listeleri ve istek listesi fiyatları (duyurular için seyrek yenilenir)
+    psplus: [[VERI, 'psplus'], null, 'yenileme-oyun'],
+    oyunlar: [[VERI, 'oyunlar'], null, 'yenileme-oyun'],
+    oyuntakip: [a => (istekListesi(a).length ? [VERI, 'oyun-takip', istekListesi(a).map(o => o.id).join(',')] : null), null, 'yenileme-oyun'],
     // hava durumu (Open-Meteo); şehir ayarı boşsa çalışmaz
     hava: [a => (a.get_string('hava-konum').trim() ? [VERI, 'hava', a.get_string('hava-konum').trim()] : null), null, 'yenileme-hava'],
 };
@@ -42,6 +47,19 @@ export class VeriMerkezi {
                 this.yenile('kizle');
             if (anahtar === 'hava-konum')
                 this.yenile('hava');
+            if (anahtar === 'oyun-istek')
+                this._istekPlanla();
+        });
+    }
+
+    // istek listesi değişince fiyatlar biraz sonra (art arda eklemeler tek istekte) tazelenir
+    _istekPlanla() {
+        if (this._istekId)
+            GLib.source_remove(this._istekId);
+        this._istekId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 800, () => {
+            this._istekId = 0;
+            this.yenile('oyuntakip');
+            return GLib.SOURCE_REMOVE;
         });
     }
 
@@ -132,6 +150,9 @@ export class VeriMerkezi {
     }
 
     destroy() {
+        if (this._istekId)
+            GLib.source_remove(this._istekId);
+        this._istekId = 0;
         this._iptal.cancel();
         for (const id of this._zamanlar.values())
             GLib.source_remove(id);

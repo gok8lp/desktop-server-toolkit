@@ -15,17 +15,22 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Sayfa} from './sayfa.js';
 import {VERI, calistir, jsonAl} from '../ortak.js';
 import {Izgara, ResimKaro, bolum, dugme, ipucuBagla, yayliBasma} from '../bilesenler.js';
+import {fiyatMetni, istegeEkle, istekListesi, istekteMi, istektenCikar, steamKimligi} from '../oyun-ortak.js';
 import {_, f} from '../dil.js';
 
-const KATEGORILER = () => [['psplus', 'PS Plus'], ['epic', _('Ücretsiz')], ['firsatlar', _('Fırsatlar')], ['indirim', _('Steam indirim')],
+const KATEGORILER = () => [['istek', _('İstek listem')], ['psplus', 'PS Plus'], ['epic', _('Ücretsiz')], ['firsatlar', _('Fırsatlar')], ['indirim', _('Steam indirim')],
     ['cok_satan', _('Çok satanlar')], ['yeni', _('Yeni çıkanlar')], ['oneri', _('Öneriler')]];
 const para = (v, birim = 'USD') => (Number.isFinite(v) ? (v === 0 ? _('Ücretsiz') : `${v.toFixed(2)} ${birim === 'USD' ? '$' : birim === 'TRY' ? '₺' : birim}`) : '');
 
 export class OyunSayfa extends Sayfa {
-    constructor({ayarlar}) {
+    constructor({ayarlar, veri}) {
         super();
         this._ayar = ayarlar;
         this._kat = 'psplus';
+        this._veri = veri;
+        // istek listesi değişince / fiyatlar gelince liste görünümü tazelenir
+        this._aboneler = [veri.abone('oyuntakip', () => this.gorunurse(() => this._kat === 'istek' && this._yaz(false)))];
+        this._ayarId = ayarlar.connect('changed::oyun-istek', () => this.gorunurse(() => this._kat === 'istek' && this._yaz(false)));
         this._iptal = new Gio.Cancellable();
         this._gw = ayarlar.get_int('kart-genislik') - 48;
 
@@ -108,13 +113,20 @@ export class OyunSayfa extends Sayfa {
     async _sec(k, animasyon = true) {
         this._kat = k;
         this._cipYaz();
+        if (k === 'istek') {
+            this._veri.tazele('oyuntakip', 1800);
+            this._yaz(animasyon);
+            return;
+        }
         const tur = k === 'psplus' ? 'psplus' : 'oyunlar';
+        // veri merkezindeki son veri kullanılır (duyuru sağlayıcısıyla aynı); yoksa bir kez çekilir
+        this[`_${tur}`] = this._veri.son(tur) ?? this[`_${tur}`];
         if (!this[`_${tur}`]) {
             this._bekle();
-            const d = await jsonAl([VERI, tur], this._iptal);
+            await this._veri.yenile(tur);
             if (this._iptal.is_cancelled())
                 return;
-            this[`_${tur}`] = d;
+            this[`_${tur}`] = this._veri.son(tur);
         }
         if (this._kat === k)
             this._yaz(animasyon);
@@ -128,7 +140,9 @@ export class OyunSayfa extends Sayfa {
     _yaz(animasyon) {
         this._icerik.destroy_all_children();
         const k = this._kat;
-        if (k === 'psplus')
+        if (k === 'istek')
+            this._istekYaz();
+        else if (k === 'psplus')
             this._psPlusYaz();
         else if (k === 'epic')
             this._epicYaz();
@@ -210,8 +224,30 @@ export class OyunSayfa extends Sayfa {
             this._icerik.add_child(this._satir(o, firsat ? o.magaza : null));
     }
 
+    // ---------- istek listesi ----------
+    _istekYaz() {
+        const l = istekListesi(this._ayar);
+        if (!l.length) {
+            this._bekle(_('İstek listen boş: fiyat listelerinde ya da aramada bir oyuna sağ tıklayıp ekle. Fiyatı düşünce adada uyarı çıkar.'));
+            return;
+        }
+        const d = this._veri.son('oyuntakip')?.oyunlar ?? {};
+        for (const o of l) {
+            const v = d[o.id] ?? {};
+            const st = v.steam;
+            const satir = this._satir({ad: o.ad, resim_yol: o.resim_yol, link: `https://store.steampowered.com/app/${o.id}`,
+                fiyat: st?.fiyat, eski: st?.indirim ? st.eski : null, indirim: st?.indirim, para: st?.para ?? 'USD', id: o.id},
+            [st ? 'Steam' : _('fiyat bekleniyor…'), v.en_ucuz ? f(_('en ucuz PC: %s'), fiyatMetni(v.en_ucuz.fiyat)) : null].filter(Boolean).join(' · '));
+            this._icerik.add_child(satir);
+        }
+        this._icerik.add_child(new St.Label({text: _('Sağ tık: listeden çıkar · fiyatlar 3 saatte bir denetlenir'), style_class: 'flugel-soluk'}));
+    }
+
     _satir(o, magaza) {
-        const b = new St.Button({style_class: 'flugel-oyun-satir', can_focus: true, x_expand: true});
+        const id = steamKimligi(o);
+        const listede = istekteMi(this._ayar, id);
+        const b = new St.Button({style_class: 'flugel-oyun-satir', can_focus: true, x_expand: true,
+            button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE});
         const k = new St.BoxLayout({x_expand: true, style: 'spacing: 12px;'});
         k.add_child(new St.Bin({style_class: 'flugel-oyun-kucuk', style: ResimKaro.stil(o.resim_yol), y_align: Clutter.ActorAlign.CENTER}));
         const m = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, y_align: Clutter.ActorAlign.CENTER});
@@ -232,7 +268,29 @@ export class OyunSayfa extends Sayfa {
         k.add_child(fiyat);
         b.set_child(k);
         yayliBasma(b, {basik: 0.97});
-        b.connect('clicked', () => this._ac(o.link));
+        if (listede) {
+            k.insert_child_at_index(new St.Icon({icon_name: 'starred-symbolic', icon_size: 14, style_class: 'flugel-oyun-istek-yildiz',
+                y_align: Clutter.ActorAlign.CENTER}), 0);
+        }
+        b.connect('clicked', (_b, n) => {
+            if (n !== 3) {
+                this._ac(o.link);
+                return;
+            }
+            // sağ tık: istek listesine ekle / çıkar
+            if (!id)
+                return;
+            if (istekteMi(this._ayar, id))
+                istektenCikar(this._ayar, id);
+            else
+                istegeEkle(this._ayar, o);
+            if (this._kat === 'istek')
+                this._yaz(false);
+            else
+                b.get_parent()?.replace_child?.(b, this._satir(o, magaza));
+        });
+        ipucuBagla(b, id ? (istekteMi(this._ayar, id) ? _('Tıkla: mağaza sayfası · sağ tık: istek listesinden çıkar')
+            : _('Tıkla: mağaza sayfası · sağ tık: istek listesine ekle (fiyat düşünce uyarır)')) : _('Tıkla: mağaza sayfası'));
         return b;
     }
 
@@ -264,6 +322,8 @@ export class OyunSayfa extends Sayfa {
     }
 
     destroy() {
+        this._aboneler?.forEach(fn => fn());
+        this._ayar.disconnect(this._ayarId);
         this._iptal.cancel();
         this._modal(false);
         super.destroy();
