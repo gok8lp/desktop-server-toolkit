@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 20:17+0300\n"
+"POT-Creation-Date: 2026-10-16 21:44+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -929,6 +929,118 @@ msgstr "Save settings"
 msgid "Ayar dosyası seç"
 msgstr "Choose settings file"
 
+#
+msgid "Kopyalandı"
+msgstr "Copied"
+
+msgid "Hesap makinesi"
+msgstr "Calculator"
+
+#
+msgid "Hesap makinesini aç"
+msgstr "Open Calculator"
+
+msgid "Örn. 1250*18% · (3+4)^2 · sqrt(2) · sin 30"
+msgstr "e.g. 1250*18% · (3+4)^2 · sqrt(2) · sin 30"
+
+#
+#
+msgid "Tıkla ya da Enter: sonucu kopyala"
+msgstr "Click or Enter: copy the result"
+
+#, javascript-format
+msgid "%s kopyalandı"
+msgstr "%s copied"
+
+#
+#
+msgid "Tıkla: yeniden düzenle"
+msgstr "Click: edit again"
+
+msgid "Durdur"
+msgstr "Stop"
+
+msgid "Başlat"
+msgstr "Start"
+
+msgid "Devam"
+msgstr "Resume"
+
+msgid "Tur"
+msgstr "Lap"
+
+#
+msgid "Sıfırla"
+msgstr "Reset"
+
+#
+#
+msgid "Kopyala"
+msgstr "Copy"
+
+#, javascript-format
+msgid "Tur %s"
+msgstr "Lap %s"
+
+msgid "QR kod (telefonun kamerasıyla okut)"
+msgstr "QR code (scan with your phone's camera)"
+
+msgid "Panodakini kullan"
+msgstr "Use clipboard"
+
+#
+#
+msgid "Bağlantı ya da metin"
+msgstr "Link or text"
+
+msgid "Panoda metin yok: yukarıya yaz"
+msgstr "No text in the clipboard: type above"
+
+msgid "Metin QR için çok uzun"
+msgstr "Text is too long for a QR code"
+
+msgid "QR üretilemedi (flugel-qr kurulu mu?)"
+msgstr "Could not create the QR code (is flugel-qr installed?)"
+
+msgid "Hızlı not (yazdıkça kaydedilir)"
+msgstr "Quick note (saved as you type)"
+
+msgid "Aklındakini yaz…"
+msgstr "Write down what's on your mind…"
+
+msgid "BÜYÜK"
+msgstr "UPPER"
+
+msgid "küçük"
+msgstr "lower"
+
+msgid "Başlık"
+msgstr "Title"
+
+msgid "Tek satır"
+msgstr "Single line"
+
+#
+#
+msgid "Bağlantıyı temizle"
+msgstr "Clean link"
+
+#, javascript-format
+msgid "Pano: %s"
+msgstr "Clipboard: %s"
+
+#, javascript-format
+msgid "Kronometre · %s"
+msgstr "Stopwatch · %s"
+
+#, javascript-format
+msgid "Kronometre duraklatıldı · %s"
+msgstr "Stopwatch paused · %s"
+
+#, javascript-format
+msgid "%s tur"
+msgstr "%s laps"
+
 msgid "Süre doldu"
 msgstr "Time's up"
 
@@ -946,9 +1058,6 @@ msgstr "Timer · %s"
 #, javascript-format
 msgid "toplam %s"
 msgstr "total %s"
-
-msgid "Devam"
-msgstr "Resume"
 
 msgid "Duraklat"
 msgstr "Pause"
@@ -986,14 +1095,6 @@ msgstr "Nothing copied yet"
 
 msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
 msgstr "Click: copy again · right-click: remove"
-
-#
-msgid "Kopyalandı"
-msgstr "Copied"
-
-#, javascript-format
-msgid "%s kopyalandı"
-msgstr "%s copied"
 
 msgid "Renk seçici"
 msgstr "Color picker"
@@ -2085,6 +2186,34 @@ msgstr ""
 "Click: history and picker · right-click: pick from the screen now (HEX to "
 "clipboard)"
 
+msgid "Hesap"
+msgstr "Calculator"
+
+msgid "Yazarken sonuç verir; Enter sonucu kopyalar"
+msgstr "Shows the result as you type; Enter copies it"
+
+msgid "Kronometre"
+msgstr "Stopwatch"
+
+msgid "Tur alır; çalışırken kapsülde görünür"
+msgstr "Records laps; shown in the capsule while running"
+
+msgid "QR kod"
+msgstr "QR code"
+
+msgid "Panodaki bağlantıyı telefona aktar: kamerayla okut"
+msgstr "Send the clipboard link to your phone: scan it with the camera"
+
+msgid "Not"
+msgstr "Note"
+
+#
+msgid "Hızlı not"
+msgstr "Quick note"
+
+msgid "Yazdıkça kaydedilir"
+msgstr "Saved as you type"
+
 msgid "Kayıt"
 msgstr "Record"
 
@@ -2120,6 +2249,9 @@ msgstr "Click: pin"
 
 msgid "tıkla: ağlar/cihazlar · sağ tık: aç/kapat"
 msgstr "click: networks/devices · right-click: on/off"
+
+msgid "Panodakini çevir:"
+msgstr "Convert clipboard:"
 
 msgid "Video"
 msgstr "Video"
@@ -2252,12 +2384,6 @@ msgstr "VM manager"
 msgid "Sanal makine yöneticisi"
 msgstr "Virtual machine manager"
 
-msgid "Hesap"
-msgstr "Calculator"
-
-msgid "Hesap makinesi"
-msgstr "Calculator"
-
 msgid "Takvim"
 msgstr "Calendar"
 
@@ -2296,9 +2422,6 @@ msgstr "Write on a PDF (Xournal++)"
 
 msgid "PDF böl"
 msgstr "Split PDF"
-
-msgid "Not"
-msgstr "Note"
 
 msgid "Hızlı not (Notlar.md)"
 msgstr "Quick note (Notlar.md)"

@@ -146,6 +146,16 @@ export class IslandGorunumu {
             if (['saydamlik', 'kart-saydamlik', 'cam-efekti', 'cam-saydamlik', 'genislik-carpani', 'kart-genislik', 'monitor'].includes(k))
                 this._yerlestir(true);
         });
+        // ekran görüntüsü / kaydı açılırken kart açıksa önce kapsüle döner ve oturur: kart görüntüye girmez
+        // (Print tuşu, Hızlı'daki düğme, kısayollar — hepsi aynı yoldan geçer)
+        const ui = Main.screenshotUI;
+        this._ekranAsil = ui.open;
+        ui.open = async function (...arg) {
+            if (ada._durum === 'genis' || ada._durum === 'bildirim')
+                ada.daralt();
+            await ada._animasyonBitsin();
+            return ada._ekranAsil.apply(this, arg);
+        };
         this._kart.kapatIstendi = () => this.daralt();
         this._kart.sabitleIstendi = () => this._yonetici.setPinned(!this._yonetici.isPinned());
         this._kart.boyutDegisti = () => this._kartBoyutu();
@@ -994,8 +1004,30 @@ export class IslandGorunumu {
         return monitor === undefined || monitor < 0 || monitor === i;
     }
 
+    // ada yayla büyüyüp küçülürken bekler (en fazla 1,2 sn); bitince son karenin çizilmesi için kısa pay
+    _animasyonBitsin() {
+        return new Promise(coz => {
+            const bas = GLib.get_monotonic_time();
+            const yokla = () => {
+                if (this._yay && GLib.get_monotonic_time() - bas < 1200000)
+                    return GLib.SOURCE_CONTINUE;
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 50, () => {
+                    coz();
+                    return GLib.SOURCE_REMOVE;
+                });
+                return GLib.SOURCE_REMOVE;
+            };
+            if (yokla() === GLib.SOURCE_CONTINUE)
+                GLib.timeout_add(GLib.PRIORITY_DEFAULT, 30, yokla);
+        });
+    }
+
     // ---------- kapanış ----------
     destroy() {
+        if (this._ekranAsil) {
+            Main.screenshotUI.open = this._ekranAsil;
+            this._ekranAsil = null;
+        }
         this._kacis?.destroy();
         this._kacis = null;
         this._kavisSol?.destroy();

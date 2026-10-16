@@ -1,0 +1,13 @@
+#!/home/flugel/.local/share/flugel-island/venv/bin/python
+# flugel-qr METIN CIKTI.svg — metni beyaz zeminli QR koduna (SVG) çevirir (FLUGEL Island "QR" aracı; qrcode kütüphanesi)
+import sys
+import qrcode
+import qrcode.image.svg
+
+metin, cikti = sys.argv[1], sys.argv[2]
+qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, border=2, box_size=10,
+                   image_factory=qrcode.image.svg.SvgFillImage)
+qr.add_data(metin)
+qr.make(fit=True)
+qr.make_image().save(cikti)
+print(cikti)

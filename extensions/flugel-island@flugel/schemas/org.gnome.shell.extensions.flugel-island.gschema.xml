@@ -156,6 +156,10 @@
       <default>95</default>
       <summary>Açık kartın opaklığı (%)</summary>
     </key>
+    <key name="hizli-not" type="s">
+      <default>''</default>
+      <summary>Hızlı not (Hızlı sekmesi, Araçlar → Not)</summary>
+    </key>
     <key name="cam-efekti" type="b">
       <default>true</default>
       <summary>Buzlu cam: kart açıkken altındaki pencereler bulanık görünür (iOS tarzı)</summary>

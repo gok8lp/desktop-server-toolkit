@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 21:40+0300\n"
+"POT-Creation-Date: 2026-10-16 21:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -855,6 +855,105 @@ msgstr ""
 msgid "Ayar dosyası seç"
 msgstr ""
 
+msgid "Kopyalandı"
+msgstr ""
+
+msgid "Hesap makinesi"
+msgstr ""
+
+msgid "Hesap makinesini aç"
+msgstr ""
+
+msgid "Örn. 1250*18% · (3+4)^2 · sqrt(2) · sin 30"
+msgstr ""
+
+msgid "Tıkla ya da Enter: sonucu kopyala"
+msgstr ""
+
+#, javascript-format
+msgid "%s kopyalandı"
+msgstr ""
+
+msgid "Tıkla: yeniden düzenle"
+msgstr ""
+
+msgid "Durdur"
+msgstr ""
+
+msgid "Başlat"
+msgstr ""
+
+msgid "Devam"
+msgstr ""
+
+msgid "Tur"
+msgstr ""
+
+msgid "Sıfırla"
+msgstr ""
+
+msgid "Kopyala"
+msgstr ""
+
+#, javascript-format
+msgid "Tur %s"
+msgstr ""
+
+msgid "QR kod (telefonun kamerasıyla okut)"
+msgstr ""
+
+msgid "Panodakini kullan"
+msgstr ""
+
+msgid "Bağlantı ya da metin"
+msgstr ""
+
+msgid "Panoda metin yok: yukarıya yaz"
+msgstr ""
+
+msgid "Metin QR için çok uzun"
+msgstr ""
+
+msgid "QR üretilemedi (flugel-qr kurulu mu?)"
+msgstr ""
+
+msgid "Hızlı not (yazdıkça kaydedilir)"
+msgstr ""
+
+msgid "Aklındakini yaz…"
+msgstr ""
+
+msgid "BÜYÜK"
+msgstr ""
+
+msgid "küçük"
+msgstr ""
+
+msgid "Başlık"
+msgstr ""
+
+msgid "Tek satır"
+msgstr ""
+
+msgid "Bağlantıyı temizle"
+msgstr ""
+
+#, javascript-format
+msgid "Pano: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Kronometre · %s"
+msgstr ""
+
+#, javascript-format
+msgid "Kronometre duraklatıldı · %s"
+msgstr ""
+
+#, javascript-format
+msgid "%s tur"
+msgstr ""
+
 msgid "Süre doldu"
 msgstr ""
 
@@ -871,9 +970,6 @@ msgstr ""
 
 #, javascript-format
 msgid "toplam %s"
-msgstr ""
-
-msgid "Devam"
 msgstr ""
 
 msgid "Duraklat"
@@ -908,13 +1004,6 @@ msgid "Henüz kopyalanan metin yok"
 msgstr ""
 
 msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
-msgstr ""
-
-msgid "Kopyalandı"
-msgstr ""
-
-#, javascript-format
-msgid "%s kopyalandı"
 msgstr ""
 
 msgid "Renk seçici"
@@ -1961,6 +2050,33 @@ msgstr ""
 msgid "Tıkla: geçmiş ve seçici · sağ tık: hemen ekrandan seç (HEX panoya)"
 msgstr ""
 
+msgid "Hesap"
+msgstr ""
+
+msgid "Yazarken sonuç verir; Enter sonucu kopyalar"
+msgstr ""
+
+msgid "Kronometre"
+msgstr ""
+
+msgid "Tur alır; çalışırken kapsülde görünür"
+msgstr ""
+
+msgid "QR kod"
+msgstr ""
+
+msgid "Panodaki bağlantıyı telefona aktar: kamerayla okut"
+msgstr ""
+
+msgid "Not"
+msgstr ""
+
+msgid "Hızlı not"
+msgstr ""
+
+msgid "Yazdıkça kaydedilir"
+msgstr ""
+
 msgid "Kayıt"
 msgstr ""
 
@@ -1992,6 +2108,9 @@ msgid "Tıkla: sabitle"
 msgstr ""
 
 msgid "tıkla: ağlar/cihazlar · sağ tık: aç/kapat"
+msgstr ""
+
+msgid "Panodakini çevir:"
 msgstr ""
 
 msgid "Video"
@@ -2123,12 +2242,6 @@ msgstr ""
 msgid "Sanal makine yöneticisi"
 msgstr ""
 
-msgid "Hesap"
-msgstr ""
-
-msgid "Hesap makinesi"
-msgstr ""
-
 msgid "Takvim"
 msgstr ""
 
@@ -2166,9 +2279,6 @@ msgid "PDF üzerine yaz (Xournal++)"
 msgstr ""
 
 msgid "PDF böl"
-msgstr ""
-
-msgid "Not"
 msgstr ""
 
 msgid "Hızlı not (Notlar.md)"

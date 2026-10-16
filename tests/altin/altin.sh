@@ -40,6 +40,8 @@ isaret HIZLI
 . "$D/hizli-detay.sh"
 isaret MEDYA
 . "$D/medya.sh"
+isaret ARACEK
+. "$D/arac-ek.sh"
 isaret ARACLAR
 . "$D/araclar.sh"
 isaret AKIS

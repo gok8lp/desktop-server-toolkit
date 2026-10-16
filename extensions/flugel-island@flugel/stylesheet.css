@@ -528,3 +528,14 @@
 .flugel-oyun-eski { font-size: 8.5pt; color: #7a7a84; }
 .flugel-oyun-fiyat { font-size: 10.5pt; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }
 .flugel-oyun-istek-yildiz { color: #e8c66b; }
+
+/* ---------- ek araçlar: hesap, kronometre, QR, not ---------- */
+.flugel-hesap-sonuc-dugme { padding: 6px 10px; border-radius: 12px; }
+.flugel-hesap-sonuc-dugme:hover { background-color: rgba(255, 255, 255, 0.08); }
+.flugel-hesap-sonuc { font-size: 20pt; font-weight: 700; color: #ffffff; font-feature-settings: "tnum"; }
+.flugel-not-giris { min-height: 120px; }
+.flugel-not-giris StLabel, .flugel-not-giris ClutterText { min-height: 110px; }
+.flugel-qr-resim { padding: 10px; margin: 6px 0; border-radius: 14px; background-color: #ffffff; }
+.flugel-tur-iyi { color: #8fd6a0; }
+.flugel-tur-kotu { color: #f07b7b; }
+.flugel-tur-toplam { min-width: 80px; text-align: right; font-feature-settings: "tnum"; }

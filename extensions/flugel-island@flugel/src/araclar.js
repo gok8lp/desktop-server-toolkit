@@ -106,6 +106,73 @@ class ZamanlayiciDurumu {
 }
 export const zamanlayici = new ZamanlayiciDurumu();
 
+// ---------- kronometre (tek, uygulama boyunca): ileri sayar, tur alır; çalışırken kapsülde görünür ----------
+export const kronoMetni = (ms, onda = true) => {
+    const t = Math.max(0, Math.floor(ms / 100));
+    const sn = Math.floor(t / 10), sa = Math.floor(sn / 3600), dk = Math.floor((sn % 3600) / 60), s = sn % 60;
+    const ana = sa ? `${sa}:${String(dk).padStart(2, '0')}:${String(s).padStart(2, '0')}` : `${dk}:${String(s).padStart(2, '0')}`;
+    return onda ? `${ana}.${t % 10}` : ana;
+};
+
+class KronometreDurumu {
+    constructor() {
+        this._abone = new Set();
+        this.sifirla();
+    }
+
+    sifirla() {
+        this.baslangic = 0;   // monotonik ms (çalışırken)
+        this.birikmis = 0;    // duraklatılmadan önce geçen ms
+        this.turlar = [];     // her turun bitiş anındaki toplam ms
+        this._yay();
+    }
+
+    get calisiyor() {
+        return this.baslangic > 0;
+    }
+
+    get gecen() {
+        return this.birikmis + (this.baslangic ? GLib.get_monotonic_time() / 1000 - this.baslangic : 0);
+    }
+
+    get bos() {
+        return !this.calisiyor && this.birikmis === 0;
+    }
+
+    baslatDurdur() {
+        if (this.baslangic) {
+            this.birikmis = this.gecen;
+            this.baslangic = 0;
+        } else {
+            this.baslangic = GLib.get_monotonic_time() / 1000;
+        }
+        this._yay();
+    }
+
+    tur() {
+        if (!this.calisiyor)
+            return;
+        this.turlar = [...this.turlar, this.gecen].slice(-99);
+        this._yay();
+    }
+
+    abone(fn) {
+        this._abone.add(fn);
+        return () => this._abone.delete(fn);
+    }
+
+    _yay() {
+        for (const fn of this._abone) {
+            try {
+                fn();
+            } catch (e) {
+                console.error('FLUGEL Island: kronometre', e);
+            }
+        }
+    }
+}
+export const kronometre = new KronometreDurumu();
+
 // kapsüldeki zamanlayıcı etkinliği
 export class ZamanlayiciProvider {
     constructor(ortam) {
@@ -117,11 +184,48 @@ export class ZamanlayiciProvider {
         this._manager = manager;
         this._settings = settings;
         this._abonelik = zamanlayici.abone(() => this._yaz());
+        this._kronoAbonelik = kronometre.abone(() => this._kronoYaz());
         this._yaz();
+        this._kronoYaz();
+    }
+
+    // kronometre: çalışırken ya da duraklatılmışken kapsülde (saniyede bir güncellenir)
+    _kronoYaz() {
+        if (!this._manager)
+            return;
+        const id = `${this.id}:krono`;
+        if (this._kronoId)
+            GLib.source_remove(this._kronoId);
+        this._kronoId = 0;
+        if (kronometre.bos) {
+            this._manager.remove(id);
+            return;
+        }
+        const ciz = () => {
+            const c = kronometre.calisiyor;
+            this._manager?.update(createActivity({id, providerId: this.id, tier: 'persistent', slot: 'either',
+                priority: oncelik(this._settings, this.id, 18), glyph: c ? 'kronometre' : 'media-playback-pause-symbolic',
+                label: f(c ? _('Kronometre · %s') : _('Kronometre duraklatıldı · %s'), kronoMetni(kronometre.gecen, false)),
+                sublabel: kronometre.turlar.length ? f(_('%s tur'), kronometre.turlar.length) : '',
+                data: {kisa: kronoMetni(kronometre.gecen, false), eylemler: [
+                    {ikon: c ? 'media-playback-pause-symbolic' : 'media-playback-start-symbolic', ipucu: c ? _('Durdur') : _('Devam'),
+                        fn: () => kronometre.baslatDurdur()},
+                    ...(c ? [{ikon: 'bayrak', ipucu: _('Tur'), fn: () => kronometre.tur()}] : []),
+                ], kapat: () => kronometre.sifirla()}}));
+            return GLib.SOURCE_CONTINUE;
+        };
+        ciz();
+        if (kronometre.calisiyor)
+            this._kronoId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, ciz);
     }
 
     disable() {
         this._abonelik?.();
+        this._kronoAbonelik?.();
+        if (this._kronoId)
+            GLib.source_remove(this._kronoId);
+        this._kronoId = 0;
+        this._manager?.remove(`${this.id}:krono`);
         if (this._tikId)
             GLib.source_remove(this._tikId);
         this._tikId = 0;
@@ -275,8 +379,10 @@ class PanoKaydi {
 export const pano = new PanoKaydi();
 
 export class PanoPaneli {
-    constructor({kapat}) {
+    // ekSatir: başlığın altına konacak satırı kuran işlev (metin dönüştürme düğmeleri; araclar-ek.js)
+    constructor({kapat, ekSatir = null}) {
         this._kapat = kapat;
+        this._ekSatir = ekSatir;
         this.actor = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel flugel-detay-panel', x_expand: true});
         this._abonelik = pano.abone(() => this._yaz());
         this._yaz();
@@ -291,6 +397,8 @@ export class PanoPaneli {
         temizle.connect('clicked', () => pano.temizle());
         ust.add_child(temizle);
         this.actor.add_child(ust);
+        if (this._ekSatir)
+            this.actor.add_child(this._ekSatir());
         if (!pano.liste.length)
             this.actor.add_child(new St.Label({text: _('Henüz kopyalanan metin yok'), style_class: 'flugel-soluk'}));
         for (const metin of pano.liste.slice(0, 12)) {

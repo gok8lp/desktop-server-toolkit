@@ -17,6 +17,7 @@ import {HizliAyarlar} from '../hizli-ayarlar.js';
 import {SesParlaklik} from '../kontroller.js';
 import {BluetoothPaneli, WifiPaneli, yumusakAc} from '../hizli-detay.js';
 import {PanoPaneli, RenkPaneli, ZamanlayiciPaneli, renkSec} from '../araclar.js';
+import {DONUSUMLER, HesapPaneli, KronometrePaneli, NotPaneli, QrPaneli, panoDonustur} from '../araclar-ek.js';
 import {_, f} from '../dil.js';
 
 function surecOldur(pid, ad) {
@@ -87,6 +88,18 @@ export class HizliSayfa extends Sayfa {
                 this.close();
                 renkSec(this._o.ayarlar).catch(() => {});
             }}));
+        araclar.ekle(new Karo({ikon: 'hesap', etiket: _('Hesap'),
+            ipucu: {baslik: _('Hesap makinesi'), ayrinti: _('Yazarken sonuç verir; Enter sonucu kopyalar')},
+            eylem: () => this._detayAcKapa('hesap')}));
+        araclar.ekle(new Karo({ikon: 'kronometre', etiket: _('Kronometre'),
+            ipucu: {baslik: _('Kronometre'), ayrinti: _('Tur alır; çalışırken kapsülde görünür')},
+            eylem: () => this._detayAcKapa('krono')}));
+        araclar.ekle(new Karo({ikon: 'qr', etiket: 'QR',
+            ipucu: {baslik: _('QR kod'), ayrinti: _('Panodaki bağlantıyı telefona aktar: kamerayla okut')},
+            eylem: () => this._detayAcKapa('qr')}));
+        araclar.ekle(new Karo({ikon: 'not', etiket: _('Not'),
+            ipucu: {baslik: _('Hızlı not'), ayrinti: _('Yazdıkça kaydedilir')},
+            eylem: () => this._detayAcKapa('not')}));
         araclar.ekle(new Karo({ikon: 'camera-video-symbolic', etiket: _('Kayıt'),
             ipucu: {baslik: _('Ekran kaydı'), ayrinti: _('Kooha: MP4 ya da GIF')},
             eylem: () => {
@@ -228,7 +241,9 @@ export class HizliSayfa extends Sayfa {
             this._detayId = id;
             const kapat = () => this.close();
             this._detay = {wifi: () => new WifiPaneli({kapat}), bt: () => new BluetoothPaneli({kapat}), zaman: () => new ZamanlayiciPaneli(),
-                pano: () => new PanoPaneli({kapat}), renk: () => new RenkPaneli({ayarlar: this._o.ayarlar, kapat})}[id]();
+                pano: () => new PanoPaneli({kapat, ekSatir: () => this._donusturSatiri()}),
+                hesap: () => new HesapPaneli(), krono: () => new KronometrePaneli(), qr: () => new QrPaneli(),
+                not: () => new NotPaneli({ayarlar: this._o.ayarlar}), renk: () => new RenkPaneli({ayarlar: this._o.ayarlar, kapat})}[id]();
             this._detayKap.add_child(this._detay.actor);
             yumusakAc(this._detayKap, true, () => gorunurKaydir(this._detayKap));
             this._ayarlarYaz();
@@ -243,6 +258,18 @@ export class HizliSayfa extends Sayfa {
         } else {
             kur();
         }
+    }
+
+    // pano geçmişinin üstünde: panodaki metni dönüştüren düğmeler
+    _donusturSatiri() {
+        const satir = new St.BoxLayout({style_class: 'flugel-cipler', x_expand: true});
+        satir.add_child(new St.Label({text: _('Panodakini çevir:'), style_class: 'flugel-detay-alt', y_align: Clutter.ActorAlign.CENTER}));
+        for (const [id, ad] of DONUSUMLER()) {
+            const b = new St.Button({label: ad, style_class: 'flugel-cip flugel-cip-kucuk', can_focus: true});
+            b.connect('clicked', () => panoDonustur(id).catch(() => {}));
+            satir.add_child(b);
+        }
+        return satir;
     }
 
     _detayKapat() {

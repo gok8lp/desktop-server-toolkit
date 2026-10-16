@@ -24,7 +24,7 @@ export function eklentiYolu(yol) {
 export const dosya = alt => `${EXT}/${alt}`;
 
 // ---------- simgeler (kural: kendi simgelerimiz ikon/<ad>-mono.svg, gerisi tema simgesi) ----------
-const OZEL_IKONLAR = new Set(['anime', 'basket', 'manga', 'kurukafa', 'panik', 'eclipse', 'kapat-daire', 'kalkan', 'fincan', 'goz-kapali', 'top', 'vm-windows', 'vm-ubuntu', 'vm-mullvad',
+const OZEL_IKONLAR = new Set(['kronometre', 'bayrak', 'qr', 'not', 'hesap', 'anime', 'basket', 'manga', 'kurukafa', 'panik', 'eclipse', 'kapat-daire', 'kalkan', 'fincan', 'goz-kapali', 'top', 'vm-windows', 'vm-ubuntu', 'vm-mullvad',
     'coin-btc', 'coin-eth', 'coin-sol', 'coin-bnb', 'coin-xrp', 'coin-doge', 'coin-avax', 'coin-ada']);
 const ikonOnbellek = new Map();
 export function ikon(ad) {
