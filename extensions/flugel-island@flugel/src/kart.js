@@ -14,6 +14,7 @@ import {ikon} from './ortak.js';
 import {Karo, dugme, ipucuBagla, onizlemeAcik} from './bilesenler.js';
 import {CalismaAlanlari} from './calisma-alanlari.js';
 import {HavaDurumu} from './hava.js';
+import {bulanikGecis} from './cam.js';
 import {_} from './dil.js';
 
 // ekranı karart: Mutter'ın güç tasarrufu kipi (3 = kapalı); fare/klavye ile geri gelir
@@ -241,6 +242,7 @@ export class Kart {
             yeni.sayfa.actor.opacity = 0;
             yeni.sayfa.actor.translation_x = 26 * yon;
             yeni.sayfa.actor.ease({opacity: 255, translation_x: 0, duration: 240, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+            bulanikGecis(yeni.sayfa.actor, {giris: true, yaricap: 6, sure: 240, acik: this._ayar.get_boolean('bulanik-gecis')});
         }
         this._ayar.set_string('son-sekme', id);
         this._seciciYerlestir(animasyon);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 19:52+0300\n"
+"POT-Creation-Date: 2026-10-16 20:17+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -420,6 +420,43 @@ msgstr ""
 
 msgid "Island'ı şimdi yeniden başlat"
 msgstr "Restart Island now"
+
+#
+msgid "Cam ve animasyon"
+msgstr "Glass and animation"
+
+msgid "iOS tarzı buzlu cam ve yumuşak geçişler"
+msgstr "iOS-style frosted glass and smooth transitions"
+
+msgid "Buzlu cam"
+msgstr "Frosted glass"
+
+msgid "Kart açıkken altındaki pencereler bulanık görünür"
+msgstr "Windows behind the open card appear blurred"
+
+#
+msgid "Bulanıklık"
+msgstr "Blur"
+
+msgid "piksel"
+msgstr "pixels"
+
+#
+msgid "Cam opaklığı"
+msgstr "Glass opacity"
+
+msgid "% (düşük = daha saydam)"
+msgstr "% (lower = more transparent)"
+
+#
+#
+msgid "Bulanık geçişler"
+msgstr "Blur transitions"
+
+msgid "İçerik değişirken eskisi bulanıklaşıp gider, yenisi netleşerek gelir"
+msgstr ""
+"When content changes, the old content blurs away and the new one comes into "
+"focus"
 
 msgid "Animasyon"
 msgstr "Animation"

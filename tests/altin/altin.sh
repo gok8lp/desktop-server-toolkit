@@ -48,6 +48,8 @@ isaret OYUN
 . "$D/oyun.sh"
 isaret OYUNISTEK
 . "$D/oyun-istek.sh"
+isaret CAM
+. "$D/cam.sh"
 isaret BOYUT
 . "$D/boyut.sh"
 isaret DUGMELER

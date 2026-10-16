@@ -156,6 +156,24 @@
       <default>95</default>
       <summary>Açık kartın opaklığı (%)</summary>
     </key>
+    <key name="cam-efekti" type="b">
+      <default>true</default>
+      <summary>Buzlu cam: kart açıkken altındaki pencereler bulanık görünür (iOS tarzı)</summary>
+    </key>
+    <key name="cam-bulaniklik" type="i">
+      <range min="4" max="60"/>
+      <default>30</default>
+      <summary>Camın bulanıklık yarıçapı (mantıksal piksel)</summary>
+    </key>
+    <key name="cam-saydamlik" type="i">
+      <range min="30" max="100"/>
+      <default>72</default>
+      <summary>Cam açıkken kartın renk katmanının opaklığı (%)</summary>
+    </key>
+    <key name="bulanik-gecis" type="b">
+      <default>true</default>
+      <summary>İçerik değişirken bulanık geçiş (eski içerik bulanıklaşıp gider, yenisi netleşerek gelir)</summary>
+    </key>
     <key name="animasyon-hizi" type="d">
       <range min="0.5" max="2.0"/>
       <default>1.0</default>

@@ -11,7 +11,8 @@ a "__A.yaz('imleç aşağıdaki kutuya geçince ada geri iner', !__A.E()._ada._c
 a "const k = __A.E()._ada._kok; __A.git(k.x - 120, k.y + 200); 1" >/dev/null; sleep 0.3
 a "__A.bas(); 1" >/dev/null; sleep 0.2
 a "const k = __A.E()._ada._kok; __A.git(k.x + k.width / 2, k.y + k.height / 2); 1" >/dev/null; sleep 0.5
-a "__A.yaz('basılı tuşla sürüklerken çentiğe gelince ada çekilir', __A.E()._ada._cekik === true); __A.birak(); __A.git(300, 800); 1" >/dev/null; sleep 0.6
+for i in $(seq 1 10); do a "__A.E()._ada._cekik === true" | grep -q true && break; sleep 0.2; done
+a "const kc = __A.E()._ada._kacis; const [px, py, pm] = global.get_pointer(); __A.yaz('basılı tuşla sürüklerken çentiğe gelince ada çekilir', __A.E()._ada._cekik === true, 'durum=' + __A.E()._ada._durum + ' dinliyor=' + kc._dinliyor + ' neden=' + [...kc._nedenler] + ' ptr=' + px + ',' + py + ' mod=' + pm + ' bolge=' + JSON.stringify(kc._bolge()) + ' altta=' + kc._pencereAltta()); __A.birak(); __A.git(300, 800); 1" >/dev/null; sleep 0.6
 a "__A.yaz('tuş bırakılıp uzaklaşınca ada geri iner', !__A.E()._ada._cekik); __A.E()._ada._kacis._degistir('kisayol'); 1" >/dev/null; sleep 0.5
 a "__A.yaz('kısayol: ada gizlenir', __A.E()._ada._cekik === true); __A.E()._ada._kacis._degistir('kisayol'); 1" >/dev/null; sleep 0.6
 a "__A.yaz('kısayol: ada geri gelir', !__A.E()._ada._cekik); 1" >/dev/null

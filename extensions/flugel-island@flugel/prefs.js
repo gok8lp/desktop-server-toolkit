@@ -201,7 +201,14 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         yb.connect('activated', () => this._yenidenBaslat());
         g.add(yb);
         sayfa.add(g);
-        sifirla(a, ['genislik-carpani', 'kart-genislik', 'saydamlik', 'kart-saydamlik', 'ekip-surpriz'], sayfa);
+        const c = new Adw.PreferencesGroup({title: _('Cam ve animasyon'), description: _('iOS tarzı buzlu cam ve yumuşak geçişler')});
+        c.add(anahtar(a, 'cam-efekti', _('Buzlu cam'), _('Kart açıkken altındaki pencereler bulanık görünür')));
+        c.add(sayi(a, 'cam-bulaniklik', _('Bulanıklık'), _('piksel'), 4, 60, 1));
+        c.add(sayi(a, 'cam-saydamlik', _('Cam opaklığı'), _('% (düşük = daha saydam)'), 30, 100, 1));
+        c.add(anahtar(a, 'bulanik-gecis', _('Bulanık geçişler'), _('İçerik değişirken eskisi bulanıklaşıp gider, yenisi netleşerek gelir')));
+        sayfa.add(c);
+        sifirla(a, ['genislik-carpani', 'kart-genislik', 'saydamlik', 'kart-saydamlik', 'ekip-surpriz', 'cam-efekti', 'cam-bulaniklik',
+            'cam-saydamlik', 'bulanik-gecis'], sayfa);
         return sayfa;
     }
 
