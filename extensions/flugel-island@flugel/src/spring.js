@@ -118,3 +118,95 @@ export function springProgress(actor, onFrame, {response = 0.5, damping = 0.78, 
     timeline.start();
     return handle;
 }
+
+// FLUGEL (2026-10-16): hızını koruyan yay. Her boyut (genişlik, yükseklik, yarıçap) kendi konum ve hızıyla
+// sönümlü yay denklemini kapalı biçimde adım adım çözer. Animasyon sürerken hedef değişirse hız korunur:
+// hareket durup baştan başlamaz, yeni hedefe kıvrılarak akar (iOS'taki kesintisiz geçiş).
+export class YayFizik {
+    // onFrame(durum): her karede {anahtar: değer}
+    constructor(actor, onFrame) {
+        this._actor = actor;
+        this._onFrame = onFrame;
+        this._x = null;
+        this._v = {};
+        this._timeline = null;
+    }
+
+    get suruyor() {
+        return !!this._timeline;
+    }
+
+    // bas: hareketsizken başlangıç değerleri (sürüyorsa yok sayılır, mevcut konum ve hız kullanılır)
+    hedefle(hedef, bas, {response = 0.5, damping = 0.78, onComplete} = {}) {
+        this._hedef = {...hedef};
+        this._onComplete = onComplete;
+        const omega = 2 * Math.PI / response;
+        this._zeta = Math.min(damping, 0.999);
+        this._omega = omega;
+        this._omegaD = omega * Math.sqrt(1 - this._zeta * this._zeta);
+        if (!St.Settings.get().enable_animations) {
+            this.stop();
+            this._onFrame({...hedef});
+            onComplete?.();
+            return;
+        }
+        if (!this._timeline) {
+            this._x = {...bas};
+            this._v = {};
+            for (const k in hedef)
+                this._v[k] = 0;
+            // süre üst sınırdır; yay oturunca erken biter
+            this._timeline = new Clutter.Timeline({actor: this._actor, duration: 4000});
+            this._son = 0;
+            this._timeline.connect('new-frame', () => this._adim());
+            this._timeline.connect('completed', () => this._bitir(true));
+            this._yokId = this._actor.connect('destroy', () => this.stop());
+            this._timeline.start();
+        }
+    }
+
+    _adim() {
+        const simdi = this._timeline.get_elapsed_time() / 1000;
+        // kare atlansa da en fazla 1/30 sn ilerlenir: uzun bir takılmadan sonra sıçrama olmaz
+        const dt = Math.min(1 / 30, Math.max(0, simdi - this._son));
+        this._son = simdi;
+        const {_zeta: z, _omega: w, _omegaD: wd} = this;
+        const e = Math.exp(-z * w * dt), c = Math.cos(wd * dt), s = Math.sin(wd * dt);
+        let oturdu = true;
+        for (const k in this._hedef) {
+            const d0 = this._x[k] - this._hedef[k], v0 = this._v[k] ?? 0;
+            const d = e * (d0 * c + ((v0 + z * w * d0) / wd) * s);
+            const v = e * (v0 * c - ((w * w * d0 + z * w * v0) / wd) * s);
+            this._x[k] = this._hedef[k] + d;
+            this._v[k] = v;
+            if (Math.abs(d) > 0.4 || Math.abs(v) > 6)
+                oturdu = false;
+        }
+        if (oturdu) {
+            this._bitir(true);
+            return;
+        }
+        this._onFrame({...this._x});
+    }
+
+    _bitir(tamam) {
+        if (!this._timeline)
+            return;
+        const tl = this._timeline;
+        this._timeline = null;
+        tl.stop();
+        this._actor.disconnect(this._yokId);
+        this._v = {};
+        if (tamam) {
+            this._x = {...this._hedef};
+            this._onFrame({...this._hedef});
+            const f = this._onComplete;
+            this._onComplete = null;
+            f?.();
+        }
+    }
+
+    stop() {
+        this._bitir(false);
+    }
+}

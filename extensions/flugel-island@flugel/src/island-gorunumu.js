@@ -9,7 +9,7 @@ import GLib from 'gi://GLib';
 import Meta from 'gi://Meta';
 import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import {springProgress} from './spring.js';
+import {YayFizik} from './spring.js';
 import {TamEkranBirlikte} from './tam-ekran.js';
 import {Kacis} from './kacis.js';
 import {Cam, bulanikGecis, bulanikTemizle} from './cam.js';
@@ -42,7 +42,6 @@ export class IslandGorunumu {
         this._kok.add_child(this._icerik);
         // iOS tarzı buzlu cam: kart/afiş açıkken zeminin arkasında altındakiler bulanık görünür
         this._cam = new Cam(ayarlar);
-        this._kok.insert_child_below(this._cam.actor, this._zemin);
 
         this._kompakt = new St.Widget({layout_manager: new Clutter.BinLayout(), x_expand: true,
             y_align: Clutter.ActorAlign.START});
@@ -76,12 +75,18 @@ export class IslandGorunumu {
         this.capa = new St.Widget({opacity: 0, reactive: false, width: 2});
         Main.layoutManager.uiGroup.add_child(this.capa);
 
+        // cam kutusu adanın hemen altında (ada büyürken kutu sabit kalsın diye adanın çocuğu değil)
+        Main.layoutManager.uiGroup.add_child(this._cam.actor);
         for (const a of [this._kok, this._balon]) {
             // tam ekranı ada kendisi yönetir (çentik kipi); GNOME'un otomatik gizlemesi kullanılmaz
             Main.layoutManager.addChrome(a, {affectsStruts: false, trackFullscreen: false});
             // panelin hemen üstü; açılır menüler ve sistem pencereleri (parola, kapatma) yine üstte kalır
             Main.layoutManager.uiGroup.set_child_above_sibling(a, Main.layoutManager.panelBox);
         }
+        Main.layoutManager.uiGroup.set_child_below_sibling(this._cam.actor, this._kok);
+        // ada gizlenir ya da solarsa cam da onunla
+        for (const sinyal of ['notify::visible', 'notify::opacity', 'notify::mapped'])
+            this._kok.connect(sinyal, () => this._camYerlestir());
 
         this._saatKaynagi = new GnomeDesktop.WallClock({time_only: true});
         this._saatId = this._saatKaynagi.connect('notify::clock', () => this._saatYaz());
@@ -252,9 +257,16 @@ export class IslandGorunumu {
         const t = Math.round(10 * Math.max(0, Math.min(1, (h - kh) / Math.max(1, kh * 3)))) / 10;
         const r = Math.max(0, Math.min(g.r, h / 2));
         this._radiusYaz(this._zemin, r, t);
-        this._cam.yerlestir(this._kok.x, this._kok.y, w, h, r, t, !!(this._te?.aktif || this._centik));
+        this._camArg = {x: this._kok.x, y: this._kok.y, w, h, r, t, ustDuz: !!(this._te?.aktif || this._centik),
+            hw: this._hedefG?.w ?? w, hh: this._hedefG?.h ?? h};
+        this._camYerlestir();
         this._kavisYerlestir();
         this._balonYerlestir();
+    }
+
+    _camYerlestir() {
+        if (this._camArg)
+            this._cam.yerlestir({...this._camArg, opak: this._kok.visible && this._kok.mapped ? this._kok.opacity : 0});
     }
 
     _radiusYaz(zemin, r, t = 0) {
@@ -314,19 +326,21 @@ export class IslandGorunumu {
             return;
         }
         this._hedefG = hedef;
-        this._yay?.stop();
         if (!bas.w) {
+            this._yay?.stop();
+            this._yay = null;
             this._geoUygula(hedef);
             bitince?.();
             return;
         }
-        // açılırken hafif yaylanır, kapanırken daha sönümlü (iOS'taki gibi)
+        // açılırken hafif yaylanır, kapanırken daha sönümlü (iOS'taki gibi). Yay sürerken hedef değişirse hız
+        // korunur (hareket durmadan yeni hedefe akar).
         const buyuyor = hedef.h > bas.h + 1 || hedef.w > bas.w + 1;
         const hiz = this._ayar.get_double('animasyon-hizi');
         Animasyon.suruyor = true;
-        this._yay = springProgress(this._kok, p => this._geoUygula({
-            w: lerp(bas.w, hedef.w, p), h: lerp(bas.h, hedef.h, p), r: lerp(bas.r, hedef.r, Math.min(p, 1)),
-        }), {
+        this._fizik ??= new YayFizik(this._kok, g => this._geoUygula(g));
+        this._yay = this._fizik;
+        this._fizik.hedefle(hedef, bas, {
             response: (buyuyor ? 0.5 : 0.42) / hiz,
             damping: buyuyor ? 0.78 : 0.88,
             onComplete: () => {
@@ -789,6 +803,8 @@ export class IslandGorunumu {
         if (this._te.acik && !anlik)
             return;
         this._te.acik = true;
+        // cam kutusu adanın hemen altında (ada büyürken kutu sabit kalsın diye adanın çocuğu değil)
+        Main.layoutManager.uiGroup.add_child(this._cam.actor);
         for (const a of [this._kok, this._balon]) {
             a.remove_transition('translation-y');
             a.remove_transition('opacity');

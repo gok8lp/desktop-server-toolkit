@@ -1,0 +1,7 @@
+# akicilik.sh — kart açılıp kapanırken kare aralıkları ve kare başına ada işi (ms). OLC=etiket ile ad verilir.
+a "const ada = __A.E()._ada; __A.kare = []; __A.is = []; const G = imports.gi.GLib; let son = 0; __A.kareId = global.stage.connect('after-paint', () => { const s = G.get_monotonic_time(); if (son) __A.kare.push((s - son) / 1000); son = s; }); const asil = ada._geoUygula.bind(ada); ada._geoUygula = g => { const b = G.get_monotonic_time(); asil(g); __A.is.push((G.get_monotonic_time() - b) / 1000); }; __A.asilGeo = asil; 1" >/dev/null
+for i in 1 2 3; do
+  a "__A.E()._yonetici.setPinned(true); 1" >/dev/null; sleep 1.2
+  a "__A.E()._yonetici.setPinned(false); __A.E()._ada.daralt(); 1" >/dev/null; sleep 1.2
+done
+a "const ada = __A.E()._ada; global.stage.disconnect(__A.kareId); ada._geoUygula = __A.asilGeo; const k = __A.kare.filter(x => x < 200); const s = [...k].sort((x, y) => x - y); const ort = a => a.reduce((x, y) => x + y, 0) / Math.max(1, a.length); const is = [...__A.is].sort((x, y) => x - y); __A.yaz('AKICILIK ${OLC:-}', true, 'kare=' + k.length + ' ort=' + ort(k).toFixed(1) + ' p95=' + (s[Math.floor(s.length * 0.95)] ?? 0).toFixed(1) + ' azami=' + (s[s.length - 1] ?? 0).toFixed(1) + ' >20ms=' + k.filter(x => x > 20).length + ' | is ort=' + ort(is).toFixed(2) + ' p95=' + (is[Math.floor(is.length * 0.95)] ?? 0).toFixed(2) + ' azami=' + (is[is.length - 1] ?? 0).toFixed(2) + ' n=' + is.length); 1" >/dev/null
