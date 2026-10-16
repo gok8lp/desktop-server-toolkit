@@ -91,6 +91,17 @@ export class MediaProvider {
                             // Identity vermeyen oynatıcı
                         }
                     });
+                // uygulama simgesi için masaüstü kaydı (spotify, firefox, org.gnome.Rhythmbox3…)
+                this._dbus.call(busName, MPRIS_PATH, 'org.freedesktop.DBus.Properties', 'Get',
+                    new GLib.Variant('(ss)', ['org.mpris.MediaPlayer2', 'DesktopEntry']), null, Gio.DBusCallFlags.NONE, 2000,
+                    this._iptal, (_b, r) => {
+                        try {
+                            kayit.masaustu = this._dbus.call_finish(r).deepUnpack()[0].deepUnpack();
+                            this._refresh(busName);
+                        } catch (e) {
+                            // DesktopEntry vermeyen oynatıcı
+                        }
+                    });
             });
     }
 
@@ -145,7 +156,9 @@ export class MediaProvider {
             caliyor, uzunluk: Number(coz(metadata['mpris:length']) ?? 0), parca: coz(metadata['mpris:trackid']) ?? '',
             sarilabilir: !!coz(proxy.get_cached_property('CanSeek')), oncekiVar: !!coz(proxy.get_cached_property('CanGoPrevious')),
             sonrakiVar: !!coz(proxy.get_cached_property('CanGoNext')), hiz: Number(coz(proxy.get_cached_property('Rate')) ?? 1),
-            oynatici: kayit.ad ?? busName.slice(MPRIS_BUS_PREFIX.length).split('.')[0]};
+            oynatici: kayit.ad ?? busName.slice(MPRIS_BUS_PREFIX.length).split('.')[0], masaustu: kayit.masaustu ?? null,
+            // desteklemeyen oynatıcıda null (düğme soluk kalır)
+            karistir: coz(proxy.get_cached_property('Shuffle')) ?? null, dongu: coz(proxy.get_cached_property('LoopStatus')) ?? null};
         this._manager.update(createActivity({
             id: `${this.id}:${busName}`,
             providerId: this.id,

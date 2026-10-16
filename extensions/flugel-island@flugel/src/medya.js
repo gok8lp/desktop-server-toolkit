@@ -9,9 +9,11 @@ import Clutter from 'gi://Clutter';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Pango from 'gi://Pango';
+import Shell from 'gi://Shell';
 import * as Volume from 'resource:///org/gnome/shell/ui/status/volume.js';
 import {Slider} from 'resource:///org/gnome/shell/ui/slider.js';
 import {ipucuBagla, yayliBasma} from './bilesenler.js';
+import {vurguRengi} from './renk-cikar.js';
 import {_} from './dil.js';
 
 const MPRIS_YOL = '/org/mpris/MediaPlayer2';
@@ -64,6 +66,13 @@ export class Esitleyici {
         this.actor.connect('destroy', () => this._durdur());
     }
 
+    // vurgu rengi (null: beyaz)
+    set renk(css) {
+        this._cubuklar.forEach(c => {
+            c.style = css ? `background-color: ${css};` : null;
+        });
+    }
+
     set caliyor(v) {
         if (this._caliyor === v)
             return;
@@ -94,44 +103,64 @@ export class Esitleyici {
 }
 
 // ---------- kart içindeki oynatıcı ----------
+// Atoll düzeni: solda büyük kapak (köşesinde çalan uygulamanın simgesi), sağda başlık / sanatçı (kapağın vurgu
+// rengiyle), ince ilerleme çubuğu ve altında geçen / kalan süre, ortada karıştır · önceki · oynat · sonraki · tekrar.
+// Kapaktan çıkarılan renk sanatçıyı, ilerlemeyi, ekolayzeri ve oynatıcının zeminini hafifçe tonlar.
+// Önceki / sonraki düğmelerine sağ tık 10 sn geri / ileri sarar.
 export class MedyaOynatici {
     constructor(ayarlar) {
         this._ayar = ayarlar;
         this._iptal = new Gio.Cancellable();
         this.actor = new St.BoxLayout({style_class: 'flugel-oynatici', orientation: Clutter.Orientation.VERTICAL,
             x_expand: true, reactive: true});
+        const ana = new St.BoxLayout({style_class: 'flugel-oynatici-ana', x_expand: true});
+        this.actor.add_child(ana);
 
-        const ust = new St.BoxLayout({style_class: 'flugel-oynatici-ust'});
-        this._kapak = new St.Bin({style_class: 'flugel-oynatici-kapak', y_align: Clutter.ActorAlign.CENTER});
-        this._kapakSimge = new St.Icon({icon_name: 'audio-x-generic-symbolic', icon_size: 28});
-        this._kapak.set_child(this._kapakSimge);
-        ust.add_child(this._kapak);
-        const metin = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, y_align: Clutter.ActorAlign.CENTER});
+        // kapak + uygulama rozeti
+        this._kapak = new St.Widget({style_class: 'flugel-oynatici-kapak', layout_manager: new Clutter.BinLayout(),
+            y_align: Clutter.ActorAlign.CENTER});
+        this._kapakSimge = new St.Icon({icon_name: 'audio-x-generic-symbolic', icon_size: 36, x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER, x_expand: true, y_expand: true});
+        this._kapak.add_child(this._kapakSimge);
+        this._rozet = new St.Icon({style_class: 'flugel-oynatici-rozet', icon_size: 20, x_align: Clutter.ActorAlign.END,
+            y_align: Clutter.ActorAlign.END, x_expand: true, y_expand: true, visible: false});
+        this._kapak.add_child(this._rozet);
+        ana.add_child(this._kapak);
+
+        const sag = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, style_class: 'flugel-oynatici-sag'});
+        const ust = new St.BoxLayout({x_expand: true});
+        const metin = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true});
         this._baslik = new St.Label({style_class: 'flugel-oynatici-baslik'});
         this._baslik.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         this._sanatci = new St.Label({style_class: 'flugel-oynatici-sanatci'});
         this._sanatci.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         this._kaynak = new St.Label({style_class: 'flugel-oynatici-kaynak'});
+        this._kaynak.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         metin.add_child(this._baslik);
         metin.add_child(this._sanatci);
         metin.add_child(this._kaynak);
         ust.add_child(metin);
-        this._esit = new Esitleyici({cubuk: 5, yukseklik: 22, genislik: 4});
+        this._esit = new Esitleyici({cubuk: 5, yukseklik: 20, genislik: 3});
         ust.add_child(this._esit.actor);
-        this.actor.add_child(ust);
+        this._cikisDugme = new St.Button({style_class: 'flugel-oynatici-dugme flugel-oynatici-cikis', can_focus: true,
+            y_align: Clutter.ActorAlign.START, child: new St.Icon({icon_name: 'audio-speakers-symbolic', icon_size: 16})});
+        ipucuBagla(this._cikisDugme, _('Çıkış cihazı'));
+        yayliBasma(this._cikisDugme);
+        this._cikisDugme.connect('clicked', () => this._cikislar(!this._cikis.visible));
+        ust.add_child(this._cikisDugme);
+        sag.add_child(ust);
 
-        // ilerleme
-        const ilerleme = new St.BoxLayout({style_class: 'flugel-oynatici-ilerleme'});
-        this._gecen = new St.Label({style_class: 'flugel-oynatici-sure', y_align: Clutter.ActorAlign.CENTER});
+        // ilerleme: tam genişlik ince çubuk, altında geçen (sol) / kalan (sağ)
         this._cubuk = new Slider(0);
         this._cubuk.x_expand = true;
-        this._cubuk.y_align = Clutter.ActorAlign.CENTER;
         this._cubuk.add_style_class_name('flugel-oynatici-cubuk');
-        this._kalan = new St.Label({style_class: 'flugel-oynatici-sure', y_align: Clutter.ActorAlign.CENTER});
-        ilerleme.add_child(this._gecen);
-        ilerleme.add_child(this._cubuk);
-        ilerleme.add_child(this._kalan);
-        this.actor.add_child(ilerleme);
+        sag.add_child(this._cubuk);
+        const sureler = new St.BoxLayout({x_expand: true});
+        this._gecen = new St.Label({style_class: 'flugel-oynatici-sure', x_expand: true});
+        this._kalan = new St.Label({style_class: 'flugel-oynatici-sure flugel-oynatici-sure-sag'});
+        sureler.add_child(this._gecen);
+        sureler.add_child(this._kalan);
+        sag.add_child(sureler);
         // sürüklerken konum etiketi canlı, bırakınca SetPosition
         this._cubuk.connect('drag-begin', () => {
             this._surukleniyor = true;
@@ -148,32 +177,28 @@ export class MedyaOynatici {
 
         // denetimler
         const denetim = new St.BoxLayout({style_class: 'flugel-oynatici-denetim', x_align: Clutter.ActorAlign.CENTER});
-        const d = (ikon, ipucu, fn, buyuk = false) => {
+        const d = (ikon, ipucu, fn, {buyuk = false, sagTik = null} = {}) => {
             const b = new St.Button({style_class: `flugel-oynatici-dugme${buyuk ? ' flugel-oynatici-dugme-buyuk' : ''}`, can_focus: true,
-                child: new St.Icon({icon_name: ikon, icon_size: buyuk ? 28 : 20})});
-            b.connect('clicked', fn);
+                button_mask: sagTik ? St.ButtonMask.ONE | St.ButtonMask.THREE : St.ButtonMask.ONE,
+                child: new St.Icon({icon_name: ikon, icon_size: buyuk ? 30 : 18})});
+            b.connect('clicked', (_b, n) => (n === 3 && sagTik ? sagTik() : fn()));
             yayliBasma(b);
             ipucuBagla(b, ipucu);
             denetim.add_child(b);
             return b;
         };
-        this._geriSar = d('media-seek-backward-symbolic', _('10 sn geri'), () => this._sar(-ON_SN));
-        this._onceki = d('media-skip-backward-symbolic', _('Önceki'), () => cagir(this._m.bus, 'Previous'));
-        this._oynat = d('media-playback-start-symbolic', _('Oynat / duraklat'), () => cagir(this._m.bus, 'PlayPause'), true);
-        this._sonraki = d('media-skip-forward-symbolic', _('Sonraki'), () => cagir(this._m.bus, 'Next'));
-        this._ileriSar = d('media-seek-forward-symbolic', _('10 sn ileri'), () => this._sar(ON_SN));
-        this.actor.add_child(denetim);
+        this._karistir = d('media-playlist-shuffle-symbolic', _('Karıştır'), () => this._ozellikYaz('Shuffle',
+            new GLib.Variant('b', !this._m.karistir)));
+        this._onceki = d('media-skip-backward-symbolic', _('Önceki · sağ tık: 10 sn geri'), () => cagir(this._m.bus, 'Previous'),
+            {sagTik: () => this._sar(-ON_SN)});
+        this._oynat = d('media-playback-start-symbolic', _('Oynat / duraklat'), () => cagir(this._m.bus, 'PlayPause'), {buyuk: true});
+        this._sonraki = d('media-skip-forward-symbolic', _('Sonraki · sağ tık: 10 sn ileri'), () => cagir(this._m.bus, 'Next'),
+            {sagTik: () => this._sar(ON_SN)});
+        this._tekrar = d('media-playlist-repeat-symbolic', _('Tekrar: kapalı → liste → parça'), () => this._ozellikYaz('LoopStatus',
+            new GLib.Variant('s', {None: 'Playlist', Playlist: 'Track'}[this._m.dongu] ?? 'None')));
+        sag.add_child(denetim);
+        ana.add_child(sag);
 
-        // çıkış cihazı
-        const alt = new St.BoxLayout({style_class: 'flugel-oynatici-alt'});
-        alt.add_child(new St.Widget({x_expand: true}));
-        this._cikisDugme = new St.Button({style_class: 'flugel-oynatici-dugme flugel-oynatici-cikis', can_focus: true,
-            child: new St.Icon({icon_name: 'audio-speakers-symbolic', icon_size: 16})});
-        ipucuBagla(this._cikisDugme, _('Çıkış cihazı'));
-        yayliBasma(this._cikisDugme);
-        this._cikisDugme.connect('clicked', () => this._cikislar(!this._cikis.visible));
-        alt.add_child(this._cikisDugme);
-        this.actor.add_child(alt);
         this._cikis = new St.BoxLayout({style_class: 'flugel-cipler', x_expand: true, visible: false});
         this.actor.add_child(this._cikis);
 
@@ -203,6 +228,36 @@ export class MedyaOynatici {
         this._m = {uzunluk: 0};
     }
 
+    // Shuffle / LoopStatus yazılır; çalar PropertiesChanged ile yeni durumu bildirir
+    _ozellikYaz(ad, deger) {
+        if (!this._m.bus || (ad === 'Shuffle' ? this._m.karistir : this._m.dongu) === null)
+            return;
+        Gio.DBus.session.call(this._m.bus, MPRIS_YOL, 'org.freedesktop.DBus.Properties', 'Set',
+            new GLib.Variant('(ssv)', [OYNATICI, ad, deger]), null, Gio.DBusCallFlags.NONE, 2000, null, null);
+    }
+
+    // kapaktan gelen vurgu rengi: sanatçı, ilerleme, ekolayzer ve zemin tonu
+    _vurguUygula(renk) {
+        this._vurgu = renk;
+        const [r, g, b] = renk ?? [255, 255, 255];
+        const rgb = `rgb(${r}, ${g}, ${b})`;
+        this._sanatci.style = renk ? `color: ${rgb};` : null;
+        this._cubuk.style = `-barlevel-active-background-color: ${rgb}; -slider-handle-border-color: ${rgb};`;
+        this._esit.renk = renk ? rgb : null;
+        this.actor.style = renk
+            ? `background-gradient-direction: horizontal; background-gradient-start: rgba(${r}, ${g}, ${b}, 0.20); ` +
+              'background-gradient-end: rgba(255, 255, 255, 0.04);'
+            : null;
+    }
+
+    async _vurguHesapla(uri) {
+        this._vurguUri = uri;
+        const renk = await vurguRengi(uri, this._iptal);
+        if (this._iptal.is_cancelled() || this._vurguUri !== uri)
+            return;
+        this._vurguUygula(renk);
+    }
+
     guncelle(a) {
         const m = a.data?.medya;
         if (!m)
@@ -213,9 +268,10 @@ export class MedyaOynatici {
         this._baslik.text = m.baslik || '';
         this._sanatci.text = m.sanatci || '';
         this._sanatci.visible = !!m.sanatci;
-        this._kaynak.text = [m.oynatici, m.album].filter(Boolean).join(' · ');
+        this._kaynak.text = [m.album, m.oynatici].filter(Boolean).join(' · ');
         this._kaynak.visible = !!this._kaynak.text;
-        if (m.kapakUrl && /^(file|https?):\/\//.test(m.kapakUrl)) {
+        const kapakVar = m.kapakUrl && /^(file|https?):\/\//.test(m.kapakUrl);
+        if (kapakVar) {
             const uri = m.kapakUrl.replace(/"/g, '%22');
             this._kapak.style = `background-image: url("${uri}"); background-size: cover;`;
             this._kapakSimge.hide();
@@ -223,17 +279,32 @@ export class MedyaOynatici {
             this._kapak.style = null;
             this._kapakSimge.show();
         }
+        if (kapakVar && m.kapakUrl !== this._vurguUri) {
+            this._vurguHesapla(m.kapakUrl);
+        } else if (!kapakVar && this._vurguUri !== null) {
+            this._vurguUri = null;
+            this._vurguUygula(null);
+        }
+        // çalan uygulamanın simgesi (kapağın sağ alt köşesinde)
+        const app = m.masaustu ? Shell.AppSystem.get_default().lookup_app(`${m.masaustu}.desktop`) : null;
+        this._rozet.gicon = app?.get_icon() ?? null;
+        this._rozet.visible = !!this._rozet.gicon;
         this._oynat.child.icon_name = m.caliyor ? 'media-playback-pause-symbolic' : 'media-playback-start-symbolic';
         this._esit.caliyor = m.caliyor;
         this._onceki.reactive = m.oncekiVar;
         this._onceki.opacity = m.oncekiVar ? 255 : 90;
         this._sonraki.reactive = m.sonrakiVar;
         this._sonraki.opacity = m.sonrakiVar ? 255 : 90;
-        const sar = m.sarilabilir && m.uzunluk > 0;
-        for (const b of [this._geriSar, this._ileriSar]) {
-            b.reactive = sar;
-            b.opacity = sar ? 255 : 90;
+        for (const [b, deger, acik] of [[this._karistir, m.karistir, !!m.karistir], [this._tekrar, m.dongu, m.dongu && m.dongu !== 'None']]) {
+            b.reactive = deger !== null;
+            b.opacity = deger !== null ? 255 : 70;
+            if (acik)
+                b.add_style_pseudo_class('checked');
+            else
+                b.remove_style_pseudo_class('checked');
         }
+        this._tekrar.child.icon_name = m.dongu === 'Track' ? 'media-playlist-repeat-song-symbolic' : 'media-playlist-repeat-symbolic';
+        const sar = m.sarilabilir && m.uzunluk > 0;
         this._cubuk.reactive = sar;
         this._gecen.visible = this._kalan.visible = this._cubuk.visible = m.uzunluk > 0;
         if (yeniParca && this.actor.mapped && St.Settings.get().enable_animations) {

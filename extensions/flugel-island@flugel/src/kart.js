@@ -6,6 +6,7 @@ import GLib from 'gi://GLib';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {EtkinlikGorunumu} from './etkinlik-gorunumu.js';
 import {MedyaOynatici} from './medya.js';
+import {MedyaOynaticiKlasik} from './medya-klasik.js';
 import {yumusakAc} from './hizli-detay.js';
 import * as SystemActions from 'resource:///org/gnome/shell/misc/systemActions.js';
 import Gio from 'gi://Gio';
@@ -330,13 +331,26 @@ export class Kart {
     }
 
     canliGuncelle(canli, ortam) {
+        this._sonCanli = [canli, ortam];
+        // tasarım değişince oynatıcılar yeni tasarımla baştan kurulur
+        this._tasarimId ??= this._ayar.connect('changed::tasarim', () => {
+            for (const [id, g] of [...this._canliGorunumler]) {
+                if (g instanceof MedyaOynatici || g instanceof MedyaOynaticiKlasik) {
+                    g.destroy();
+                    this._canliGorunumler.delete(id);
+                }
+            }
+            if (this._sonCanli)
+                this.canliGuncelle(...this._sonCanli);
+        });
         // genişletilmiş kartta: kalıcı etkinliklerin hepsi + mini olmayan ortam etkinlikleri
         const liste = [...canli, ...ortam.filter(a => a.data?.kartta)];
         const kalan = new Set(this._canliGorunumler.keys());
         liste.forEach((a, i) => {
             let g = this._canliGorunumler.get(a.id);
             if (!g) {
-                g = a.data?.medya ? new MedyaOynatici(this._ayar) : new EtkinlikGorunumu('satir');
+                const Oynatici = this._ayar.get_string('tasarim') === 'klasik' ? MedyaOynaticiKlasik : MedyaOynatici;
+                g = a.data?.medya ? new Oynatici(this._ayar) : new EtkinlikGorunumu('satir');
                 this._canliGorunumler.set(a.id, g);
                 this._canli.add_child(g.actor);
             }
@@ -357,6 +371,9 @@ export class Kart {
     }
 
     destroy() {
+        if (this._tasarimId)
+            this._ayar.disconnect(this._tasarimId);
+        this._tasarimId = 0;
         this._hava?.destroy();
         if (this._seciciId)
             GLib.source_remove(this._seciciId);

@@ -7,6 +7,7 @@ import {Sayfa} from './sayfa.js';
 import {H, KIRMIZI, SARI, bilgiSatiri, altMenu, calistir, ikon, kac, renkli, renkSicak, renkYuzde, soluk} from '../ortak.js';
 import {Karo, Izgara, bolum, ipucuBagla} from '../bilesenler.js';
 import {Grafik} from '../grafik.js';
+import {CanliIstatistik} from '../canli-istatistik.js';
 import {_, f} from '../dil.js';
 
 const SIRA = 60;   // grafikte tutulan son ölçüm sayısı (PC 15 sn → 15 dk, sunucu 20 sn → 20 dk)
@@ -52,6 +53,19 @@ export class SistemSayfa extends Sayfa {
 
         // ---------- sade görünüm: iki kart (tıklayınca detay) ----------
         this._ana = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true});
+        // canlı istatistikler (Atoll "Stats" görünümü): sadece sekme görünürken saniyede bir ölçer
+        this._istat = new CanliIstatistik();
+        this._istatBolum = bolum(_('Canlı izleme'), this._istat.actor);
+        this._ana.add_child(this._istatBolum);
+        // önceki tasarımda canlı izleme yok
+        if (ayarlar) {
+            const g = () => {
+                this._istatBolum.visible = ayarlar.get_string('tasarim') !== 'klasik';
+            };
+            g();
+            this._tasarimId = ayarlar.connect('changed::tasarim', g);
+            this._tasarimAyar = ayarlar;
+        }
         const kartlar = new St.BoxLayout({style_class: 'flugel-sistem-kartlar', x_expand: true});
         this._pcKart = kart(_('Bu bilgisayar'), 'computer-symbolic');
         this._svKart = kart(_('Sunucu'), 'network-server-symbolic');
@@ -64,7 +78,7 @@ export class SistemSayfa extends Sayfa {
         this._ana.add_child(kartlar);
 
         // ---------- aç: düğmeler ----------
-        const ac = new Izgara({genislik, karoGenisligi: 104});
+        const ac = new Izgara({genislik, karoGenisligi: 96});   // 6 sütun karo iç boşluğuyla birlikte sığsın
         const git = komut => () => {
             this.close();
             calistir(komut);
@@ -269,6 +283,8 @@ export class SistemSayfa extends Sayfa {
     }
 
     destroy() {
+        if (this._tasarimId)
+            this._tasarimAyar.disconnect(this._tasarimId);
         this._aboneler.forEach(fn => fn());
         this._gucAbone?.();
         super.destroy();

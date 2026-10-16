@@ -156,6 +156,19 @@
       <default>95</default>
       <summary>Açık kartın opaklığı (%)</summary>
     </key>
+    <key name="pano-favoriler" type="as">
+      <default>[]</default>
+      <summary>Pano yöneticisinde yıldızlanan metinler (kalıcı)</summary>
+    </key>
+    <key name="renk-zaman" type="as">
+      <default>[]</default>
+      <summary>Renk geçmişindeki renklerin seçildiği an ("HEX=ms")</summary>
+    </key>
+    <key name="tasarim" type="s">
+      <choices><choice value="atoll"/><choice value="klasik"/></choices>
+      <default>'atoll'</default>
+      <summary>Tasarım: atoll (Atoll düzeni: medya oynatıcı, pano, renk seçici, canlı izleme) ya da klasik (v2.8.0 görünümü)</summary>
+    </key>
     <key name="hizli-not" type="s">
       <default>''</default>
       <summary>Hızlı not (Hızlı sekmesi, Araçlar → Not)</summary>

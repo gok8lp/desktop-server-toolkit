@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 21:56+0300\n"
+"POT-Creation-Date: 2026-10-16 22:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -339,6 +339,30 @@ msgid "Vazgeç"
 msgstr ""
 
 msgid "Island görünümü"
+msgstr ""
+
+msgid "Tasarım"
+msgstr ""
+
+msgid ""
+"Atoll düzeni: kapak rengine göre tonlanan medya oynatıcı, pano yöneticisi, "
+"iki sütunlu renk seçici, canlı izleme. Önceki: v2.8.0 görünümü. İstediğin an "
+"geri dönebilirsin."
+msgstr ""
+
+msgid "Değişiklik hemen uygulanır"
+msgstr ""
+
+msgid "Atoll düzeni (yeni)"
+msgstr ""
+
+msgid "Önceki görünüm (v2.8.0)"
+msgstr ""
+
+msgid "Atoll düzenine geç"
+msgstr ""
+
+msgid "Önceki görünüme dön"
 msgstr ""
 
 msgid "Boyut ve renk"
@@ -997,25 +1021,104 @@ msgstr ""
 msgid "İptal"
 msgstr ""
 
-msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgid "az önce"
+msgstr ""
+
+#, javascript-format
+msgid "%s dk önce"
+msgstr ""
+
+#, javascript-format
+msgid "%s sa önce"
+msgstr ""
+
+#, javascript-format
+msgid "%s gün önce"
+msgstr ""
+
+msgid "Bağlantı"
+msgstr ""
+
+msgid "E-posta"
+msgstr ""
+
+msgid "Renk"
+msgstr ""
+
+msgid "Kod"
+msgstr ""
+
+msgid "Metin"
+msgstr ""
+
+msgid "Pano yöneticisi"
+msgstr ""
+
+msgid "Geçmişi temizle (favoriler kalır)"
+msgstr ""
+
+msgid "Panoda ara…"
+msgstr ""
+
+msgid "Geçmiş"
+msgstr ""
+
+msgid "Favoriler"
+msgstr ""
+
+msgid "Eşleşen yok"
+msgstr ""
+
+msgid "Yıldızladığın metinler burada kalıcı durur"
 msgstr ""
 
 msgid "Henüz kopyalanan metin yok"
 msgstr ""
 
-msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgid "Favorilere ekle (kalıcı)"
+msgstr ""
+
+msgid "Tıkla: yeniden kopyala · sağ tık: sil"
 msgstr ""
 
 msgid "Renk seçici"
 msgstr ""
 
-msgid "Ekrandan renk seç"
+msgid "Renk seç"
+msgstr ""
+
+msgid "Renk geçmişini temizle"
 msgstr ""
 
 msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
 msgstr ""
 
+msgid "Son renkler"
+msgstr ""
+
+msgid "Renk ayrıntısı"
+msgstr ""
+
+msgid "Tıkla: HEX kopyala"
+msgstr ""
+
+#, javascript-format
+msgid "%s seçildi"
+msgstr ""
+
+msgid "Biçimler"
+msgstr ""
+
 msgid "Tıkla: kopyala"
+msgstr ""
+
+msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgstr ""
+
+msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgstr ""
+
+msgid "Ekrandan renk seç"
 msgstr ""
 
 #, javascript-format
@@ -1033,6 +1136,36 @@ msgid "Şu an buradasın"
 msgstr ""
 
 msgid "Tıkla: geç · kapsülde tekerlek de geçer"
+msgstr ""
+
+msgid "Canlı"
+msgstr ""
+
+msgid "İşlemci"
+msgstr ""
+
+msgid "Bellek"
+msgstr ""
+
+msgid "Ekran kartı"
+msgstr ""
+
+msgid "Ağ"
+msgstr ""
+
+msgid "Disk"
+msgstr ""
+
+msgid "Turuncu: indirme (üst) · kırmızı: yükleme (alt)"
+msgstr ""
+
+msgid "Mavi: okuma (üst) · sarı: yazma (alt)"
+msgstr ""
+
+msgid "Durdu"
+msgstr ""
+
+msgid "Uykuda"
 msgstr ""
 
 msgid "şimdi"
@@ -1334,22 +1467,34 @@ msgstr ""
 msgid "Parlaklık"
 msgstr ""
 
+msgid "Çıkış cihazı"
+msgstr ""
+
+msgid "Karıştır"
+msgstr ""
+
+msgid "Önceki · sağ tık: 10 sn geri"
+msgstr ""
+
+msgid "Oynat / duraklat"
+msgstr ""
+
+msgid "Sonraki · sağ tık: 10 sn ileri"
+msgstr ""
+
+msgid "Tekrar: kapalı → liste → parça"
+msgstr ""
+
 msgid "10 sn geri"
 msgstr ""
 
 msgid "Önceki"
 msgstr ""
 
-msgid "Oynat / duraklat"
-msgstr ""
-
 msgid "Sonraki"
 msgstr ""
 
 msgid "10 sn ileri"
-msgstr ""
-
-msgid "Çıkış cihazı"
 msgstr ""
 
 msgid "komut çalışmadı"
@@ -1444,9 +1589,6 @@ msgid "Servisler"
 msgstr ""
 
 msgid "Güvenlik"
-msgstr ""
-
-msgid "Disk"
 msgstr ""
 
 msgid "Ağ / VPN"
@@ -1877,16 +2019,10 @@ msgstr ""
 msgid "Yarın"
 msgstr ""
 
-msgid "Geçmiş"
-msgstr ""
-
 msgid "Ankara basketbol fikstürü"
 msgstr ""
 
 msgid "canlı"
-msgstr ""
-
-msgid "Canlı"
 msgstr ""
 
 msgid "Yaklaşan (36 saat)"
@@ -2042,9 +2178,6 @@ msgid "Pano geçmişi"
 msgstr ""
 
 msgid "Son kopyalanan metinler (sadece bu oturumda, bellekte)"
-msgstr ""
-
-msgid "Renk seç"
 msgstr ""
 
 msgid "Tıkla: geçmiş ve seçici · sağ tık: hemen ekrandan seç (HEX panoya)"
@@ -2327,9 +2460,6 @@ msgid "Şifreler"
 msgstr ""
 
 msgid "Şifreler ve anahtarlar"
-msgstr ""
-
-msgid "Ağ"
 msgstr ""
 
 msgid "Ağ ayarları"
@@ -2625,6 +2755,9 @@ msgid "En ucuz · PC mağazaları (CheapShark)"
 msgstr ""
 
 msgid "en düşük fiyat"
+msgstr ""
+
+msgid "Canlı izleme"
 msgstr ""
 
 msgid "Bu bilgisayar"

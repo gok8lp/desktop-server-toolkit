@@ -17,6 +17,7 @@ import {HizliAyarlar} from '../hizli-ayarlar.js';
 import {SesParlaklik} from '../kontroller.js';
 import {BluetoothPaneli, WifiPaneli, yumusakAc} from '../hizli-detay.js';
 import {PanoPaneli, RenkPaneli, ZamanlayiciPaneli, renkSec} from '../araclar.js';
+import {PanoPaneliKlasik, RenkPaneliKlasik} from '../araclar-klasik.js';
 import {DONUSUMLER, HesapPaneli, KronometrePaneli, NotPaneli, QrPaneli, panoDonustur} from '../araclar-ek.js';
 import {_, f} from '../dil.js';
 
@@ -241,9 +242,10 @@ export class HizliSayfa extends Sayfa {
             this._detayId = id;
             const kapat = () => this.close();
             this._detay = {wifi: () => new WifiPaneli({kapat}), bt: () => new BluetoothPaneli({kapat}), zaman: () => new ZamanlayiciPaneli(),
-                pano: () => new PanoPaneli({kapat, ekSatir: () => this._donusturSatiri()}),
+                pano: () => (this._klasik() ? new PanoPaneliKlasik({kapat, ekSatir: () => this._donusturSatiri()})
+                    : new PanoPaneli({kapat, ayarlar: this._o.ayarlar, ekSatir: () => this._donusturSatiri()})),
                 hesap: () => new HesapPaneli(), krono: () => new KronometrePaneli(), qr: () => new QrPaneli(),
-                not: () => new NotPaneli({ayarlar: this._o.ayarlar}), renk: () => new RenkPaneli({ayarlar: this._o.ayarlar, kapat})}[id]();
+                not: () => new NotPaneli({ayarlar: this._o.ayarlar}), renk: () => new (this._klasik() ? RenkPaneliKlasik : RenkPaneli)({ayarlar: this._o.ayarlar, kapat})}[id]();
             this._detayKap.add_child(this._detay.actor);
             yumusakAc(this._detayKap, true, () => gorunurKaydir(this._detayKap));
             this._ayarlarYaz();
@@ -258,6 +260,10 @@ export class HizliSayfa extends Sayfa {
         } else {
             kur();
         }
+    }
+
+    _klasik() {
+        return this._o.ayarlar.get_string('tasarim') === 'klasik';
     }
 
     // pano geçmişinin üstünde: panodaki metni dönüştüren düğmeler

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 21:44+0300\n"
+"POT-Creation-Date: 2026-10-16 22:06+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -377,6 +377,37 @@ msgstr "Cancel"
 
 msgid "Island görünümü"
 msgstr "Island appearance"
+
+#
+#
+msgid "Tasarım"
+msgstr "Design"
+
+msgid ""
+"Atoll düzeni: kapak rengine göre tonlanan medya oynatıcı, pano yöneticisi, "
+"iki sütunlu renk seçici, canlı izleme. Önceki: v2.8.0 görünümü. İstediğin an "
+"geri dönebilirsin."
+msgstr ""
+"Atoll layout: media player tinted by the cover color, clipboard manager, two-"
+"column color picker, live monitor. Previous: the v2.8.0 look. You can switch "
+"back any time."
+
+#
+msgid "Değişiklik hemen uygulanır"
+msgstr "Applied immediately"
+
+msgid "Atoll düzeni (yeni)"
+msgstr "Atoll layout (new)"
+
+msgid "Önceki görünüm (v2.8.0)"
+msgstr "Previous look (v2.8.0)"
+
+msgid "Atoll düzenine geç"
+msgstr "Switch to the Atoll layout"
+
+#
+msgid "Önceki görünüme dön"
+msgstr "Go back to the previous look"
 
 msgid "Boyut ve renk"
 msgstr "Size & colour"
@@ -1087,27 +1118,118 @@ msgstr "+5 min"
 msgid "İptal"
 msgstr "Cancel"
 
-msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
-msgstr "Clipboard history (this session only, in memory)"
+msgid "az önce"
+msgstr "just now"
+
+#, javascript-format
+msgid "%s dk önce"
+msgstr "%s min ago"
+
+#, javascript-format
+msgid "%s sa önce"
+msgstr "%s h ago"
+
+#, javascript-format
+msgid "%s gün önce"
+msgstr "%s days ago"
+
+#
+msgid "Bağlantı"
+msgstr "Link"
+
+msgid "E-posta"
+msgstr "Email"
+
+#
+msgid "Renk"
+msgstr "Color"
+
+msgid "Kod"
+msgstr "Code"
+
+msgid "Metin"
+msgstr "Text"
+
+#
+msgid "Pano yöneticisi"
+msgstr "Clipboard manager"
+
+msgid "Geçmişi temizle (favoriler kalır)"
+msgstr "Clear history (favorites stay)"
+
+#
+#
+msgid "Panoda ara…"
+msgstr "Search clipboard…"
+
+msgid "Geçmiş"
+msgstr "Past"
+
+#
+msgid "Favoriler"
+msgstr "Favorites"
+
+#
+msgid "Eşleşen yok"
+msgstr "No matches"
+
+msgid "Yıldızladığın metinler burada kalıcı durur"
+msgstr "Texts you star are kept here"
 
 msgid "Henüz kopyalanan metin yok"
 msgstr "Nothing copied yet"
 
-msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgid "Favorilere ekle (kalıcı)"
+msgstr "Add to favorites (kept)"
+
+#
+msgid "Tıkla: yeniden kopyala · sağ tık: sil"
 msgstr "Click: copy again · right-click: remove"
 
 msgid "Renk seçici"
 msgstr "Color picker"
 
-msgid "Ekrandan renk seç"
-msgstr "Pick a color from the screen"
+msgid "Renk seç"
+msgstr "Pick color"
+
+msgid "Renk geçmişini temizle"
+msgstr "Clear color history"
 
 msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
 msgstr "Picked colors appear here (copied to the clipboard as HEX)"
 
+msgid "Son renkler"
+msgstr "Recent colors"
+
+msgid "Renk ayrıntısı"
+msgstr "Color details"
+
+#
+#
+msgid "Tıkla: HEX kopyala"
+msgstr "Click: copy HEX"
+
+#, javascript-format
+msgid "%s seçildi"
+msgstr "picked %s"
+
+#
+msgid "Biçimler"
+msgstr "Formats"
+
 #
 msgid "Tıkla: kopyala"
 msgstr "Click: copy"
+
+msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgstr "Clipboard history (this session only, in memory)"
+
+#
+msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgstr "Click: copy again · right-click: remove from list"
+
+msgid "Ekrandan renk seç"
+msgstr "Pick a color from the screen"
 
 #, javascript-format
 msgid "Çalışma alanı %s / %s"
@@ -1125,6 +1247,39 @@ msgstr "You are here"
 
 msgid "Tıkla: geç · kapsülde tekerlek de geçer"
 msgstr "Click to switch · scrolling on the capsule works too"
+
+#
+msgid "Canlı"
+msgstr "Live"
+
+msgid "İşlemci"
+msgstr "CPU"
+
+msgid "Bellek"
+msgstr "Memory"
+
+#
+msgid "Ekran kartı"
+msgstr "GPU"
+
+msgid "Ağ"
+msgstr "Network"
+
+msgid "Disk"
+msgstr "Disk"
+
+msgid "Turuncu: indirme (üst) · kırmızı: yükleme (alt)"
+msgstr "Orange: download (top) · red: upload (bottom)"
+
+msgid "Mavi: okuma (üst) · sarı: yazma (alt)"
+msgstr "Blue: read (top) · yellow: write (bottom)"
+
+#
+msgid "Durdu"
+msgstr "Stopped"
+
+msgid "Uykuda"
+msgstr "Asleep"
 
 msgid "şimdi"
 msgstr "now"
@@ -1446,24 +1601,36 @@ msgstr "App volumes and output device"
 msgid "Parlaklık"
 msgstr "Brightness"
 
+#
+msgid "Çıkış cihazı"
+msgstr "Output device"
+
+msgid "Karıştır"
+msgstr "Shuffle"
+
+msgid "Önceki · sağ tık: 10 sn geri"
+msgstr "Previous · right-click: back 10 s"
+
+msgid "Oynat / duraklat"
+msgstr "Play / pause"
+
+msgid "Sonraki · sağ tık: 10 sn ileri"
+msgstr "Next · right-click: forward 10 s"
+
+msgid "Tekrar: kapalı → liste → parça"
+msgstr "Repeat: off → playlist → track"
+
 msgid "10 sn geri"
 msgstr "Back 10 s"
 
 msgid "Önceki"
 msgstr "Previous"
 
-msgid "Oynat / duraklat"
-msgstr "Play / pause"
-
 msgid "Sonraki"
 msgstr "Next"
 
 msgid "10 sn ileri"
 msgstr "Forward 10 s"
-
-#
-msgid "Çıkış cihazı"
-msgstr "Output device"
 
 msgid "komut çalışmadı"
 msgstr "command failed"
@@ -1559,9 +1726,6 @@ msgstr "Services"
 
 msgid "Güvenlik"
 msgstr "Security"
-
-msgid "Disk"
-msgstr "Disk"
 
 msgid "Ağ / VPN"
 msgstr "Network / VPN"
@@ -2007,18 +2171,11 @@ msgstr "Today"
 msgid "Yarın"
 msgstr "Tomorrow"
 
-msgid "Geçmiş"
-msgstr "Past"
-
 msgid "Ankara basketbol fikstürü"
 msgstr "Ankara basketball fixtures"
 
 msgid "canlı"
 msgstr "live"
-
-#
-msgid "Canlı"
-msgstr "Live"
 
 msgid "Yaklaşan (36 saat)"
 msgstr "Upcoming (36 hours)"
@@ -2177,9 +2334,6 @@ msgstr "Clipboard history"
 
 msgid "Son kopyalanan metinler (sadece bu oturumda, bellekte)"
 msgstr "Recently copied text (this session only, in memory)"
-
-msgid "Renk seç"
-msgstr "Pick color"
 
 msgid "Tıkla: geçmiş ve seçici · sağ tık: hemen ekrandan seç (HEX panoya)"
 msgstr ""
@@ -2470,9 +2624,6 @@ msgstr "Passwords"
 
 msgid "Şifreler ve anahtarlar"
 msgstr "Passwords and keys"
-
-msgid "Ağ"
-msgstr "Network"
 
 msgid "Ağ ayarları"
 msgstr "Network settings"
@@ -2800,6 +2951,10 @@ msgstr "Cheapest · PC stores (CheapShark)"
 #
 msgid "en düşük fiyat"
 msgstr "lowest price"
+
+#
+msgid "Canlı izleme"
+msgstr "Live monitor"
 
 msgid "Bu bilgisayar"
 msgstr "This computer"

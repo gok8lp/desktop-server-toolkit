@@ -340,6 +340,7 @@ const PANO_SINIR = 30;
 class PanoKaydi {
     constructor() {
         this.liste = [];
+        this.zaman = new Map();   // metin → kopyalandığı an (ms)
         this._abone = new Set();
     }
 
@@ -354,7 +355,12 @@ class PanoKaydi {
                 if (!metin || !metin.trim() || metin.length > 20000)
                     return;
                 this.liste = [metin, ...this.liste.filter(x => x !== metin)].slice(0, PANO_SINIR);
-                this._abone.forEach(fn => fn());
+                this.zaman.set(metin, Date.now());
+                for (const k of [...this.zaman.keys()]) {
+                    if (!this.liste.includes(k))
+                        this.zaman.delete(k);
+                }
+                this._yay();
             });
         });
     }
@@ -364,6 +370,7 @@ class PanoKaydi {
             this._secim.disconnect(this._id);
         this._id = 0;
         this.liste = [];
+        this.zaman.clear();
     }
 
     abone(fn) {
@@ -371,64 +378,192 @@ class PanoKaydi {
         return () => this._abone.delete(fn);
     }
 
+    sil(metin) {
+        this.liste = this.liste.filter(x => x !== metin);
+        this.zaman.delete(metin);
+        this._yay();
+    }
+
     temizle() {
         this.liste = [];
+        this.zaman.clear();
+        this._yay();
+    }
+
+    _yay() {
         this._abone.forEach(fn => fn());
     }
 }
 export const pano = new PanoKaydi();
 
+// "3 dk önce" gibi
+export function onceMetni(ms) {
+    if (!ms)
+        return '';
+    const s = Math.max(0, (Date.now() - ms) / 1000);
+    if (s < 60)
+        return _('az önce');
+    if (s < 3600)
+        return f(_('%s dk önce'), Math.floor(s / 60));
+    if (s < 86400)
+        return f(_('%s sa önce'), Math.floor(s / 3600));
+    return f(_('%s gün önce'), Math.floor(s / 86400));
+}
+
+const panoTuru = m => (/^\s*https?:\/\/\S+\s*$/i.test(m) ? ['link', _('Bağlantı')]
+    : /^\s*[\w.+-]+@[\w-]+\.[\w.-]+\s*$/.test(m) ? ['mail', _('E-posta')]
+    : /^#[0-9a-f]{6}$/i.test(m.trim()) ? ['renk', _('Renk')]
+    : /[{};=<>]|=>|\bfunction\b|\bconst\b|\bimport\b/.test(m) && m.includes('\n') ? ['kod', _('Kod')]
+    : ['metin', _('Metin')]);
+const TUR_IKON = {link: 'insert-link-symbolic', mail: 'mail-unread-symbolic', renk: 'color-select-symbolic',
+    kod: 'text-x-script-symbolic', metin: 'text-x-generic-symbolic'};
+
+// Atoll'daki pano yöneticisi düzeni: başlık + sil, Geçmiş / Favoriler sekmeleri (sayılı), arama, türüne göre simgeli
+// satırlar (metin, tür · ne zaman). Favoriler kalıcıdır (ayar: pano-favoriler; sadece yıldızlananlar diske yazılır).
 export class PanoPaneli {
     // ekSatir: başlığın altına konacak satırı kuran işlev (metin dönüştürme düğmeleri; araclar-ek.js)
-    constructor({kapat, ekSatir = null}) {
+    constructor({kapat, ekSatir = null, ayarlar = null}) {
         this._kapat = kapat;
         this._ekSatir = ekSatir;
+        this._ayar = ayarlar;
+        this._sekme = 'gecmis';
         this.actor = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel flugel-detay-panel', x_expand: true});
+        const ust = new St.BoxLayout({style_class: 'flugel-detay-baslik'});
+        ust.add_child(new St.Icon({icon_name: 'edit-paste-symbolic', icon_size: 18, style_class: 'flugel-panel-baslik-simge', y_align: Clutter.ActorAlign.CENTER}));
+        ust.add_child(new St.Label({text: _('Pano yöneticisi'), style_class: 'flugel-panel-baslik', x_expand: true, y_align: Clutter.ActorAlign.CENTER}));
+        const temizle = new St.Button({style_class: 'flugel-dugme flugel-dugme-kucuk flugel-dugme-tehlike', can_focus: true,
+            child: new St.Icon({icon_name: 'user-trash-symbolic', icon_size: 16})});
+        temizle.connect('clicked', () => pano.temizle());
+        ipucuBagla(temizle, _('Geçmişi temizle (favoriler kalır)'));
+        ust.add_child(temizle);
+        this.actor.add_child(ust);
+        this._sekmeler = new St.BoxLayout({style_class: 'flugel-cipler'});
+        this.actor.add_child(this._sekmeler);
+        this._arama = new St.Entry({style_class: 'flugel-arama', hint_text: _('Panoda ara…'), can_focus: true, x_expand: true,
+            primary_icon: new St.Icon({icon_name: 'system-search-symbolic', icon_size: 14})});
+        this._arama.clutter_text.connect('text-changed', () => this._listeYaz());
+        this._arama.clutter_text.connect('button-press-event', () => {
+            this._modal(true);
+            return Clutter.EVENT_PROPAGATE;
+        });
+        this.actor.add_child(this._arama);
+        if (this._ekSatir)
+            this.actor.add_child(this._ekSatir());
+        this._liste = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true});
+        this.actor.add_child(this._liste);
         this._abonelik = pano.abone(() => this._yaz());
+        this._favId = ayarlar?.connect('changed::pano-favoriler', () => this._yaz());
         this._yaz();
     }
 
+    _favoriler() {
+        return this._ayar?.get_strv('pano-favoriler') ?? [];
+    }
+
+    _favDegistir(metin) {
+        if (!this._ayar)
+            return;
+        const l = this._favoriler();
+        this._ayar.set_strv('pano-favoriler', l.includes(metin) ? l.filter(x => x !== metin) : [metin, ...l].slice(0, 40));
+    }
+
+    _modal(ac) {
+        if (ac && !this._grab) {
+            let kok = this.actor;
+            while (kok && kok.name !== 'flugelIsland')
+                kok = kok.get_parent();
+            if (kok)
+                this._grab = Main.pushModal(kok, {actionMode: Shell.ActionMode.POPUP});
+            this._arama.grab_key_focus();
+        } else if (!ac && this._grab) {
+            global.stage.set_key_focus(null);
+            Main.popModal(this._grab);
+            this._grab = null;
+        }
+    }
+
     _yaz() {
-        this.actor.destroy_all_children();
-        const ust = new St.BoxLayout({style_class: 'flugel-detay-baslik'});
-        ust.add_child(new St.Label({text: _('Pano geçmişi (sadece bu oturumda, bellekte)'), style_class: 'flugel-bolum-baslik', x_expand: true,
-            y_align: Clutter.ActorAlign.CENTER}));
-        const temizle = new St.Button({label: _('Temizle'), style_class: 'flugel-cip flugel-cip-kucuk', can_focus: true});
-        temizle.connect('clicked', () => pano.temizle());
-        ust.add_child(temizle);
-        this.actor.add_child(ust);
-        if (this._ekSatir)
-            this.actor.add_child(this._ekSatir());
-        if (!pano.liste.length)
-            this.actor.add_child(new St.Label({text: _('Henüz kopyalanan metin yok'), style_class: 'flugel-soluk'}));
-        for (const metin of pano.liste.slice(0, 12)) {
-            const b = new St.Button({style_class: 'flugel-detay-satir', can_focus: true, x_expand: true,
+        this._sekmeler.destroy_all_children();
+        const fav = this._favoriler();
+        for (const [id, ad, ikon, n] of [['gecmis', _('Geçmiş'), 'document-open-recent-symbolic', pano.liste.length],
+            ['favori', _('Favoriler'), 'starred-symbolic', fav.length]]) {
+            const b = new St.Button({style_class: `flugel-cip flugel-pano-sekme${this._sekme === id ? ' flugel-anahtar-acik' : ''}`, can_focus: true});
+            const k = new St.BoxLayout({style: 'spacing: 6px;'});
+            k.add_child(new St.Icon({icon_name: ikon, icon_size: 14, y_align: Clutter.ActorAlign.CENTER}));
+            k.add_child(new St.Label({text: ad, y_align: Clutter.ActorAlign.CENTER}));
+            k.add_child(new St.Label({text: String(n), style_class: 'flugel-pano-sayi', y_align: Clutter.ActorAlign.CENTER}));
+            b.set_child(k);
+            b.connect('clicked', () => {
+                this._sekme = id;
+                this._yaz();
+            });
+            this._sekmeler.add_child(b);
+        }
+        this._listeYaz();
+    }
+
+    _listeYaz() {
+        this._liste.destroy_all_children();
+        const fav = this._favoriler();
+        const ara = this._arama.text.trim().toLocaleLowerCase('tr');
+        const kaynak = this._sekme === 'favori' ? fav : pano.liste;
+        const l = kaynak.filter(m => !ara || m.toLocaleLowerCase('tr').includes(ara)).slice(0, 12);
+        if (!l.length) {
+            this._liste.add_child(new St.Label({style_class: 'flugel-soluk', text: ara ? _('Eşleşen yok')
+                : this._sekme === 'favori' ? _('Yıldızladığın metinler burada kalıcı durur') : _('Henüz kopyalanan metin yok')}));
+            return;
+        }
+        for (const metin of l) {
+            const [tur, turAd] = panoTuru(metin);
+            const b = new St.Button({style_class: 'flugel-pano-satir', can_focus: true, x_expand: true,
                 button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE});
-            const l = new St.Label({text: metin.replace(/\s+/g, ' ').trim(), style_class: 'flugel-detay-ad'});
-            l.clutter_text.ellipsize = Pango.EllipsizeMode.END;
-            b.set_child(l);
-            ipucuBagla(b, _('Tıkla: yeniden kopyala · sağ tık: listeden sil'));
+            const k = new St.BoxLayout({x_expand: true, style: 'spacing: 12px;'});
+            k.add_child(new St.Icon({icon_name: TUR_IKON[tur], icon_size: 18, style_class: 'flugel-pano-tur-simge', y_align: Clutter.ActorAlign.START}));
+            const m = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true});
+            const ana = new St.Label({text: metin.replace(/\s+/g, ' ').trim().slice(0, 300), style_class: 'flugel-pano-metin'});
+            ana.clutter_text.line_wrap = true;
+            ana.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+            m.add_child(ana);
+            const alt = new St.BoxLayout();
+            alt.add_child(new St.Label({text: turAd, style_class: 'flugel-pano-alt', x_expand: true}));
+            alt.add_child(new St.Label({text: onceMetni(pano.zaman.get(metin)), style_class: 'flugel-pano-alt'}));
+            m.add_child(alt);
+            k.add_child(m);
+            const yildiz = new St.Button({style_class: 'flugel-dugme flugel-dugme-kucuk', can_focus: true, y_align: Clutter.ActorAlign.CENTER,
+                child: new St.Icon({icon_name: fav.includes(metin) ? 'starred-symbolic' : 'non-starred-symbolic', icon_size: 14,
+                    style_class: fav.includes(metin) ? 'flugel-oyun-istek-yildiz' : ''})});
+            yildiz.connect('clicked', () => this._favDegistir(metin));
+            ipucuBagla(yildiz, fav.includes(metin) ? _('Favorilerden çıkar') : _('Favorilere ekle (kalıcı)'));
+            k.add_child(yildiz);
+            b.set_child(k);
+            ipucuBagla(b, _('Tıkla: yeniden kopyala · sağ tık: sil'));
             b.connect('clicked', (_b, n) => {
                 if (n === 3) {
-                    pano.liste = pano.liste.filter(x => x !== metin);
-                    this._yaz();
+                    if (this._sekme === 'favori')
+                        this._favDegistir(metin);
+                    else
+                        pano.sil(metin);
                     return;
                 }
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, metin);
                 Main.osdWindowManager.showAll(Gio.ThemedIcon.new('edit-copy-symbolic'), _('Kopyalandı'), null, null);
                 this._kapat?.();
             });
-            this.actor.add_child(b);
+            this._liste.add_child(b);
         }
     }
 
     destroy() {
+        this._modal(false);
         this._abonelik();
+        if (this._favId)
+            this._ayar.disconnect(this._favId);
         this.actor.destroy();
     }
 }
 
 // ---------- renk seçici ----------
+// geçmiş: renk-gecmisi (HEX), seçildiği an: renk-zaman ("HEX=ms")
 export async function renkSec(ayarlar) {
     const secici = new PickPixel(new Shell.Screenshot());
     const c = await secici.pickAsync();
@@ -436,51 +571,146 @@ export async function renkSec(ayarlar) {
         return null;
     const hex = `#${[c.red, c.green, c.blue].map(v => v.toString(16).padStart(2, '0')).join('')}`.toUpperCase();
     St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, hex);
-    const l = [hex, ...ayarlar.get_strv('renk-gecmisi').filter(x => x !== hex)].slice(0, 12);
+    const l = [hex, ...ayarlar.get_strv('renk-gecmisi').filter(x => x !== hex)].slice(0, 30);
+    const zaman = ayarlar.get_strv('renk-zaman').filter(x => l.includes(x.split('=')[0]) && !x.startsWith(`${hex}=`));
+    ayarlar.set_strv('renk-zaman', [`${hex}=${Date.now()}`, ...zaman]);
     ayarlar.set_strv('renk-gecmisi', l);
     Main.osdWindowManager.showAll(Gio.ThemedIcon.new('color-select-symbolic'), f(_('%s kopyalandı'), hex), null, null);
     return hex;
 }
 
+// HEX → biçimler (HEX, RGB, RGBA, HSL, HSLA, HSV, GTK/CSS)
+export function renkBicimleri(hex) {
+    const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+    const [r1, g1, b1] = [r, g, b].map(v => v / 255);
+    const mx = Math.max(r1, g1, b1), mn = Math.min(r1, g1, b1), d = mx - mn;
+    let h = 0;
+    if (d) {
+        h = mx === r1 ? ((g1 - b1) / d) % 6 : mx === g1 ? (b1 - r1) / d + 2 : (r1 - g1) / d + 4;
+        h = Math.round(h * 60 + 360) % 360;
+    }
+    const l = (mx + mn) / 2;
+    const sl = d ? d / (1 - Math.abs(2 * l - 1)) : 0;
+    const sv = mx ? d / mx : 0;
+    const y = v => Math.round(v * 100);
+    return [
+        ['HEX', hex],
+        ['RGB', `rgb(${r}, ${g}, ${b})`],
+        ['RGBA', `rgba(${r}, ${g}, ${b}, 1)`],
+        ['HSL', `hsl(${h}, ${y(sl)}%, ${y(l)}%)`],
+        ['HSLA', `hsla(${h}, ${y(sl)}%, ${y(l)}%, 1)`],
+        ['HSV', `hsv(${h}, ${y(sv)}%, ${y(mx)}%)`],
+        ['GdkRGBA', `rgba(${(r1).toFixed(3)}, ${(g1).toFixed(3)}, ${(b1).toFixed(3)}, 1.0)`],
+    ];
+}
+
+// Atoll'daki renk seçici düzeni: solda son renkler (yuvarlak örnek, HEX, ne zaman), sağda seçilenin ayrıntısı
+// (büyük örnek, ne zaman seçildi, biçimler — tıklayınca kopyalanır).
 export class RenkPaneli {
     constructor({ayarlar, kapat}) {
         this._ayar = ayarlar;
         this._kapat = kapat;
+        this._secili = null;
         this.actor = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel flugel-detay-panel', x_expand: true});
-        this._id = ayarlar.connect('changed::renk-gecmisi', () => this._yaz());
+        this._ids = ['changed::renk-gecmisi', 'changed::renk-zaman'].map(k => ayarlar.connect(k, () => this._yaz()));
         this._yaz();
+    }
+
+    _zaman(hex) {
+        const z = this._ayar.get_strv('renk-zaman').find(x => x.startsWith(`${hex}=`));
+        return z ? Number(z.split('=')[1]) : 0;
+    }
+
+    _kopyala(metin) {
+        St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, metin);
+        Main.osdWindowManager.showAll(Gio.ThemedIcon.new('edit-copy-symbolic'), f(_('%s kopyalandı'), metin), null, null);
     }
 
     _yaz() {
         this.actor.destroy_all_children();
+        const renkler = this._ayar.get_strv('renk-gecmisi');
+        if (!renkler.includes(this._secili))
+            this._secili = renkler[0] ?? null;
         const ust = new St.BoxLayout({style_class: 'flugel-detay-baslik'});
-        ust.add_child(new St.Label({text: _('Renk seçici'), style_class: 'flugel-bolum-baslik', x_expand: true, y_align: Clutter.ActorAlign.CENTER}));
-        const sec = new St.Button({label: _('Ekrandan renk seç'), style_class: 'flugel-cip flugel-anahtar-acik', can_focus: true});
+        ust.add_child(new St.Icon({icon_name: 'color-select-symbolic', icon_size: 18, style_class: 'flugel-panel-baslik-simge', y_align: Clutter.ActorAlign.CENTER}));
+        ust.add_child(new St.Label({text: _('Renk seçici'), style_class: 'flugel-panel-baslik', x_expand: true, y_align: Clutter.ActorAlign.CENTER}));
+        const sec = new St.Button({style_class: 'flugel-cip flugel-anahtar-acik', can_focus: true});
+        const sk = new St.BoxLayout({style: 'spacing: 6px;'});
+        sk.add_child(new St.Icon({icon_name: 'list-add-symbolic', icon_size: 14, y_align: Clutter.ActorAlign.CENTER}));
+        sk.add_child(new St.Label({text: _('Renk seç'), y_align: Clutter.ActorAlign.CENTER}));
+        sec.set_child(sk);
         sec.connect('clicked', () => {
             this._kapat?.();
             renkSec(this._ayar).catch(() => {});
         });
         ust.add_child(sec);
-        this.actor.add_child(ust);
-        const renkler = this._ayar.get_strv('renk-gecmisi');
-        if (!renkler.length)
-            this.actor.add_child(new St.Label({text: _('Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)'), style_class: 'flugel-soluk'}));
-        const izgara = new St.BoxLayout({style_class: 'flugel-cipler', x_expand: true});
-        for (const hex of renkler) {
-            const b = new St.Button({style_class: 'flugel-renk-ornek', can_focus: true});
-            const k = new St.BoxLayout({style: 'spacing: 6px;'});
-            k.add_child(new St.Widget({style_class: 'flugel-renk-kare', style: `background-color: ${hex};`}));
-            k.add_child(new St.Label({text: hex, style_class: 'flugel-detay-alt', y_align: Clutter.ActorAlign.CENTER}));
-            b.set_child(k);
-            b.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, hex));
-            ipucuBagla(b, _('Tıkla: kopyala'));
-            izgara.add_child(b);
+        if (renkler.length) {
+            const sil = new St.Button({style_class: 'flugel-dugme flugel-dugme-kucuk flugel-dugme-tehlike', can_focus: true,
+                child: new St.Icon({icon_name: 'user-trash-symbolic', icon_size: 16})});
+            sil.connect('clicked', () => {
+                this._ayar.set_strv('renk-gecmisi', []);
+                this._ayar.set_strv('renk-zaman', []);
+            });
+            ipucuBagla(sil, _('Renk geçmişini temizle'));
+            ust.add_child(sil);
         }
-        this.actor.add_child(izgara);
+        this.actor.add_child(ust);
+        if (!renkler.length) {
+            this.actor.add_child(new St.Label({text: _('Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)'), style_class: 'flugel-soluk'}));
+            return;
+        }
+        const govde = new St.BoxLayout({x_expand: true, style_class: 'flugel-renk-govde'});
+        // sol: son renkler
+        const sol = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-renk-liste'});
+        const solBas = new St.BoxLayout();
+        solBas.add_child(new St.Label({text: _('Son renkler'), style_class: 'flugel-bolum-baslik', x_expand: true}));
+        solBas.add_child(new St.Label({text: String(renkler.length), style_class: 'flugel-pano-sayi'}));
+        sol.add_child(solBas);
+        for (const hex of renkler.slice(0, 7)) {
+            const b = new St.Button({style_class: `flugel-renk-satir${hex === this._secili ? ' flugel-renk-satir-secili' : ''}`, can_focus: true, x_expand: true});
+            const k = new St.BoxLayout({style: 'spacing: 10px;', x_expand: true});
+            k.add_child(new St.Widget({style_class: 'flugel-renk-daire', style: `background-color: ${hex};`, y_align: Clutter.ActorAlign.CENTER}));
+            const m = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL});
+            m.add_child(new St.Label({text: hex, style_class: 'flugel-renk-hex'}));
+            m.add_child(new St.Label({text: onceMetni(this._zaman(hex)), style_class: 'flugel-pano-alt'}));
+            k.add_child(m);
+            b.set_child(k);
+            b.connect('clicked', () => {
+                this._secili = hex;
+                this._yaz();
+            });
+            sol.add_child(b);
+        }
+        govde.add_child(sol);
+        // sağ: ayrıntı
+        const sag = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, x_expand: true, style_class: 'flugel-renk-ayrinti'});
+        sag.add_child(new St.Label({text: _('Renk ayrıntısı'), style_class: 'flugel-bolum-baslik'}));
+        const ornek = new St.Button({style_class: 'flugel-renk-buyuk', style: `background-color: ${this._secili};`, x_expand: true, can_focus: true});
+        ornek.connect('clicked', () => this._kopyala(this._secili));
+        ipucuBagla(ornek, _('Tıkla: HEX kopyala'));
+        sag.add_child(ornek);
+        const z = this._zaman(this._secili);
+        if (z)
+            sag.add_child(new St.Label({text: f(_('%s seçildi'), onceMetni(z)), style_class: 'flugel-pano-alt', x_align: Clutter.ActorAlign.CENTER}));
+        sag.add_child(new St.Label({text: _('Biçimler'), style_class: 'flugel-bolum-baslik'}));
+        for (const [ad, deger] of renkBicimleri(this._secili)) {
+            const b = new St.Button({style_class: 'flugel-renk-bicim', can_focus: true, x_expand: true});
+            const k = new St.BoxLayout({x_expand: true});
+            k.add_child(new St.Label({text: ad, style_class: 'flugel-renk-bicim-ad'}));
+            const d = new St.Label({text: deger, style_class: 'flugel-renk-bicim-deger', x_expand: true});
+            d.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+            k.add_child(d);
+            b.set_child(k);
+            b.connect('clicked', () => this._kopyala(deger));
+            ipucuBagla(b, _('Tıkla: kopyala'));
+            sag.add_child(b);
+        }
+        govde.add_child(sag);
+        this.actor.add_child(govde);
     }
 
     destroy() {
-        this._ayar.disconnect(this._id);
+        this._ids.forEach(id => this._ayar.disconnect(id));
         this.actor.destroy();
     }
 }
