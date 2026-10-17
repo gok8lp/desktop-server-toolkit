@@ -264,7 +264,7 @@ export class Kart {
             return;
         this._secici.remove_all_transitions();
         if (animasyon && this._secici.opacity === 255 && St.Settings.get().enable_animations) {
-            this._secici.ease({x, y, width: w, height: h, duration: 260, mode: Clutter.AnimationMode.EASE_OUT_BACK});
+            this._secici.ease({x, y, width: w, height: h, duration: 220, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
         } else {
             this._secici.set_position(x, y);
             this._secici.set_size(w, h);
