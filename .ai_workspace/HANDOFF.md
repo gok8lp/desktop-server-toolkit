@@ -11,3 +11,10 @@ Güncelleme: 2026-10-17, Europe/Istanbul. Bu belge public GitHub'a uygun proje d
 - PC'de RAM/swap/I/O baskısı görülmedi; `libinput` giriş gecikmesi ve yüksek CPU kullanan Chrome renderer süreçleri görüldü. Servis, cache, kernel ve ekran ayarı değiştirilmedi. Sonraki ajan yeni oturumda canlı PiP doğrulaması ve GNOME uyarısı için A/B testi yapmalı; görev ayrıntıları AI-005/AI-006'da.
 
 Her tamamlanan önemli görevden sonra bu özeti en fazla birkaç somut maddeyle yenileyin; eski özetleri aktif durum sanmayın. Kodun ayrıntılı geçmişi commit ve görev panosundadır.
+
+## 2026-10-17 — Island akıcılığı ve koyu katmanlı görünüm
+
+- Canlı A/B: Island kapalı veya Island açıkken iki blur ayarı kapalı olduğunda fare akıcı; yalnız bulanik-gecis ya da yalnız cam-efekti açıkken takılma geri geliyor. USB G305 kopması veya NVIDIA Xid kanıtı yok. Canlı blur ayarları kapalı bırakıldı.
+- cam.js: değişmeyen pencere sahnesini yeniden kurmama, değişmeyen blur yarıçapını tekrar yazmama, geçişin ortasında blur efektini çizimden çıkarma. stylesheet.css: kapsül kenarı, yazı hiyerarşisi, kart ve sekme ayrımı, katmanlı kontrol yüzeyleri. Yeni blur/animasyon ve Apple markası yok.
+- Ana/ayrı depo ve kurulu kopya eşit. ESLint temiz, npm test 35/35; başsız GNOME cam görsel testi geçti. Ölçülen hızlanma yüzdesi doğrulanmadı. Canlı GNOME oturumu eski JS/CSS'i kullanıyor olabilir.
+- Kullanıcı oturumu kapatıp açtıktan sonra iki ayar kapalıyken kontrol et; sonra ayrı ayrı açıp fare ve kart açılışını kıyasla. Takılma sürerse ayarı geri kapat. Sürüm etiketi eklenmedi.

@@ -94,6 +94,7 @@ export class Cam {
             this.actor.hide();
             this._sahne.destroy_all_children();
             this._kirli = true;
+            this._sonSira = null;
         }
     }
 
@@ -110,23 +111,33 @@ export class Cam {
     // sahnedeki kopyaları baştan kurar (pencere açılıp kapanınca, yığın ya da çalışma alanı değişince)
     _kur() {
         this._kirli = false;
-        this._sahne.destroy_all_children();
         if (!this._acik)
             return;
+        const ws = global.workspace_manager.get_active_workspace();
+        const sira = global.get_window_actors().filter(pa => {
+            const p = pa.meta_window;
+            return pa.visible && p && !p.minimized && (p.is_on_all_workspaces() || p.get_workspace() === ws);
+        });
+        const pb = Main.layoutManager.panelBox;
         const arka = Main.layoutManager._backgroundGroup;
+        const panel = [arka, Main.panel.style, pb.visible, pb.opacity, pb.translation_y,
+            pb.x, pb.y, pb.width, pb.height];
+        if (this._sonSira && this._sonSira.length === sira.length &&
+            this._sonSira.every((pa, i) => pa === sira[i]) &&
+            this._sonWs === ws && this._sonPanel.every((v, i) => v === panel[i]))
+            return;
+        this._sonSira = sira;
+        this._sonWs = ws;
+        this._sonPanel = panel;
+        this._sahne.destroy_all_children();
         if (arka)
             this._sahne.add_child(new Clutter.Clone({source: arka, reactive: false}));
-        const ws = global.workspace_manager.get_active_workspace();
-        for (const pa of global.get_window_actors()) {
-            const p = pa.meta_window;
-            if (!pa.visible || !p || p.minimized || !(p.is_on_all_workspaces() || p.get_workspace() === ws))
-                continue;
+        for (const pa of sira) {
             const k = new Clutter.Clone({source: pa, reactive: false});
             k.add_constraint(new Clutter.BindConstraint({source: pa, coordinate: Clutter.BindCoordinate.POSITION}));
             this._sahne.add_child(k);
         }
         // üst şerit renkliyse (siyah bar / uygulama rengi) camın üstünde de o renk görünsün
-        const pb = Main.layoutManager.panelBox;
         const renk = (Main.panel.style ?? '').match(/background-color:\s*([^;]+);/)?.[1];
         if (renk && pb.visible && pb.opacity > 0 && pb.translation_y === 0) {
             this._sahne.add_child(new St.Widget({x: pb.x, y: pb.y, width: pb.width, height: pb.height,
@@ -158,7 +169,9 @@ export class Cam {
         this._sahne.set_position(-kx, -y);
         this._maske.ayarla(this._kutu.w, this._kutu.h, x - kx, 0, w, h, r, ustDuz);
         this.actor.opacity = Math.round(Math.min(1, t * 1.6) * opak);
-        this._bulanik.radius = Math.round(this._ayar.get_int('cam-bulaniklik') * s);
+        const radius = Math.round(this._ayar.get_int('cam-bulaniklik') * s);
+        if (this._bulanik.radius !== radius)
+            this._bulanik.radius = radius;
         if (!this.actor.visible)
             this.actor.show();
     }
@@ -205,13 +218,30 @@ export function bulanikGecis(aktor, {giris = true, yaricap = 10, sure = 260, gec
         return;
     const s = St.ThemeContext.get_for_stage(global.stage).scale_factor;
     const azami = Math.round(yaricap * s);
-    const e = _bulanikAl(aktor);
-    e.radius = giris ? azami : 0;
+    // Bulanıklık yalnızca geçişin kenarında gerekli; orta kısımda GPU geçişi çizmesin.
+    const esik = 0.4;
+    let e = giris ? _bulanikAl(aktor) : null;
+    if (e)
+        e.radius = azami;
     const tl = new Clutter.Timeline({actor: aktor, duration: sure, delay: gecikme});
     tl.set_progress_mode(Clutter.AnimationMode.EASE_OUT_CUBIC);
     tl.connect('new-frame', () => {
         const p = tl.get_progress();
-        e.radius = Math.round(giris ? azami * (1 - p) : azami * p);
+        const bolge = giris ? p < esik : p > 1 - esik;
+        if (!bolge) {
+            // Bağlı kalır (kesintisiz geçiş için), fakat GPU'da çizilmez.
+            if (e && e.enabled)
+                e.set_enabled(false);
+            return;
+        }
+        if (!e)
+            e = _bulanikAl(aktor);
+        if (!e.enabled)
+            e.set_enabled(true);
+        const radius = Math.round(giris ? azami * (1 - p / esik) :
+            azami * (p - (1 - esik)) / esik);
+        if (e.radius !== radius)
+            e.radius = radius;
     });
     // aktör geçiş sürerken yok edilirse zaman çizelgesi ona dokunmadan durur
     tl._yokId = aktor.connect('destroy', () => {

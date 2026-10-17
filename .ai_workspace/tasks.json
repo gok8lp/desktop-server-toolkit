@@ -76,10 +76,10 @@
         "extensions/flugel-island@flugel",
         "../flugel-island/flugel-island@flugel"
       ],
-      "evidence": "Ana 4f6ad37, ayrı Island 64ccaf9 (yerel; push yok). ESLint, iki depoda 35/35, başsız 24 PiP döngüsü: 0 izleyici/0 PiP hatası. Canlı oturum yenilenmedi",
-      "next": "Canlı oturum sonrası PiP doğrula; GJS GC kapanış uyarısını A/B incele, animasyon/veri ömrünü profil et",
+      "evidence": "Blur/CSS kaynakları iki depoda ve kurulu kopyada eşit; lint, 35/35 birim, cam başsız görsel testi geçti; GitHub push hazırlanıyor.",
+      "next": "Yeni GNOME oturumunda cam-efekti ve bulanik-gecis ayarlarını tek tek A/B test et; mouse takılırsa kapat.",
       "created_by": "codex",
-      "updated_at": "2026-10-17T10:30:51+00:00",
+      "updated_at": "2026-10-17T10:47:14+00:00",
       "lease_until": null
     },
     {
@@ -90,10 +90,10 @@
       "paths": [
         "pc"
       ],
-      "evidence": "RAM/swap/I-O baskısı yok; Btrfs kök %82 dolu; libinput 20-39 ms gecikme ve Chrome renderer yüksek CPU görüldü; servis/cache/kernel değişmedi",
-      "next": "Chrome Görev Yöneticisi ile yoğun sekmeleri saptayıp GNOME efektleri açık/kapalı gecikme ölçümü yap",
+      "evidence": "Island ve iki blur A/B sonucuyla takılma korelasyonu görüldü; OS/NVIDIA/USB ayarı yapılmadı.",
+      "next": "Yeni oturum sonrası canlı fare gecikmesi doğrula.",
       "created_by": "codex",
-      "updated_at": "2026-10-17T10:30:19+00:00",
+      "updated_at": "2026-10-17T10:47:14+00:00",
       "lease_until": null
     }
   ]

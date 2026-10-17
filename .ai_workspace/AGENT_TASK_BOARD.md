@@ -43,15 +43,15 @@ Aktif görevler sahip alanında görünür. Başka ajanın işi varsayılmaz.
 
 - Durum: `ready`; sahip: `yok`; kira sonu: `yok`
 - Dosyalar: `extensions/flugel-island@flugel`, `../flugel-island/flugel-island@flugel`
-- Kanıt: Ana 4f6ad37, ayrı Island 64ccaf9 (yerel; push yok). ESLint, iki depoda 35/35, başsız 24 PiP döngüsü: 0 izleyici/0 PiP hatası. Canlı oturum yenilenmedi
-- Sonraki adım: Canlı oturum sonrası PiP doğrula; GJS GC kapanış uyarısını A/B incele, animasyon/veri ömrünü profil et
+- Kanıt: Blur/CSS kaynakları iki depoda ve kurulu kopyada eşit; lint, 35/35 birim, cam başsız görsel testi geçti; GitHub push hazırlanıyor.
+- Sonraki adım: Yeni GNOME oturumunda cam-efekti ve bulanik-gecis ayarlarını tek tek A/B test et; mouse takılırsa kapat.
 
 ## AI-006 — PC kasma ve kaynak analizi
 
 - Durum: `ready`; sahip: `yok`; kira sonu: `yok`
 - Dosyalar: `pc`
-- Kanıt: RAM/swap/I-O baskısı yok; Btrfs kök %82 dolu; libinput 20-39 ms gecikme ve Chrome renderer yüksek CPU görüldü; servis/cache/kernel değişmedi
-- Sonraki adım: Chrome Görev Yöneticisi ile yoğun sekmeleri saptayıp GNOME efektleri açık/kapalı gecikme ölçümü yap
+- Kanıt: Island ve iki blur A/B sonucuyla takılma korelasyonu görüldü; OS/NVIDIA/USB ayarı yapılmadı.
+- Sonraki adım: Yeni oturum sonrası canlı fare gecikmesi doğrula.
 
 ## Kullanım
 
