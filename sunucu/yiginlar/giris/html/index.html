@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLUGEL</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root { --zemin: #0e0e10; --kart: #18181b; --kart-ust: #222226; --cizgi: #2a2a2f; --yazi: #f2f2f4; --soluk: #9a9aa5; --vurgu: #ffffff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--zemin); color: var(--yazi); font: 15px/1.45 system-ui, "Ubuntu", "Segoe UI", sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 48px 16px 64px; }
+  header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+  #saat { color: var(--soluk); font-variant-numeric: tabular-nums; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--soluk); margin: 32px 0 12px; font-weight: 700; }
+  .izgara { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+  a.kart { display: flex; gap: 12px; align-items: center; padding: 14px; border-radius: 16px; background: var(--kart); border: 1px solid var(--cizgi);
+           color: inherit; text-decoration: none; transition: background .15s, transform .15s, border-color .15s; }
+  a.kart:hover, a.kart:focus-visible { background: var(--kart-ust); border-color: #3a3a40; transform: translateY(-2px); outline: none; }
+  .simge { flex: none; width: 38px; height: 38px; border-radius: 11px; background: #26262b; display: grid; place-items: center; }
+  .simge svg { width: 20px; height: 20px; stroke: var(--vurgu); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  a.kart > span:nth-child(2) { min-width: 0; }
+  .ad, .alt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ad { font-weight: 700; }
+  .alt { color: var(--soluk); font-size: 13px; }
+  .kilit { margin-left: auto; flex: none; display: grid; place-items: center; }
+  .kilit svg { width: 16px; height: 16px; stroke: var(--soluk); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .kart-alt { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  button.ac { font: inherit; font-size: 13px; font-weight: 700; color: #000; background: #f2f2f4; border: 0; border-radius: 9px; padding: 5px 12px; cursor: pointer; }
+  button.ac:hover { background: #fff; } button.ac:disabled { opacity: .5; cursor: default; }
+  .durum { font-size: 12px; color: var(--soluk); } .durum.acik { color: #8fd6a0; }
+  div.kart { display: flex; gap: 12px; align-items: center; padding: 14px; border-radius: 16px; background: var(--kart); border: 1px solid var(--cizgi); }
+  #not { color: var(--soluk); font-size: 13px; margin-top: 10px; min-height: 18px; }
+  footer { margin-top: 40px; color: #6a6a72; font-size: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <header><h1>FLUGEL</h1><span id="saat"></span></header>
+
+  <h2>Masaüstleri</h2>
+  <div class="izgara">
+    <a class="kart" href="https://masaustu.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span><span><div class="ad">Masaüstü</div><div class="alt">Sanal makine, Eclipse</div></span></a>
+    <div class="kart"><span class="simge"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 8h6M7 11h10"/></svg></span><span><div class="ad">Webtop</div><div class="alt">Kalıcı Ubuntu KDE</div><div class="kart-alt"><button class="ac" data-hedef="webtop">Aç</button><span class="durum" id="d-webtop"></span></div></span></div>
+    <div class="kart"><span class="simge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 14v5M14 16.5h5"/></svg></span><span><div class="ad">Kasm</div><div class="alt">Geçici sistemler</div><div class="kart-alt"><button class="ac" data-hedef="kasm">Aç</button><span class="durum" id="d-kasm"></span></div></span></div>
+  </div>
+  <div id="not">Webtop ve Kasm aynı anda çalışmaz: birini açınca diğeri kapanır. İlk tıklamada şifre sorulur.</div>
+
+  <h2>Uygulamalar</h2>
+  <div class="izgara">
+    <a class="kart" href="https://akis.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span><span><div class="ad">Akış</div><div class="alt">Haber, oyun, anime</div></span></a>
+    <a class="kart" href="https://immich.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg></span><span><div class="ad">Fotoğraflar</div><div class="alt">Immich</div></span></a>
+    <a class="kart" href="https://video.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg></span><span><div class="ad">Video</div><div class="alt">Jellyfin</div></span></a>
+    <a class="kart" href="https://ln.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h6"/></svg></span><span><div class="ad">Kitaplar</div><div class="alt">Kavita</div></span></a>
+    <a class="kart" href="https://manga.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M3 5h8v14H3zM13 5h8v14h-8z"/></svg></span><span><div class="ad">Manga</div><div class="alt">Komga</div></span></a>
+    <a class="kart" href="https://office.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h7M9 16h7"/></svg></span><span><div class="ad">Ofis</div><div class="alt">LibreOffice</div></span></a>
+    <a class="kart" href="https://pdf.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M9 14h6M9 17h4"/></svg></span><span><div class="ad">PDF</div><div class="alt">Birleştir, böl, çevir</div></span></a>
+    <a class="kart" href="https://convert.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></span><span><div class="ad">Dönüştürücü</div><div class="alt">ConvertX</div></span></a>
+    <a class="kart" href="https://tools.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M14 7l3-3 3 3-3 3M4 20l9-9M7 4l3 3-6 6-3-3z"/></svg></span><span><div class="ad">Araçlar</div><div class="alt">IT-Tools</div></span></a>
+    <a class="kart" href="https://status.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></span><span><div class="ad">Durum</div><div class="alt">Servisler ayakta mı</div></span></a>
+  </div>
+
+  <h2>Yönetim</h2>
+  <div class="izgara">
+    <a class="kart" href="https://nextcloud.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.5-8 6 6 0 0 1 11.5 1.5A3.5 3.5 0 0 1 17.5 18z"/></svg></span><span><div class="ad">Nextcloud</div><div class="alt">Dosyalar</div></span><span class="kilit" title="Cloudflare e-posta koduyla korumalı"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></a>
+    <a class="kart" href="https://ai.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4z"/></svg></span><span><div class="ad">Yapay zekâ</div><div class="alt">Open WebUI</div></span><span class="kilit" title="Cloudflare e-posta koduyla korumalı"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></a>
+    <a class="kart" href="https://portainer.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="M7 8V5h10v3M8 13h8"/></svg></span><span><div class="ad">Portainer</div><div class="alt">Docker</div></span><span class="kilit" title="Cloudflare e-posta koduyla korumalı"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></a>
+    <a class="kart" href="https://admin.<alan-adı>"><span class="simge"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></svg></span><span><div class="ad">Sunucu</div><div class="alt">Cockpit</div></span><span class="kilit" title="Cloudflare e-posta koduyla korumalı"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></a>
+  </div>
+
+  <footer>Kilit simgeli olanlar Cloudflare e-posta koduyla açılır.</footer>
+</main>
+<script>
+  const ADRES = {webtop: 'https://webtop.<alan-adı>', kasm: 'https://kasm.<alan-adı>'};
+  const not = document.getElementById('not');
+  async function durumAl() {
+    const r = await fetch('/anahtar/durum', {cache: 'no-store'});
+    if (!r.ok) throw new Error('giriş');
+    const d = await r.json();
+    for (const k of ['webtop', 'kasm']) {
+      const e = document.getElementById('d-' + k);
+      e.textContent = d[k] === 'active' ? 'açık' : 'kapalı'; e.className = 'durum' + (d[k] === 'active' ? ' acik' : '');
+    }
+    return d;
+  }
+  document.querySelectorAll('button.ac').forEach(b => b.addEventListener('click', async () => {
+    const h = b.dataset.hedef;
+    document.querySelectorAll('button.ac').forEach(x => x.disabled = true);
+    try {
+      let d = await durumAl();
+      if (d[h] !== 'active') {
+        not.textContent = (h === 'webtop' ? 'Webtop' : 'Kasm') + ' açılıyor, diğeri kapatılıyor… (ilk açılış bir dakika sürebilir)';
+        await fetch('/anahtar/' + h, {method: 'POST'});
+        for (let i = 0; i < 90 && d[h] !== 'active'; i++) { await new Promise(r => setTimeout(r, 2000)); d = await durumAl(); }
+        await new Promise(r => setTimeout(r, 12000));
+      }
+      not.textContent = 'Yönlendiriliyor…';
+      location.href = ADRES[h];
+    } catch (e) {
+      not.textContent = 'Açılamadı (şifre ya da sunucu). Sayfayı yenileyip tekrar dene.';
+      document.querySelectorAll('button.ac').forEach(x => x.disabled = false);
+    }
+  }));
+  const s = document.getElementById('saat');
+  const yaz = () => { s.textContent = new Date().toLocaleString('tr-TR', {weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'}); };
+  yaz(); setInterval(yaz, 30000);
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+[Unit]
+Description=FLUGEL Webtop (kalici KDE masaustu)
+Requires=docker.service
+After=docker.service network-online.target
+# biri baslayinca digeri durur
+Conflicts=flugel-kasm.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/stacks/webtop
+ExecStart=/usr/bin/docker compose up -d
+ExecStop=/usr/bin/docker compose stop
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

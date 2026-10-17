@@ -1,0 +1,78 @@
+services:
+  immich-server:
+    container_name: immich_server
+    image: ghcr.io/immich-app/immich-server:release
+    mem_limit: 3g   # sistem-bakim v2: makul bellek sınırı
+    runtime: nvidia # Docker'a bu konteynerın NVIDIA kullanacağını doğrudan söyler 🚀
+    ports:
+      - 2283:2283
+    volumes:
+      - /mnt/sidemain/immich:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - DB_HOSTNAME=database
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE_NAME=immich
+      - REDIS_HOSTNAME=redis
+    depends_on:
+      - redis
+      - database
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities:
+                - gpu
+                - video
+                - compute
+                - utility
+
+  immich-machine-learning:
+    container_name: immich_machine_learning
+    # CUDA destekli özel imajı kullanıyoruz ✨
+    image: ghcr.io/immich-app/immich-machine-learning:release-cuda
+    runtime: nvidia
+    mem_limit: 2g
+    volumes:
+      - /arrapps/immich/model-cache:/cache
+    environment:
+      - DB_HOSTNAME=database
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE_NAME=immich
+      - REDIS_HOSTNAME=redis
+      # CUDA'yı zorlamak için (opsiyonel):
+      - IMMICH_TRITON_ENABLED=false
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities:
+                - gpu
+
+  redis:
+    container_name: immich_redis
+    image: docker.io/redis:6.2-alpine
+    mem_limit: 256m   # sistem-bakim v2: makul bellek sınırı
+    restart: unless-stopped
+
+  database:
+    container_name: immich_postgres
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+    mem_limit: 1536m   # sistem-bakim v2: makul bellek sınırı
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=immich
+    volumes:
+      - /arrapps/immich/postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+
+networks: {}

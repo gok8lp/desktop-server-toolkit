@@ -1,0 +1,16 @@
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    mem_limit: 512m   # sistem-bakim v2: makul bellek sınırı
+    container_name: prowlarr
+    network_mode: "container:gluetun"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+      - FLARESOLVERR_URL=http://flaresolverr:8191
+    volumes:
+      - /arrapps/prowlarr:/config:Z
+    restart: unless-stopped
+    # Arayüz: http://sunucuip:9696
+    # FlareSolverr: http://flaresolverr:8191

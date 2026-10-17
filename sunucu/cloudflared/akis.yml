@@ -1,9 +1,21 @@
 # FLUGEL Akis: herkese acik (kullanici istegi 2026-10-14). Ana tunel (homeserver) panelden yonetilir; bu ayri ve yereldir.
-tunnel: <flugel-akis tünel kimliği>
-credentials-file: /root/.cloudflared/<kimlik>.json
+tunnel: <tunel-kimligi>
+credentials-file: /root/.cloudflared/<tunel-kimligi>.json
 ingress:
   - hostname: akis.<alan-adı>
     service: http://localhost:3012
   - hostname: status.<alan-adı>
-    service: http://localhost:3004   # Uptime Kuma
+    service: http://localhost:3004
+  - hostname: masaustu.<alan-adı>
+    service: http://localhost:8097
+  - hostname: <alan-adı>
+    service: http://localhost:8098
+  - hostname: www.<alan-adı>
+    service: http://localhost:8098
+  - hostname: webtop.<alan-adı>
+    service: http://localhost:8101
+  - hostname: kasm.<alan-adı>
+    service: https://localhost:8103
+    originRequest:
+      noTLSVerify: true
   - service: http_status:404

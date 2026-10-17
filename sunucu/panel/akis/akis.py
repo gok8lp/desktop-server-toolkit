@@ -904,7 +904,7 @@ def uygulamalar_verisi():
 
     def kontrol(o):
         h = o.get("href", "")
-        u = h.replace("192.168.0.15", "host.docker.internal")
+        u = h.replace("<IP>", "host.docker.internal")
         try:
             istek = urllib.request.Request(u, headers=UA, method="GET")
             import ssl
@@ -916,7 +916,7 @@ def uygulamalar_verisi():
             o["acik"] = False
         i = o.get("icon", "")
         o["ikon"] = (f"https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/{i}" if i.endswith(".png")
-                     else f"https://cdn.jsdelivr.net/npm/@mdi/svg@7.4.47/svg/{i[4:]}.svg" if i.startswith("mdi-") else None)
+                     else f"https://cdn.jsdelivr.net/npm/@mdi/<e-posta>/svg/{i[4:]}.svg" if i.startswith("mdi-") else None)
         return o
     with ThreadPoolExecutor(12) as h:
         for g in gruplar:

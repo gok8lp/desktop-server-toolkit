@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  stirling-pdf:
+    image: frooodle/s-pdf:latest
+    mem_limit: 1536m   # sistem-bakim v2: makul bellek sınırı
+    container_name: stirling-pdf
+    ports:
+      - 8095:8080
+    volumes:
+      - /arrapps/stirling-pdf/trainingData:/usr/share/tesseract-ocr/4.00/tessdata:Z
+      - /arrapps/stirling-pdf/extraConfigs:/configs:Z
+      - /arrapps/stirling-pdf/customFiles:/customFiles:Z
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - LANGS=tr_TR
+    restart: unless-stopped

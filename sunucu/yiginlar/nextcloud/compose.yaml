@@ -1,0 +1,24 @@
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    mem_limit: 1536m   # sistem-bakim v2: makul bellek sınırı
+    healthcheck:   # sistem-bakim v2
+      test: ["CMD", "curl", "-fsSk", "-m", "8", "https://localhost/status.php"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /arrapps/nextcloud:/config
+      - /mnt/sidemain/nextcloud_data:/data
+    ports:   # <IP>:8443 Tailscale (FLUGEL Akis) icin ayrildi; tunel 127.0.0.1, ev agi <IP> (sistem-bakim)
+      - 127.0.0.1:8443:443
+      - <IP>:8443:443
+    restart: unless-stopped
+
+networks: {}

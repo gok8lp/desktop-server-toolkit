@@ -1,0 +1,21 @@
+# FLUGEL: Webtop — tarayıcıdan kalıcı Ubuntu KDE masaüstü (linuxserver/webtop). 127.0.0.1:8101 → webtop.<alan-adı>
+# Kasm ile aynı anda çalışmaz: flugel-webtop.service / flugel-kasm.service birbirini durdurur (restart: "no").
+services:
+  webtop:
+    image: lscr.io/linuxserver/webtop:ubuntu-kde
+    container_name: webtop
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Europe/Istanbul
+      TITLE: FLUGEL Webtop
+      CUSTOM_USER: flugel
+      PASSWORD: ${WEBTOP_SIFRE}
+      LC_ALL: tr_TR.UTF-8
+    volumes:
+      - ./config:/config
+    ports:
+      - "127.0.0.1:8101:3000"
+    shm_size: "1gb"
+    mem_limit: 3g
+    restart: "no"

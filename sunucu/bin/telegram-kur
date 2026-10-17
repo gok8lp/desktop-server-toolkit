@@ -19,7 +19,7 @@ print(ids[-1] if ids else '')")
 done
 [ -z "$CID" ] && { echo "Mesaj gelmedi. Bota /start yazip tekrar calistirin."; exit 1; }
 sudo install -m 600 /dev/null /etc/sistem-bakim/telegram.env
-printf 'TELEGRAM_BOT_TOKEN=%s\nTELEGRAM_CHAT_ID=%s\n' "$TOKEN" "$CID" | sudo tee /etc/sistem-bakim/telegram.env >/dev/null
+printf 'TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}' "$TOKEN" "$CID" | sudo tee /etc/sistem-bakim/telegram.env >/dev/null
 unset TOKEN
 sudo /usr/local/bin/bildirim "Telegram bildirimleri kuruldu! Sunucu uyarilari ve basketbol mac atamalarin buraya gelecek. 🏀"
 echo "=== TAMAM: Telegram'a test mesaji gonderildi ==="

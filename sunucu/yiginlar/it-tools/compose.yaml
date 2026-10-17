@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  it-tools:
+    image: corentinth/it-tools:latest
+    mem_limit: 256m   # sistem-bakim v2: makul bellek sınırı
+    container_name: it-tools
+    ports:
+      - 8233:80
+    restart: unless-stopped
+networks: {}

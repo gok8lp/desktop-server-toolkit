@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  gotify:
+    image: gotify/server:latest
+    container_name: gotify
+    restart: unless-stopped
+    networks:
+      - default
+    ports:
+      - 8482:80
+    environment:
+      - GOTIFY_DEFAULTUSER_PASS=${GOTIFY_DEFAULTUSER_PASS} # İlk girişteki şifreniz, girişten sonra değiştirin
+      - TZ=Europe/Istanbul
+    volumes:
+      - /arrapps/gotify/data:/app/data

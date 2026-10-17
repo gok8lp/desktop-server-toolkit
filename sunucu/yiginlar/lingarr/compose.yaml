@@ -1,0 +1,15 @@
+services:
+  lingarr:
+    image: ghcr.io/lingarr-translate/lingarr:latest
+    container_name: lingarr
+    restart: unless-stopped
+    mem_limit: 512m
+    environment:
+      - TZ=Europe/Istanbul
+      - DB_CONNECTION=sqlite
+    volumes:
+      - /arrapps/lingarr:/app/storage
+      - /mnt/sidemain/movies:/movies:Z
+      - /mnt/sidemain/series:/tv:Z
+    ports:
+      - 5575:8080

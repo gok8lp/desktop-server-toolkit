@@ -1,0 +1,11 @@
+[Unit]
+Description=Fix sudo setuid bit
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/chmod 4755 /usr/bin/sudo.ws
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

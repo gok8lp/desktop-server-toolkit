@@ -1,0 +1,18 @@
+# FLUGEL: Kasm Workspaces — tarayıcıdan geçici sistemler (linuxserver/kasm, içinde Docker). 127.0.0.1:8103 → kasm.<alan-adı>
+# İlk kurulum sihirbazı: ev ağından http://<IP>:8102 (yönetici şifresini kullanıcı koyar).
+# Webtop ile aynı anda çalışmaz (flugel-kasm.service / flugel-webtop.service).
+services:
+  kasm:
+    image: lscr.io/linuxserver/kasm:latest
+    container_name: kasm
+    privileged: true
+    environment:
+      KASM_PORT: "443"
+      TZ: Europe/Istanbul
+    volumes:
+      - ./veri:/opt
+      - ./profiller:/profiles
+    ports:
+      - "8102:3000"
+      - "127.0.0.1:8103:443"
+    restart: "no"

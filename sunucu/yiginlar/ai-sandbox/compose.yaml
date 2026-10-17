@@ -1,0 +1,23 @@
+# Yapay zeka kum havuzu: internet YOK (internal ag), salt-okunur, yetkisiz. Sadece ollama'ya erisir.
+services:
+  sohbet:
+    image: python:3.12-alpine
+    container_name: ai-sandbox
+    command: ["python", "-u", "/app/sohbet.py"]
+    environment: [MODEL_A, MODEL_B, KONU, TUR]
+    volumes:
+      - ./sohbet.py:/app/sohbet.py:ro
+      - /home/flugel/sistem-bakim/ai-sandbox:/sonuc
+    networks: [kumhavuzu]
+    read_only: true
+    user: "1000:1000"
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 256m
+    cpus: 1
+    pids_limit: 64
+    restart: "no"
+networks:
+  kumhavuzu:
+    name: ai-kumhavuzu
+    internal: true

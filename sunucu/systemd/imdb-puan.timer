@@ -1,0 +1,10 @@
+[Unit]
+Description=IMDb puanlarini gunde bir guncelle
+
+[Timer]
+OnCalendar=*-*-* 06:15
+Persistent=true
+RandomizedDelaySec=10min
+
+[Install]
+WantedBy=timers.target

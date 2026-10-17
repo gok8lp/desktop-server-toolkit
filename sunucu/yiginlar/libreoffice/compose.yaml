@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  libreoffice:
+    image: lscr.io/linuxserver/libreoffice:latest
+    mem_limit: 1536m   # sistem-bakim v2: makul bellek sınırı
+    container_name: libreoffice
+    restart: unless-stopped
+    ports:
+      - 3205:3000 # Arayüze erişim portu (http://sunucu-ip:3005)
+      - 3206:3001 # Güvenli (HTTPS) erişim için opsiyonel
+    volumes:
+      - /opt/stacks/libreoffice/config:/config # Ayarlar ve profil
+      - /mnt/sidemain:/data # Senin ana depolama alanın (Belgelerini burada görebilirsin)
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul

@@ -1,0 +1,13 @@
+[Unit]
+Description=cloudflared - FLUGEL Akis (akis.<alan-adı>)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/cloudflared --no-autoupdate --config /etc/cloudflared/akis.yml tunnel run
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

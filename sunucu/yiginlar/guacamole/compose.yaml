@@ -1,0 +1,55 @@
+# FLUGEL: tarayıcıdan sanal makine masaüstü (Apache Guacamole). Web: 127.0.0.1:8097 (dışarıya Cloudflare tüneliyle).
+# guacd sunucu ağında (sanal makine ağına <IP>/24 erişmek için), sadece docker0 adresinde dinler.
+services:
+  guacd:
+    image: guacamole/guacd:1.6.0
+    container_name: guacd
+    network_mode: host
+    command: ["/opt/guacamole/sbin/guacd", "-b", "172.17.0.1", "-l", "4822", "-L", "info", "-f"]
+    restart: unless-stopped
+    mem_limit: 512m
+  guac-db:
+    image: postgres:16-alpine
+    container_name: guac-db
+    environment:
+      POSTGRES_DB: guacamole
+      POSTGRES_USER: guacamole
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./veri/db:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U guacamole -d guacamole"]
+      interval: 10s
+      retries: 10
+  guacamole:
+    image: guacamole/guacamole:1.6.0
+    container_name: guacamole
+    depends_on:
+      guac-db:
+        condition: service_healthy
+    environment:
+      GUACD_HOSTNAME: host.docker.internal
+      GUACD_PORT: "4822"
+      POSTGRESQL_HOSTNAME: guac-db
+      POSTGRESQL_DATABASE: guacamole
+      POSTGRESQL_USERNAME: guacamole
+      POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD}
+      TOTP_ENABLED: "true"
+      # ev agi ve Tailscale girisinde telefon kodu sorulmaz; internetten (Cloudflare) sorulur
+      TOTP_BYPASS_HOSTS: "${TOTP_BYPASS_HOSTS}" <IP>/10"
+      # Cloudflare tuneli docker ag gecidinden gelir: gercek istemci adresi X-Forwarded-For basligindan okunur
+      REMOTE_IP_VALVE_ENABLED: "true"
+      PROXY_ALLOWED_IPS_REGEX: "192\\.168\\.208\\.1|127\\.0\\.0\\.1"
+      PROXY_IP_HEADER: "X-Forwarded-For"
+      # giris 1 gun gecerli (dakika)
+      API_SESSION_TIMEOUT: "1440"
+      WEBAPP_CONTEXT: ROOT
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8097:8080"
+    restart: unless-stopped
+    mem_limit: 768m

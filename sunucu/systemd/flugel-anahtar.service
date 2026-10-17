@@ -1,0 +1,8 @@
+[Unit]
+Description=FLUGEL masaustu anahtari (Webtop/Kasm secimi)
+After=network.target
+[Service]
+ExecStart=/usr/bin/python3 /opt/stacks/anahtar/anahtar.py
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

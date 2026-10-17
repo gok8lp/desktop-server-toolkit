@@ -1,0 +1,15 @@
+services:
+  daedalos:
+    build: 
+      context: https://github.com/DustinBrett/daedalOS.git#main
+      dockerfile: Dockerfile
+    container_name: daedalos
+    restart: unless-stopped
+    stdin_open: true # Konteynerin açık kalmasına yardımcı olur
+    tty: true        # Terminal desteği sağlar
+    ports:
+      - 3005:3000    # Burası kritik! Uygulama 3000'de çalışıyor.
+    deploy:
+      resources:
+        limits:
+          memory: 1G

@@ -1,0 +1,9 @@
+[Unit]
+Description=FLUGEL Island: takip edilen animelerin son bolum IMDb puani (resmi IMDb veri dosyalari)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=flugel
+Nice=10
+ExecStart=/usr/bin/python3 /opt/basket-bot/imdb_puan.py

@@ -1,0 +1,14 @@
+[Unit]
+Description=SSH login WhatsApp bildirimi
+After=network.target ssh.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/ssh-login-watcher.sh
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

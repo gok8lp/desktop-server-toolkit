@@ -4,7 +4,7 @@ services:
     container_name: homepage
     restart: unless-stopped
     environment:
-      HOMEPAGE_ALLOWED_HOSTS: "192.168.0.15:3010,100.86.88.1:3010,flugelserver.tail42f1f4.ts.net:3010,localhost:3010"
+      HOMEPAGE_ALLOWED_HOSTS: "<IP>:3010,<IP>:3010,flugelserver.<tailnet>.ts.net:3010,localhost:3010"
     volumes:
       - ./homepage:/app/config
       - ./homepage/fontlar:/app/public/fontlar:ro
@@ -37,7 +37,7 @@ services:
       interval: 60s
       start_period: 120s
 
-  # FLUGEL Akis (sistem-bakim): kisisel sosyal akis uygulamasi -> http://192.168.0.15:3012
+  # FLUGEL Akis (sistem-bakim): kisisel sosyal akis uygulamasi -> http://<IP>:3012
   flugel-akis:
     image: python:3.13-alpine
     container_name: flugel-akis

@@ -24,4 +24,4 @@
     - Cloudflare:
         - {abbr: CF, href: "https://dash.cloudflare.com"}
     - Modem:
-        - {abbr: RT, href: "http://192.168.0.1"}
+        - {abbr: RT, href: "http://<IP>"}

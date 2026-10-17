@@ -30,6 +30,8 @@ cp -r "$S"/opt/stacks/panel/* sunucu/panel/; cp "$S"/opt/basket-bot/* sunucu/bas
 cp "$S"/usr/local/sbin/* sunucu/sbin/; cp "$S"/usr/local/bin/* sunucu/bin/; cp "$S"/usr/local/lib/sistem-bakim/* sunucu/lib/
 cp "$S"/etc/libvirt/hooks/qemu sunucu/libvirt/qemu-hook; cp "$S"/etc/systemd/system/* sunucu/systemd/
 
+# ---- sunucunun geri kalanı: Docker yığınları, servisler, betikler, tünel, sanal makineler (kendi temizliğiyle) ----
+"$R/sunucu/topla.sh"
 # ---- gizli bilgileri temizle (sadece depodaki kopyalarda) ----
 # Degerler depo DISINDAKI ~/.config/flugel-depo/gizli.txt dosyasinda: "gizli_deger<TAB>yer_tutucu" (bu betikte asla yazmaz)
 GIZLI=~/.config/flugel-depo/gizli.txt

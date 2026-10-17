@@ -1,0 +1,9 @@
+[Unit]
+Description=Her sabah 07:00 Chicago saati
+
+[Timer]
+OnCalendar=*-*-* 07:00:00 America/Chicago
+Persistent=true
+
+[Install]
+WantedBy=timers.target

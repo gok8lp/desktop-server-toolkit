@@ -1,0 +1,3 @@
+#!/bin/bash
+# Kullanim: ai-sohbet "konu" [tur_sayisi] [modelA] [modelB]
+cd /opt/stacks/ai-sandbox && KONU="${1:-Yapay zekalar insanlara en cok hangi konuda yardim edebilir?}" TUR="${2:-4}" MODEL_A="${3:-llama3.2}" MODEL_B="${4:-gemma3}" docker compose run --rm sohbet

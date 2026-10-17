@@ -1,0 +1,8 @@
+[Unit]
+Description=FLUGEL Island sunucu durumu 20 sn (sistem-bakim)
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=20s
+AccuracySec=2s
+[Install]
+WantedBy=timers.target

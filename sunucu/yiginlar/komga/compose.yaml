@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  komga:
+    image: gotson/komga:latest
+    mem_limit: 1536m   # sistem-bakim v2: makul bellek sınırı
+    container_name: komga
+    restart: unless-stopped
+    ports:
+      - 8296:25600 # Tarayıcıdan erişim için: http://IP-ADRESINIZ:8296
+    volumes:
+      # Kitaplarınızın bulunduğu gerçek klasörü buraya bağlayın
+      - /mnt/sidemain/books:/data
+      # Komga ayarlarının (veritabanı vb.) saklanacağı klasör
+      - /arrapps/komga:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+      # Java bellek kullanımı (Sunucunuzun RAM'ine göre artırabilirsiniz)
+      - JAVA_OPTS=-Xmx512m
+networks: {}

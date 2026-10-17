@@ -1,0 +1,64 @@
+services:
+  tranga-api:
+    image: glax/tranga-api:latest
+    mem_limit: 768m   # sistem-bakim v2: makul bellek sınırı
+    container_name: tranga-api
+    restart: unless-stopped
+    depends_on:
+      tranga-pg:
+        condition: service_healthy
+    ports:
+      - "6531:6531"
+    environment:
+      - POSTGRES_HOST=tranga-pg
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - TZ=Europe/Istanbul
+    volumes:
+      - /mnt/sidemain/tranga/manga:/Manga
+      - /mnt/sidemain/tranga/settings:/usr/share/tranga-api
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  tranga-website:
+    image: glax/tranga-website:latest
+    mem_limit: 256m   # sistem-bakim v2: makul bellek sınırı
+    container_name: tranga-website
+    restart: unless-stopped
+    depends_on:
+      - tranga-api
+    ports:
+      - "9555:80"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  tranga-pg:
+    image: postgres:17
+    container_name: tranga-pg
+    restart: unless-stopped
+    mem_limit: 512m
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=postgres
+    volumes:
+      - tranga-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  tranga-pgdata:

@@ -2,7 +2,7 @@
 . /usr/local/lib/sistem-bakim/whatsapp-kapat.sh  # sistem-bakim
 PHONE="<TELEFON>"
 APIKEY="<CALLMEBOT_APIKEY>"
-GOTIFY="http://192.168.0.15:8482/message?token=<GOTIFY_TOKEN>"
+GOTIFY="http://<IP>:8482/message?token=<GOTIFY_TOKEN>"
 STATE="/var/lib/self-heal"; mkdir -p "$STATE"
 # GPU sanal makinedeyken (W11-GPU, kart vfio-pci'de) bu konteynerler bilerek durdurulur — sorun sayma (sistem-bakim)
 GPU_KONTEYNERLER="ollama jellyfin plex immich_machine_learning subgen"
@@ -49,10 +49,19 @@ while IFS= read -r c; do
 done < <(docker ps -a --filter status=exited --format '{{.Names}}')
 
 # ── 3. Unhealthy containerlar: restart ──
+# (sistem-bakim) anlik dalgalanmaya karisma: 10 dk boyunca unhealthy kalirsa yeniden baslat (gluetun kendi VPN'ini zaten yeniler)
+for f in "$STATE"/uh-ilk-*; do
+  [ -e "$f" ] || continue
+  c=${f##*/uh-ilk-}
+  docker ps --filter health=unhealthy --format '{{.Names}}' | grep -qx "$c" || rm -f "$f"
+done
 while IFS= read -r c; do
   [ -z "$c" ] && continue
+  [ -f "$STATE/uh-ilk-$c" ] || date +%s > "$STATE/uh-ilk-$c"
+  [ $(( $(date +%s) - $(cat "$STATE/uh-ilk-$c") )) -lt 600 ] && continue
   docker restart "$c" >/dev/null 2>&1
-  notify "uh-$c" "Container $c unhealthy idi, restart edildi"
+  rm -f "$STATE/uh-ilk-$c"
+  notify "uh-$c" "Container $c 10 dakikadir unhealthy idi, restart edildi"
 done < <(docker ps --filter health=unhealthy --format '{{.Names}}')
 
 # ── 4. Disk doluluk: %90 ustu otomatik temizlik ──

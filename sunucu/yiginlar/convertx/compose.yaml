@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  convertx:
+    image: ghcr.io/c4illin/convertx
+    mem_limit: 2g   # sistem-bakim v2: makul bellek sınırı
+    container_name: convertx
+    restart: unless-stopped
+    ports:
+      - 3003:3000
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      HTTP_ALLOWED: "true"
+    volumes:
+      - /arrapps/convertx:/app/data
+networks: {}

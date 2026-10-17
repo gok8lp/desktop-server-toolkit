@@ -1,0 +1,16 @@
+services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    mem_limit: 1g   # sistem-bakim v2: makul bellek sınırı
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /arrapps/bazarr:/config:Z
+      - /mnt/sidemain/movies:/movies:Z
+      - /mnt/sidemain/series:/tv:Z
+    ports:
+      - 6767:6767
+    restart: unless-stopped

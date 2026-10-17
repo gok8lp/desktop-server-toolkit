@@ -1,0 +1,6 @@
+[Unit]
+Description=FLUGEL Island icin sunucu durumu JSON (sistem-bakim)
+[Service]
+Type=oneshot
+Nice=10
+ExecStart=/usr/local/sbin/island-veri.py

@@ -1,0 +1,16 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    mem_limit: 768m   # sistem-bakim v2: makul bellek sınırı
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /arrapps/sonarr:/config:Z
+      - /mnt/sidemain/series:/tv:Z
+      - /mnt/side/downloads:/downloads:Z
+    ports:
+      - 8989:8989
+    restart: unless-stopped

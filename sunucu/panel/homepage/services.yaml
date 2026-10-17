@@ -2,11 +2,11 @@
 - Durum:
     - FLUGEL Akış:
         icon: mdi-alpha-f-circle
-        href: http://192.168.0.15:3012
+        href: http://<IP>:3012
         description: Kişisel sosyal akış — oyun, teknoloji, anime, YouTube, maçlar, AI
     - Sunucu:
         icon: mdi-server-network
-        href: http://192.168.0.15:3011/durum
+        href: http://<IP>:3011/durum
         description: Sorunlar, uyarilar, son bildirimler
         widget:
           type: customapi
@@ -18,7 +18,7 @@
             name: baslik
             label: etiket
             limit: 6
-            target: "http://192.168.0.15:3011/durum"
+            target: "http://<IP>:3011/durum"
     - Maçlar:
         icon: mdi-basketball
         href: https://www.ankarabasket.org.tr/fiksturler
@@ -110,156 +110,156 @@
             target: "{link}"
 - Medya:
     - Jellyfin:
-        href: "http://192.168.0.15:8096/"
+        href: "http://<IP>:8096/"
         description: "Dizi ve film izle"
         icon: "jellyfin.png"
         server: "yerel"
         container: "jellyfin"
     - Plex:
-        href: "http://192.168.0.15:32400/web"
+        href: "http://<IP>:32400/web"
         description: "Plex medya"
         icon: "plex.png"
     - Immich:
-        href: "http://192.168.0.15:2283/"
+        href: "http://<IP>:2283/"
         description: "Fotograf ve video arsivi"
         icon: "immich.png"
         server: "yerel"
         container: "immich_server"
     - Kavita:
-        href: "http://192.168.0.15:8295/"
+        href: "http://<IP>:8295/"
         description: "Kitap ve manga oku"
         icon: "kavita.png"
         server: "yerel"
         container: "kavita"
     - Komga:
-        href: "http://192.168.0.15:8296/"
+        href: "http://<IP>:8296/"
         description: "Cizgi roman kutuphanesi"
         icon: "komga.png"
         server: "yerel"
         container: "komga"
     - Tranga:
-        href: "http://192.168.0.15:9555/"
+        href: "http://<IP>:9555/"
         description: "Manga indirici"
         icon: "mdi-book-arrow-down"
         server: "yerel"
         container: "tranga-api"
     - Kamiyomu:
-        href: "http://192.168.0.15:2342/"
+        href: "http://<IP>:2342/"
         description: "Manga indirici"
         icon: "mdi-book-open-page-variant"
         server: "yerel"
         container: "kamiyomu"
     - OpenBooks:
-        href: "http://192.168.0.15:8285/"
+        href: "http://<IP>:8285/"
         description: "E-kitap bulucu"
         icon: "mdi-bookshelf"
         server: "yerel"
         container: "openbooks"
     - Open WebUI:
-        href: "http://192.168.0.15:3030/"
+        href: "http://<IP>:3030/"
         description: "Yapay zeka sohbet (qwen3)"
         icon: "open-webui.png"
         server: "yerel"
         container: "open-webui"
 - Bulut:
     - Nextcloud:
-        href: "https://192.168.0.15:8443/"
+        href: "https://<IP>:8443/"
         description: "Kisisel bulut"
         icon: "nextcloud.png"
         server: "yerel"
         container: "nextcloud"
     - FileBrowser:
-        href: "http://192.168.0.15:8085/"
+        href: "http://<IP>:8085/"
         description: "Sunucu dosyalari"
         icon: "filebrowser.png"
         server: "yerel"
         container: "filebrowser"
     - ConvertX:
-        href: "http://192.168.0.15:3003/"
+        href: "http://<IP>:3003/"
         description: "Dosya donusturucu"
         icon: "mdi-file-swap"
         server: "yerel"
         container: "convertx"
 - Indirme:
     - Sonarr:
-        href: "http://192.168.0.15:8989/"
+        href: "http://<IP>:8989/"
         description: "Dizi otomasyonu"
         icon: "sonarr.png"
         server: "yerel"
         container: "sonarr"
     - Radarr:
-        href: "http://192.168.0.15:7878/"
+        href: "http://<IP>:7878/"
         description: "Film otomasyonu"
         icon: "radarr.png"
         server: "yerel"
         container: "radarr"
     - Prowlarr:
-        href: "http://192.168.0.15:9696/"
+        href: "http://<IP>:9696/"
         description: "Indexer yonetimi"
         icon: "prowlarr.png"
         server: "yerel"
         container: "prowlarr"
     - Bazarr:
-        href: "http://192.168.0.15:6767/"
+        href: "http://<IP>:6767/"
         description: "Otomatik altyazi"
         icon: "bazarr.png"
         server: "yerel"
         container: "bazarr"
     - Lingarr:
-        href: "http://192.168.0.15:5575/"
+        href: "http://<IP>:5575/"
         description: "Altyazi cevirisi"
         icon: "mdi-translate"
         server: "yerel"
         container: "lingarr"
     - Transmission:
-        href: "http://192.168.0.15:9091/transmission/web/"
+        href: "http://<IP>:9091/transmission/web/"
         description: "Torrent (VPN + icerik bekcisi)"
         icon: "transmission.png"
         server: "yerel"
         container: "transmission"
     - Jackett:
-        href: "http://192.168.0.15:9117/"
+        href: "http://<IP>:9117/"
         description: "Indexer koprusu"
         icon: "jackett.png"
         server: "yerel"
         container: "jackett"
 - Yonetim:
     - Portainer:
-        href: "http://192.168.0.15:9000/"
+        href: "http://<IP>:9000/"
         description: "Docker konteynerleri"
         icon: "portainer.png"
         server: "yerel"
         container: "portainer"
     - Dockge:
-        href: "http://192.168.0.15:5001/"
+        href: "http://<IP>:5001/"
         description: "Compose stackleri"
         icon: "dockge.png"
         server: "yerel"
         container: "dockge"
     - Netdata:
-        href: "http://192.168.0.15:19999/"
+        href: "http://<IP>:19999/"
         description: "Canli sistem izleme"
         icon: "netdata.png"
         server: "yerel"
         container: "netdata"
     - Cockpit:
-        href: "https://192.168.0.15:9090/"
+        href: "https://<IP>:9090/"
         description: "Sunucu paneli + sanal makineler"
         icon: "cockpit.png"
     - AdGuard:
-        href: "http://192.168.0.15:8888/"
+        href: "http://<IP>:8888/"
         description: "Sifreli DNS + reklam/tehdit engeli"
         icon: "adguard-home.png"
         server: "yerel"
         container: "adguardhome"
     - CheckCle:
-        href: "http://192.168.0.15:8090/"
+        href: "http://<IP>:8090/"
         description: "Servis durum takibi"
         icon: "mdi-heart-pulse"
         server: "yerel"
         container: "checkcle"
     - code-server:
-        href: "http://192.168.0.15:8444/"
+        href: "http://<IP>:8444/"
         description: "Tarayicida VS Code"
         icon: "code-server.png"
         server: "yerel"

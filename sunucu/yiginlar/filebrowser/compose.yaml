@@ -1,0 +1,15 @@
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    user: 0:0
+    environment:
+      - TZ=Europe/Istanbul
+    volumes:
+      - /:/srv
+      - /DATA/AppData/filebrowser/database:/database
+      - /DATA/AppData/filebrowser/config:/config
+    ports:
+      - 8085:80
+    restart: unless-stopped
+networks: {}

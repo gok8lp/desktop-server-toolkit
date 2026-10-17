@@ -1,0 +1,18 @@
+services:
+  tapmap-god-mode:
+    build:
+      context: https://github.com/olalie/tapmap.git#main
+      dockerfile: Dockerfile
+    container_name: tapmap-god-mode
+    restart: unless-stopped
+    # ⚠️ BURASI ÇOK KRİTİK
+    network_mode: host       # Sunucudaki TÜM ağ kartlarını (fiziksel ve sanal) görür
+    privileged: true         # Kernel seviyesinde her paketi okur
+    environment:
+      - INTERFACE=any        # 'any' diyerek Docker bridge'leri dahil her şeyi dinler
+    volumes:
+      - /DATA/AppData/tapmap/data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 1G

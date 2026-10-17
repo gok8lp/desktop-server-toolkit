@@ -13,7 +13,7 @@ if [ "$ACTION" = "prepare" ] && [ "$SUB" = "begin" ]; then
   if [ -n "$DIGER" ] && [ -e "/run/libvirt/qemu/$DIGER.pid" ]; then echo "$(date '+%F %T') $VM: $DIGER zaten acik, baslatma reddedildi" >> /var/log/libvirt/gpu-hook.log; exit 1; fi
 fi
 # Moonlight/Apollo port yonlendirme (W11 -> .51, W11-GPU -> .50)
-case "$VM" in W11) VMIP=192.168.122.51;; W11-GPU) VMIP=192.168.122.50;; *) VMIP="";; esac
+case "$VM" in W11) VMIP=<IP>;; W11-GPU) VMIP=<IP>;; *) VMIP="";; esac
 if [ -n "$VMIP" ]; then
   [ "$ACTION" = "started" ] && [ "$SUB" = "begin" ] && /usr/local/sbin/vm-yonlendir.sh ekle $VMIP
   [ "$ACTION" = "release" ] && [ "$SUB" = "end" ] && /usr/local/sbin/vm-yonlendir.sh sil $VMIP

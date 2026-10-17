@@ -387,7 +387,7 @@ async function sunucuSayfa(ic) {
       <small>${st.cevrilen || 0} haber Türkçeye çevrildi · ${st.puanlanan || 0} haber AI tarafından puanlandı</small></div></div>
     ${kaynakTablo}
     <div class="kutu" style="margin:16px"><a class="oge" href="#/uygulamalar"><b>Tüm uygulamalar →</b><small>Jellyfin, Immich, Nextcloud ve diğerleri, canlı durumlarıyla</small></a>
-    <a class="oge" href="http://192.168.0.15:3011/durum" target="_blank"><b>Ayrıntılı durum sayfası →</b><small>AI analizi ve günlük özet</small></a></div>`;
+    <a class="oge" href="http://<IP>:3011/durum" target="_blank"><b>Ayrıntılı durum sayfası →</b><small>AI analizi ve günlük özet</small></a></div>`;
   $("#nobet").innerHTML = "";
 }
 
@@ -404,7 +404,7 @@ async function ayarSayfa(ic) {
       ${"Notification" in window && Notification.permission !== "granted" && isSecureContext ? '<button class="ai-buyuk" style="width:auto;padding:8px 18px;margin-top:8px;font-size:14px" data-bildirim-ac>Bildirimlere izin ver</button>' : ""}</div></div>
     <div class="kutu" style="margin:16px"><h2>Telefon</h2>
       <a class="oge" href="/indir/FLUGEL.apk"><b>Android uygulamasını indir (APK)</b><small>Sadece Tailscale ağında çalışır · ek izin istemez, yalnızca bu sayfayı açar</small></a>
-      <div class="oge"><b>iPhone / diğer</b><small>https://flugelserver.tail42f1f4.ts.net:8443 adresini aç → Paylaş → Ana ekrana ekle</small></div></div>`;
+      <div class="oge"><b>iPhone / diğer</b><small>https://flugelserver.<tailnet>.ts.net:8443 adresini aç → Paylaş → Ana ekrana ekle</small></div></div>`;
   $("#takip-form").onsubmit = async e => { e.preventDefault(); const v = $("input", e.target).value.trim(); if (v) { await api("/api/takip", { kelime: v }); ayarSayfa(ic); } };
   $("#nobet").innerHTML = "";
 }

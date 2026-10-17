@@ -1,0 +1,11 @@
+services:
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    mem_limit: 1536m   # sistem-bakim v2: makul bellek sınırı
+    container_name: flaresolverr
+    network_mode: container:gluetun
+    user: root
+    environment:
+      - LOG_LEVEL=info
+      - TZ=Europe/Istanbul
+    restart: unless-stopped

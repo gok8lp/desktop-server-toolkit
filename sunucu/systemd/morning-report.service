@@ -1,0 +1,6 @@
+[Unit]
+Description=Sabah sunucu raporu
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/morning-report.sh

@@ -1,0 +1,33 @@
+services:
+  subgen:
+    image: mccloud/subgen:latest
+    container_name: subgen
+    restart: unless-stopped
+    runtime: nvidia
+    mem_limit: 4g
+    environment:
+      - WHISPER_MODEL=medium
+      - WHISPER_THREADS=4
+      - CONCURRENT_TRANSCRIPTIONS=1   # 2 iken 4 GB sinirini asip OOM oluyordu (sistem-bakim)
+      - TRANSCRIBE_OR_TRANSLATE=translate
+      - NAMESUBLANG=en
+      - OVERWRITE_EXISTINGSUBS=true
+      - USE_GPU=true
+      - TRANSCRIBE_DEVICE=cuda
+      - PLEX_TOKEN=${PLEX_TOKEN}
+      - PLEX_SERVER=http://<IP>:32400
+    ports:
+      - 8091:9000
+    volumes:
+      - /mnt/sidemain/series:/tv:Z
+      - /mnt/sidemain/movies:/movies:Z
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities:
+                - gpu
+                - compute
+                - utility

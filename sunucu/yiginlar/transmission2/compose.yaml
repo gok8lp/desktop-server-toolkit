@@ -1,0 +1,15 @@
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    mem_limit: 768m   # sistem-bakim v2: makul bellek sınırı
+    container_name: transmission
+    network_mode: "container:gluetun"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /arrapps/transmission:/config:Z
+      - /mnt/side/downloads:/downloads:Z
+      - /mnt/side/watch:/watch:Z
+    restart: unless-stopped

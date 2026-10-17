@@ -1,0 +1,19 @@
+services:
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    restart: unless-stopped
+    mem_limit: 768m
+    ports:
+      - <IP>:53:53/tcp
+      - <IP>:53:53/udp
+      - <IP>:53:53/tcp
+      - <IP>:53:53/udp
+      - 0.0.0.0:3000:3000/tcp
+      - 0.0.0.0:8888:80/tcp
+      - 0.0.0.0:853:853/tcp
+      - 0.0.0.0:853:853/udp
+    volumes:
+      - /home/flugel/adguard/work:/opt/adguardhome/work
+      - /home/flugel/adguard/conf:/opt/adguardhome/conf
+      - /etc/letsencrypt:/etc/letsencrypt:ro

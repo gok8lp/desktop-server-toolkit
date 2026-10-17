@@ -1,0 +1,15 @@
+services:
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    mem_limit: 512m   # sistem-bakim v2: makul bellek sınırı
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+      - AUTO_UPDATE=true
+    volumes:
+      - /arrapps/jackett:/config:Z
+    ports:
+      - 9117:9117
+    restart: unless-stopped

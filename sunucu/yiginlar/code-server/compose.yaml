@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    mem_limit: 1536m   # sistem-bakim v2: makul bellek sınırı
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+      - PASSWORD=${PASSWORD} # Giriş şifren (değiştirmeyi unutma)
+      - SUDO_PASSWORD=${SUDO_PASSWORD} # Terminal için sudo şifren
+    volumes:
+      - /arrapps/code-server:/config:Z
+      - /mnt/sidemain:/workspace:Z # Ana deponu workspace olarak tanımladık
+    ports:
+      - 8444:8443 # Nextcloud 8443'ü aldığı için bunu 8444 yaptık
+    restart: unless-stopped

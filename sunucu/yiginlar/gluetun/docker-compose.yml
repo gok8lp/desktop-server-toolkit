@@ -1,0 +1,24 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    mem_limit: 256m   # sistem-bakim v2: makul bellek sınırı
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    network_mode: bridge
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 8889:8888/tcp
+      - 9091:9091/tcp
+      - 51413:51413/tcp
+      - 51413:51413/udp
+      - 9696:9696/tcp
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=<IP>/32
+      - SERVER_COUNTRIES=Sweden
+      - BLOCK_IPV6=on
+    restart: unless-stopped

@@ -1,0 +1,9 @@
+[Unit]
+Description=GTX 1660 Ti tasarruf ayari (persistence + guc siniri)
+After=nvidia-persistenced.service systemd-modules-load.service
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'nvidia-smi -pm 1; MIN=$(nvidia-smi --query-gpu=power.min_limit --format=csv,noheader,nounits | cut -d. -f1); PL=90; [ "$MIN" -gt "$PL" ] && PL=$MIN; nvidia-smi -pl $PL'
+[Install]
+WantedBy=multi-user.target

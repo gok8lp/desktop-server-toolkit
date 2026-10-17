@@ -1,0 +1,6 @@
+[Unit]
+Description=Swap kullanimini esik gecince temizle
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/swap-flush.sh

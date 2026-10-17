@@ -1,0 +1,8 @@
+[Unit]
+Description=FLUGEL: acilista giris ekranini (lightdm) baslat
+After=multi-user.target plymouth-quit-wait.service systemd-user-sessions.service
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl --no-block start lightdm.service
+[Install]
+WantedBy=graphical.target

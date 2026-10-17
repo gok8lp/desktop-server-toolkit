@@ -1,0 +1,16 @@
+services:
+  kavita:
+    image: lscr.io/linuxserver/kavita:latest # Resmi ve stabil LinuxServer imajı
+    mem_limit: 768m   # sistem-bakim v2: makul bellek sınırı
+    container_name: kavita
+    restart: unless-stopped
+    ports:
+      - 8295:5000
+    volumes:
+      - /arrapps/kavita:/config # Mevcut ayar klasörün aynen kalıyor
+      - /mnt/sidemain/books:/data/books # Kitap klasörün ve uzantıların güvende
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+networks: {}

@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  netdata:
+    image: netdata/netdata:latest
+    mem_limit: 768m   # sistem-bakim v2: makul bellek sınırı
+    container_name: netdata
+    ports:
+      - 19999:19999
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/lib/netdata/cache
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+volumes:
+  netdataconfig: null
+  netdatalib: null
+  netdatacache: null

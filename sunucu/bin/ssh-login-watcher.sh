@@ -23,8 +23,9 @@ while read -r line; do
     
     # LAN mi WAN mi
     if echo "$IP" | grep -qE '^(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.|100\.)'; then
-      ICON="🏠"
-      LOC="LAN"
+      # ev agi / Tailscale: bilinen cihazlar -> bildirim yok, sadece kayit (sistem-bakim: 7 gunde 94 gereksiz bildirim)
+      echo "$TIMESTAMP $USER $IP $METHOD" >> /var/log/ssh-girisleri.log
+      continue
     else
       ICON="🌍"
       LOC="WAN"

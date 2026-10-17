@@ -1,0 +1,26 @@
+services:
+  kamiyomu:
+    image: marcoscostadev/kamiyomu:latest
+    mem_limit: 1g   # sistem-bakim v2: makul bellek sınırı
+    container_name: kamiyomu
+    restart: unless-stopped
+    ports:
+      - "2342:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/sidemain/downloads/openbooks/books/kamiyomu:/manga
+      - /mnt/sidemain/kamiyomu/database:/db
+      - /mnt/sidemain/kamiyomu/agents:/agents
+      - /mnt/sidemain/kamiyomu/logs:/logs
+    environment:
+      - TZ=Europe/Istanbul
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

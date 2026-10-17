@@ -1,0 +1,21 @@
+version: "3.3"
+services:
+  openbooks:
+    container_name: openbooks
+    image: evanbuss/openbooks:latest
+    mem_limit: 256m   # sistem-bakim v2: makul bellek sınırı
+    restart: unless-stopped
+    ports:
+      - 8285:80
+    volumes:
+      - /mnt/sidemain/books/ln:/books
+    # --tls=false ile şifrelemeyi kapatıp 6667'ye düz bağlanıyoruz
+    # --name kısmına 'kitap' veya 'reader' içermeyen çok rastgele bir isim seçtik
+    command: --persist --name gokalp_tech_2026 --server irc.irchighway.net:6667
+      --tls=false
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+      - BASE_PATH=/
+networks: {}

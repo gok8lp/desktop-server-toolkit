@@ -1,0 +1,16 @@
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    mem_limit: 768m   # sistem-bakim v2: makul bellek sınırı
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      - /arrapps/radarr:/config:Z
+      - /mnt/sidemain/movies:/movies:Z
+      - /mnt/side/downloads:/downloads:Z
+    ports:
+      - 7878:7878
+    restart: unless-stopped
