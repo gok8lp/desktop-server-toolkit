@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 22:06+0300\n"
+"POT-Creation-Date: 2026-10-17 21:52+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -1060,6 +1060,29 @@ msgstr "Clean link"
 msgid "Pano: %s"
 msgstr "Clipboard: %s"
 
+msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgstr "Clipboard history (this session only, in memory)"
+
+msgid "Henüz kopyalanan metin yok"
+msgstr "Nothing copied yet"
+
+#
+msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgstr "Click: copy again · right-click: remove from list"
+
+msgid "Renk seçici"
+msgstr "Color picker"
+
+msgid "Ekrandan renk seç"
+msgstr "Pick a color from the screen"
+
+msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
+msgstr "Picked colors appear here (copied to the clipboard as HEX)"
+
+#
+msgid "Tıkla: kopyala"
+msgstr "Click: copy"
+
 #, javascript-format
 msgid "Kronometre · %s"
 msgstr "Stopwatch · %s"
@@ -1176,9 +1199,6 @@ msgstr "No matches"
 msgid "Yıldızladığın metinler burada kalıcı durur"
 msgstr "Texts you star are kept here"
 
-msgid "Henüz kopyalanan metin yok"
-msgstr "Nothing copied yet"
-
 msgid "Favorilere ekle (kalıcı)"
 msgstr "Add to favorites (kept)"
 
@@ -1186,17 +1206,11 @@ msgstr "Add to favorites (kept)"
 msgid "Tıkla: yeniden kopyala · sağ tık: sil"
 msgstr "Click: copy again · right-click: remove"
 
-msgid "Renk seçici"
-msgstr "Color picker"
-
 msgid "Renk seç"
 msgstr "Pick color"
 
 msgid "Renk geçmişini temizle"
 msgstr "Clear color history"
-
-msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
-msgstr "Picked colors appear here (copied to the clipboard as HEX)"
 
 msgid "Son renkler"
 msgstr "Recent colors"
@@ -1216,20 +1230,6 @@ msgstr "picked %s"
 #
 msgid "Biçimler"
 msgstr "Formats"
-
-#
-msgid "Tıkla: kopyala"
-msgstr "Click: copy"
-
-msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
-msgstr "Clipboard history (this session only, in memory)"
-
-#
-msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
-msgstr "Click: copy again · right-click: remove from list"
-
-msgid "Ekrandan renk seç"
-msgstr "Pick a color from the screen"
 
 #, javascript-format
 msgid "Çalışma alanı %s / %s"
@@ -1293,14 +1293,17 @@ msgstr "Battery Saver"
 msgid "Parlaklık %40, animasyonsuz"
 msgstr "40% brightness, no animations"
 
-msgid "Açık"
-msgstr "Running"
+msgid "Açık hava"
+msgstr "Clear"
 
 msgid "Az bulutlu"
 msgstr "Mostly clear"
 
 msgid "Parçalı bulutlu"
 msgstr "Partly cloudy"
+
+msgid "Kapalı hava"
+msgstr "Overcast"
 
 msgid "Sisli"
 msgstr "Foggy"
@@ -1354,6 +1357,9 @@ msgstr "On · click: turn off"
 
 msgid "Kapalı · tıkla: aç"
 msgstr "Off · click: turn on"
+
+msgid "Açık"
+msgstr "On"
 
 #
 msgid "Uçak modu"
@@ -1444,7 +1450,7 @@ msgstr "Connecting…"
 
 #, javascript-format
 msgid "Bağlı · pil %%%s"
-msgstr "Connected · battery %%%s"
+msgstr "Connected · battery %s%%"
 
 #
 msgid "Bağlı"
@@ -1601,6 +1607,21 @@ msgstr "App volumes and output device"
 msgid "Parlaklık"
 msgstr "Brightness"
 
+msgid "10 sn geri"
+msgstr "Back 10 s"
+
+msgid "Önceki"
+msgstr "Previous"
+
+msgid "Oynat / duraklat"
+msgstr "Play / pause"
+
+msgid "Sonraki"
+msgstr "Next"
+
+msgid "10 sn ileri"
+msgstr "Forward 10 s"
+
 #
 msgid "Çıkış cihazı"
 msgstr "Output device"
@@ -1611,26 +1632,11 @@ msgstr "Shuffle"
 msgid "Önceki · sağ tık: 10 sn geri"
 msgstr "Previous · right-click: back 10 s"
 
-msgid "Oynat / duraklat"
-msgstr "Play / pause"
-
 msgid "Sonraki · sağ tık: 10 sn ileri"
 msgstr "Next · right-click: forward 10 s"
 
 msgid "Tekrar: kapalı → liste → parça"
 msgstr "Repeat: off → playlist → track"
-
-msgid "10 sn geri"
-msgstr "Back 10 s"
-
-msgid "Önceki"
-msgstr "Previous"
-
-msgid "Sonraki"
-msgstr "Next"
-
-msgid "10 sn ileri"
-msgstr "Forward 10 s"
 
 msgid "komut çalışmadı"
 msgstr "command failed"
@@ -1828,7 +1834,7 @@ msgstr "%s battery low"
 
 #, javascript-format
 msgid "%%%s · şarj et"
-msgstr "%%%s · charge it"
+msgstr "%s%% · charge it"
 
 msgid "Kablosuz aygıtlar"
 msgstr "Wireless devices"
@@ -3029,7 +3035,7 @@ msgstr "RAM <b>%s / %s GB</b>   Disk <b>%s</b> used"
 
 #, javascript-format
 msgid "Pil <b>%%%s</b>  %s%s%s"
-msgstr "Battery <b>%%%s</b>  %s%s%s"
+msgstr "Battery <b>%s%%</b>  %s%s%s"
 
 msgid " · yenilemeler seyrek"
 msgstr " · refreshing less often"
@@ -3093,6 +3099,9 @@ msgstr "Windows without GPU (same disk); connect through the console"
 
 msgid "Mullvad + Tailscale çıkış düğümü"
 msgstr "Mullvad + Tailscale exit node"
+
+msgid "Çalışıyor"
+msgstr "Running"
 
 msgid "Duraklatıldı"
 msgstr "Paused"

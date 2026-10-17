@@ -3,6 +3,7 @@
 // değiştirmemek için .mo dosyası burada okunur. Saf modül: hem kabukta hem ayar penceresinde çalışır.
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
+import {systemLanguage} from './i18n.js';
 
 let tablo = null;
 export let DIL = 'tr';
@@ -32,7 +33,7 @@ function moOku(yol) {
 }
 
 export function dilKur(eklentiYolu, secim = 'sistem') {
-    const sistem = GLib.get_language_names().some(l => l.startsWith('tr')) ? 'tr' : 'en';
+    const sistem = systemLanguage(GLib.get_language_names());
     DIL = secim === 'tr' || secim === 'en' ? secim : sistem;
     tablo = DIL === 'tr' ? null : moOku(`${eklentiYolu}/locale/${DIL}/LC_MESSAGES/flugel-island.mo`);
 }

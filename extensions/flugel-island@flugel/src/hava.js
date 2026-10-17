@@ -8,7 +8,7 @@ import {ipucuBagla} from './bilesenler.js';
 import {_, f} from './dil.js';
 
 // WMO hava kodları (çeviri için burada; betik Türkçe adı da gönderir)
-const DURUM = () => ({0: _('Açık'), 1: _('Az bulutlu'), 2: _('Parçalı bulutlu'), 3: _('Kapalı'), 45: _('Sisli'), 48: _('Sisli'),
+const DURUM = () => ({0: _('Açık hava'), 1: _('Az bulutlu'), 2: _('Parçalı bulutlu'), 3: _('Kapalı hava'), 45: _('Sisli'), 48: _('Sisli'),
     51: _('Çisenti'), 53: _('Çisenti'), 55: _('Çisenti'), 61: _('Yağmur'), 63: _('Yağmur'), 65: _('Kuvvetli yağmur'),
     71: _('Kar'), 73: _('Kar'), 75: _('Yoğun kar'), 80: _('Sağanak'), 81: _('Sağanak'), 82: _('Şiddetli sağanak'),
     95: _('Gök gürültülü fırtına')});

@@ -13,7 +13,7 @@ export const VM_ETIKET = {'W11-GPU': 'Windows (GPU)', 'W11': 'Windows', 'mullvad
 const VM_ACIKLAMA = () => ({'W11-GPU': _('Ekran kartı aktarılmış Windows; Moonlight ile bağlanılır'),
     'W11': _('GPU\'suz Windows (aynı disk); konsolla bağlanılır'), 'mullvad-ts': _('Mullvad + Tailscale çıkış düğümü')});
 const VM_SIMGE = {'W11-GPU': 'vm-windows', 'W11': 'vm-windows', 'mullvad-ts': 'vm-ubuntu'};
-const DURUM = () => ({'running': ['acik', _('Açık')], 'shut off': ['kapali', _('Kapalı')], 'paused': ['bekliyor', _('Duraklatıldı')],
+const DURUM = () => ({'running': ['acik', _('Çalışıyor')], 'shut off': ['kapali', _('Kapalı')], 'paused': ['bekliyor', _('Duraklatıldı')],
     'in shutdown': ['bekliyor', _('Kapanıyor…')]});
 
 export function vmKomut(...arg) {

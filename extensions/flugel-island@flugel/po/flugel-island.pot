@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 22:33+0300\n"
+"POT-Creation-Date: 2026-10-17 21:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -966,6 +966,27 @@ msgstr ""
 msgid "Pano: %s"
 msgstr ""
 
+msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgstr ""
+
+msgid "Henüz kopyalanan metin yok"
+msgstr ""
+
+msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgstr ""
+
+msgid "Renk seçici"
+msgstr ""
+
+msgid "Ekrandan renk seç"
+msgstr ""
+
+msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
+msgstr ""
+
+msgid "Tıkla: kopyala"
+msgstr ""
+
 #, javascript-format
 msgid "Kronometre · %s"
 msgstr ""
@@ -1072,25 +1093,16 @@ msgstr ""
 msgid "Yıldızladığın metinler burada kalıcı durur"
 msgstr ""
 
-msgid "Henüz kopyalanan metin yok"
-msgstr ""
-
 msgid "Favorilere ekle (kalıcı)"
 msgstr ""
 
 msgid "Tıkla: yeniden kopyala · sağ tık: sil"
 msgstr ""
 
-msgid "Renk seçici"
-msgstr ""
-
 msgid "Renk seç"
 msgstr ""
 
 msgid "Renk geçmişini temizle"
-msgstr ""
-
-msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
 msgstr ""
 
 msgid "Son renkler"
@@ -1107,18 +1119,6 @@ msgid "%s seçildi"
 msgstr ""
 
 msgid "Biçimler"
-msgstr ""
-
-msgid "Tıkla: kopyala"
-msgstr ""
-
-msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
-msgstr ""
-
-msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
-msgstr ""
-
-msgid "Ekrandan renk seç"
 msgstr ""
 
 #, javascript-format
@@ -1180,13 +1180,16 @@ msgstr ""
 msgid "Parlaklık %40, animasyonsuz"
 msgstr ""
 
-msgid "Açık"
+msgid "Açık hava"
 msgstr ""
 
 msgid "Az bulutlu"
 msgstr ""
 
 msgid "Parçalı bulutlu"
+msgstr ""
+
+msgid "Kapalı hava"
 msgstr ""
 
 msgid "Sisli"
@@ -1237,6 +1240,9 @@ msgid "Açık · tıkla: kapat"
 msgstr ""
 
 msgid "Kapalı · tıkla: aç"
+msgstr ""
+
+msgid "Açık"
 msgstr ""
 
 msgid "Uçak modu"
@@ -1467,6 +1473,21 @@ msgstr ""
 msgid "Parlaklık"
 msgstr ""
 
+msgid "10 sn geri"
+msgstr ""
+
+msgid "Önceki"
+msgstr ""
+
+msgid "Oynat / duraklat"
+msgstr ""
+
+msgid "Sonraki"
+msgstr ""
+
+msgid "10 sn ileri"
+msgstr ""
+
 msgid "Çıkış cihazı"
 msgstr ""
 
@@ -1476,25 +1497,10 @@ msgstr ""
 msgid "Önceki · sağ tık: 10 sn geri"
 msgstr ""
 
-msgid "Oynat / duraklat"
-msgstr ""
-
 msgid "Sonraki · sağ tık: 10 sn ileri"
 msgstr ""
 
 msgid "Tekrar: kapalı → liste → parça"
-msgstr ""
-
-msgid "10 sn geri"
-msgstr ""
-
-msgid "Önceki"
-msgstr ""
-
-msgid "Sonraki"
-msgstr ""
-
-msgid "10 sn ileri"
 msgstr ""
 
 msgid "komut çalışmadı"
@@ -2892,6 +2898,9 @@ msgid "GPU'suz Windows (aynı disk); konsolla bağlanılır"
 msgstr ""
 
 msgid "Mullvad + Tailscale çıkış düğümü"
+msgstr ""
+
+msgid "Çalışıyor"
 msgstr ""
 
 msgid "Duraklatıldı"
