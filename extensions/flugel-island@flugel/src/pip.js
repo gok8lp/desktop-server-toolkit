@@ -25,7 +25,7 @@ export function pipMi(w) {
 export class PipYoneticisi {
     constructor(ayarlar) {
         this._ayar = ayarlar;
-        this._pencereler = new Map();   // MetaWindow → {idler, aktor, aktorId, pip, yerlesti, sessiz, kayitId}
+        this._pencereler = new Map();   // MetaWindow → sinyaller, zamanlayıcılar ve canlı aktör
     }
 
     enable() {
@@ -55,6 +55,13 @@ export class PipYoneticisi {
         if (yeni && aktor) {
             // konum, pencere ilk karesini çizdikten sonra verilir (önce verilirse istemci ezebilir)
             k.aktor = aktor;
+            k.aktorYokId = aktor.connect('destroy', () => {
+                // Mutter aktörü MetaWindow'un unmanaged sinyalinden önce yok edebilir.
+                // Artık geçersiz aktörde disconnect() çağırmamak için referansı bırak.
+                k.aktor = null;
+                k.aktorId = 0;
+                k.aktorYokId = 0;
+            });
             k.aktorId = aktor.connect('first-frame', () => {
                 k.ilkKare = true;
                 this._kontrol(w);
@@ -69,14 +76,19 @@ export class PipYoneticisi {
         const k = this._pencereler.get(w);
         if (!k)
             return;
+        this._pencereler.delete(w);
         k.idler.forEach(id => w.disconnect(id));
-        if (k.aktor && k.aktorId)
-            k.aktor.disconnect(k.aktorId);
+        if (k.aktor) {
+            if (k.aktorId)
+                k.aktor.disconnect(k.aktorId);
+            if (k.aktorYokId)
+                k.aktor.disconnect(k.aktorYokId);
+            k.aktor = null;
+        }
         for (const id of [k.kayitId, k.sessizId]) {
             if (id)
                 GLib.source_remove(id);
         }
-        this._pencereler.delete(w);
     }
 
     _kontrol(w) {
@@ -136,7 +148,9 @@ export class PipYoneticisi {
         } catch (e) {
             k = null;
         }
-        if (!k || !Number.isFinite(k.dx) || !Number.isFinite(k.dy) || !(k.w > 50) || !(k.h > 50))
+        if (!k || typeof k !== 'object' || !['sol-ust', 'sol-alt', 'sag-ust', 'sag-alt'].includes(k.kose) ||
+            !Number.isFinite(k.dx) || k.dx < 0 || !Number.isFinite(k.dy) || k.dy < 0 ||
+            !Number.isFinite(k.w) || k.w <= 50 || !Number.isFinite(k.h) || k.h <= 50)
             return null;
         const {i, alan} = this._calismaAlani(k.monitor ?? -1);
         const x = k.kose.startsWith('sol') ? alan.x + k.dx : alan.x + alan.width - k.w - k.dx;

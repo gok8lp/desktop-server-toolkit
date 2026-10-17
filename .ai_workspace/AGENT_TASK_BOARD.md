@@ -39,6 +39,20 @@ Aktif görevler sahip alanında görünür. Başka ajanın işi varsayılmaz.
 - Kanıt: 2026-10-17: yerel envanter üretildi, JSON doğrulandı ve görev kapsamı çakışması testi geçti; uygulama/sunucu konfigürasyonu değişmedi
 - Sonraki adım: AI-002 ve AI-003 uygun ajanlar tarafından üstlenilebilir
 
+## AI-005 — Island derin performans ve hata analizi
+
+- Durum: `ready`; sahip: `yok`; kira sonu: `yok`
+- Dosyalar: `extensions/flugel-island@flugel`, `../flugel-island/flugel-island@flugel`
+- Kanıt: PiP aktör yaşam döngüsü ve bozuk konum düzeltildi; ESLint, 35/35, başsız 24/24 PiP döngüsü; kurulu dosya güncel, canlı oturum henüz yenilenmedi
+- Sonraki adım: Yeni oturumda canlı PiP ve GJS kapanış uyarısını A/B doğrula; animasyon/veri ömrü analizini sürdür
+
+## AI-006 — PC kasma ve kaynak analizi
+
+- Durum: `ready`; sahip: `yok`; kira sonu: `yok`
+- Dosyalar: `pc`
+- Kanıt: RAM/swap/I-O baskısı yok; Btrfs kök %82 dolu; libinput 20-39 ms gecikme ve Chrome renderer yüksek CPU görüldü; servis/cache/kernel değişmedi
+- Sonraki adım: Chrome Görev Yöneticisi ile yoğun sekmeleri saptayıp GNOME efektleri açık/kapalı gecikme ölçümü yap
+
 ## Kullanım
 
 ```bash

@@ -66,6 +66,35 @@
       "created_by": "codex",
       "updated_at": "2026-10-17T10:15:18+00:00",
       "lease_until": null
+    },
+    {
+      "id": "AI-005",
+      "title": "Island derin performans ve hata analizi",
+      "status": "ready",
+      "owner": null,
+      "paths": [
+        "extensions/flugel-island@flugel",
+        "../flugel-island/flugel-island@flugel"
+      ],
+      "evidence": "PiP aktör yaşam döngüsü ve bozuk konum düzeltildi; ESLint, 35/35, başsız 24/24 PiP döngüsü; kurulu dosya güncel, canlı oturum henüz yenilenmedi",
+      "next": "Yeni oturumda canlı PiP ve GJS kapanış uyarısını A/B doğrula; animasyon/veri ömrü analizini sürdür",
+      "created_by": "codex",
+      "updated_at": "2026-10-17T10:30:19+00:00",
+      "lease_until": null
+    },
+    {
+      "id": "AI-006",
+      "title": "PC kasma ve kaynak analizi",
+      "status": "ready",
+      "owner": null,
+      "paths": [
+        "pc"
+      ],
+      "evidence": "RAM/swap/I-O baskısı yok; Btrfs kök %82 dolu; libinput 20-39 ms gecikme ve Chrome renderer yüksek CPU görüldü; servis/cache/kernel değişmedi",
+      "next": "Chrome Görev Yöneticisi ile yoğun sekmeleri saptayıp GNOME efektleri açık/kapalı gecikme ölçümü yap",
+      "created_by": "codex",
+      "updated_at": "2026-10-17T10:30:19+00:00",
+      "lease_until": null
     }
   ]
 }
