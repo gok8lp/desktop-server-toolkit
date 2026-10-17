@@ -14,6 +14,11 @@ if ! grep -Fq "PiP izlenen pencere sayısı: (true, '0')" <<<"$OUTPUT"; then
     echo 'PiP pencere izleyicileri temizlenmedi' >&2
     exit 1
 fi
+if ! grep -Fq 'GNOME tarafından görülen PiP döngüsü: 24/24' <<<"$OUTPUT"; then
+    printf '%s\n' "$OUTPUT"
+    echo 'PiP pencerelerinin tümü GNOME tarafından görülmedi' >&2
+    exit 1
+fi
 if rg -q 'pip\.js:|already disposed|has no handler with id|JS ERROR.*pip' "$DIR/shell.log"; then
     rg -n 'pip\.js:|already disposed|has no handler with id|JS ERROR.*pip' "$DIR/shell.log" >&2
     exit 1
