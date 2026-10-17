@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FLUGEL Island — Menü v2 alternatifleri</title>
+  <style>
+    :root { color-scheme: dark; --ink:#050506; --card:#101114; --raised:#1b1c20; --hover:#26272c; --line:rgba(255,255,255,.12); --text:#f5f5f7; --muted:#a7a8b0; --quiet:#777982; }
+    * { box-sizing:border-box; }
+    body { margin:0; padding:40px 22px 70px; background:#090a0c; color:var(--text); font:14px/1.42 system-ui,sans-serif; }
+    header, main, footer { max-width:1200px; margin:auto; }
+    h1 { font-size:26px; letter-spacing:-.04em; margin:0 0 8px; }
+    header p, footer, .note { color:var(--muted); }
+    header p { max-width:760px; margin:0; }
+    main { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin-top:30px; }
+    .sample { background:#15161a; border:1px solid var(--line); border-radius:18px; padding:20px; min-width:0; }
+    .sample.wide { grid-column:1/-1; }
+    .sample h2 { font-size:16px; margin:0 0 4px; }
+    .sample .note { font-size:12px; margin:0 0 16px; }
+    .canvas { background:#1b1c20; border-radius:12px; padding:8px 10px 22px; display:flex; flex-direction:column; align-items:center; min-height:530px; overflow:hidden; }
+    .card { width:min(100%,720px); background:var(--card); border:1px solid var(--line); border-radius:0 0 26px 26px; padding:16px; min-height:470px; }
+    .narrow .card { max-width:560px; }
+    .mast { display:flex; align-items:center; gap:12px; padding-bottom:13px; border-bottom:1px solid var(--line); }
+    .mast .clock { font-size:25px; line-height:1; font-weight:800; letter-spacing:-.04em; }
+    .mast .date { font-size:11px; color:var(--muted); margin-top:4px; }
+    .mast .spacer { flex:1; }
+    .mast .head-action { width:32px; height:32px; border:1px solid var(--line); border-radius:50%; display:grid; place-items:center; color:var(--muted); font-size:12px; }
+    .live { display:grid; gap:6px; margin:12px 0 10px; }
+    .live-row { display:flex; align-items:center; gap:9px; min-height:40px; padding:7px 10px; background:var(--raised); border:1px solid var(--line); border-radius:12px; font-size:12px; }
+    .live-row .mark { width:20px; height:20px; flex:none; border-radius:6px; border:2px solid #c6c7cc; }
+    .live-row .title { flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .live-row .meta { color:var(--muted); font-size:11px; }
+    .more { border:1px solid var(--line); background:transparent; border-radius:9px; color:var(--muted); padding:6px 11px; font:inherit; font-size:11px; justify-self:start; }
+    .groups { display:flex; gap:4px; margin:12px 0 10px; padding:4px; background:#17181c; border-radius:13px; overflow:hidden; }
+    .group { flex:1; text-align:center; border-radius:10px; padding:9px 3px; color:var(--muted); font-size:11px; white-space:nowrap; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+    .group.active { background:var(--raised); color:var(--text); border:1px solid var(--line); padding:8px 2px; }
+    .subnav { display:flex; gap:8px; align-items:center; border-bottom:1px solid var(--line); padding:0 0 10px; margin-bottom:12px; font-size:11px; }
+    .subnav span { color:var(--muted); padding:4px 7px; }
+    .subnav .selected { background:var(--raised); color:var(--text); border-radius:7px; }
+    .section-title { font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.04em; margin:12px 0 8px; }
+    .controls { display:grid; grid-template-columns:repeat(2,1fr); gap:7px; }
+    .control { padding:9px 11px; min-height:42px; border-radius:11px; background:var(--raised); border:1px solid var(--line); display:flex; justify-content:space-between; gap:6px; font-size:12px; }
+    .control small { color:var(--muted); white-space:nowrap; }
+    .tiles { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+    .tile { min-height:62px; padding:8px; border:1px solid var(--line); border-radius:11px; background:var(--raised); font-size:11px; display:flex; align-items:end; }
+    .bottom { display:flex; justify-content:flex-end; margin-top:10px; }
+    .plain { background:transparent; border:1px solid var(--line); border-radius:9px; padding:6px 10px; color:var(--muted); font:inherit; font-size:11px; }
+    .today { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .today .tile { min-height:82px; }
+    .list { border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+    .list div { padding:10px 12px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; font-size:12px; }
+    .list div:last-child { border-bottom:0; }
+    .list small { color:var(--muted); }
+    .caption { color:var(--quiet); font-size:11px; margin-top:12px; }
+    footer { margin-top:26px; font-size:12px; }
+    @media (max-width:850px) { main { grid-template-columns:1fr; } .sample.wide { grid-column:auto; } }
+    @media (max-width:520px) { .sample { padding:12px; } .card { padding:12px; } .tiles { grid-template-columns:repeat(2,1fr); } .mast .head-action:nth-last-child(3) { display:none; } }
+  </style>
+</head>
+<body>
+  <header><h1>FLUGEL Island / Menü v2</h1><p>Üç statik yerleşim. Aynı opak, mat AI-010 görsel dili; canlı alan en çok iki satır, geri kalanı “+N daha”. Bu HTML GNOME kodu değil, karar vermek için makettir.</p></header>
+  <main>
+    <section class="sample wide" aria-label="A seçeneği: dengeli beş grup">
+      <h2>A / Dengeli beş grup — önerilen</h2><p class="note">Eski on sayfa beş açık etiketli grupta. Ana ilk ekranda kısa; tüm araçlar korunur.</p>
+      <div class="canvas"><div class="card">
+        <div class="mast"><div><div class="clock">21:53</div><div class="date">17 Ekim Cumartesi · 19°</div></div><div class="spacer"></div><span class="head-action" title="Ayarlar">A</span><span class="head-action" title="Güç">G</span><span class="head-action" title="Kapat">X</span></div>
+        <div class="live"><div class="live-row"><span class="mark" aria-hidden="true"></span><span class="title">Gece Yolu · Çalıyor</span><span class="meta">2:14</span></div><div class="live-row"><span class="mark" aria-hidden="true"></span><span class="title">Sunucu · Yedek tamamlandı</span><span class="meta">Şimdi</span></div><button class="more" title="Diğer üç canlı etkinliği aç">+3 daha</button></div>
+        <nav class="groups" aria-label="Gruplar"><span class="group active" title="Hızlı ve Kısayollar">Ana</span><span class="group" title="Sistem ve Sanal makineler">Sistem</span><span class="group" title="Akış, Oyunlar, Anime">İçerik</span><span class="group" title="Maçlar ve Kripto">Takip</span><span class="group" title="Bildirimler">Bildirim</span></nav>
+        <div class="subnav" aria-label="Ana alt sayfaları"><span class="selected">Hızlı</span><span>Kısayollar</span></div>
+        <div class="section-title">GÜNLÜK KONTROLLER</div><div class="controls"><div class="control">Ses <small>%42</small></div><div class="control">Parlaklık <small>%78</small></div><div class="control">Wi-Fi <small>Açık</small></div><div class="control">Bluetooth <small>Kapalı</small></div></div>
+        <div class="section-title">SABİT UYGULAMALAR</div><div class="tiles"><div class="tile">Tarayıcı</div><div class="tile">Dosyalar</div><div class="tile">Terminal</div><div class="tile">Ekle</div></div>
+        <div class="section-title">SIK ARAÇLAR</div><div class="tiles"><div class="tile">Görüntü</div><div class="tile">Pano</div><div class="tile">Zamanlayıcı</div><div class="tile">Not</div></div><div class="bottom"><button class="plain" title="Tüm ayarlar, uygulamalar ve on iki araç">Tümü</button></div>
+      </div></div><p class="caption">Öncelik: kritik etkinlik başta; seçili grup ve iç sayfa son kullanılan sayfadan türetilir.</p>
+    </section>
+    <section class="sample" aria-label="B seçeneği: dört görev alanı">
+      <h2>B / Dört görev alanı</h2><p class="note">“Şimdi ne yapacağım?” yaklaşımı. Daha kısa üst gezinme, içeride daha fazla seçim.</p>
+      <div class="canvas narrow"><div class="card">
+        <div class="mast"><div><div class="clock">21:53</div><div class="date">Bugün · 19°</div></div><div class="spacer"></div><span class="head-action" title="Güç">G</span><span class="head-action" title="Kapat">X</span></div>
+        <div class="live"><div class="live-row"><span class="mark" aria-hidden="true"></span><span class="title">Yedek tamamlandı</span></div><div class="live-row"><span class="mark" aria-hidden="true"></span><span class="title">Gece Yolu · Çalıyor</span></div><button class="more" title="Üç etkinlik daha">+3 daha</button></div>
+        <nav class="groups" aria-label="Görev alanları"><span class="group active">Bugün</span><span class="group">Kontrol</span><span class="group">Keşfet</span><span class="group">Araçlar</span></nav>
+        <div class="section-title">ŞİMDİ</div><div class="today"><div class="tile">Son bildirimler</div><div class="tile">Yaklaşan maç</div><div class="tile">Günlük durum</div><div class="tile">Son Akış</div></div>
+        <div class="section-title">DİĞER ALANLAR</div><div class="list"><div>Kontrol <small>Hızlı · Sistem · VM</small></div><div>Keşfet <small>Akış · Oyun · Anime · Takip</small></div><div>Araçlar <small>Kısayollar · 12 araç</small></div></div>
+      </div></div><p class="caption">Artı: dört üst alan. Eksi: “Bugün” canlı başlığıyla tekrar edebilir; Keşfet kalabalıklaşır.</p>
+    </section>
+    <section class="sample" aria-label="C seçeneği: kişisel yuvalar">
+      <h2>C / Kişisel beş yuva</h2><p class="note">Dört sayfa kullanıcı tarafından sabitlenir; Tümü, on sayfanın güvenli geri dönüş yoludur.</p>
+      <div class="canvas narrow"><div class="card">
+        <div class="mast"><div><div class="clock">21:53</div><div class="date">17 Ekim · 19°</div></div><div class="spacer"></div><span class="head-action" title="Ayarlar">A</span><span class="head-action" title="Kapat">X</span></div>
+        <div class="live"><div class="live-row"><span class="mark" aria-hidden="true"></span><span class="title">Gece Yolu · Çalıyor</span></div><button class="more" title="Dört etkinlik daha">+4 daha</button></div>
+        <nav class="groups" aria-label="Kişisel sayfalar"><span class="group active">Hızlı</span><span class="group">Sistem</span><span class="group">Akış</span><span class="group">Maçlar</span><span class="group">Tümü</span></nav>
+        <div class="section-title">SABİT SAYFALAR</div><div class="list"><div>Hızlı <small>Günlük kontroller</small></div><div>Sistem <small>Bu PC · sunucu</small></div><div>Akış <small>Haberler</small></div><div>Maçlar <small>Görevler</small></div></div>
+        <div class="section-title">TÜM SAYFALAR</div><div class="list"><div>İçerik <small>Oyun · Anime · Kripto</small></div><div>Diğer <small>VM · Kısayol · Bildirim</small></div></div><div class="bottom"><button class="plain" title="Dört sabit sayfayı değiştir">Düzenle</button></div>
+      </div></div><p class="caption">Artı: kişisel rutin. Eksi: yeni ayar ve taşıma mantığı; ilk kullanımda keşif zor.</p>
+    </section>
+  </main>
+  <footer>İkonlar bu makette bilinçli olarak temsil edilmiyor. Uygulamada mevcut mono varlıklar, kısa etiketler ve açıklayıcı ipuçları kullanılmalı. Emoji, marka, blur, ağır gölge ve sürekli animasyon yok.</footer>
+</body>
+</html>
