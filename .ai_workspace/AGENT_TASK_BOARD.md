@@ -43,8 +43,8 @@ Aktif görevler sahip alanında görünür. Başka ajanın işi varsayılmaz.
 
 - Durum: `ready`; sahip: `yok`; kira sonu: `yok`
 - Dosyalar: `extensions/flugel-island@flugel`, `../flugel-island/flugel-island@flugel`
-- Kanıt: Blur/CSS kaynakları iki depoda ve kurulu kopyada eşit; lint, 35/35 birim, cam başsız görsel testi geçti; GitHub push hazırlanıyor.
-- Sonraki adım: Yeni GNOME oturumunda cam-efekti ve bulanik-gecis ayarlarını tek tek A/B test et; mouse takılırsa kapat.
+- Kanıt: GitHub main: flugel 9b0df19, flugel-island 7df2f8a; kurulu kopya eşit; ESLint, npm test 35/35, başsız cam görsel testi geçti; canlı blur ayarları kapalı.
+- Sonraki adım: GNOME oturumu yenilendikten sonra iki blur ayarını tek tek A/B test et; takılma varsa kapalı bırak.
 
 ## AI-006 — PC kasma ve kaynak analizi
 

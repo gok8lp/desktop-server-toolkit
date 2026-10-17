@@ -76,10 +76,10 @@
         "extensions/flugel-island@flugel",
         "../flugel-island/flugel-island@flugel"
       ],
-      "evidence": "Blur/CSS kaynakları iki depoda ve kurulu kopyada eşit; lint, 35/35 birim, cam başsız görsel testi geçti; GitHub push hazırlanıyor.",
-      "next": "Yeni GNOME oturumunda cam-efekti ve bulanik-gecis ayarlarını tek tek A/B test et; mouse takılırsa kapat.",
+      "evidence": "GitHub main: flugel 9b0df19, flugel-island 7df2f8a; kurulu kopya eşit; ESLint, npm test 35/35, başsız cam görsel testi geçti; canlı blur ayarları kapalı.",
+      "next": "GNOME oturumu yenilendikten sonra iki blur ayarını tek tek A/B test et; takılma varsa kapalı bırak.",
       "created_by": "codex",
-      "updated_at": "2026-10-17T10:47:14+00:00",
+      "updated_at": "2026-10-17T10:47:36+00:00",
       "lease_until": null
     },
     {

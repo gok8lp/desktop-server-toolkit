@@ -16,5 +16,5 @@ Her tamamlanan önemli görevden sonra bu özeti en fazla birkaç somut maddeyle
 
 - Canlı A/B: Island kapalı veya Island açıkken iki blur ayarı kapalı olduğunda fare akıcı; yalnız bulanik-gecis ya da yalnız cam-efekti açıkken takılma geri geliyor. USB G305 kopması veya NVIDIA Xid kanıtı yok. Canlı blur ayarları kapalı bırakıldı.
 - cam.js: değişmeyen pencere sahnesini yeniden kurmama, değişmeyen blur yarıçapını tekrar yazmama, geçişin ortasında blur efektini çizimden çıkarma. stylesheet.css: kapsül kenarı, yazı hiyerarşisi, kart ve sekme ayrımı, katmanlı kontrol yüzeyleri. Yeni blur/animasyon ve Apple markası yok.
-- Ana/ayrı depo ve kurulu kopya eşit. ESLint temiz, npm test 35/35; başsız GNOME cam görsel testi geçti. Ölçülen hızlanma yüzdesi doğrulanmadı. Canlı GNOME oturumu eski JS/CSS'i kullanıyor olabilir.
+- Ana/ayrı depo ve kurulu kopya eşit. ESLint temiz, npm test 35/35; başsız GNOME cam görsel testi geçti. Kod ve görünüm GitHub main dallarına gönderildi: flugel 9b0df19, flugel-island 7df2f8a. Ölçülen hızlanma yüzdesi doğrulanmadı. Canlı GNOME oturumu eski JS/CSS'i kullanıyor olabilir.
 - Kullanıcı oturumu kapatıp açtıktan sonra iki ayar kapalıyken kontrol et; sonra ayrı ayrı açıp fare ve kart açılışını kıyasla. Takılma sürerse ayarı geri kapat. Sürüm etiketi eklenmedi.
