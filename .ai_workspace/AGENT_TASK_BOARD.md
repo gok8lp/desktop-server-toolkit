@@ -43,8 +43,8 @@ Aktif görevler sahip alanında görünür. Başka ajanın işi varsayılmaz.
 
 - Durum: `ready`; sahip: `yok`; kira sonu: `yok`
 - Dosyalar: `extensions/flugel-island@flugel`, `../flugel-island/flugel-island@flugel`
-- Kanıt: PiP aktör yaşam döngüsü ve bozuk konum düzeltildi; ESLint, 35/35, başsız 24/24 PiP döngüsü; kurulu dosya güncel, canlı oturum henüz yenilenmedi
-- Sonraki adım: Yeni oturumda canlı PiP ve GJS kapanış uyarısını A/B doğrula; animasyon/veri ömrü analizini sürdür
+- Kanıt: Ana 4f6ad37, ayrı Island 64ccaf9 (yerel; push yok). ESLint, iki depoda 35/35, başsız 24 PiP döngüsü: 0 izleyici/0 PiP hatası. Canlı oturum yenilenmedi
+- Sonraki adım: Canlı oturum sonrası PiP doğrula; GJS GC kapanış uyarısını A/B incele, animasyon/veri ömrünü profil et
 
 ## AI-006 — PC kasma ve kaynak analizi
 
