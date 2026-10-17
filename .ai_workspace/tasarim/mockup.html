@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FLUGEL Island — Monochrome Contour</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #050506;
+      --card: #101114;
+      --raised: #1b1c20;
+      --hover: #26272c;
+      --line: rgba(255,255,255,.12);
+      --line-strong: rgba(255,255,255,.22);
+      --text: #f5f5f7;
+      --muted: #a7a8b0;
+      --quiet: #777982;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 42px 22px 72px;
+      background: #0a0b0d;
+      color: var(--text);
+      font: 14px/1.4 system-ui, sans-serif;
+    }
+    header, main, footer { max-width: 1100px; margin: auto; }
+    h1 { margin: 0; font-size: 26px; letter-spacing: -.04em; }
+    header p { color: var(--muted); max-width: 660px; }
+    h2 { margin: 0 0 12px; font-size: 14px; font-weight: 650; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 32px; }
+    .sample { border: 1px solid #27282d; border-radius: 18px; padding: 20px; background: #111216; }
+    .sample.wide { grid-column: 1 / -1; }
+    .screen {
+      min-height: 188px;
+      border: 1px solid #32333a;
+      border-radius: 11px;
+      background: #1c1d22;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .screen.tall { min-height: 600px; }
+    .top-edge { width: 100%; height: 9px; background: #09090b; }
+    .island {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-top: 0;
+      border-radius: 0 0 16px 16px;
+      background: var(--ink);
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .idle { width: 184px; justify-content: space-between; }
+    .compact { width: 324px; }
+    .split { width: 268px; }
+    .bubble { width: 38px; justify-content: center; padding: 0; border-radius: 0 0 16px 16px; }
+    .pair { display: flex; gap: 8px; align-items: start; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #a8d7ad; flex: none; }
+    .muted { color: var(--muted); }
+    .quiet { color: var(--quiet); }
+    .time { font-weight: 750; font-variant-numeric: tabular-nums; font-size: 14px; }
+    .micro { font-weight: 650; font-variant-numeric: tabular-nums; font-size: 11px; }
+    .cover { width: 20px; height: 20px; flex: none; border-radius: 5px; background: #c8c9ce; position: relative; }
+    .cover::after { content: ""; position: absolute; inset: 5px; border: 1px solid #33343a; border-radius: 2px; }
+    .stack { min-width: 0; display: flex; flex-direction: column; line-height: 1.05; gap: 2px; }
+    .stack strong { overflow: hidden; text-overflow: ellipsis; font-size: 11px; }
+    .stack small { overflow: hidden; text-overflow: ellipsis; font-size: 10px; color: var(--muted); }
+    .grow { flex: 1; min-width: 0; }
+    .progress { height: 2px; background: #4a4b52; width: 38px; border-radius: 2px; overflow: hidden; }
+    .progress::before { content: ""; display: block; width: 60%; height: 100%; background: #f5f5f7; }
+    .card {
+      width: min(720px, calc(100% - 28px));
+      min-height: 470px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-top: 0;
+      border-radius: 0 0 26px 26px;
+      background: var(--card);
+    }
+    .card-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+    .weather { font-size: 11px; color: var(--muted); }
+    .clock { font-size: 29px; font-weight: 800; letter-spacing: -.05em; font-variant-numeric: tabular-nums; line-height: 1; }
+    .date { margin-top: 3px; font-size: 12px; color: var(--muted); }
+    .actions { margin-left: auto; display: flex; gap: 5px; }
+    .action { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--raised); display: grid; place-items: center; color: var(--muted); font-weight: 700; font-size: 15px; }
+    .activity { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: var(--raised); }
+    .activity .cover { width: 30px; height: 30px; }
+    .activity .stack strong { font-size: 13px; }
+    .activity .stack small { font-size: 11px; }
+    .activity .time { font-size: 11px; }
+    .tabs { display: flex; justify-content: center; gap: 3px; max-width: 480px; margin: 14px auto 18px; padding: 3px; border-radius: 14px; background: #17181c; }
+    .tab { min-width: 64px; height: 34px; display: grid; place-items: center; padding: 0 10px; border-radius: 11px; color: var(--muted); font-size: 11px; }
+    .tab.current { color: var(--text); background: var(--raised); border: 1px solid var(--line); }
+    .section-label { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 10px; }
+    .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .tile { min-height: 100px; padding: 14px; border-radius: 16px; border: 1px solid var(--line); background: var(--raised); display: flex; flex-direction: column; justify-content: space-between; }
+    .tile strong { font-size: 13px; }
+    .tile small { color: var(--muted); font-size: 11px; }
+    .tile .symbol { width: 24px; height: 24px; border: 2px solid #d7d7dc; border-radius: 7px; }
+    .tile.dim { background: #15161a; }
+    .tile.dim .symbol { border-color: var(--quiet); }
+    footer { margin-top: 28px; color: var(--muted); font-size: 12px; }
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
+      .sample.wide { grid-column: auto; }
+      .card { min-height: 450px; }
+      .card-header { flex-wrap: wrap; }
+      .actions { margin-left: 0; }
+      .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tabs { max-width: 100%; overflow: hidden; }
+      .tab { min-width: 52px; padding: 0 5px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>FLUGEL Island / Monochrome Contour</h1>
+    <p>Dört durum, tek görsel dil. Mat yüzey, net hiyerarşi ve ince kenarlar; blur, gölge ve sürekli animasyon yok. Bunlar kaynak kod değil, Claude için statik uygulama maketleridir.</p>
+  </header>
+  <main class="grid">
+    <section class="sample" aria-label="Boş kapsül maketi">
+      <h2>01 / Boş kapsül</h2>
+      <div class="screen"><div class="top-edge"></div>
+        <div class="island idle"><span class="dot" aria-hidden="true"></span><span class="time">21:53</span><span class="micro muted">%84</span></div>
+      </div>
+    </section>
+    <section class="sample" aria-label="Kompakt etkinlik maketi">
+      <h2>02 / Kompakt etkinlik</h2>
+      <div class="screen"><div class="top-edge"></div>
+        <div class="island compact"><span class="cover" aria-hidden="true"></span><span class="stack grow"><strong>Gece Yolu</strong><small>FLUGEL Oynatıcı</small></span><span class="progress" aria-hidden="true"></span><span class="micro">2:14</span></div>
+      </div>
+    </section>
+    <section class="sample" aria-label="Bölünmüş etkinlik maketi">
+      <h2>03 / Bölünmüş görünüm</h2>
+      <div class="screen"><div class="top-edge"></div>
+        <div class="pair"><div class="island split"><span class="cover" aria-hidden="true"></span><span class="stack grow"><strong>Gece Yolu</strong><small>Oynatılıyor</small></span><span class="micro">2:14</span></div><div class="island bubble"><span class="dot" aria-hidden="true"></span></div></div>
+      </div>
+    </section>
+    <section class="sample wide" aria-label="Açık kart maketi">
+      <h2>04 / Açık kart (720 px varsayılan genişlik)</h2>
+      <div class="screen tall"><div class="top-edge"></div>
+        <div class="card">
+          <div class="card-header"><div><div class="weather">Açık hava · 19°</div><div class="clock">21:53</div><div class="date">17 Ekim Cumartesi</div></div><div class="actions" aria-label="Başlık eylemleri"><span class="action" title="Hızlı ayarlar">≡</span><span class="action" title="Bildirimler">○</span><span class="action" title="Açık tut">⌁</span><span class="action" title="Kapat">×</span></div></div>
+          <div class="activity"><span class="cover" aria-hidden="true"></span><span class="stack grow"><strong>Gece Yolu</strong><small>FLUGEL Oynatıcı · Çalıyor</small></span><span class="time">2:14</span></div>
+          <div class="tabs" aria-label="Sekme rayı"><span class="tab current">Hızlı</span><span class="tab">Kısayol</span><span class="tab">Sistem</span><span class="tab">Medya</span><span class="tab">Diğer</span></div>
+          <p class="section-label">Sık kullanılanlar</p>
+          <div class="tiles"><div class="tile"><span class="symbol" aria-hidden="true"></span><div><strong>Ekran görüntüsü</strong><br><small>Alan veya ekran</small></div></div><div class="tile"><span class="symbol" aria-hidden="true"></span><div><strong>Uyku engelle</strong><br><small>Kapalı</small></div></div><div class="tile dim"><span class="symbol" aria-hidden="true"></span><div><strong>Hızlı not</strong><br><small>Son notunu aç</small></div></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>İkon şekilleri yalnız yer tutucudur. Uygulamada mevcut <code>*-mono.svg</code> varlıkları ve erişilebilir ipuçları kullanılmalı; HTML'deki metin sekmeleri uygulamanın mevcut ikon sekmelerine dönüşmez.</footer>
+</body>
+</html>
