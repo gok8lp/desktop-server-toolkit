@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {
+      "id": "AI-001",
+      "title": "İki Island deposu arasındaki farkı ve yayımlama yönünü doğrula",
+      "status": "done",
+      "owner": null,
+      "paths": [
+        "extensions/flugel-island@flugel",
+        "../flugel-island/flugel-island@flugel"
+      ],
+      "evidence": "Claude raporu: 2026-10-17 iki Island klasörü eşitlendi, lint ve 35/35 birim testi geçti. Codex origin/main üzerinde flugel ca85d9b ve flugel-island 27f3ba3 commitlerini doğruladı; klasör diff'i boş.",
+      "next": "Yeni Island değişikliğinde iki klasörü ve uzak dalları tekrar karşılaştır; etiket için kullanıcı isteğini bekle",
+      "reported_actor": "claude (kullanıcı tarafından aktarılan rapor)",
+      "verified_by": "codex"
+    },
+    {
+      "id": "AI-002",
+      "title": "Akış API ve canlı dağıtım denetimi",
+      "status": "ready",
+      "owner": null,
+      "paths": [
+        "sunucu/panel/akis"
+      ],
+      "evidence": "2026-10-17: konteyner healthy, / HTTP 200, üç temel dosya SHA-256 eşit",
+      "next": "API uçları ve diğer statik dosyalar için hedefli doğrulama",
+      "lease_until": null,
+      "updated_at": "2026-10-17T10:14:57+00:00"
+    },
+    {
+      "id": "AI-003",
+      "title": "Sunucuda dışa açık portları ve kaynak baskısını gözden geçir",
+      "status": "ready",
+      "owner": null,
+      "paths": [
+        "sunucu/panel",
+        "sunucu/cloudflared"
+      ],
+      "evidence": "2026-10-17 yerel envanter: yüksek disk doluluğu ve tüm arayüzlerde dinleyen servisler görüldü; ayrıntılar yerel SERVER_STATE_INDEX.json dosyasında",
+      "next": "Erişim amacını ve güvenlik duvarı gerçek politikasını doğrula; değişiklik önerisi hazırla"
+    },
+    {
+      "id": "AI-004",
+      "title": "Claude son oturum durumunu doğrula",
+      "status": "done",
+      "owner": null,
+      "paths": [
+        "CLAUDE.md"
+      ],
+      "evidence": "Kullanıcının aktardığı Claude raporu alındı; iki uzak dal ve klasör eşitliği Codex tarafından doğrulandı. Claude'un sonraki aktif görevi bildirilmedi.",
+      "next": "Claude yeni işe başladığında task_board.py ile görevi alsın",
+      "reported_actor": "claude (kullanıcı tarafından aktarılan rapor)",
+      "verified_by": "codex"
+    },
+    {
+      "id": "AI-000",
+      "title": "AI çalışma merkezini ve güvenli envanteri kur",
+      "status": "done",
+      "owner": null,
+      "paths": [
+        ".ai_workspace"
+      ],
+      "evidence": "2026-10-17: yerel envanter üretildi, JSON doğrulandı ve görev kapsamı çakışması testi geçti; uygulama/sunucu konfigürasyonu değişmedi",
+      "next": "AI-002 ve AI-003 uygun ajanlar tarafından üstlenilebilir",
+      "created_by": "codex",
+      "updated_at": "2026-10-17T10:15:18+00:00",
+      "lease_until": null
+    }
+  ]
+}

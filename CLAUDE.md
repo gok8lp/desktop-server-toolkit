@@ -1,5 +1,11 @@
 # FLUGEL: proje kuralları
 
+## Ortak çalışma
+- Codex ile ortak giriş noktası: `.ai_workspace/README.md`; görev panosu: `.ai_workspace/AGENT_TASK_BOARD.md` (kaynak veri `tasks.json`). Göreve başlamadan panoyu oku ve `task_board.py` ile sahiplen.
+- `/home/flugel/Projects/weekly-task` ve `/home/flugel/Projects/weekly-tasks` dizinlerine hiçbir şekilde dokunma; okuma, değişiklik, test, commit ve push dahil.
+- Island'ın ayrı deposu `../flugel-island/`; 2026-10-17'de iki eklenti kopyası eşitlendi. Yeni koddan önce iki repo durumunu ve diff'i kontrol et. Diğer ajanın çalışmasını ezme.
+- Büyük değişiklikten sonra panoya commit/test/devir kanıtı yaz. Paylaşılan `tasks.json` ve `AGENT_TASK_BOARD.md` birlikte commit edilir; canlı sunucu envanteri ve yerel `AI_STATE_INDEX.md` public depoya girmez.
+
 ## Makine
 - Bu oturum flugelubuntu (PC). Sunucu: ssh flugelserver.
 - Ubuntu 26.04, GNOME 50 Wayland, 2560x1600, RTX 4060 hibrit.

@@ -1,0 +1,8 @@
+# Bu PC'ye özgü anlık durum, kilit ve yedekler GitHub'a gitmez.
+SERVER_STATE_INDEX.json
+SERVER_STATE_INDEX.previous.json
+task_events.jsonl
+tasks.previous.json
+*.lock
+__pycache__/
+*.onceki*
