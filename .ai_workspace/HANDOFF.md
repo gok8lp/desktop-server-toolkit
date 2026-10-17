@@ -12,6 +12,13 @@ Güncelleme: 2026-10-17, Europe/Istanbul. Bu belge public GitHub'a uygun proje d
 
 Her tamamlanan önemli görevden sonra bu özeti en fazla birkaç somut maddeyle yenileyin; eski özetleri aktif durum sanmayın. Kodun ayrıntılı geçmişi commit ve görev panosundadır.
 
+## 2026-10-17 — Çift blur geçişi ayıklaması
+
+- Kullanıcı yeni sürümden sonra henüz GNOME oturumunu yenilemedi; canlı performans ölçümü eski kodu temsil ediyor. Kullanıcı daha sonra oturum kapatıp açacak.
+- Kart/kompakt geçişinde aynı anda gelen ve kaybolan aktöre blur bağlanıyordu. Kaybolan aktör zaten opaklık/ölçekle çıkıyor; onun blur'u temizleniyor, gelen aktörün efekti korunuyor. Yeni başsız kontrol, açılışta yalnız gelen tarafta blur olduğunu ve geçiş sonunda efektin kalktığını doğruladı.
+- Başsız tek örnek p95 kare aralığı 53.4 ms öncesi, 51.4 ms sonrası; varyans yüksek, güvenilir hızlanma yüzdesi yok. 35/35 birim ve cam görsel kontrolü geçti. Cam yarıçapını 30'dan 12'ye indirmek ve hareket boyunca camı devre dışı bırakmak ölçümde yarar göstermedi; iki prototip de geri alındı.
+- Kaynak değişikliği ana/ayrı Island/kurulu kopyaya işlendi, canlı oturumda henüz etkin değil. Sonraki adım: oturum yenilendikten sonra blur ayarlarını tek tek A/B test et. Bu düzeltme için GitHub push yapılmadı.
+
 ## 2026-10-17 — Island akıcılığı ve koyu katmanlı görünüm
 
 - Canlı A/B: Island kapalı veya Island açıkken iki blur ayarı kapalı olduğunda fare akıcı; yalnız bulanik-gecis ya da yalnız cam-efekti açıkken takılma geri geliyor. USB G305 kopması veya NVIDIA Xid kanıtı yok. Canlı blur ayarları kapalı bırakıldı.

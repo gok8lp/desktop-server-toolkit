@@ -462,7 +462,8 @@ export class IslandGorunumu {
             c.remove_all_transitions();
             c._flugelGidiyor = true;
             c.set_pivot_point(0.5, 0.5);
-            bulanikGecis(c, {giris: false, yaricap: 8, sure: SOLMA_CIKIS, acik: bg});
+            // Kaybolan içerik zaten solarak küçülür; ikinci blur geçişi GPU yükünü katlar.
+            bulanikTemizle(c);
             c.ease({opacity: 0, scale_x: bg ? 0.94 : 1, scale_y: bg ? 0.94 : 1, duration: SOLMA_CIKIS, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
                 onStopped: () => {
                     if (!c._flugelGidiyor)
@@ -480,7 +481,7 @@ export class IslandGorunumu {
             bulanikGecis(this._kompakt, {giris: true, yaricap: 8, sure: SOLMA_GIRIS, acik: bg});
         this._kompakt.ease({opacity: 255, duration: SOLMA_GIRIS, mode: Clutter.AnimationMode.EASE_OUT_QUAD});
         if (kartKapandi) {
-            bulanikGecis(this._kartKutu, {giris: false, yaricap: 12, sure: SOLMA_CIKIS, acik: bg});
+            bulanikTemizle(this._kartKutu);
             this._kartKutu.ease({opacity: 0, duration: SOLMA_CIKIS, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
                 onStopped: () => {
                     if (this._durum !== 'genis')
@@ -531,7 +532,7 @@ export class IslandGorunumu {
         this._kartKutu.scale_x = this._kartKutu.scale_y = bg ? 0.96 : 1;
         this._kartKutu.ease({opacity: 255, scale_x: 1, scale_y: 1, delay: 90, duration: 300, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
         bulanikGecis(this._kartKutu, {giris: true, yaricap: 14, sure: 340, gecikme: 60, acik: bg});
-        bulanikGecis(this._kompakt, {giris: false, yaricap: 8, sure: SOLMA_CIKIS, acik: bg});
+        bulanikTemizle(this._kompakt);
         this._kompakt.ease({opacity: 0, duration: SOLMA_CIKIS, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
             onStopped: () => {
                 if (this._durum === 'genis')

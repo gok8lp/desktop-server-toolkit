@@ -76,10 +76,10 @@
         "extensions/flugel-island@flugel",
         "../flugel-island/flugel-island@flugel"
       ],
-      "evidence": "GitHub main: flugel 9b0df19, flugel-island 7df2f8a; kurulu kopya eşit; ESLint, npm test 35/35, başsız cam görsel testi geçti; canlı blur ayarları kapalı.",
-      "next": "GNOME oturumu yenilendikten sonra iki blur ayarını tek tek A/B test et; takılma varsa kapalı bırak.",
+      "evidence": "Kart/kompakt geçişindeki çıkış blur katmanı kaldırıldı; ana/ayrı/kurulu kopya eşit. ESLint, npm test 35/35, başsız cam görsel testi geçti. p95 tek örnek 53.4->51.4ms, anlamlı yüzde iddiası yok. Oturum yenilenmedi; push yok.",
+      "next": "Kullanıcı oturumu yenileyince cam ve geçiş ayarlarını tek tek A/B test et; fare donarsa kapat. GitHub push için ayrıca kullanıcı kararı.",
       "created_by": "codex",
-      "updated_at": "2026-10-17T10:47:36+00:00",
+      "updated_at": "2026-10-17T10:53:24+00:00",
       "lease_until": null
     },
     {

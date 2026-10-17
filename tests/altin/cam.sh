@@ -3,7 +3,7 @@ WD=$(grep -o "Using Wayland display name '[^']*'" "$T/shell.log" | head -1 | cut
 WAYLAND_DISPLAY=$WD GDK_BACKEND=wayland python3 "$D/sahte-renkli.py" & PR=$!
 sleep 3.5
 a "const ada = __A.E()._ada; __A.yaz('cam: kapsülde cam çizilmez', !ada._cam.actor.visible); 1" >/dev/null
-a "__A.E()._yonetici.setPinned(true); __A.E()._kart.sekmeSec('hizli', false); 1" >/dev/null; sleep 2
+a "__A.E()._yonetici.setPinned(true); __A.E()._kart.sekmeSec('hizli', false); const ada = __A.E()._ada; __A.yaz('geçiş: aynı anda yalnız gelen içerik bulanık', !!ada._kartKutu.get_effect('flugel-gecis-bulanik') && !ada._kompakt.get_effect('flugel-gecis-bulanik')); 1" >/dev/null; sleep 2
 a "const ada = __A.E()._ada; const c = ada._cam; __A.yaz('cam: kart açıkken cam görünür', c.actor.visible && c.actor.opacity > 200, c.actor.visible + ' ' + c.actor.opacity); __A.yaz('cam: kopya adanın yerine hizalı', c._sahne.x === -c.actor.x && c._sahne.y === -ada._kok.y && c.actor.x <= ada._kok.x && c.actor.x + c.actor.width >= ada._kok.x + ada._kok.width && c._sahne.get_n_children() > 1, c._sahne.x + ',' + c._sahne.y + ' kutu=' + c.actor.x + '+' + c.actor.width + ' n=' + c._sahne.get_n_children()); __A.yaz('cam: bulanıklık ve köşe maskesi bağlı', !!c.actor.get_effect('flugel-cam-bulanik') && !!c.actor.get_effect('flugel-cam-kose') && c._bulanik.radius > 0, String(c._bulanik.radius)); __A.yaz('cam: kart zemini saydam', (ada._zemin.style ?? '').includes(',0.72)'), ada._zemin.style); __A.yaz('geçiş: açılış bulanıklığı bitince kalkar', !ada._kartKutu.get_effect('flugel-gecis-bulanik') && ada._kartKutu.scale_x === 1, String(ada._kartKutu.scale_x)); 1" >/dev/null
 foto cam-acik
 a "__A.E()._kart.sekmeSec('sistem', true); 1" >/dev/null; sleep 0.08

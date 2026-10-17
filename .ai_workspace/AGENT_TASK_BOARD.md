@@ -43,8 +43,8 @@ Aktif görevler sahip alanında görünür. Başka ajanın işi varsayılmaz.
 
 - Durum: `ready`; sahip: `yok`; kira sonu: `yok`
 - Dosyalar: `extensions/flugel-island@flugel`, `../flugel-island/flugel-island@flugel`
-- Kanıt: GitHub main: flugel 9b0df19, flugel-island 7df2f8a; kurulu kopya eşit; ESLint, npm test 35/35, başsız cam görsel testi geçti; canlı blur ayarları kapalı.
-- Sonraki adım: GNOME oturumu yenilendikten sonra iki blur ayarını tek tek A/B test et; takılma varsa kapalı bırak.
+- Kanıt: Kart/kompakt geçişindeki çıkış blur katmanı kaldırıldı; ana/ayrı/kurulu kopya eşit. ESLint, npm test 35/35, başsız cam görsel testi geçti. p95 tek örnek 53.4->51.4ms, anlamlı yüzde iddiası yok. Oturum yenilenmedi; push yok.
+- Sonraki adım: Kullanıcı oturumu yenileyince cam ve geçiş ayarlarını tek tek A/B test et; fare donarsa kapat. GitHub push için ayrıca kullanıcı kararı.
 
 ## AI-006 — PC kasma ve kaynak analizi
 
