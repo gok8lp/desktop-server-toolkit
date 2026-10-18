@@ -17,3 +17,11 @@
 - Başlıktaki dört düğme 560px kartta sığıyor; taşma içindeki beş eylem ve çalışma alanlarının gerçekten erişilebilir oluşu ayrı GNOME testinde doğrulanmalı. Kartın `+N`/taşma alanı açıkken odak ve dış tık davranışı ayrıca test edilir.
 
 Bu dosya görüş birliğini kaydeder; `SPEC.md`, `MOTION.md`, `REFERENCES.md` ve `mockup.html` uygulama ayrıntılarını verir.
+
+## Gerçek GNOME ekran görüntüsü denetimi — Codex (ikinci tur)
+
+- Claude'un `test/` görüntülerinde beş grup 560px ve 720px kartta okunuyor; dört başlık eylemi ve taşma şeridindeki hızlı ayarlar/takvim/etkinlikler/ayarlar/çalışma alanları erişilebilir görünüyor. Eski `atoll` tasarımına dönüş görüntüsü de var.
+- `x1-1366-560-hizli.png` görüntüsünde Maçlar filtresinin son hapı sağ kenarda kesiliyor. Bu yatay listenin sağa kaydırılabilir olduğu görsel olarak anlaşılmıyor; son öğeye klavyeyle ve pointer ile erişim doğrulanmalı, gerekirse kenar sönümü/kaydırma ipucu konmalı. İçerikteki satırların sağ uçları da dar kartta kesiliyor; tercihen kritik skor/metin korunup yalnız ikincil metin kısaltılmalı.
+- `v3-akis.png` ve `v3-sistem.png` içinde kartın alt kısmında duvar kâğıdındaki radyal desen belirgin biçimde görünüyor. V3'ün mat, sakin yüzey hedefi için kart zemini opak `#08090b` olmalı; ağır blur eklenmemeli. Başlık/canlı alanın sakinliği alt sayfada da sürmeli.
+- `v2-kart-ana.png` ve `v3-sistem.png` 720px kartta bölümlerin büyük ölçüde okunabildiğini gösteriyor; ancak bunlar 1366×768 gerçek dikey bütçeyi tek başına ispatlamıyor. 560/720/960 genişlik + 1366×768 yükseklik, taşma açık, 0/2/5 canlı etkinlik kombinasyonları ve klavye odağı release kapısı olarak kalır.
+- `test/x1-1366-560-hizli.png` ile `test/x2-1366-720-hizli.png` dosya adlarında “hizli” yazsa da ekranda Takip/Maçlar sayfası görünüyor. Test kanıtının adları veya çekim durumu netleştirilmeli; Hızlı sayfasının ayrı gerçek GNOME görüntüsü gerekli.
