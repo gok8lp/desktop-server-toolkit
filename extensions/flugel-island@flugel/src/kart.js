@@ -17,6 +17,8 @@ import {CalismaAlanlari} from './calisma-alanlari.js';
 import {HavaDurumu} from './hava.js';
 import {bulanikGecis} from './cam.js';
 import {_} from './dil.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import {ActivityManager} from './activity-manager.js';
 
 // ekranı karart: Mutter'ın güç tasarrufu kipi (3 = kapalı); fare/klavye ile geri gelir
 function ekraniKapat() {
@@ -592,6 +594,23 @@ export class Kart {
             }
             this._canli.set_child_at_index(g.actor, i);
             g.guncelle(a);
+            // v3.1: sağ tık (ya da Menü tuşu) satır menüsü: sustur / önceliklendir
+            g._flugelEtkinlik = a;
+            if (!g._flugelMenuId) {
+                g.actor.reactive = true;
+                g._flugelMenuId = g.actor.connect('button-press-event', (_act, olay) => {
+                    if (olay.get_button() !== 3 || !this._v3())
+                        return Clutter.EVENT_PROPAGATE;
+                    this._satirMenu(g._flugelEtkinlik, g.actor);
+                    return Clutter.EVENT_STOP;
+                });
+                g.actor.connect('key-press-event', (_act, olay) => {
+                    if (olay.get_key_symbol() !== Clutter.KEY_Menu || !this._v3())
+                        return Clutter.EVENT_PROPAGATE;
+                    this._satirMenu(g._flugelEtkinlik, g.actor);
+                    return Clutter.EVENT_STOP;
+                });
+            }
             kalan.delete(a.id);
         });
         for (const id of kalan) {
@@ -599,8 +618,69 @@ export class Kart {
             this._canliGorunumler.delete(id);
         }
         this._dahaYaz(this._v3() && tum.length > CANLI_AZAMI ? tum.length - CANLI_AZAMI : 0, liste.length);
-        this._canli.visible = liste.length > 0;
+        this._susturulanYaz();
+        this._canli.visible = liste.length > 0 || !!this._susturulanDugme?.visible;
         this._boyutBildir();
+    }
+
+    // susturulmuş kaynak varsa küçük hap: "N kaynak susturuldu" — tıklayınca hepsi geri gelir
+    _susturulanYaz() {
+        const n = this._v3() ? this.susturulanSayisi?.() ?? 0 : 0;
+        if (!n) {
+            this._susturulanDugme?.hide();
+            return;
+        }
+        if (!this._susturulanDugme) {
+            this._susturulanDugme = new St.Button({style_class: 'flugel-v3-daha', can_focus: true, x_align: Clutter.ActorAlign.START});
+            this._susturulanDugme.connect('clicked', () => this.susturmaKaldir?.());
+            ipucuBagla(this._susturulanDugme, _('Susturulan canlı etkinlikleri geri getir'));
+            this._canli.add_child(this._susturulanDugme);
+        }
+        this._susturulanDugme.label = _('%d kaynak susturuldu').format(n);
+        this._susturulanDugme.accessible_name = this._susturulanDugme.label;
+        this._canli.set_child_above_sibling(this._susturulanDugme, null);
+        this._susturulanDugme.show();
+        this._canli.visible = true;
+    }
+
+    _satirMenu(a, kaynak) {
+        if (!a)
+            return;
+        this._satirMenuKapat();
+        const menu = new PopupMenu.PopupMenu(kaynak, 0.5, St.Side.TOP);
+        menu.actor.add_style_class_name('flugel-kart-menu');
+        Main.uiGroup.add_child(menu.actor);
+        this._satirMenuYon ??= new PopupMenu.PopupMenuManager(this.actor);
+        this._satirMenuYon.addMenu(menu);
+        if (ActivityManager.isCritical(a)) {
+            menu.addMenuItem(new PopupMenu.PopupMenuItem(_('Kritik uyarı susturulamaz'), {reactive: false}));
+        } else {
+            menu.addAction(_('1 saat sustur'), () => this.susturIstendi?.(a.providerId, 'saat'));
+            menu.addAction(_('Bu oturumda sustur'), () => this.susturIstendi?.(a.providerId, 'oturum'));
+        }
+        menu.addAction(this.onceMi?.(a.providerId) ? _('Önceliği kaldır') : _('Önceliklendir'),
+            () => this.oncelikIstendi?.(a.providerId));
+        menu.connect('open-state-changed', (_m, acik) => {
+            if (acik)
+                return;
+            this.disMenuKapandi?.();
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                if (this._satirMenuObj === menu)
+                    this._satirMenuKapat();
+                return GLib.SOURCE_REMOVE;
+            });
+        });
+        this._satirMenuObj = menu;
+        menu.open(true);
+    }
+
+    _satirMenuKapat() {
+        const m = this._satirMenuObj;
+        this._satirMenuObj = null;
+        if (!m)
+            return;
+        this._satirMenuYon?.removeMenu(m);
+        m.destroy();
     }
 
     // "+N daha" / "Daha az" düğmesi (canlı listenin sonunda)
@@ -626,10 +706,12 @@ export class Kart {
     }
 
     disMenuAcik() {
-        return onizlemeAcik() || this._tepsi.disMenuAcik() || this._sayfalar.some(s => s.sayfa.disMenuAcik());
+        return onizlemeAcik() || this._tepsi.disMenuAcik() || !!this._satirMenuObj?.isOpen ||
+            this._sayfalar.some(s => s.sayfa.disMenuAcik());
     }
 
     destroy() {
+        this._satirMenuKapat();
         if (this._v3Id)
             this._ayar.disconnect(this._v3Id);
         this._v3Id = 0;

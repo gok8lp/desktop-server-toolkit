@@ -20,7 +20,36 @@ export class ActivityManager {
         this._hovered = false;
         this._pinned = false;
         this._lastVM = emptyViewModel();
+        // FLUGEL v3.1: kaynak bazlı geçici susturma (providerId -> bitiş ms, Infinity = oturum) ve öne alma
+        this._muted = new Map();
+        this._promoted = new Set();
         this._notify();
+    }
+
+    // Kritik etkinlikler susturulamaz: gizlilik (mikrofon/kamera), panik ve data.kritik işaretliler.
+    static isCritical(a) {
+        return a.providerId === 'privacy' || a.providerId === 'panik' || a.data?.kritik === true;
+    }
+
+    setMuted(map) {
+        this._muted = new Map(map);
+        this._notify();
+    }
+
+    setPromoted(ids) {
+        this._promoted = new Set(ids);
+        this._notify();
+    }
+
+    isMuted(providerId, now = _now()) {
+        const bitis = this._muted.get(providerId);
+        return bitis !== undefined && bitis > now;
+    }
+
+    // en yakın susturma bitişi (yeniden değerlendirme zamanı için); yoksa null
+    nextMuteExpiry(now = _now()) {
+        const ileri = [...this._muted.values()].filter(t => t > now && Number.isFinite(t));
+        return ileri.length ? Math.min(...ileri) : null;
     }
 
     // Subscription: invoke immediately with current VM.
@@ -91,8 +120,13 @@ export class ActivityManager {
 
         // Drop expired.
         const live = [];
+        let mutedCount = 0;
         for (const a of this._activities.values()) {
             if (a.expiresAt !== undefined && a.expiresAt <= now) continue;
+            if (this.isMuted(a.providerId, now) && !ActivityManager.isCritical(a)) {
+                mutedCount++;
+                continue;
+            }
             live.push(a);
         }
 
@@ -105,7 +139,9 @@ export class ActivityManager {
         const flashing = transients[0] ?? null;
 
         // Slot assignment over persistents.
-        const byPriority = (x, y) => (y.priority - x.priority) || (x.startedAt - y.startedAt);
+        // öne alınan kaynak kendi sınıfında üste çıkar; kritikler her zaman en üstte
+        const etkin = a => a.priority + (this._promoted.has(a.providerId) ? 1000 : 0) + (ActivityManager.isCritical(a) ? 10000 : 0);
+        const byPriority = (x, y) => (etkin(y) - etkin(x)) || (x.startedAt - y.startedAt);
         const leadingCandidates = persistents.filter(a => a.slot === 'leading' || a.slot === 'either');
         leadingCandidates.sort(byPriority);
         const leading = leadingCandidates[0] ?? null;
@@ -134,6 +170,7 @@ export class ActivityManager {
             pinned: this._pinned,
             ambientOverflow: Object.freeze(ambients),
             live: Object.freeze(liveSorted),
+            mutedCount,
         };
     }
 

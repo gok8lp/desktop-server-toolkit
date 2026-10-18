@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 11:56+0300\n"
+"POT-Creation-Date: 2026-10-18 12:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1496,6 +1496,28 @@ msgid "Pencereler ve uygulamalar"
 msgstr ""
 
 msgid "Ayarlar"
+msgstr ""
+
+msgid "Susturulan canlı etkinlikleri geri getir"
+msgstr ""
+
+#, javascript-format
+msgid "%d kaynak susturuldu"
+msgstr ""
+
+msgid "Kritik uyarı susturulamaz"
+msgstr ""
+
+msgid "1 saat sustur"
+msgstr ""
+
+msgid "Bu oturumda sustur"
+msgstr ""
+
+msgid "Önceliği kaldır"
+msgstr ""
+
+msgid "Önceliklendir"
 msgstr ""
 
 msgid "Canlı etkinlikleri kısalt"

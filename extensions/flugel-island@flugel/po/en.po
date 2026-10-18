@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 11:56+0300\n"
+"POT-Creation-Date: 2026-10-18 12:02+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -1634,6 +1634,29 @@ msgstr "Windows and apps"
 msgid "Ayarlar"
 msgstr "Settings"
 
+#
+msgid "Susturulan canlı etkinlikleri geri getir"
+msgstr "Bring back muted live activities"
+
+#, javascript-format
+msgid "%d kaynak susturuldu"
+msgstr "%d sources muted"
+
+msgid "Kritik uyarı susturulamaz"
+msgstr "Critical alerts can't be muted"
+
+msgid "1 saat sustur"
+msgstr "Mute for 1 hour"
+
+msgid "Bu oturumda sustur"
+msgstr "Mute for this session"
+
+msgid "Önceliği kaldır"
+msgstr "Remove priority"
+
+msgid "Önceliklendir"
+msgstr "Prioritize"
+
 msgid "Canlı etkinlikleri kısalt"
 msgstr "Show fewer live activities"
 
@@ -2452,7 +2475,8 @@ msgid "Düzenlemeyi bitir"
 msgstr "Finish editing"
 
 msgid "Kısa görünümdeki dört aracı seç: araca tıkla, sabitlenir ya da çıkar"
-msgstr "Choose the four tools of the short view: click a tool to pin or unpin it"
+msgstr ""
+"Choose the four tools of the short view: click a tool to pin or unpin it"
 
 #
 msgid "Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır"

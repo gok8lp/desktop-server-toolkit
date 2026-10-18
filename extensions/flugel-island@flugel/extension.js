@@ -142,6 +142,22 @@ export default class FlugelIsland extends Extension {
         this._kart = new Kart({ayarlar: this._ayar, veri: this._veri, sayfalar, ayarlariAc: () => this.openPreferences(),
             tepsi: new Tepsi(), ustCubuk: o.ustCubuk});
         this._ada = new IslandGorunumu({ayarlar: this._ayar, yonetici: this._yonetici, kart: this._kart, ekip: this._ekip});
+        // v3.1 canlı etkinlik susturma/öne alma: 1 saatlik susturma ayarda (yeniden başlatmaya dayanır), oturumluk bellekte
+        this._oturumSusturma = new Set();
+        this._kart.susturIstendi = (kaynak, kip) => this._sustur(kaynak, kip);
+        this._kart.oncelikIstendi = kaynak => {
+            const l = this._ayar.get_strv('canli-oncelik');
+            this._ayar.set_strv('canli-oncelik', l.includes(kaynak) ? l.filter(x => x !== kaynak) : [...l, kaynak]);
+        };
+        this._kart.onceMi = kaynak => this._ayar.get_strv('canli-oncelik').includes(kaynak);
+        this._kart.susturulanSayisi = () => [...this._yonetici._muted.keys()].filter(k => this._yonetici.isMuted(k)).length;
+        this._kart.susturmaKaldir = () => {
+            this._oturumSusturma.clear();
+            this._ayar.set_strv('canli-susturma', []);
+        };
+        this._susturmaIdleri = ['changed::canli-susturma', 'changed::canli-oncelik'].map(s =>
+            this._ayar.connect(s, () => this._susturmaUygula()));
+        this._susturmaUygula();
         this._ustCubuk = new UstCubuk(this._ayar, this._ada.capa);
         this._ustCubuk.enable();
 
@@ -230,7 +246,53 @@ export default class FlugelIsland extends Extension {
         });
     }
 
+    _sustur(kaynak, kip) {
+        // kritik kaynaklar (gizlilik, panik) hiçbir yoldan susturulamaz
+        if (ActivityManager.isCritical({providerId: kaynak}))
+            return;
+        if (kip === 'oturum') {
+            this._oturumSusturma.add(kaynak);
+            this._susturmaUygula();
+            return;
+        }
+        const bitis = Date.now() + 3600 * 1000;
+        const l = this._ayar.get_strv('canli-susturma').filter(x => !x.startsWith(`${kaynak}=`));
+        this._ayar.set_strv('canli-susturma', [...l, `${kaynak}=${bitis}`]);
+    }
+
+    _susturmaUygula() {
+        const simdi = Date.now();
+        const harita = new Map();
+        for (const x of this._ayar.get_strv('canli-susturma')) {
+            const i = x.lastIndexOf('=');
+            const t = Number(x.slice(i + 1));
+            if (i > 0 && Number.isFinite(t) && t > simdi)
+                harita.set(x.slice(0, i), t);
+        }
+        for (const k of this._oturumSusturma)
+            harita.set(k, Infinity);
+        this._yonetici.setMuted(harita);
+        this._yonetici.setPromoted(this._ayar.get_strv('canli-oncelik'));
+        // süre dolunca kaynak kendiliğinden geri gelsin: tek zamanlayıcı, en yakın bitişte
+        if (this._susturmaId)
+            GLib.source_remove(this._susturmaId);
+        this._susturmaId = 0;
+        const sonraki = this._yonetici.nextMuteExpiry(simdi);
+        if (sonraki !== null) {
+            this._susturmaId = GLib.timeout_add(GLib.PRIORITY_LOW, Math.max(1000, sonraki - simdi + 500), () => {
+                this._susturmaId = 0;
+                this._susturmaUygula();
+                return GLib.SOURCE_REMOVE;
+            });
+        }
+    }
+
     disable() {
+        if (this._susturmaId)
+            GLib.source_remove(this._susturmaId);
+        this._susturmaId = 0;
+        this._susturmaIdleri?.forEach(id => this._ayar.disconnect(id));
+        this._susturmaIdleri = null;
         this._sureAbone?.();
         if (this._sureId)
             GLib.source_remove(this._sureId);
