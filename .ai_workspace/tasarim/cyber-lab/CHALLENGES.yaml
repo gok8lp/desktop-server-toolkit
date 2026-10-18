@@ -1,0 +1,123 @@
+version: 1
+defaults:
+  timeout_minutes: 45
+  network: internal
+  read_only: true
+  cap_drop: [ALL]
+  no_new_privileges: true
+  pids_limit: 128
+  memory: 256m
+  cpus: 0.50
+
+challenges:
+  - slug: scope-guard
+    module: safety
+    difficulty: beginner
+    title_tr: Kapsam dışını reddet
+    type: defense
+    objective: Runner'ın RFC1918 üretim adresi ve izin listesi dışındaki hedefleri reddettiğini doğrula.
+    score: 100
+    verifier: verify_scope_guard
+
+  - slug: linux-permission-leak
+    module: linux
+    difficulty: beginner
+    title_tr: Fazla izinli yedek
+    type: attack_defense
+    objective: Lab içindeki yanlış izinli dosyadan flag'i bul, sonra en az yetkiyle düzelt.
+    score: 220
+    paired_checks: [flag_read, service_still_works, unauthorized_read_fails]
+
+  - slug: path-shadow
+    module: linux
+    difficulty: beginner
+    title_tr: Yanlış program çalışıyor
+    type: attack_defense
+    objective: Kopya shell ortamında PATH sırasını kullanarak davranışı açıkla ve mutlak yol/temiz env ile düzelt.
+    score: 240
+
+  - slug: service-map
+    module: network
+    difficulty: beginner
+    title_tr: Lab ağını haritala
+    type: attack_defense
+    objective: Yalnız atanmış /29 lab ağındaki servisleri keşfet ve gereksiz portu kapat.
+    score: 240
+    max_scan_hosts: 8
+
+  - slug: http-info-leak
+    module: web
+    difficulty: beginner
+    title_tr: Debug izi
+    type: attack_defense
+    objective: Header ve directory listing sızıntısından flag'i bul; debug bilgisini kapat.
+    score: 260
+
+  - slug: object-ownership
+    module: identity
+    difficulty: intermediate
+    title_tr: Bu not kimin?
+    type: attack_defense
+    objective: Toy not uygulamasında nesne sahipliği açığını kanıtla ve server-side authorization ekle.
+    score: 400
+
+  - slug: sqlite-parameter
+    module: injection
+    difficulty: intermediate
+    title_tr: Sorguyu ayır
+    type: attack_defense
+    objective: Toy SQLite login sorgusunda enjeksiyonu kanıtla ve parametrik sorguyla düzelt.
+    score: 420
+    destructive_sql_blocked: true
+
+  - slug: auth-log-hunt
+    module: blue-team
+    difficulty: beginner
+    title_tr: Gürültü içindeki deneme
+    type: defense
+    objective: Sağlanan log paketinde brute-force dizisini correlation ID ve zaman çizgisiyle açıkla.
+    score: 300
+
+  - slug: c-stack-boundary
+    module: memory
+    difficulty: intermediate
+    title_tr: Sınırın bir bayt ötesi
+    type: attack_defense
+    objective: Toy binary'de kontrollü taşmayı ASan ile gözle; sınır kontrolüyle düzelt.
+    score: 500
+    architecture: x86_64
+    internet: false
+
+  - slug: c-format-string
+    module: memory
+    difficulty: intermediate
+    title_tr: Format kullanıcı değildir
+    type: attack_defense
+    objective: Toy programın format string hatasıyla flag'i göster; sabit format ve uzunluk sınırı uygula.
+    score: 520
+    internet: false
+
+  - slug: cpp-raii-leak
+    module: memory
+    difficulty: beginner
+    title_tr: Kaynağı sahibine ver
+    type: defense
+    objective: C++ örneğinde erken dönüş kaynak sızıntısını RAII ile gider; sanitizer testi geçsin.
+    score: 300
+
+  - slug: container-least-privilege
+    module: containers
+    difficulty: intermediate
+    title_tr: Fazla yetkili servis
+    type: defense
+    objective: Kopya compose manifestinden privileged, secret mount ve gereksiz capability'leri kaldır.
+    score: 450
+
+  - slug: final-incident
+    module: final
+    difficulty: intermediate
+    title_tr: İzden yamaya
+    type: attack_defense_report
+    objective: Logdan vektörü bul, disposable hedefte doğrula, yamala ve regresyon testini geçir.
+    score: 900
+    prerequisites: [linux-permission-leak, sqlite-parameter, c-stack-boundary, auth-log-hunt]
