@@ -46,8 +46,15 @@ export function konumOku(bus, iptal) {
 }
 
 // ---------- ekolayzer: çalarken dans eden 4-5 çubuk ----------
+// v3 (Quiet Orbit): üç çubuk, rastgele değil üç sabit faz, en çok 2 kare/sn; island görünümü ayarlar
+const V3_FAZLAR = [[0.45, 0.9, 0.6], [0.85, 0.5, 0.9], [0.6, 0.8, 0.4]];
 export class Esitleyici {
+    static v3 = false;
+
     constructor({cubuk = 4, yukseklik = 14, genislik = 3} = {}) {
+        this._v3 = Esitleyici.v3;
+        if (this._v3)
+            cubuk = 3;
         const s = St.ThemeContext.get_for_stage(global.stage).scale_factor;
         this._h = yukseklik * s;
         this.actor = new St.BoxLayout({style_class: 'flugel-esitleyici', y_align: Clutter.ActorAlign.CENTER,
@@ -84,6 +91,18 @@ export class Esitleyici {
         this._durdur();
         if (!this._caliyor || !this.actor.mapped || !St.Settings.get().enable_animations) {
             this._cubuklar.forEach(c => c.ease({scale_y: 0.25, duration: 200, mode: Clutter.AnimationMode.EASE_OUT_QUAD}));
+            return;
+        }
+        if (this._v3) {
+            let faz = 0;
+            const v3Adim = () => {
+                const f = V3_FAZLAR[faz++ % V3_FAZLAR.length];
+                this._cubuklar.forEach((c, i) => c.ease({scale_y: f[i % f.length], duration: 420,
+                    mode: Clutter.AnimationMode.EASE_IN_OUT_SINE}));
+                return GLib.SOURCE_CONTINUE;
+            };
+            v3Adim();
+            this._id = GLib.timeout_add(GLib.PRIORITY_LOW, 500, v3Adim);
             return;
         }
         const adim = () => {
@@ -238,6 +257,9 @@ export class MedyaOynatici {
 
     // kapaktan gelen vurgu rengi: sanatçı, ilerleme, ekolayzer ve zemin tonu
     _vurguUygula(renk) {
+        // v3: kapaktan renk örneklenmez; yüzey ve vurgu tek renk (CSS)
+        if (this._ayar?.get_string('tasarim') === 'v3')
+            renk = null;
         this._vurgu = renk;
         const [r, g, b] = renk ?? [255, 255, 255];
         const rgb = `rgb(${r}, ${g}, ${b})`;

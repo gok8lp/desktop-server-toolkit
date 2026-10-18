@@ -151,6 +151,11 @@ export class EtkinlikGorunumu {
             this._baslik.text = a.label;
             this._alt.text = (a.sublabel ?? '').slice(0, 240);
             this._alt.visible = !!a.sublabel;
+            // v3: kritik bildirimde soldaki çizgi amber (renk tek başına anlam taşımaz: başlık da korunur)
+            if (d.kritik)
+                this.actor.add_style_class_name('flugel-bildirim-kritik');
+            else
+                this.actor.remove_style_class_name('flugel-bildirim-kritik');
             return;
         }
         this.id = a.id;

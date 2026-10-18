@@ -11,7 +11,7 @@ import Meta from 'gi://Meta';
 import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {YayFizik} from './spring.js';
-import {konumOku} from './medya.js';
+import {Esitleyici, konumOku} from './medya.js';
 import {TamEkranBirlikte} from './tam-ekran.js';
 import {Kacis} from './kacis.js';
 import {Cam, bulanikGecis, bulanikTemizle} from './cam.js';
@@ -570,6 +570,7 @@ export class IslandGorunumu {
     }
 
     _v3Sinif() {
+        Esitleyici.v3 = this._v3();
         if (this._v3())
             this._kok?.add_style_class_name('flugel-v3');
         else

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 12:02+0300\n"
+"POT-Creation-Date: 2026-10-18 12:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2191,10 +2191,44 @@ msgstr ""
 msgid "Susturma"
 msgstr ""
 
+msgid "Gruplama: kategoriye ya da zamana göre"
+msgstr ""
+
+msgid "Hepsini okundu say"
+msgstr ""
+
+msgid "Kritik ve hata bildirimleri korunur"
+msgstr ""
+
+msgid "Hepsini temizle"
+msgstr ""
+
+msgid "Emin misin? Tekrar bas"
+msgstr ""
+
+#, javascript-format
+msgid "%s okunmamış"
+msgstr ""
+
+msgid "Hepsi okundu"
+msgstr ""
+
+msgid "Kategori"
+msgstr ""
+
+msgid "Zaman"
+msgstr ""
+
+msgid "Okundu say"
+msgstr ""
+
 msgid "Sunucuya ulaşılamıyor"
 msgstr ""
 
 msgid "Son 24 saatte bildirim yok"
+msgstr ""
+
+msgid "Kritik"
 msgstr ""
 
 #, javascript-format

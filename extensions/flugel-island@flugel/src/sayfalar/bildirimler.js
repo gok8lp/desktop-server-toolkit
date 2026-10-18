@@ -31,6 +31,27 @@ export class BildirimlerSayfa extends Sayfa {
             ust.add_child(b);
         }
         this.actor.add_child(ust);
+        // v3: okunmamış sayısı · gruplama · okundu say · hepsini temizle (iki adımlı)
+        this._v3Ust = new St.BoxLayout({style_class: 'flugel-v3-bildirim-ust', x_expand: true, visible: false});
+        this._okunmamis = new St.Label({style_class: 'flugel-v3-bildirim-sayi', x_expand: true, y_align: Clutter.ActorAlign.CENTER});
+        this._v3Ust.add_child(this._okunmamis);
+        const v3Dugme = (ipucu, fn) => {
+            const b = new St.Button({style_class: 'flugel-cip', can_focus: true});
+            b.connect('clicked', fn);
+            ipucuBagla(b, ipucu);
+            this._v3Ust.add_child(b);
+            return b;
+        };
+        this._grupDugme = v3Dugme(_('Gruplama: kategoriye ya da zamana göre'), () => {
+            this._ayar.set_string('bildirim-gruplama', this._ayar.get_string('bildirim-gruplama') === 'kategori' ? 'zaman' : 'kategori');
+            this._yaz(true);
+        });
+        this._okunduDugme = v3Dugme(_('Hepsini okundu say'), () => {
+            this._ayar.set_double('bildirim-okundu', Date.now() / 1000);
+            this._yaz(true);
+        });
+        this._temizleDugme = v3Dugme(_('Kritik ve hata bildirimleri korunur'), () => this._temizleBas());
+        this.actor.add_child(this._v3Ust);
         this._liste = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-bildirim-listesi', x_expand: true});
         this.actor.add_child(this._liste);
         this._aboneler = [veri.abone('island', s => {
@@ -39,9 +60,45 @@ export class BildirimlerSayfa extends Sayfa {
             this.gorunurse(() => this._yaz());
         })];
         this._ayarId = ayarlar.connect('changed::sunucu-sessiz', () => this.gorunurse(() => this._yaz(true)));
+        this._tasarimId = ayarlar.connect('changed::tasarim', () => this.gorunurse(() => this._yaz(true)));
+    }
+
+    _v3() {
+        return this._ayar.get_string('tasarim') === 'v3';
+    }
+
+    // yıkıcı eylem: ilk tık onay ister, 3 sn içinde ikinci tık temizler
+    _temizleBas() {
+        if (!this._temizleOnay) {
+            this._temizleOnay = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 3000, () => {
+                this._temizleOnay = 0;
+                this._temizleDugme.label = _('Hepsini temizle');
+                return GLib.SOURCE_REMOVE;
+            });
+            this._temizleDugme.label = _('Emin misin? Tekrar bas');
+            return;
+        }
+        GLib.source_remove(this._temizleOnay);
+        this._temizleOnay = 0;
+        const simdi = Date.now() / 1000;
+        this._ayar.set_double('bildirim-temizlendi', simdi);
+        this._ayar.set_double('bildirim-okundu', simdi);
+        this._temizleDugme.label = _('Hepsini temizle');
+        this._yaz(true);
+    }
+
+    gizle() {
+        // sayfadan çıkınca görülenler okundu sayılır
+        // (kart açılışındaki ısınma turu sayfalara kısaca uğrar: en az 1,5 sn görünmediyse okundu sayılmaz)
+        const sure = this._gosterildi ? (GLib.get_monotonic_time() - this._gosterildi) / 1000 : 0;
+        this._gosterildi = 0;
+        if (this._v3() && this._enYeni && sure >= 1500)
+            this._ayar.set_double('bildirim-okundu', Math.max(this._ayar.get_double('bildirim-okundu'), this._enYeni));
+        super.gizle?.();
     }
 
     goster() {
+        this._gosterildi = GLib.get_monotonic_time();
         this._yaz();
     }
 
@@ -60,14 +117,51 @@ export class BildirimlerSayfa extends Sayfa {
             this._susturmaYaz();
             return;
         }
+        const v3 = this._v3();
+        const temiz = v3 ? this._ayar.get_double('bildirim-temizlendi') : 0;
+        const korunan = b => b.seviye === 'KRITIK' || b.seviye === 'HATA';
         const liste = (s?.bildirimler ?? []).filter(b => this._suzgec === 'hepsi' ||
-            (this._suzgec === 'uyari' ? b.seviye !== 'BILGI' : b.seviye === 'BILGI'));
+            (this._suzgec === 'uyari' ? b.seviye !== 'BILGI' : b.seviye === 'BILGI'))
+            .filter(b => b.ts > temiz || korunan(b));
+        const okundu = this._ayar.get_double('bildirim-okundu');
+        this._enYeni = Math.max(0, ...liste.map(b => b.ts));
+        this._v3Ust.visible = v3;
+        if (v3) {
+            const n = liste.filter(b => b.ts > okundu).length;
+            this._okunmamis.text = n ? f(_('%s okunmamış'), n) : _('Hepsi okundu');
+            this._grupDugme.label = this._ayar.get_string('bildirim-gruplama') === 'kategori' ? _('Kategori') : _('Zaman');
+            this._okunduDugme.label = _('Okundu say');
+            this._okunduDugme.visible = n > 0;
+            if (!this._temizleOnay)
+                this._temizleDugme.label = _('Hepsini temizle');
+        }
         if (!s || s.hata) {
             this._liste.add_child(new St.Label({text: _('Sunucuya ulaşılamıyor'), style_class: 'flugel-soluk'}));
             return;
         }
         if (!liste.length) {
             this._liste.add_child(new St.Label({text: _('Son 24 saatte bildirim yok'), style_class: 'flugel-soluk'}));
+            return;
+        }
+        if (v3 && this._ayar.get_string('bildirim-gruplama') === 'kategori') {
+            // kategoriye göre gruplar: Kritik önce, sonra içinde bildirim olan kategoriler
+            const ad = KATEGORI_AD();
+            const gruplar = new Map();
+            for (const b of liste) {
+                const k = korunan(b) ? 'kritik' : kategori(b.metin).k;
+                if (!gruplar.has(k))
+                    gruplar.set(k, []);
+                gruplar.get(k).push(b);
+            }
+            const sira = ['kritik', ...Object.keys(ad)].filter(k => gruplar.has(k));
+            for (const k of sira) {
+                const g = gruplar.get(k);
+                const yeni = g.filter(b => b.ts > okundu).length;
+                const baslik = k === 'kritik' ? _('Kritik') : ad[k];
+                this._liste.add_child(new St.Label({text: yeni ? `${baslik} · ${yeni}` : baslik, style_class: 'flugel-bolum-baslik'}));
+                for (const b of g)
+                    this._liste.add_child(this._satir(b, GLib.DateTime.new_from_unix_local(b.ts), b.ts > okundu));
+            }
             return;
         }
         let gun = '';
@@ -79,15 +173,15 @@ export class BildirimlerSayfa extends Sayfa {
                 this._liste.add_child(new St.Label({text: g === GLib.DateTime.new_now_local().format('%d.%m') ? _('Bugün') : g,
                     style_class: 'flugel-bolum-baslik'}));
             }
-            this._liste.add_child(this._satir(b, t));
+            this._liste.add_child(this._satir(b, t, v3 && b.ts > okundu));
         }
     }
 
-    _satir(b, t) {
+    _satir(b, t, yeni = false) {
         const {k, ikon: ik} = kategori(b.metin);
         const sessiz = sessizMi(this._ayar, k);
-        const satir = new St.Button({style_class: `flugel-sb-satir${sessiz ? ' flugel-sb-sessiz' : ''}`, can_focus: true,
-            x_expand: true, track_hover: true});
+        const satir = new St.Button({style_class: `flugel-sb-satir${sessiz ? ' flugel-sb-sessiz' : ''}${yeni ? ' flugel-sb-yeni' : ''}`,
+            can_focus: true, x_expand: true, track_hover: true});
         const kutu = new St.BoxLayout({x_expand: true, style: 'spacing: 10px;'});
         kutu.add_child(new St.Widget({style_class: 'flugel-nokta', style: `background-color: ${RENK[b.seviye] ?? RENK.BILGI};`,
             y_align: Clutter.ActorAlign.START}));
@@ -149,8 +243,12 @@ export class BildirimlerSayfa extends Sayfa {
     }
 
     destroy() {
+        if (this._temizleOnay)
+            GLib.source_remove(this._temizleOnay);
+        this._temizleOnay = 0;
         this._aboneler.forEach(fn => fn());
         this._ayar.disconnect(this._ayarId);
+        this._ayar.disconnect(this._tasarimId);
         super.destroy();
     }
 }

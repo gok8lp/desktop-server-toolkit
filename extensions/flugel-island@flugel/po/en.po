@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 12:02+0300\n"
+"POT-Creation-Date: 2026-10-18 12:08+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -2347,11 +2347,46 @@ msgstr "Info"
 msgid "Susturma"
 msgstr "Mute"
 
+msgid "Gruplama: kategoriye ya da zamana göre"
+msgstr "Grouping: by category or by time"
+
+msgid "Hepsini okundu say"
+msgstr "Mark all as read"
+
+msgid "Kritik ve hata bildirimleri korunur"
+msgstr "Critical and error notifications are kept"
+
+msgid "Hepsini temizle"
+msgstr "Clear all"
+
+msgid "Emin misin? Tekrar bas"
+msgstr "Sure? Press again"
+
+#
+#, javascript-format
+msgid "%s okunmamış"
+msgstr "%s unread"
+
+msgid "Hepsi okundu"
+msgstr "All read"
+
+msgid "Kategori"
+msgstr "Category"
+
+msgid "Zaman"
+msgstr "Time"
+
+msgid "Okundu say"
+msgstr "Mark read"
+
 msgid "Sunucuya ulaşılamıyor"
 msgstr "Server unreachable"
 
 msgid "Son 24 saatte bildirim yok"
 msgstr "No notifications in the last 24 hours"
+
+msgid "Kritik"
+msgstr "Critical"
 
 #, javascript-format
 msgid "%s: susturmayı kaldır"

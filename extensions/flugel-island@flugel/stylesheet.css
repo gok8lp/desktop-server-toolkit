@@ -707,3 +707,36 @@
 .flugel-v3 .flugel-karo.flugel-v3-sabit { border: 2px solid rgba(255, 255, 255, 0.70); }
 /* v3.1 kompakt medya ilerlemesi: 2 px, yuvarlak uçlu, tek renk */
 .flugel-v3-medya-cizgi { height: 2px; border-radius: 1px; background-color: rgba(245, 246, 247, 0.85); }
+
+/* v3 · kart içi medya oynatıcı (BILDIRIM-MEDYA.md §3): kapaktan ton yok, sabit yerleşim */
+.flugel-v3 .flugel-oynatici { padding: 14px; border-radius: 14px; background-color: #14161a; border: 1px solid rgba(255, 255, 255, 0.11); }
+.flugel-v3 .flugel-oynatici-kapak { width: 112px; height: 112px; border-radius: 10px; background-color: #202329; color: #a7abb2; }
+.flugel-v3 .flugel-oynatici-baslik { font-size: 12pt; font-weight: 800; color: #f5f6f7; }
+.flugel-v3 .flugel-oynatici-sanatci { font-size: 10.5pt; color: #a7abb2; }
+.flugel-v3 .flugel-oynatici-kaynak { color: #878d96; }
+.flugel-v3 .flugel-oynatici-sure { color: #a7abb2; }
+.flugel-v3 .flugel-oynatici-cubuk { -barlevel-height: 4px; -barlevel-active-background-color: #f5f6f7; -barlevel-background-color: #2b3037; }
+.flugel-v3 .flugel-oynatici-dugme { padding: 9px; border-radius: 10px; color: #f5f6f7; transition-duration: 120ms; }
+.flugel-v3 .flugel-oynatici-dugme:hover { background-color: #2b3037; }
+.flugel-v3 .flugel-oynatici-dugme:checked { background-color: #202329; border: 1px solid rgba(255, 255, 255, 0.22); }
+.flugel-v3 .flugel-oynatici-dugme:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.70); }
+.flugel-v3 .flugel-oynatici-dugme-buyuk { padding: 10px; border-radius: 999px; background-color: #f5f6f7; color: #08090b; }
+.flugel-v3 .flugel-oynatici-dugme-buyuk:hover { background-color: #ffffff; }
+.flugel-v3 .flugel-esitleyici-cubuk { background-color: #f5f6f7; }
+
+/* v3 · bildirim afişi (BILDIRIM-MEDYA.md §1) */
+.flugel-v3 .flugel-bildirim { border-left: 2px solid rgba(255, 255, 255, 0.22); padding: 10px 14px 12px 12px; }
+.flugel-v3 .flugel-bildirim.flugel-bildirim-kritik { border-left-color: #e2b048; }
+.flugel-v3 .flugel-bildirim-simge { icon-size: 20px; padding: 4px; border-radius: 8px; background-color: #202329; }
+.flugel-v3 .flugel-bildirim-uygulama { font-size: 8pt; font-weight: 700; color: #a7abb2; }
+.flugel-v3 .flugel-bildirim-zaman { color: #878d96; }
+.flugel-v3 .flugel-bildirim-baslik { font-size: 10.5pt; font-weight: 700; color: #f5f6f7; }
+.flugel-v3 .flugel-bildirim-metin { font-size: 9pt; color: #a7abb2; }
+
+/* v3 · Bildirimler sayfası (BILDIRIM-MEDYA.md §2) */
+.flugel-v3-bildirim-ust { spacing: 6px; padding: 2px 2px 6px 2px; }
+.flugel-v3-bildirim-sayi { font-size: 10pt; font-weight: 700; color: #f5f6f7; }
+.flugel-v3 .flugel-sb-satir { border-left: 3px solid transparent; }
+.flugel-v3 .flugel-sb-satir.flugel-sb-yeni { border-left-color: rgba(245, 246, 247, 0.85); }
+.flugel-v3 .flugel-sb-satir.flugel-sb-yeni .flugel-sb-metin { color: #f5f6f7; font-weight: 700; }
+.flugel-v3 .flugel-sb-metin { color: #a7abb2; }
