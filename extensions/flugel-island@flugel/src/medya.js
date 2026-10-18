@@ -32,7 +32,7 @@ function cagir(bus, yontem, parametre = null) {
     Gio.DBus.session.call(bus, MPRIS_YOL, OYNATICI, yontem, parametre, null, Gio.DBusCallFlags.NONE, 2000, null, null);
 }
 
-function konumOku(bus, iptal) {
+export function konumOku(bus, iptal) {
     return new Promise(coz => {
         Gio.DBus.session.call(bus, MPRIS_YOL, 'org.freedesktop.DBus.Properties', 'Get',
             new GLib.Variant('(ss)', [OYNATICI, 'Position']), null, Gio.DBusCallFlags.NONE, 1500, iptal, (b, res) => {

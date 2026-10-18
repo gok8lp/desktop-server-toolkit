@@ -705,3 +705,5 @@
 .flugel-v3-duzenle:checked { background-color: #202329; color: #f5f6f7; border-color: rgba(255, 255, 255, 0.22); }
 /* düzenleme kipinde Hızlı'ya sabitli araç: belirgin kenar (renk değil, yalnız kontrast) */
 .flugel-v3 .flugel-karo.flugel-v3-sabit { border: 2px solid rgba(255, 255, 255, 0.70); }
+/* v3.1 kompakt medya ilerlemesi: 2 px, yuvarlak uçlu, tek renk */
+.flugel-v3-medya-cizgi { height: 2px; border-radius: 1px; background-color: rgba(245, 246, 247, 0.85); }

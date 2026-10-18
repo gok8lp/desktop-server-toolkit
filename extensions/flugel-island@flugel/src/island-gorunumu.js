@@ -6,10 +6,12 @@
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 import Meta from 'gi://Meta';
 import GnomeDesktop from 'gi://GnomeDesktop';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {YayFizik} from './spring.js';
+import {konumOku} from './medya.js';
 import {TamEkranBirlikte} from './tam-ekran.js';
 import {Kacis} from './kacis.js';
 import {Cam, bulanikGecis, bulanikTemizle} from './cam.js';
@@ -407,6 +409,7 @@ export class IslandGorunumu {
         const ana = gorunum === 'flas' || gorunum === 'bildirim' ? vm.flashing : (gorunum === 'bos' ? null : (vm.leading ?? vm.trailing));
         const ikinci = gorunum === 'kompakt' && vm.leading && vm.trailing ? vm.trailing : null;
         this._kompaktGoster(gorunum, ana, onceki === 'genis' || onceki === null);
+        this._medyaIlerlemeYaz(gorunum === 'kompakt' && this._v3() ? ana : null);
         this._balonGoster(ikinci);
         this._bicimle(this._hedef(gorunum));
     }
@@ -501,6 +504,64 @@ export class IslandGorunumu {
                         this._kartKutu.hide();
                 }});
         }
+    }
+
+    // v3.1: kompakt medya kapsülünün alt iç kenarında 2 px ilerleme çizgisi. Yalnız kapsül görünürken ve süre
+    // geçerliyse; çalarken saniyede en çok bir konum okuması (MPRIS Position sinyal vermez), duraklatılmışsa bir kez.
+    _medyaIlerlemeYaz(a) {
+        const m = a?.data?.medya;
+        const gecerli = m && Number.isFinite(m.uzunluk) && m.uzunluk > 0 && m.bus;
+        if (!gecerli) {
+            this._medyaDurdur();
+            if (this._medyaCizgi)
+                this._medyaCizgi.hide();
+            return;
+        }
+        if (!this._medyaCizgi) {
+            this._medyaCizgi = new St.Widget({style_class: 'flugel-v3-medya-cizgi', x_align: Clutter.ActorAlign.START,
+                y_align: Clutter.ActorAlign.END, width: 0});
+            this._medyaCizgi.margin_left = 14 * this._s;
+            this._medyaCizgi.margin_bottom = 3 * this._s;
+            this._icerik.add_child(this._medyaCizgi);
+        }
+        this._medyaAktif = m;
+        const oku = () => {
+            const iptal = this._medyaIptal = new Gio.Cancellable();
+            konumOku(m.bus, iptal).then(us => {
+                if (iptal.is_cancelled() || this._medyaAktif !== m || !this._medyaCizgi)
+                    return;
+                const oran = Number.isFinite(us) ? Math.max(0, Math.min(1, us / m.uzunluk)) : NaN;
+                if (!Number.isFinite(oran)) {
+                    this._medyaCizgi.hide();
+                    return;
+                }
+                const genislik = Math.max(0, this._kok.width - 28 * this._s);
+                this._medyaCizgi.set_width(Math.round(genislik * oran));
+                this._medyaCizgi.show();
+            });
+        };
+        this._medyaDurdur(false);
+        oku();
+        if (m.caliyor) {
+            this._medyaTikId = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, 1, () => {
+                if (!this._kok?.mapped || this._durum === 'genis' || this._medyaAktif !== m) {
+                    this._medyaTikId = 0;
+                    return GLib.SOURCE_REMOVE;
+                }
+                oku();
+                return GLib.SOURCE_CONTINUE;
+            });
+        }
+    }
+
+    _medyaDurdur(tum = true) {
+        if (this._medyaTikId)
+            GLib.source_remove(this._medyaTikId);
+        this._medyaTikId = 0;
+        this._medyaIptal?.cancel();
+        this._medyaIptal = null;
+        if (tum)
+            this._medyaAktif = null;
     }
 
     // v3 (Quiet Orbit) tasarımı seçili mi; stil kapsamı için kök aktöre sınıf
@@ -1068,6 +1129,7 @@ export class IslandGorunumu {
 
     // ---------- kapanış ----------
     destroy() {
+        this._medyaDurdur();
         if (this._ekranAsil) {
             Main.screenshotUI.open = this._ekranAsil;
             this._ekranAsil = null;
