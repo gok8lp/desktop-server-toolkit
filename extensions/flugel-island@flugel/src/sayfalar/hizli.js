@@ -198,6 +198,12 @@ export class HizliSayfa extends Sayfa {
         this._o.ayarlar.set_strv('hizli-araclar', [...liste, id]);
     }
 
+    // kart içerik genişliği değişince ızgaralar yeniden dizilir (Kart çağırır)
+    genislikDegisti(w) {
+        for (const iz of [this._ayarIzgara, this._sabit, this._araclar])
+            iz?.sutunAyarla(w - 12);
+    }
+
     _kisaUygula() {
         if (!this._tumuDugme)
             return;

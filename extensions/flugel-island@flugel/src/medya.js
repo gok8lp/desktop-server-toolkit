@@ -281,6 +281,9 @@ export class MedyaOynatici {
     }
 
     guncelle(a) {
+        // v3: dar kartta (560 ve altı) kapak 80 px, kontroller tek satırda kalır
+        const dar = this._ayar?.get_string('tasarim') === 'v3' && this._ayar.get_int('kart-genislik') < 600;
+        const boyut = dar ? 'width: 80px; height: 80px;' : '';
         const m = a.data?.medya;
         if (!m)
             return;
@@ -295,10 +298,10 @@ export class MedyaOynatici {
         const kapakVar = m.kapakUrl && /^(file|https?):\/\//.test(m.kapakUrl);
         if (kapakVar) {
             const uri = m.kapakUrl.replace(/"/g, '%22');
-            this._kapak.style = `background-image: url("${uri}"); background-size: cover;`;
+            this._kapak.style = `${boyut} background-image: url("${uri}"); background-size: cover;`;
             this._kapakSimge.hide();
         } else {
-            this._kapak.style = null;
+            this._kapak.style = boyut || null;
             this._kapakSimge.show();
         }
         if (kapakVar && m.kapakUrl !== this._vurguUri) {

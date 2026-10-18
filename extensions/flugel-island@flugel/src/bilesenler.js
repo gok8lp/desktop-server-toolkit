@@ -159,6 +159,7 @@ export class Izgara {
         this._sutun = sutun ?? Math.max(3, Math.floor((genislik + bosluk) / (karoGenisligi + bosluk)));
         // sabit sütun sayısıyla (sutun verildiyse) karolar genişliği paylaşır; yoksa sabit boyutlu ve ortalı dizilir
         this._sabit = sutun ? null : karoGenisligi;
+        this._bosluk = bosluk;
         this._duzen = new Clutter.GridLayout({column_spacing: bosluk, row_spacing: bosluk, column_homogeneous: true});
         this.actor = new St.Widget({layout_manager: this._duzen, x_expand: !!sutun, style_class: 'flugel-izgara',
             x_align: sutun ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.START});
@@ -178,6 +179,7 @@ export class Izgara {
     // yalnız görünen karoları sırayla yeniden dizer (gizli karo hücre boşluğu bırakmaz); gizliler sona gider
     // oncelik: önce dizilecek aktörler (sırasıyla), sonra kalan görünenler
     yenidenDiz(oncelik = []) {
+        this._sonOncelik = oncelik;
         const sira = (this._sira ?? []).filter(a => a.get_parent() === this.actor);
         const gorunur = new Set(sira.filter(a => a.visible));
         const once = oncelik.filter(a => gorunur.has(a));
@@ -194,6 +196,18 @@ export class Izgara {
         this.actor.destroy_all_children();
         this._n = 0;
         this._sira = [];
+    }
+
+    // kullanılabilir genişlik değişince (kart genişliği, dar ekran) sütun sayısı yeniden hesaplanır; taşma olmaz
+    sutunAyarla(genislik) {
+        if (!this._sabit || !(genislik > 0))
+            return;
+        // karo gerçek genişliği: CSS genişliği + yatay iç boşluk ve kenarlık (~10 px)
+        const yeni = Math.max(2, Math.floor((genislik + this._bosluk) / (this._sabit + 10 + this._bosluk)));
+        if (yeni === this._sutun)
+            return;
+        this._sutun = yeni;
+        this.yenidenDiz(this._sonOncelik ?? []);
     }
 
     get sayi() {

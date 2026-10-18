@@ -228,6 +228,18 @@ export class Kart {
             this._sayfaKutu.add_child(s.sayfa.actor);
         }
         this.actor.add_child(this._kaydirma);
+        // içerik alanının gerçek genişliği sayfalara bildirilir (ızgaralar taşmasın)
+        this._kaydirma.connect('notify::width', () => {
+            if (this._genislikId)
+                return;
+            this._genislikId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._genislikId = 0;
+                const w = this._kaydirma.width / St.ThemeContext.get_for_stage(global.stage).scale_factor;
+                for (const s of this._sayfalar)
+                    s.sayfa.genislikDegisti?.(w);
+                return GLib.SOURCE_REMOVE;
+            });
+        });
         this.actor.connect('notify::height', () => this._boyutBildir());
         // Ada sabit boyuttayken kartın kendi yüksekliği değişmez: içerik (sayfa) uzayıp kısalınca kaydırma alanının
         // içeriğinden izlenir. Yoksa kısa bir listeden uzun birine geçince kart kısa boyda takılı kalır.
@@ -722,6 +734,9 @@ export class Kart {
         if (this._seciciId)
             GLib.source_remove(this._seciciId);
         this._seciciId = 0;
+        if (this._genislikId)
+            GLib.source_remove(this._genislikId);
+        this._genislikId = 0;
         if (this._isitId)
             GLib.source_remove(this._isitId);
         this._isitId = 0;
