@@ -687,3 +687,16 @@
 .flugel-v3 .flugel-karo:active, .flugel-v3 .flugel-karo:checked { background-color: #202329; }
 .flugel-v3 .flugel-karo:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.70); }
 .flugel-v3 .flugel-bolum-baslik { font-size: 10pt; color: #a7abb2; }
+.flugel-v3-tumu {
+  margin-top: 4px;
+  padding: 10px 14px;   /* en az 36 px tıklama alanı */
+  border-radius: 14px;
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #f5f6f7;
+  background-color: #14161a;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  transition-duration: 120ms;
+}
+.flugel-v3-tumu:hover { background-color: #2b3037; }
+.flugel-v3-tumu:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.70); }

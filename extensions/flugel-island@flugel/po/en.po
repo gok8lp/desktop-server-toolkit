@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 21:52+0300\n"
+"POT-Creation-Date: 2026-10-18 11:42+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -384,20 +384,23 @@ msgid "Tasarım"
 msgstr "Design"
 
 msgid ""
-"Atoll düzeni: kapak rengine göre tonlanan medya oynatıcı, pano yöneticisi, "
-"iki sütunlu renk seçici, canlı izleme. Önceki: v2.8.0 görünümü. İstediğin an "
-"geri dönebilirsin."
+"Quiet Orbit: beş grup, en çok iki canlı satır, sade ve hızlı hareket. Atoll "
+"düzeni: kapak rengine göre tonlanan medya oynatıcı, pano, renk seçici. "
+"Önceki: v2.8.0 görünümü. İstediğin an geri dönebilirsin."
 msgstr ""
-"Atoll layout: media player tinted by the cover color, clipboard manager, two-"
-"column color picker, live monitor. Previous: the v2.8.0 look. You can switch "
-"back any time."
+"Quiet Orbit: five groups, at most two live rows, calm and fast motion. Atoll "
+"layout: media player tinted by the cover color, clipboard, color picker. "
+"Previous: the v2.8.0 look. You can switch back any time."
 
 #
 msgid "Değişiklik hemen uygulanır"
 msgstr "Applied immediately"
 
-msgid "Atoll düzeni (yeni)"
-msgstr "Atoll layout (new)"
+msgid "Quiet Orbit (v3)"
+msgstr "Quiet Orbit (v3)"
+
+msgid "Atoll düzeni"
+msgstr "Atoll layout"
 
 msgid "Önceki görünüm (v2.8.0)"
 msgstr "Previous look (v2.8.0)"
@@ -1060,29 +1063,6 @@ msgstr "Clean link"
 msgid "Pano: %s"
 msgstr "Clipboard: %s"
 
-msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
-msgstr "Clipboard history (this session only, in memory)"
-
-msgid "Henüz kopyalanan metin yok"
-msgstr "Nothing copied yet"
-
-#
-msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
-msgstr "Click: copy again · right-click: remove from list"
-
-msgid "Renk seçici"
-msgstr "Color picker"
-
-msgid "Ekrandan renk seç"
-msgstr "Pick a color from the screen"
-
-msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
-msgstr "Picked colors appear here (copied to the clipboard as HEX)"
-
-#
-msgid "Tıkla: kopyala"
-msgstr "Click: copy"
-
 #, javascript-format
 msgid "Kronometre · %s"
 msgstr "Stopwatch · %s"
@@ -1199,6 +1179,9 @@ msgstr "No matches"
 msgid "Yıldızladığın metinler burada kalıcı durur"
 msgstr "Texts you star are kept here"
 
+msgid "Henüz kopyalanan metin yok"
+msgstr "Nothing copied yet"
+
 msgid "Favorilere ekle (kalıcı)"
 msgstr "Add to favorites (kept)"
 
@@ -1206,11 +1189,17 @@ msgstr "Add to favorites (kept)"
 msgid "Tıkla: yeniden kopyala · sağ tık: sil"
 msgstr "Click: copy again · right-click: remove"
 
+msgid "Renk seçici"
+msgstr "Color picker"
+
 msgid "Renk seç"
 msgstr "Pick color"
 
 msgid "Renk geçmişini temizle"
 msgstr "Clear color history"
+
+msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
+msgstr "Picked colors appear here (copied to the clipboard as HEX)"
 
 msgid "Son renkler"
 msgstr "Recent colors"
@@ -1230,6 +1219,20 @@ msgstr "picked %s"
 #
 msgid "Biçimler"
 msgstr "Formats"
+
+#
+msgid "Tıkla: kopyala"
+msgstr "Click: copy"
+
+msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgstr "Clipboard history (this session only, in memory)"
+
+#
+msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgstr "Click: copy again · right-click: remove from list"
+
+msgid "Ekrandan renk seç"
+msgstr "Pick a color from the screen"
 
 #, javascript-format
 msgid "Çalışma alanı %s / %s"
@@ -1488,6 +1491,19 @@ msgstr "off"
 msgid "Ses ayarları"
 msgstr "Sound settings"
 
+msgid "Ana"
+msgstr "Home"
+
+msgid "İçerik"
+msgstr "Content"
+
+#
+msgid "Takip"
+msgstr "Following"
+
+msgid "Bildirim"
+msgstr "Notification"
+
 msgid "Pazar"
 msgstr "Sunday"
 
@@ -1566,6 +1582,10 @@ msgstr "Keep open"
 msgid "Island ayarları"
 msgstr "Island settings"
 
+msgid ""
+"Daha fazla: hızlı ayarlar, takvim, etkinlikler, çalışma alanları, ayarlar"
+msgstr "More: quick settings, calendar, activities, workspaces, settings"
+
 #
 msgid "Ekranı kapat"
 msgstr "Screen off"
@@ -1595,6 +1615,39 @@ msgstr "GNOME's confirmation dialog opens"
 msgid "GNOME onay penceresi açılır (geri sayımlı)"
 msgstr "GNOME's confirmation dialog opens (with countdown)"
 
+#
+msgid "Hızlı ayarlar"
+msgstr "Quick settings"
+
+msgid "Ses, ağ, pil, güç"
+msgstr "Sound, network, battery, power"
+
+msgid "Takvim"
+msgstr "Calendar"
+
+msgid "Etkinlikler"
+msgstr "Activities"
+
+msgid "Pencereler ve uygulamalar"
+msgstr "Windows and apps"
+
+msgid "Ayarlar"
+msgstr "Settings"
+
+msgid "Canlı etkinlikleri kısalt"
+msgstr "Show fewer live activities"
+
+#
+msgid "Tüm canlı etkinlikleri göster"
+msgstr "Show all live activities"
+
+msgid "Daha az"
+msgstr "Show less"
+
+#, javascript-format
+msgid "+%d daha"
+msgstr "+%d more"
+
 msgid "Ses"
 msgstr "Sound"
 
@@ -1607,21 +1660,6 @@ msgstr "App volumes and output device"
 msgid "Parlaklık"
 msgstr "Brightness"
 
-msgid "10 sn geri"
-msgstr "Back 10 s"
-
-msgid "Önceki"
-msgstr "Previous"
-
-msgid "Oynat / duraklat"
-msgstr "Play / pause"
-
-msgid "Sonraki"
-msgstr "Next"
-
-msgid "10 sn ileri"
-msgstr "Forward 10 s"
-
 #
 msgid "Çıkış cihazı"
 msgstr "Output device"
@@ -1632,11 +1670,26 @@ msgstr "Shuffle"
 msgid "Önceki · sağ tık: 10 sn geri"
 msgstr "Previous · right-click: back 10 s"
 
+msgid "Oynat / duraklat"
+msgstr "Play / pause"
+
 msgid "Sonraki · sağ tık: 10 sn ileri"
 msgstr "Next · right-click: forward 10 s"
 
 msgid "Tekrar: kapalı → liste → parça"
 msgstr "Repeat: off → playlist → track"
+
+msgid "10 sn geri"
+msgstr "Back 10 s"
+
+msgid "Önceki"
+msgstr "Previous"
+
+msgid "Sonraki"
+msgstr "Next"
+
+msgid "10 sn ileri"
+msgstr "Forward 10 s"
 
 msgid "komut çalışmadı"
 msgstr "command failed"
@@ -1806,9 +1859,6 @@ msgstr "assignment"
 
 msgid "Basket sekmesi"
 msgstr "Matches tab"
-
-msgid "Bildirim"
-msgstr "Notification"
 
 msgid "Fare"
 msgstr "Mouse"
@@ -2016,10 +2066,6 @@ msgstr "Open the article"
 
 msgid "Sana özel"
 msgstr "For you"
-
-#
-msgid "Takip"
-msgstr "Following"
 
 #
 msgid "Oyun"
@@ -2396,8 +2442,11 @@ msgid "Araçlar"
 msgstr "Tools"
 
 #
-msgid "Hızlı ayarlar"
-msgstr "Quick settings"
+msgid "Kısa görünüme dön"
+msgstr "Back to the short view"
+
+msgid "Tüm hızlı ayarlar, uygulamalar ve araçlar (zorla kapat, panik dahil)"
+msgstr "All quick settings, apps and tools (including force quit and panic)"
 
 #
 msgid "Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır"
@@ -2544,9 +2593,6 @@ msgstr "VM manager"
 msgid "Sanal makine yöneticisi"
 msgstr "Virtual machine manager"
 
-msgid "Takvim"
-msgstr "Calendar"
-
 msgid "Saat"
 msgstr "Clocks"
 
@@ -2657,9 +2703,6 @@ msgstr "Back up this PC to the server"
 
 msgid "Timeshift (geçmişe dön)"
 msgstr "Timeshift (go back in time)"
-
-msgid "Ayarlar"
-msgstr "Settings"
 
 msgid "GNOME ayarları"
 msgstr "GNOME Settings"

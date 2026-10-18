@@ -171,12 +171,27 @@ export class Izgara {
             a.style = `${a.style ?? ''} width: ${this._sabit}px;`;
         this._duzen.attach(a, this._n % this._sutun, Math.floor(this._n / this._sutun), 1, 1);
         this._n++;
+        (this._sira ??= []).push(a);
         return karo;
+    }
+
+    // yalnız görünen karoları sırayla yeniden dizer (gizli karo hücre boşluğu bırakmaz); gizliler sona gider
+    yenidenDiz() {
+        const sira = (this._sira ?? []).filter(a => a.get_parent() === this.actor);
+        const gorunur = new Set(sira.filter(a => a.visible));
+        const dizi = [...sira.filter(a => gorunur.has(a)), ...sira.filter(a => !gorunur.has(a))];
+        for (const a of dizi)
+            this.actor.remove_child(a);
+        dizi.forEach((a, i) => {
+            this._duzen.attach(a, i % this._sutun, Math.floor(i / this._sutun), 1, 1);
+            a.visible = gorunur.has(a); // ebeveyne eklenince Clutter gösterir (show-on-set-parent); gizliyi koru
+        });
     }
 
     temizle() {
         this.actor.destroy_all_children();
         this._n = 0;
+        this._sira = [];
     }
 
     get sayi() {

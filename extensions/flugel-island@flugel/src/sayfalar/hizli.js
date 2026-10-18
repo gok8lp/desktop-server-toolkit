@@ -10,7 +10,7 @@ import Shell from 'gi://Shell';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {Sayfa} from './sayfa.js';
 import {bash, calistir, ekranGoruntusu, ikon} from '../ortak.js';
-import {Karo, Izgara, bolum, gorunurKaydir} from '../bilesenler.js';
+import {Karo, Izgara, bolum, gorunurKaydir, ipucuBagla} from '../bilesenler.js';
 import {sabitKarolar} from '../uygulamalar.js';
 import {UYKU_KIPLERI} from '../uyku.js';
 import {HizliAyarlar} from '../hizli-ayarlar.js';
@@ -69,7 +69,7 @@ export class HizliSayfa extends Sayfa {
         this._basiliBagla();
         this._uykuKaro = araclar.ekle(new Karo({ikon: 'fincan', etiket: _('Uyku engelle'),
             ipucu: () => this._uykuIpucu(), eylem: () => this._ac('uyku')}));
-        araclar.ekle(new Karo({ikon: 'camera-photo-symbolic', etiket: _('Görüntü'),
+        this._goruntuKaro = araclar.ekle(new Karo({ikon: 'camera-photo-symbolic', etiket: _('Görüntü'),
             ipucu: {baslik: _('Ekran görüntüsü'), ayrinti: _('Alan, pencere ya da tüm ekran (Print, Shift+Super+S)')},
             eylem: () => {
                 this.close();
@@ -79,7 +79,7 @@ export class HizliSayfa extends Sayfa {
         this._zamanKaro = araclar.ekle(new Karo({ikon: 'alarm-symbolic', etiket: _('Zamanlayıcı'),
             ipucu: {baslik: _('Zamanlayıcı'), ayrinti: _('Geri sayım kapsülde görünür; bitince ses ve duyuru')},
             eylem: () => this._detayAcKapa('zaman')}));
-        araclar.ekle(new Karo({ikon: 'edit-paste-symbolic', etiket: _('Pano'),
+        this._panoKaro = araclar.ekle(new Karo({ikon: 'edit-paste-symbolic', etiket: _('Pano'),
             ipucu: {baslik: _('Pano geçmişi'), ayrinti: _('Son kopyalanan metinler (sadece bu oturumda, bellekte)')},
             eylem: () => this._detayAcKapa('pano')}));
         araclar.ekle(new Karo({ikon: 'color-select-symbolic', etiket: _('Renk seç'),
@@ -111,6 +111,7 @@ export class HizliSayfa extends Sayfa {
             ipucu: {baslik: _('Paniği geri al'), ayrinti: _('Gizlenen pencereler ve ses geri gelir')},
             eylem: () => this._panik.geriAl()}));
         this.actor.add_child(bolum(_('Araçlar'), araclar));
+        this._araclar = araclar;
         this._hizliAyar = new HizliAyarlar();
         this._ayarIzgara = new Izgara({genislik: this._genislik, karoGenisligi: 84});
         // hızlı ayarlar ses/parlaklığın hemen altında (stok Hızlı Ayarlar gibi sistem denetimleri bir arada)
@@ -124,6 +125,21 @@ export class HizliSayfa extends Sayfa {
         // açılır alt panel (zorla kapat listesi / uyku süreleri)
         this._alt = new St.BoxLayout({orientation: Clutter.Orientation.VERTICAL, style_class: 'flugel-alt-panel', visible: false});
         this.actor.add_child(this._alt);
+
+        // v3 (Quiet Orbit): kısa ilk görünüm (dört ayar, dört uygulama, dört araç) + "Tümü"; hiçbir eylem silinmez
+        this._tumu = false;
+        this._tumuDugme = new St.Button({style_class: 'flugel-v3-tumu', can_focus: true, x_expand: true, visible: false});
+        this._tumuDugme.connect('clicked', () => {
+            this._tumu = !this._tumu;
+            this._kisaUygula();
+        });
+        ipucuBagla(this._tumuDugme, () => (this._tumu ? _('Kısa görünüme dön')
+            : _('Tüm hızlı ayarlar, uygulamalar ve araçlar (zorla kapat, panik dahil)')));
+        this.actor.add_child(this._tumuDugme);
+        this._tasarimId = o.ayarlar.connect('changed::tasarim', () => {
+            this._tumu = false;
+            this._kisaUygula();
+        });
 
         this._abonelikler = [
             this._panik.abone(() => this._durumYaz()),
@@ -139,6 +155,32 @@ export class HizliSayfa extends Sayfa {
         this._ekleKaro = this._sabit.ekle(new Karo({ikon: 'list-add-symbolic', etiket: _('Ekle'), boyut: 28,
             stil: 'flugel-ekle-karo', ipucu: {baslik: _('Uygulama ekle'), ayrinti: _('Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır')},
             eylem: () => this._uygAcKapa()}));
+        this._kisaUygula();
+    }
+
+    _kisaUygula() {
+        if (!this._tumuDugme)
+            return;
+        const v3 = this._o.ayarlar.get_string('tasarim') === 'v3';
+        const kisa = v3 && !this._tumu;
+        const sik = new Set([this._goruntuKaro, this._uykuKaro, this._zamanKaro, this._panoKaro].map(k => k.actor));
+        for (const a of this._araclar.actor.get_children()) {
+            if (a === this._geriKaro.actor)
+                a.visible = this._panik.aktif; // panik geri alma her zaman erişilebilir
+            else
+                a.visible = !kisa || sik.has(a);
+        }
+        this._ayarIzgara.actor.get_children().forEach((a, i) => (a.visible = !kisa || i < 4));
+        let uyg = 0;
+        for (const a of this._sabit.actor.get_children()) {
+            const ekle = a === this._ekleKaro?.actor;
+            a.visible = !kisa || (!ekle && uyg++ < 4);
+        }
+        for (const iz of [this._araclar, this._ayarIzgara, this._sabit])
+            iz.yenidenDiz();
+        this._tumuDugme.visible = v3;
+        this._tumuDugme.label = this._tumu ? _('Daha az') : _('Tümü');
+        this._tumuDugme.accessible_name = this._tumuDugme.label;
     }
 
     // ---------- uygulama ekleme ----------
@@ -230,6 +272,7 @@ export class HizliSayfa extends Sayfa {
             if (detayli && this._detayId === d.id)
                 k.actor.add_style_class_name('flugel-karo-detay-acik');
         }
+        this._kisaUygula();
     }
 
     _detayAcKapa(id) {
@@ -289,6 +332,10 @@ export class HizliSayfa extends Sayfa {
 
     kapandi() {
         super.kapandi();
+        if (this._tumu) {
+            this._tumu = false;
+            this._kisaUygula();
+        }
         this._detayKapat();
         this._uygKapat();
         this._altKapat();
@@ -296,8 +343,8 @@ export class HizliSayfa extends Sayfa {
     }
 
     _durumYaz() {
-        this._geriKaro.actor.visible = this._panik.aktif;
         this._uykuKaro.secili(this._uyku.acik);
+        this._kisaUygula();
         this._uykuKaro.nokta(this._uyku.acik ? 'acik' : null);
         this._uykuKaro.guncelle({etiket: this._uyku.acik ? (this._uyku.kip === 'video' ? _('Video') : _('Uyanık')) : _('Uyku engelle')});
         if (this._altTur === 'uyku')
@@ -465,6 +512,7 @@ export class HizliSayfa extends Sayfa {
         this._panikOnayId = this._basiliId = 0;
         this._abonelikler.forEach(f => f());
         this._o.ayarlar.disconnect(this._ayarId);
+        this._o.ayarlar.disconnect(this._tasarimId);
         super.destroy();
     }
 }

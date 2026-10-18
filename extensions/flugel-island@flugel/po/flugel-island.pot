@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 21:52+0300\n"
+"POT-Creation-Date: 2026-10-18 11:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -345,15 +345,18 @@ msgid "Tasarım"
 msgstr ""
 
 msgid ""
-"Atoll düzeni: kapak rengine göre tonlanan medya oynatıcı, pano yöneticisi, "
-"iki sütunlu renk seçici, canlı izleme. Önceki: v2.8.0 görünümü. İstediğin an "
-"geri dönebilirsin."
+"Quiet Orbit: beş grup, en çok iki canlı satır, sade ve hızlı hareket. Atoll "
+"düzeni: kapak rengine göre tonlanan medya oynatıcı, pano, renk seçici. "
+"Önceki: v2.8.0 görünümü. İstediğin an geri dönebilirsin."
 msgstr ""
 
 msgid "Değişiklik hemen uygulanır"
 msgstr ""
 
-msgid "Atoll düzeni (yeni)"
+msgid "Quiet Orbit (v3)"
+msgstr ""
+
+msgid "Atoll düzeni"
 msgstr ""
 
 msgid "Önceki görünüm (v2.8.0)"
@@ -966,27 +969,6 @@ msgstr ""
 msgid "Pano: %s"
 msgstr ""
 
-msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
-msgstr ""
-
-msgid "Henüz kopyalanan metin yok"
-msgstr ""
-
-msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
-msgstr ""
-
-msgid "Renk seçici"
-msgstr ""
-
-msgid "Ekrandan renk seç"
-msgstr ""
-
-msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
-msgstr ""
-
-msgid "Tıkla: kopyala"
-msgstr ""
-
 #, javascript-format
 msgid "Kronometre · %s"
 msgstr ""
@@ -1093,16 +1075,25 @@ msgstr ""
 msgid "Yıldızladığın metinler burada kalıcı durur"
 msgstr ""
 
+msgid "Henüz kopyalanan metin yok"
+msgstr ""
+
 msgid "Favorilere ekle (kalıcı)"
 msgstr ""
 
 msgid "Tıkla: yeniden kopyala · sağ tık: sil"
 msgstr ""
 
+msgid "Renk seçici"
+msgstr ""
+
 msgid "Renk seç"
 msgstr ""
 
 msgid "Renk geçmişini temizle"
+msgstr ""
+
+msgid "Seçilen renkler burada görünür (HEX olarak panoya kopyalanır)"
 msgstr ""
 
 msgid "Son renkler"
@@ -1119,6 +1110,18 @@ msgid "%s seçildi"
 msgstr ""
 
 msgid "Biçimler"
+msgstr ""
+
+msgid "Tıkla: kopyala"
+msgstr ""
+
+msgid "Pano geçmişi (sadece bu oturumda, bellekte)"
+msgstr ""
+
+msgid "Tıkla: yeniden kopyala · sağ tık: listeden sil"
+msgstr ""
+
+msgid "Ekrandan renk seç"
 msgstr ""
 
 #, javascript-format
@@ -1356,6 +1359,18 @@ msgstr ""
 msgid "Ses ayarları"
 msgstr ""
 
+msgid "Ana"
+msgstr ""
+
+msgid "İçerik"
+msgstr ""
+
+msgid "Takip"
+msgstr ""
+
+msgid "Bildirim"
+msgstr ""
+
 msgid "Pazar"
 msgstr ""
 
@@ -1434,6 +1449,10 @@ msgstr ""
 msgid "Island ayarları"
 msgstr ""
 
+msgid ""
+"Daha fazla: hızlı ayarlar, takvim, etkinlikler, çalışma alanları, ayarlar"
+msgstr ""
+
 msgid "Ekranı kapat"
 msgstr ""
 
@@ -1461,6 +1480,37 @@ msgstr ""
 msgid "GNOME onay penceresi açılır (geri sayımlı)"
 msgstr ""
 
+msgid "Hızlı ayarlar"
+msgstr ""
+
+msgid "Ses, ağ, pil, güç"
+msgstr ""
+
+msgid "Takvim"
+msgstr ""
+
+msgid "Etkinlikler"
+msgstr ""
+
+msgid "Pencereler ve uygulamalar"
+msgstr ""
+
+msgid "Ayarlar"
+msgstr ""
+
+msgid "Canlı etkinlikleri kısalt"
+msgstr ""
+
+msgid "Tüm canlı etkinlikleri göster"
+msgstr ""
+
+msgid "Daha az"
+msgstr ""
+
+#, javascript-format
+msgid "+%d daha"
+msgstr ""
+
 msgid "Ses"
 msgstr ""
 
@@ -1473,21 +1523,6 @@ msgstr ""
 msgid "Parlaklık"
 msgstr ""
 
-msgid "10 sn geri"
-msgstr ""
-
-msgid "Önceki"
-msgstr ""
-
-msgid "Oynat / duraklat"
-msgstr ""
-
-msgid "Sonraki"
-msgstr ""
-
-msgid "10 sn ileri"
-msgstr ""
-
 msgid "Çıkış cihazı"
 msgstr ""
 
@@ -1497,10 +1532,25 @@ msgstr ""
 msgid "Önceki · sağ tık: 10 sn geri"
 msgstr ""
 
+msgid "Oynat / duraklat"
+msgstr ""
+
 msgid "Sonraki · sağ tık: 10 sn ileri"
 msgstr ""
 
 msgid "Tekrar: kapalı → liste → parça"
+msgstr ""
+
+msgid "10 sn geri"
+msgstr ""
+
+msgid "Önceki"
+msgstr ""
+
+msgid "Sonraki"
+msgstr ""
+
+msgid "10 sn ileri"
 msgstr ""
 
 msgid "komut çalışmadı"
@@ -1667,9 +1717,6 @@ msgid "görev"
 msgstr ""
 
 msgid "Basket sekmesi"
-msgstr ""
-
-msgid "Bildirim"
 msgstr ""
 
 msgid "Fare"
@@ -1869,9 +1916,6 @@ msgid "Haberi aç"
 msgstr ""
 
 msgid "Sana özel"
-msgstr ""
-
-msgid "Takip"
 msgstr ""
 
 msgid "Oyun"
@@ -2237,7 +2281,10 @@ msgstr ""
 msgid "Araçlar"
 msgstr ""
 
-msgid "Hızlı ayarlar"
+msgid "Kısa görünüme dön"
+msgstr ""
+
+msgid "Tüm hızlı ayarlar, uygulamalar ve araçlar (zorla kapat, panik dahil)"
 msgstr ""
 
 msgid "Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır"
@@ -2381,9 +2428,6 @@ msgstr ""
 msgid "Sanal makine yöneticisi"
 msgstr ""
 
-msgid "Takvim"
-msgstr ""
-
 msgid "Saat"
 msgstr ""
 
@@ -2493,9 +2537,6 @@ msgid "PC'yi sunucuya yedekle"
 msgstr ""
 
 msgid "Timeshift (geçmişe dön)"
-msgstr ""
-
-msgid "Ayarlar"
 msgstr ""
 
 msgid "GNOME ayarları"

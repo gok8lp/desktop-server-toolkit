@@ -144,7 +144,7 @@ export class IslandGorunumu {
         this._ayarId = this._ayar.connect('changed', (_s, k) => {
             if (k === 'tam-ekran-kipi')
                 this._uygula(this._vm ?? this._yonetici._lastVM);
-            if (['saydamlik', 'kart-saydamlik', 'cam-efekti', 'cam-saydamlik', 'genislik-carpani', 'kart-genislik', 'monitor'].includes(k))
+            if (['saydamlik', 'kart-saydamlik', 'cam-efekti', 'cam-saydamlik', 'genislik-carpani', 'kart-genislik', 'monitor', 'tasarim'].includes(k))
                 this._yerlestir(true);
         });
         // ekran görüntüsü / kaydı açılırken kart açıksa önce kapsüle döner ve oturur: kart görüntüye girmez
@@ -283,9 +283,11 @@ export class IslandGorunumu {
     _radiusYaz(zemin, r, t = 0) {
         const css = Math.round(r / this._s);
         // cam açıkken kart daha saydam: bulanık arka plan rengi taşır (iOS'taki gibi), yazı yine okunur kalır
-        const a0 = this._ayar.get_int('saydamlik') / 100;
-        const a1 = this._ayar.get_int(this._cam?.acik ? 'cam-saydamlik' : 'kart-saydamlik') / 100;
-        const [cr, cg, cb] = KAPSUL_RGB.map((v, i) => Math.round(v + (KART_RGB[i] - v) * t));
+        // v3 (Quiet Orbit): mat ve opak shell #08090b; duvar kâğıdı kartın altından görünmez (cam açıksa onun saydamlığı)
+        const v3 = this._v3();
+        const a0 = v3 ? 1 : this._ayar.get_int('saydamlik') / 100;
+        const a1 = this._cam?.acik ? this._ayar.get_int('cam-saydamlik') / 100 : v3 ? 1 : this._ayar.get_int('kart-saydamlik') / 100;
+        const [cr, cg, cb] = v3 ? [8, 9, 11] : KAPSUL_RGB.map((v, i) => Math.round(v + (KART_RGB[i] - v) * t));
         const alfa = (a0 + (a1 - a0) * t).toFixed(2);
         // tam ekranda çentik: üst köşeler düz, alt köşeler yuvarlak, tam siyah
         const centik = this._te?.aktif || this._centik;
