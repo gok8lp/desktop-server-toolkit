@@ -49,13 +49,13 @@ Grup sekmesi ikon + kısa etiket içerir; seçili grup `raised` dolu yüzeydir. 
 | Geçiş | Süre | Kurgu |
 | --- | --- | --- |
 | Hover/odak | 120ms | Yalnız yüzey/kenar/opaklık; odak halkası anında |
-| Kapsül → kart | 210–230ms | Mevcut yay geometrisi; damping yüksek, overshoot yok; içerik en çok 6px Y + opacity |
+| Kapsül → kart | İlk tepki ≤80ms; görünür içerik 180–220ms; geometri ≤360ms | Mevcut yay geometrisi; damping yüksek, overshoot yok; içerik en çok 6px Y + opacity |
 | Kart → kapsül | ≤180ms | İçerik opacity, geometri yay; kapanış açılıştan yavaş değil |
 | Grup/iç sayfa | 150–180ms | Kısa opacity + en çok 4px Y; veri/actor yeniden kurulumu animasyon ortasında yok |
 | Canlı etkinlik değişimi | ≤180ms | Yalnız değişen satır; tüm kartı tekrar çizme |
 | Azaltılmış animasyon | 0–80ms | Blur, scale, stagger ve yay taşması yok |
 
-`cam-efekti` ve `bulanik-gecis` yeni `v3` seçeneğinde kapalı varsayılanla gelmeli; mevcut kullanıcının kayıtlı seçimini sessizce ezme. Efekt açıkken geçmişte fare takılması gözlendi; canlı A/B ancak yeni kod oturuma yüklendikten sonra yapılır. CSS filter/backdrop-filter, büyük shadow ve sürekli frame callback eklenmez. GSettings `tasarim` anahtarına `v3` eklenirken mevcut `atoll`/`klasik` değerleri ve geri dönüş korunur.
+Ön yüzün olay bazlı koreografisi ve mevcut koddaki değişiklik noktaları [MOTION.md](MOTION.md) dosyasındadır. `cam-efekti` ve `bulanik-gecis` yeni `v3` seçeneğinde kapalı varsayılanla gelmeli; mevcut kullanıcının kayıtlı seçimini sessizce ezme. Efekt açıkken geçmişte fare takılması gözlendi; canlı A/B ancak yeni kod oturuma yüklendikten sonra yapılır. CSS filter/backdrop-filter, büyük shadow ve sürekli frame callback eklenmez. GSettings `tasarim` anahtarına `v3` eklenirken mevcut `atoll`/`klasik` değerleri ve geri dönüş korunur.
 
 ## İkon teslimi
 
