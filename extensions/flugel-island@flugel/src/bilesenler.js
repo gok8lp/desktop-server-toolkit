@@ -176,10 +176,12 @@ export class Izgara {
     }
 
     // yalnız görünen karoları sırayla yeniden dizer (gizli karo hücre boşluğu bırakmaz); gizliler sona gider
-    yenidenDiz() {
+    // oncelik: önce dizilecek aktörler (sırasıyla), sonra kalan görünenler
+    yenidenDiz(oncelik = []) {
         const sira = (this._sira ?? []).filter(a => a.get_parent() === this.actor);
         const gorunur = new Set(sira.filter(a => a.visible));
-        const dizi = [...sira.filter(a => gorunur.has(a)), ...sira.filter(a => !gorunur.has(a))];
+        const once = oncelik.filter(a => gorunur.has(a));
+        const dizi = [...once, ...sira.filter(a => gorunur.has(a) && !once.includes(a)), ...sira.filter(a => !gorunur.has(a))];
         for (const a of dizi)
             this.actor.remove_child(a);
         dizi.forEach((a, i) => {

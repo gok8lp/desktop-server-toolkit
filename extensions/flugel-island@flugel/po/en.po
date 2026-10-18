@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FLUGEL Island\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 11:42+0300\n"
+"POT-Creation-Date: 2026-10-18 11:56+0300\n"
 "PO-Revision-Date: 2026-10-14 18:00+0300\n"
 "Last-Translator: FLUGEL\n"
 "Language-Team: English\n"
@@ -2270,7 +2270,7 @@ msgid "CANLI"
 msgstr "LIVE"
 
 msgid "Bitti"
-msgstr "Final"
+msgstr "Done"
 
 msgid "Tıkla: favori, özel maç, maç sayfası"
 msgstr "Click: favorite, pin, match page"
@@ -2448,9 +2448,26 @@ msgstr "Back to the short view"
 msgid "Tüm hızlı ayarlar, uygulamalar ve araçlar (zorla kapat, panik dahil)"
 msgstr "All quick settings, apps and tools (including force quit and panic)"
 
+msgid "Düzenlemeyi bitir"
+msgstr "Finish editing"
+
+msgid "Kısa görünümdeki dört aracı seç: araca tıkla, sabitlenir ya da çıkar"
+msgstr "Choose the four tools of the short view: click a tool to pin or unpin it"
+
 #
 msgid "Sistemdeki herhangi bir uygulama; sağ tıkla kaldırılır"
 msgstr "Any app on the system; right-click to remove"
+
+msgid "Hızlıda en çok dört araç olur"
+msgstr "Quick holds at most four tools"
+
+msgid "Önce sabitlenmiş bir aracı çıkar"
+msgstr "Unpin a tool first"
+
+#
+#
+msgid "Hızlıyı düzenle"
+msgstr "Edit Quick"
 
 #
 msgid "Tıkla: sabitle"

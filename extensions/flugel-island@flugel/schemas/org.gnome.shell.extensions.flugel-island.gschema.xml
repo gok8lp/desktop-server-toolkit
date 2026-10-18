@@ -169,6 +169,10 @@
       <default>'atoll'</default>
       <summary>Tasarım: atoll (Atoll düzeni), klasik (v2.8.0 görünümü) ya da v3 (Quiet Orbit: beş grup, sade hareket)</summary>
     </key>
+    <key name="hizli-araclar" type="as">
+      <default>['uyku', 'goruntu', 'zaman', 'pano']</default>
+      <summary>v3 Hızlı kısa görünümündeki araçlar (en çok dört, sırasıyla)</summary>
+    </key>
     <key name="hizli-not" type="s">
       <default>''</default>
       <summary>Hızlı not (Hızlı sekmesi, Araçlar → Not)</summary>
