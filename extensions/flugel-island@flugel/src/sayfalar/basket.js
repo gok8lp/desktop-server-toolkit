@@ -74,7 +74,9 @@ export class BasketSayfa extends Sayfa {
             () => this._kontrol(), {stil: 'flugel-dugme flugel-dugme-kucuk'})});
         this.actor.add_child(this._benimBolum);
 
-        this._katKutu = new St.BoxLayout({style_class: 'flugel-cipler flugel-mac-kategoriler', x_align: Clutter.ActorAlign.CENTER});
+        // kategori hapları: dar kartta (ya da çok kategoride) iki ortalı satıra bölünür, sağ kenardan kesilmez
+        this._katKutu = new St.BoxLayout({style_class: 'flugel-mac-kategoriler', orientation: Clutter.Orientation.VERTICAL,
+            x_align: Clutter.ActorAlign.CENTER, style: 'spacing: 6px;'});
         this.actor.add_child(this._katKutu);
         this._gunKutu = new St.BoxLayout({style_class: 'flugel-cipler', x_align: Clutter.ActorAlign.CENTER});
         this._gunCip = {};
@@ -105,7 +107,7 @@ export class BasketSayfa extends Sayfa {
             veri.abone('cs2', () => this._rozet()),
         ];
         this._ayarId = ayarlar.connect('changed', (_s, k) => {
-            if (k === 'mac-kategoriler') {
+            if (k === 'mac-kategoriler' || k === 'kart-genislik') {
                 this._kategorileriKur();
                 this.gorunurse(() => this._yaz({animasyon: true}));
             } else if (['mac-favoriler', 'mac-ozel', 'mac-min-yildiz', 'cs2-takip', 'cs2-etkin'].includes(k)) {
@@ -136,7 +138,14 @@ export class BasketSayfa extends Sayfa {
         const gorunen = this._ayar.get_strv('mac-kategoriler').filter(k => ad[k]);
         if (!gorunen.includes(this._kat))
             this._kat = gorunen[0] ?? 'onemli';
-        for (const k of gorunen) {
+        const darKart = this._ayar.get_int('kart-genislik') < 760;
+        const satirBoyu = darKart && gorunen.length > 5 ? Math.ceil(gorunen.length / 2) : gorunen.length;
+        let satir = null;
+        gorunen.forEach((k, i) => {
+            if (i % satirBoyu === 0) {
+                satir = new St.BoxLayout({style_class: 'flugel-cipler', x_align: Clutter.ActorAlign.CENTER});
+                this._katKutu.add_child(satir);
+            }
             const b = new St.Button({label: ad[k], style_class: 'flugel-cip', can_focus: true});
             b.connect('clicked', () => {
                 this._kat = k;
@@ -144,8 +153,8 @@ export class BasketSayfa extends Sayfa {
                 this._yaz({animasyon: true});
             });
             this._katCip[k] = b;
-            this._katKutu.add_child(b);
-        }
+            satir.add_child(b);
+        });
     }
 
     _kontrol() {
