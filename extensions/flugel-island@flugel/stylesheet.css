@@ -604,3 +604,86 @@
 .flugel-koynatici-dugme-buyuk { padding: 10px; background-color: rgba(255, 255, 255, 0.12); }
 .flugel-koynatici-dugme-buyuk:hover { background-color: rgba(255, 255, 255, 0.20); }
 .flugel-koynatici-cikis { padding: 6px; color: #b4b4bc; }
+
+/* ---------- v3 · Quiet Orbit (tasarim=v3) — Codex tasarımı, .ai_workspace/tasarim/island-v3/SPEC.md ----------
+   shell #08090b · surface #14161a · raised #202329 · hover #2b3037 · hairline beyaz %11 · focus beyaz %70
+   primary #f5f6f7 · secondary #a7abb2 · tertiary #878d96. Blur/gölge yok; geçiş yalnız renk ve opaklık. */
+.flugel-v3 { color: #f5f6f7; }
+.flugel-v3 .flugel-island-zemin { border: 1px solid rgba(255, 255, 255, 0.11); }
+.flugel-v3 .flugel-saat { font-size: 12pt; font-weight: 700; }
+.flugel-v3 .flugel-etkinlik-baslik { font-size: 10.5pt; }
+.flugel-v3 .flugel-etkinlik-alt { color: #a7abb2; }
+
+.flugel-v3 .flugel-kart { padding: 16px; spacing: 12px; color: #f5f6f7; }
+.flugel-v3 .flugel-kart-ust { padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.11); }
+.flugel-v3 .flugel-kart-saat { font-size: 24pt; font-weight: 800; }
+.flugel-v3 .flugel-kart-tarih { color: #a7abb2; }
+.flugel-v3 .flugel-dugme { border-radius: 10px; transition-duration: 120ms; }
+.flugel-v3 .flugel-dugme:hover { background-color: #2b3037; }
+.flugel-v3 .flugel-dugme:active, .flugel-v3 .flugel-dugme:checked { background-color: #202329; }
+.flugel-v3 .flugel-dugme:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.70); }
+
+.flugel-v3 .flugel-etkinlik-satir {
+  background-color: #14161a;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 14px;
+  padding: 8px 12px;
+}
+.flugel-v3-daha {
+  padding: 9px 14px;   /* en az 36 px tıklama alanı */
+  border-radius: 999px;
+  font-size: 9pt;
+  font-weight: 700;
+  color: #a7abb2;
+  background-color: #14161a;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  transition-duration: 120ms;
+}
+.flugel-v3-daha:hover { background-color: #2b3037; color: #f5f6f7; }
+.flugel-v3-daha:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.70); }
+
+/* beş grup + iç seçim */
+.flugel-v3-gezinme { spacing: 8px; }
+.flugel-v3-gruplar {
+  spacing: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background-color: #14161a;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+}
+.flugel-v3-grup {
+  padding: 7px 4px 6px 4px;
+  border-radius: 10px;
+  color: #a7abb2;
+  transition-duration: 120ms;
+}
+.flugel-v3-grup:hover { background-color: #2b3037; color: #f5f6f7; }
+.flugel-v3-grup:checked { background-color: #202329; color: #f5f6f7; }
+.flugel-v3-grup:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.70); }
+.flugel-v3-grup-ic { spacing: 3px; }
+.flugel-v3-grup-etiket { font-size: 8.5pt; font-weight: 700; }
+.flugel-v3-grup .flugel-rozet { font-size: 7pt; }
+.flugel-v3-alt { spacing: 6px; padding: 0 2px; }
+.flugel-v3-alt-dugme {
+  padding: 9px 14px;   /* en az 36 px tıklama alanı */
+  border-radius: 999px;
+  font-size: 9pt;
+  font-weight: 700;
+  color: #a7abb2;
+  border: 1px solid transparent;
+  transition-duration: 120ms;
+}
+.flugel-v3-alt-dugme:hover { background-color: #2b3037; color: #f5f6f7; }
+.flugel-v3-alt-dugme:checked { background-color: #202329; color: #f5f6f7; border-color: rgba(255, 255, 255, 0.11); }
+.flugel-v3-alt-dugme:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.70); }
+
+/* sayfa yüzeyleri */
+.flugel-v3 .flugel-karo {
+  background-color: #14161a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+.flugel-v3 .flugel-karo:hover { background-color: #2b3037; border-color: rgba(255, 255, 255, 0.16); }
+.flugel-v3 .flugel-karo:active, .flugel-v3 .flugel-karo:checked { background-color: #202329; }
+.flugel-v3 .flugel-karo:focus { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.70); }
+.flugel-v3 .flugel-bolum-baslik { font-size: 10pt; color: #a7abb2; }

@@ -38,6 +38,7 @@ export class IslandGorunumu {
         this._icerik = new St.Widget({layout_manager: new Clutter.BinLayout(), x_expand: true, y_expand: true,
             clip_to_allocation: true});
         this._kok.add_child(this._zemin);
+        this._v3Sinif();
         this._kok.add_child(this._icerik);
         // iOS tarzı buzlu cam: kart/afiş açıkken zeminin arkasında altındakiler bulanık görünür
         this._cam = new Cam(ayarlar);
@@ -181,6 +182,7 @@ export class IslandGorunumu {
             ...['size-changed', 'minimize', 'unminimize', 'map', 'destroy'].map(s =>
                 [global.window_manager, global.window_manager.connect(s, () => this._kaplamaPlanla())]),
             [global.workspace_manager, global.workspace_manager.connect('active-workspace-changed', () => this._kaplamaPlanla())],
+            [this._ayar, this._ayar.connect('changed::tasarim', () => this._v3Sinif())],
             [this._ayar, this._ayar.connect('changed::pencere-centik', () => this._tamEkranDenetle())],
             [this._ayar, this._ayar.connect('changed::tam-ekran-kipi', () => this._tamEkranDenetle())],
             [this._ayar, this._ayar.connect('changed::ust-serit', () => this._tamEkranDenetle())],
@@ -350,8 +352,9 @@ export class IslandGorunumu {
         this._fizik ??= new YayFizik(this._kok, g => this._geoUygula(g));
         this._yay = this._fizik;
         this._fizik.hedefle(hedef, bas, {
-            response: (buyuyor ? 0.5 : 0.42) / hiz,
-            damping: buyuyor ? 0.78 : 0.88,
+            // v3 (Quiet Orbit): daha hizli ve neredeyse asimsiz yay
+            response: (this._v3() ? (buyuyor ? 0.33 : 0.30) : (buyuyor ? 0.5 : 0.42)) / hiz,
+            damping: this._v3() ? (buyuyor ? 0.95 : 0.97) : (buyuyor ? 0.78 : 0.88),
             onComplete: () => {
                 this._yay = null;
                 Animasyon.bitti();
@@ -438,7 +441,7 @@ export class IslandGorunumu {
             yeni.add_child(this._kompaktSaat);
         }
         // yeni bir etkinlik kapsüle gelince kapsül hafifçe "pıt" eder (kart kapanırken değil)
-        if (!kartKapandi && gorunum === 'kompakt' && a && St.Settings.get().enable_animations && this._kok.mapped) {
+        if (!kartKapandi && gorunum === 'kompakt' && a && !this._v3() && St.Settings.get().enable_animations && this._kok.mapped) {
             this._kok.set_pivot_point(0.5, 0);
             this._kok.ease({scale_x: 1.045, scale_y: 1.045, duration: 110, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
                 onComplete: () => this._kok.ease({scale_x: 1, scale_y: 1, duration: 380, mode: Clutter.AnimationMode.EASE_OUT_BACK})});
@@ -451,12 +454,20 @@ export class IslandGorunumu {
         if (!yeni.get_parent())
             this._kompakt.add_child(yeni);
         // iOS geçişi: yeni içerik bulanıktan netleşip hafif büyüyerek gelir, eskisi bulanıklaşıp küçülerek gider
-        const bg = this._ayar.get_boolean('bulanik-gecis');
+        const v3 = this._v3();
+        const bg = !v3 && this._ayar.get_boolean('bulanik-gecis');
         yeni.opacity = 0;
         yeni.set_pivot_point(0.5, 0.5);
         yeni.scale_x = yeni.scale_y = bg ? 0.94 : 1;
-        yeni.ease({opacity: 255, scale_x: 1, scale_y: 1, delay: eski.length ? 60 : 0, duration: SOLMA_GIRIS + 60,
-            mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        if (v3) {
+            // v3: yalniz opaklik + 4 px dikey; metin olceklenmez
+            yeni.translation_y = 4;
+            yeni.ease({opacity: 255, translation_y: 0, delay: eski.length ? 40 : 0, duration: 170,
+                mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        } else {
+            yeni.ease({opacity: 255, scale_x: 1, scale_y: 1, delay: eski.length ? 60 : 0, duration: SOLMA_GIRIS + 60,
+                mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        }
         bulanikGecis(yeni, {giris: true, yaricap: 8, sure: SOLMA_GIRIS + 80, gecikme: eski.length ? 60 : 0, acik: bg});
         for (const c of eski) {
             c.remove_all_transitions();
@@ -464,7 +475,7 @@ export class IslandGorunumu {
             c.set_pivot_point(0.5, 0.5);
             // Kaybolan içerik zaten solarak küçülür; ikinci blur geçişi GPU yükünü katlar.
             bulanikTemizle(c);
-            c.ease({opacity: 0, scale_x: bg ? 0.94 : 1, scale_y: bg ? 0.94 : 1, duration: SOLMA_CIKIS, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+            c.ease({opacity: 0, scale_x: bg ? 0.94 : 1, scale_y: bg ? 0.94 : 1, duration: v3 ? 90 : SOLMA_CIKIS, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
                 onStopped: () => {
                     if (!c._flugelGidiyor)
                         return;
@@ -490,6 +501,18 @@ export class IslandGorunumu {
         }
     }
 
+    // v3 (Quiet Orbit) tasarımı seçili mi; stil kapsamı için kök aktöre sınıf
+    _v3() {
+        return this._ayar.get_string('tasarim') === 'v3';
+    }
+
+    _v3Sinif() {
+        if (this._v3())
+            this._kok?.add_style_class_name('flugel-v3');
+        else
+            this._kok?.remove_style_class_name('flugel-v3');
+    }
+
     // kapsüle basılınca içe göçme (sadece kapalıyken; açık kartta içerideki düğmeler kendi tepkisini verir)
     _basKucul(basik) {
         if (!St.Settings.get().enable_animations || (basik && this._durum === 'genis'))
@@ -498,6 +521,12 @@ export class IslandGorunumu {
             return;
         this._basik = basik;
         this._kok.set_pivot_point(0.5, 0);
+        if (this._v3()) {
+            // v3: hafif basis, siçramasız birakis
+            this._kok.ease(basik ? {scale_x: 0.985, scale_y: 0.985, duration: 80, mode: Clutter.AnimationMode.EASE_OUT_QUAD}
+                : {scale_x: 1, scale_y: 1, duration: 110, mode: Clutter.AnimationMode.EASE_OUT_QUAD});
+            return;
+        }
         this._kok.ease(basik ? {scale_x: 0.95, scale_y: 0.95, duration: 90, mode: Clutter.AnimationMode.EASE_OUT_QUAD}
             : {scale_x: 1, scale_y: 1, duration: 340, mode: Clutter.AnimationMode.EASE_OUT_BACK});
     }
@@ -508,15 +537,18 @@ export class IslandGorunumu {
             if (!this._balon.visible) {
                 this._balon.show();
                 this._balon.set_pivot_point(0, 0.5);
-                this._balon.scale_x = this._balon.scale_y = 0.6;
+                this._balon.scale_x = this._balon.scale_y = this._v3() ? 0.96 : 0.6;
                 this._balonYerlestir();
             }
-            this._balon.ease({opacity: 255, scale_x: 1, scale_y: 1, duration: 260, mode: Clutter.AnimationMode.EASE_OUT_BACK});
-            if (this._balon.opacity < 255)
+            this._balon.ease(this._v3()
+                ? {opacity: 255, scale_x: 1, scale_y: 1, duration: 170, mode: Clutter.AnimationMode.EASE_OUT_CUBIC}
+                : {opacity: 255, scale_x: 1, scale_y: 1, duration: 260, mode: Clutter.AnimationMode.EASE_OUT_BACK});
+            if (this._balon.opacity < 255 && !this._v3())
                 bulanikGecis(this._balonGorunum.actor, {giris: true, yaricap: 6, sure: 260, acik: this._ayar.get_boolean('bulanik-gecis')});
             this._balonYerlestir();
         } else if (this._balon.visible) {
-            this._balon.ease({opacity: 0, scale_x: 0.6, scale_y: 0.6, duration: 160, mode: Clutter.AnimationMode.EASE_IN_QUAD,
+            const v3 = this._v3();
+            this._balon.ease({opacity: 0, scale_x: v3 ? 0.96 : 0.6, scale_y: v3 ? 0.96 : 0.6, duration: v3 ? 130 : 160, mode: Clutter.AnimationMode.EASE_IN_QUAD,
                 onStopped: () => this._balon.hide()});
         }
     }
@@ -527,10 +559,17 @@ export class IslandGorunumu {
         this._kartKutu.show();
         this._kartKutu.opacity = 0;
         // kart içeriği bulanıktan netleşerek, üstten hafifçe büyüyerek belirir (ada büyürken)
-        const bg = this._ayar.get_boolean('bulanik-gecis');
+        const v3 = this._v3();
+        const bg = !v3 && this._ayar.get_boolean('bulanik-gecis');
         this._kartKutu.set_pivot_point(0.5, 0);
         this._kartKutu.scale_x = this._kartKutu.scale_y = bg ? 0.96 : 1;
-        this._kartKutu.ease({opacity: 255, scale_x: 1, scale_y: 1, delay: 90, duration: 300, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        if (v3) {
+            // v3: kart gecikmesiz, 6 px asagidan opaklikla gelir; giris kilitlenmez
+            this._kartKutu.translation_y = 6;
+            this._kartKutu.ease({opacity: 255, translation_y: 0, delay: 20, duration: 200, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        } else {
+            this._kartKutu.ease({opacity: 255, scale_x: 1, scale_y: 1, delay: 90, duration: 300, mode: Clutter.AnimationMode.EASE_OUT_CUBIC});
+        }
         bulanikGecis(this._kartKutu, {giris: true, yaricap: 14, sure: 340, gecikme: 60, acik: bg});
         bulanikTemizle(this._kompakt);
         this._kompakt.ease({opacity: 0, duration: SOLMA_CIKIS, mode: Clutter.AnimationMode.EASE_OUT_QUAD,
@@ -722,7 +761,8 @@ export class IslandGorunumu {
             a.reactive = !cekil && a !== this._kavisSol && a !== this._kavisSag;
             if (anim) {
                 a.ease({translation_y: cekil ? -h : 0, opacity: cekil ? 0 : 255, duration: cekil ? 170 : 300,
-                    mode: cekil ? Clutter.AnimationMode.EASE_IN_QUAD : Clutter.AnimationMode.EASE_OUT_BACK});
+                    mode: cekil ? Clutter.AnimationMode.EASE_IN_QUAD
+                        : this._v3() ? Clutter.AnimationMode.EASE_OUT_CUBIC : Clutter.AnimationMode.EASE_OUT_BACK});
             } else {
                 a.translation_y = cekil ? -h : 0;
                 a.opacity = cekil ? 0 : 255;
@@ -830,7 +870,8 @@ export class IslandGorunumu {
             this._unred(true);
         this._kok.translation_y = -this._kok.height - 4;
         this._kok.opacity = 255;
-        this._kok.ease({translation_y: 0, duration: 260, mode: Clutter.AnimationMode.EASE_OUT_BACK});
+        this._kok.ease({translation_y: 0, duration: this._v3() ? 200 : 260,
+            mode: this._v3() ? Clutter.AnimationMode.EASE_OUT_CUBIC : Clutter.AnimationMode.EASE_OUT_BACK});
     }
 
     _teGizle(anlik = false) {

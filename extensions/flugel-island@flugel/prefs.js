@@ -193,10 +193,10 @@ export default class FlugelIslandAyarlari extends ExtensionPreferences {
         const sayfa = new Adw.PreferencesPage({title: _('Island görünümü'), icon_name: 'applications-graphics-symbolic'});
         // tasarım kipi: Atoll düzeni ya da hemen önceki (v2.8.0) görünüm; anında geçer, yeniden başlatma gerekmez
         const t = new Adw.PreferencesGroup({title: _('Tasarım'),
-            description: _('Atoll düzeni: kapak rengine göre tonlanan medya oynatıcı, pano yöneticisi, iki sütunlu renk seçici, canlı izleme. ' +
-                'Önceki: v2.8.0 görünümü. İstediğin an geri dönebilirsin.')});
+            description: _('Quiet Orbit: beş grup, en çok iki canlı satır, sade ve hızlı hareket. ' +
+                'Atoll düzeni: kapak rengine göre tonlanan medya oynatıcı, pano, renk seçici. Önceki: v2.8.0 görünümü. İstediğin an geri dönebilirsin.')});
         const [tasarim, tasarimId] = secim(a, 'tasarim', _('Tasarım'), _('Değişiklik hemen uygulanır'),
-            [['atoll', _('Atoll düzeni (yeni)')], ['klasik', _('Önceki görünüm (v2.8.0)')]]);
+            [['v3', _('Quiet Orbit (v3)')], ['atoll', _('Atoll düzeni')], ['klasik', _('Önceki görünüm (v2.8.0)')]]);
         this._baglan(a, tasarimId);
         t.add(tasarim);
         const donus = new Adw.ButtonRow({start_icon_name: 'edit-undo-symbolic'});

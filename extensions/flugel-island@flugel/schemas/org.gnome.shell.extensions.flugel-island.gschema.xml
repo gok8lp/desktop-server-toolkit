@@ -165,9 +165,9 @@
       <summary>Renk geçmişindeki renklerin seçildiği an ("HEX=ms")</summary>
     </key>
     <key name="tasarim" type="s">
-      <choices><choice value="atoll"/><choice value="klasik"/></choices>
+      <choices><choice value="atoll"/><choice value="klasik"/><choice value="v3"/></choices>
       <default>'atoll'</default>
-      <summary>Tasarım: atoll (Atoll düzeni: medya oynatıcı, pano, renk seçici, canlı izleme) ya da klasik (v2.8.0 görünümü)</summary>
+      <summary>Tasarım: atoll (Atoll düzeni), klasik (v2.8.0 görünümü) ya da v3 (Quiet Orbit: beş grup, sade hareket)</summary>
     </key>
     <key name="hizli-not" type="s">
       <default>''</default>
