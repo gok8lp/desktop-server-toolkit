@@ -1,6 +1,6 @@
 # FLUGEL Island v3 — Quiet Orbit
 
-Durum: Codex görsel tasarım devri, 2026-10-18. Uygulama sahibi Claude. `mockup.html` bu belgenin statik görsel karşılığıdır; GNOME kodu değildir. Önceki `Monochrome Contour` ve `menu-v2` taslaklarından bağımsız yeni tasarım seçeneğidir. Kullanıcı verisi, ayarlar ve on mevcut sayfa silinmez.
+Durum: Codex görsel tasarım devri, 2026-10-18. Uygulama sahibi Claude. `mockup.html` statik görsel, `prototype.html` hover/kart/olay geçişleri için tıklanabilir davranış maketidir; hiçbiri GNOME kodu değildir. Önceki `Monochrome Contour` ve `menu-v2` taslaklarından bağımsız yeni tasarım seçeneğidir. Kullanıcı verisi, ayarlar ve on mevcut sayfa silinmez.
 
 ## Karakter
 
