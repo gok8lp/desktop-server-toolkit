@@ -95,6 +95,27 @@
       "created_by": "codex",
       "updated_at": "2026-10-17T10:47:14+00:00",
       "lease_until": null
+    },
+    {
+      "id": "AI-007",
+      "title": "GitHub adlandirma ve anlasilir proje belgeleri",
+      "status": "done",
+      "owner": null,
+      "paths": [
+        "README.md",
+        "README.tr.md",
+        "package.json",
+        "package-lock.json",
+        "extensions/flugel-island@flugel/metadata.json",
+        "../flugel-island/README.md",
+        "../flugel-island/README.tr.md",
+        "../flugel-island/flugel-island@flugel/metadata.json"
+      ],
+      "evidence": "README ve repo adlari sadeleşti; teknik UUID/schema kimlikleri korundu. Ana ve ayri Island kopyalari esit. Ikisinde lint ve 47/47 test gecti. Cyber web build ve 20 test, sunucu API 10 test gecti. Islem agaci uyarisiz derlendi ve 16 yaprak toplami dogrulandi. Canli dagitim yapilmadi.",
+      "next": "Bu gorevin commitlerini ve uzak SHA eslesmesini dogrula; sonraki uygulama gelistirmesi ayridir",
+      "created_by": "codex",
+      "updated_at": "2026-10-22T22:53:13+00:00",
+      "lease_until": null
     }
   ]
 }

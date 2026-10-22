@@ -1,2 +1,2 @@
-{ "name": "FLUGEL", "short_name": "FLUGEL", "start_url": "/#/ana", "display": "standalone", "background_color": "#000000",
+{ "name": "Akış", "short_name": "Akış", "start_url": "/#/ana", "display": "standalone", "background_color": "#000000",
   "theme_color": "#000000", "lang": "tr", "icons": [{ "src": "/ikon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }] }

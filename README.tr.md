@@ -1,36 +1,41 @@
-# FLUGEL
+# Masaüstü ve Sunucu Araçları
 
-[English](README.md) · **Türkçe**
+Gökalp Göksu'nun Linux masaüstü ve ev sunucusu için geliştirdiği kişisel araçlar.
+[English](README.md) · Türkçe
 
-Kişisel bilgisayar (**flugelubuntu**, Ubuntu 26.04 / GNOME 50) ve ev sunucusu (**flugelserver**) için yazılan her şey.
+Bu depo tek bir uygulamadan oluşmuyor. Haber akışı, GNOME eklentileri, sunucu yapılandırmaları ve bakım betikleri aynı yerde tutuluyor.
+Hazır bir işletim sistemi veya herkesin doğrudan çalıştırabileceği otomatik kurulum paketi değildir.
 
-## FLUGEL Akış — kişisel sosyal akış (`sunucu/panel/akis/`)
-X tarzı, siyah, tek kişilik haber/sosyal akış uygulaması. Sadece Python standart kütüphanesi + sade JS.
-- 36 RSS kaynağı (Türkçe ağırlıklı oyun/teknoloji/gündem, PlayStation, anime, Japonya) + 25 YouTube kanalı
-- Önemli kaynaklar 1 dk, diğerleri 3 dk aralıkla (ETag ile) kontrol edilir; arayüz 20 sn'de bir yeni gönderi ekler
-- Sunucudaki Ollama (gemma3): İngilizce/Japonca haberleri Türkçeye çevirir, her habere 0-100 önem puanı ve etiket verir,
-  aynı olayı anlatan haberleri tek gönderide toplar, haber özetler, sohbet eder (yalnızca bağlamdaki gerçek veriyle)
-- Anime/manga (AniList + MAL listesi, yasal yayın bağlantıları), Steam puan/öneri, CheapShark/Epic fiyatları,
-  ESPN hafta sonu maçları, TVmaze + IMDb puanlı dizi takvimi, fragmanlar, sunucu uygulamaları
-- Takip kelimeleri → uygulama içi uyarı + Telegram
-- Yayın: `tailscale serve` (yalnızca tailnet) `https://flugelserver.tail42f1f4.ts.net:8443`
+## Nereden başlamalıyım?
 
-## Klasörler
-| Klasör | İçerik |
-|---|---|
-| `sunucu/panel/` | Homepage paneli, `gundem-botu`, `flugel-akis` (compose) |
-| `sunucu/basket-bot/` | Hakemlik ataması (ankarabasket bültenleri) ve anime/manga takip botları |
-| `sunucu/sbin`, `sunucu/bin` | AI gözcü, disk koruyucu, kritik yedek, torrent bekçisi, kendini onarma, bildirim |
-| `sunucu/libvirt/` | GPU passthrough (W11-GPU) libvirt hook'u + Moonlight port yönlendirme |
-| `sunucu/systemd/` | Zamanlayıcılar ve servisler |
-| `pc/gnome-uzantilari/` | `flugel-panel` (üst çubuk) ve `flugel-kilit` (kilit ekranı) GNOME Shell eklentileri |
-| `pc/bin/` | Üst çubuk veri yardımcısı, pil modu, `w11-gpu`, `vm`, `flugel-akis` başlatıcı |
-| `pc/acilis-ekrani/` | Plymouth "FLUGEL" açılış teması |
-| `android/` | FLUGEL Android kabuğu (WebView, yalnızca INTERNET izni) — `derle.sh` ile Ubuntu araçlarıyla derlenir |
+| İhtiyacın | İlgili bölüm |
+| --- | --- |
+| Haberleri tek yerde okumak | `sunucu/panel/akis/`: Python arka uç ve web/PWA arayüzü |
+| GNOME kapsül/panel eklentisi | [gnome-island](https://github.com/gok8lp/gnome-island); asıl kaynak burada `extensions/flugel-island@flugel/` |
+| Sunucunun yapılandırmalarını incelemek | `sunucu/` ve [home-server](https://github.com/gok8lp/home-server) |
+| Sunucuyu Android'den izlemek | [home-server-android](https://github.com/gok8lp/home-server-android) |
+| Masaüstü veri yardımcıları | `pc/bin/` |
 
-## Güncelleme
-`./guncelle.sh "açıklama"` → PC ve sunucudaki güncel dosyaları toplar, gizli bilgileri yer tutucuyla değiştirir,
-tarar (gizli bilgi kalırsa göndermez), commit'ler ve GitHub'a gönderir.
+Akış; RSS/YouTube içerikleri, isteğe bağlı Ollama çeviri/özetleri ve kişisel kaynak listeleri kullanır.
+Kaynaklar, hesap bağlantıları ve sunucu adresleri kendi ortamına göre yapılandırılmalıdır.
+GNOME bileşenleri Shell 50 hedefler; diğer sürümler için uyumluluk iddiası yoktur.
 
-> Gizli bilgiler (Telegram token, API anahtarları, APK imza anahtarı, Cloudflare kimlikleri) depoda **yoktur**;
-> betiklerde `<TELEFON>`, `<CALLMEBOT_APIKEY>`, `<GOTIFY_TOKEN>` gibi yer tutucular bulunur.
+## Kaynak kod üzerinde çalışma
+
+```bash
+git clone https://github.com/gok8lp/desktop-server-toolkit.git
+cd desktop-server-toolkit
+npm ci
+npm run lint
+npm test
+```
+
+Bu komutlar yalnız JavaScript denetimlerini çalıştırır. Eklentiyi kurmaz, sunucuda servis başlatmaz.
+`kur-*.sh` ve `guncelle.sh` kişisel makine yolları ve kurulum adımları içerir; genel kurulum sihirbazı gibi çalıştırılmamalıdır.
+Akış için önce `sunucu/panel/compose.yaml` ve `sunucu/panel/akis/akis.py` dosyalarını incele.
+
+## İsimler ve uyumluluk
+
+Eski eklenti UUID'si, ayar şemaları ve servis adları mevcut kurulumların ayarlarını kaybetmemesi için teknik kimlik olarak korunur.
+Depo adı ve kullanıcıya sunulan proje başlıkları bunlardan ayrıdır.
+Üçüncü taraf bileşenlerin lisans ve atıfları kendi dosyalarında korunmuştur.

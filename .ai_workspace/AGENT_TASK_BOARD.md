@@ -53,6 +53,13 @@ Aktif görevler sahip alanında görünür. Başka ajanın işi varsayılmaz.
 - Kanıt: Island ve iki blur A/B sonucuyla takılma korelasyonu görüldü; OS/NVIDIA/USB ayarı yapılmadı.
 - Sonraki adım: Yeni oturum sonrası canlı fare gecikmesi doğrula.
 
+## AI-007 — GitHub adlandirma ve anlasilir proje belgeleri
+
+- Durum: `done`; sahip: `yok`; kira sonu: `yok`
+- Dosyalar: `README.md`, `README.tr.md`, `package.json`, `package-lock.json`, `extensions/flugel-island@flugel/metadata.json`, `../flugel-island/README.md`, `../flugel-island/README.tr.md`, `../flugel-island/flugel-island@flugel/metadata.json`
+- Kanıt: README ve repo adlari sadeleşti; teknik UUID/schema kimlikleri korundu. Ana ve ayri Island kopyalari esit. Ikisinde lint ve 47/47 test gecti. Cyber web build ve 20 test, sunucu API 10 test gecti. Islem agaci uyarisiz derlendi ve 16 yaprak toplami dogrulandi. Canli dagitim yapilmadi.
+- Sonraki adım: Bu gorevin commitlerini ve uzak SHA eslesmesini dogrula; sonraki uygulama gelistirmesi ayridir
+
 ## Kullanım
 
 ```bash
